@@ -1,0 +1,121 @@
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.invoice-content {
+    background-color: colors.$white;
+	border: 1px solid variables.$border-color;
+	padding: 24px;
+    margin-bottom: 24px;
+	@include mixins.rounded(10px);	
+}
+.invoice-item {
+	.invoice-logo {
+	    margin-bottom: 30px;
+	    img {
+		    width: variables.$auto;
+		    max-height: 52px;
+		}
+	}
+	.invoice-text {
+		padding-top: 42px;
+		padding-bottom: 36px;
+		h2 {
+			color: colors.$dark__blue;
+			font-size: typography.$font__size__36;
+			font-weight: variables.$font-weight-semibold;
+		}
+	}
+	.invoice-details {
+		text-align: variables.$right;
+		@include mixins.respond-below(md) {
+			text-align: variables.$left;
+		}
+	}
+	.invoice-details-two {
+		text-align: variables.$left;
+	}
+	.customer-text {
+		font-size: variables.$font-size-18;
+		font-weight: variables.$font-weight-semibold;
+		color: variables.$gray-900;
+		margin-bottom: 8px;
+		display: variables.$block;
+		@include mixins.respond-below(md) {
+			font-size: variables.$font-size-16;
+		}
+	}
+}
+.invoice-info {
+	margin-bottom: 30px;
+	p {
+		margin-bottom: 0;
+	}
+	&.invoice-info2 {
+	    text-align: variables.$right;
+	    @include mixins.respond-below(md) {
+			text-align: variables.$left;
+		}
+	}
+	h5 {
+	    font-size: variables.$font-size-16;
+	    font-weight: variables.$font-weight-medium;
+	}
+}
+.invoice-table {
+    border: 1px solid variables.$border-color;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+.invoice-table, .invoice-table-two {
+	tr {
+		th {
+			color: variables.$gray-900;
+			font-weight: variables.$font-weight-medium;
+			line-height: inherit;
+			padding: 8px 12px;
+			&:first-child {
+				border-top-left-radius: 10px;
+			}
+			&:last-child {
+				border-top-right-radius: 10px;
+			}
+		}
+		td {
+			color: variables.$gray-600;
+			font-weight: variables.$font-weight-medium;
+			padding: 12px 12px;
+		}
+	}
+	tbody {
+		tr {
+			
+			&:last-child {
+				border-color: transparent;
+				td {
+					&:first-child {
+						border-bottom-left-radius: 10px;
+					}
+					&:last-child {
+						border-bottom-right-radius: 10px;
+					}
+				}
+			}
+		}
+	}
+}
+.invoice-table-two {
+	margin-bottom:0;
+	tr {
+		th, td {
+			border-top: 0;
+		}
+		td {
+			text-align: variables.$right;
+		}
+	}
+}
+.other-info {
+    margin-top: 10px;
+}

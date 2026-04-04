@@ -1,0 +1,191 @@
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.partner-item {
+    &-three {
+        background: variables.$light;
+        padding: 40px;
+        border-radius: variables.$border-radius-lg;
+        margin-top: 30px;
+        @include mixins.respond-below(lg) {
+            margin-top: 20px;
+        }
+        @include mixins.respond-below(md) {
+            padding: 24px;
+        }
+        .title {
+            font-size: 20px;
+            font-weight: variables.$font-weight-bold;
+            color: variables.$gray-900;
+            margin-bottom: 0;
+            line-height: 27px;
+            line-height: 1.4;
+            @include mixins.respond-below(xl) {
+                text-align: center;
+                margin-bottom: 30px;
+            }
+        }
+        .hospital-img {
+            display: flex;
+            align-items: center;
+            justify-content: end;
+            gap: 60px;
+            @include mixins.respond-below(lg) {
+                justify-content: center;
+                gap: 36px;
+            }
+            @include mixins.respond-below(sm) {
+                gap: 22px;
+            }
+            img {
+                filter: grayscale(1);
+                transition: all 0.5s;
+                &:hover {
+                    filter: grayscale(0);
+                    transform: scale(0.9);
+                }
+                @include mixins.respond-below(md) {
+                    max-width: 43px;
+                }
+                @include mixins.respond-below(sm) {
+                    max-width: 26px;
+                }
+            }
+        }
+    }
+    &-four {
+        text-align: center;
+        padding: 33px 0;
+        @include mixins.respond-below(md) {
+            padding: 0;
+        }
+        img {
+            margin: 0 auto;
+            filter: grayscale(1);
+            transition: all 0.5s;
+            @include mixins.respond-below(md) {
+                max-width: 60px;
+            }
+            @include mixins.respond-below(sm) {
+                max-width: 40px;
+            }
+        }        
+        &:hover {
+            img {
+                filter: grayscale(0);
+                transform: scale(0.95);
+            }
+        }
+    } 
+    &-seven {
+        text-align: center;
+        img {
+            width: auto !important;
+            margin: 0 auto;
+        }
+    }
+    &-ten {
+        text-align: center;
+        img {
+            width: auto !important;
+            margin: 0 auto;
+        }
+    }
+}
+.partner-section {
+    &-four {
+        padding-top: 0;
+    }
+    &-ten {
+        background: variables.$secondary;
+        padding: 60px 0;
+        @include mixins.respond-below(sm) {
+            padding: 40px 0;
+        }
+        .section-header {
+            text-align: center;
+        }
+        .sub-title {
+            position: relative;
+            padding: 0 80px;
+            display: inline-block;
+            color: variables.$darkmode-text-white;
+            margin: 0 auto;
+            @include mixins.respond-below(sm) {
+                padding: 0 60px;
+            }
+            &::before, &::after {
+                content: "";
+                width: 40px;
+                height: 1px;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                background: variables.$darkmode-text-white;
+            }
+            &::before {
+                left: 0;
+            }
+            &::after {
+                right: 0;
+            }
+        }
+    }
+}
+.partner-slider-four {
+    border: 1px solid variables.$border-color;
+    overflow: hidden;
+    @include mixins.respond-below(md) {
+        border: 0;
+    }
+    .slick-slide {
+        border-right: 1px solid variables.$border-color;
+        @include mixins.respond-below(md) {
+            border: 0;
+        }
+        &:last-child {
+            border-right: 0;
+        }
+    }
+}
+.partner-slider-seven {
+    position: relative;   
+    overflow: hidden; 
+        &::before {
+            content: "";
+            top: 60%;
+            left: 0;
+            width: 160px;
+            height: 98px;
+            position: absolute;
+            transform: translateY(-50%);
+            backdrop-filter: blur(1px);
+            z-index: 9;
+            background: linear-gradient(296.21deg, rgba(255, 255, 255, 0) -14.46%, rgba(253, 237, 236, 0.6) 25.19%, #FDEDEC 64.84%);
+            @include mixins.respond-below(lg) {
+                display: none;
+            }
+        }
+        &::after {
+            content: "";
+            top: 60%;
+            right: 0;
+            width: 160px;
+            height: 300px;
+            position: absolute;
+            transform: translateY(-50%);
+            backdrop-filter: blur(1px);
+            z-index: 9;
+            background: linear-gradient(296.21deg, rgba(255, 255, 255, 0) -14.46%, rgba(253, 237, 236, 0.6) 25.19%, #FDEDEC 64.84%);
+            @include mixins.respond-below(lg) {
+                display: none;
+            }
+        }
+}
+.hospital-slider-four {
+    .slide-item {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+    }
+}

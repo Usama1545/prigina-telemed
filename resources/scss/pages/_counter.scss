@@ -1,0 +1,135 @@
+@use "../utils/mixins";
+@use "../utils/variables";
+
+// Counter Section
+.counter-section {
+    &-four {
+        &.section {
+            padding-top: 0;
+        }
+    }
+}
+
+.counter-item {
+    &-four {
+        background: url('../img/bg/count-bg.png') variables.$light;
+        background-size: cover;
+        border: 1px solid variables.$border-color;
+        padding: 40px;
+        border-radius: variables.$border-radius-lg;
+        transition: all 1.6s;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+        @include mixins.respond-below(md) {
+            padding: 20px;
+        }
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 15px;
+            height: 16px;
+            background: variables.$secondary;
+            opacity: 0;
+            transition: all 1.6s;
+            border-radius: 7px 0 10px 0;
+        }
+        h3 {
+            font-size: 48px;
+            margin-bottom: 4px;
+            transition: all 1.6s;
+            @include mixins.respond-below(lg) {
+                font-size: 32px;
+            }
+            @include mixins.respond-below(md) {
+                font-size: 26px;
+            }
+            @include mixins.respond-below(sm) {
+                font-size: 22px;
+            }
+        }
+        p {
+            margin-bottom: 0;
+        }
+        &:hover {
+            background: url('../img/bg/count-bg.png') variables.$primary;
+            transform: translateY(-4px);
+            &::before {
+                opacity: 1;
+            }
+            h3 {
+                color: variables.$secondary;
+            }
+            p {
+                color: variables.$darkmode-text-white;
+            }
+        }
+    }
+    &-seven {
+        transition: all 1.6s;
+        position: relative;
+        text-align: center;
+        h2 {
+            font-size: 80px;
+            margin-bottom: 4px;
+            transition: all 1.6s;
+            color: transparent;
+            -webkit-text-stroke: 1px variables.$primary;
+            -webkit-font-smoothing: antialiased;
+            transition: all 0.6s ease;
+            @include mixins.respond-below(lg) {
+                font-size: 60px;
+            }
+            @include mixins.respond-below(md) {
+                font-size: 42px;
+            }
+        }
+        p {
+            margin-bottom: 0;
+        }
+        &:hover {
+            background: url('../img/bg/circle-bg.png') no-repeat;
+            background-position: center;
+            transform: translateY(-4px);
+            h2 {
+                background: variables.$primary-gradient;
+                background-clip: text;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                -webkit-text-stroke: 1px transparent;
+            }
+        }
+    }
+    &-ten {
+        transition: all 1.6s;
+        position: relative;
+        text-align: center;
+        h3 {
+            font-size: 120px;
+            margin-bottom: 12px;
+            color: rgba(variables.$secondary-rgb, 0.1);
+            transition: all 0.6s ease;
+            @include mixins.respond-below(xl) {
+                font-size: 94px;
+            }
+            @include mixins.respond-below(lg) {
+                font-size: 60px;
+            }
+            @include mixins.respond-below(md) {
+                font-size: 42px;
+            }
+        }
+        p {
+            color: variables.$secondary;
+            margin-bottom: 0;
+        }
+        &:hover {
+            transform: translateY(-4px);
+            h3 {
+                color: variables.$secondary;
+            }
+        }
+    }
+}

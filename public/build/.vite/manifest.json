@@ -1,0 +1,381 @@
+{
+  "resources/css/style.css": {
+    "file": "css/style.min.css",
+    "src": "resources/css/style.css",
+    "isEntry": true,
+    "name": "style",
+    "names": [
+      "style.css"
+    ]
+  },
+  "resources/img/about/appointment.jpg": {
+    "file": "icons/appointment.jpg",
+    "src": "resources/img/about/appointment.jpg"
+  },
+  "resources/img/about/video.jpg": {
+    "file": "icons/video.jpg",
+    "src": "resources/img/about/video.jpg"
+  },
+  "resources/img/banner-bg.png": {
+    "file": "icons/banner-bg.png",
+    "src": "resources/img/banner-bg.png"
+  },
+  "resources/img/bg/app-bgs.png": {
+    "file": "icons/app-bgs.png",
+    "src": "resources/img/bg/app-bgs.png"
+  },
+  "resources/img/bg/ban-bg.png": {
+    "file": "icons/ban-bg.png",
+    "src": "resources/img/bg/ban-bg.png"
+  },
+  "resources/img/bg/banner-bg-11.png": {
+    "file": "icons/banner-bg-11.png",
+    "src": "resources/img/bg/banner-bg-11.png"
+  },
+  "resources/img/bg/banner-bg-6.png": {
+    "file": "icons/banner-bg-6.png",
+    "src": "resources/img/bg/banner-bg-6.png"
+  },
+  "resources/img/bg/banner-bg-8.png": {
+    "file": "icons/banner-bg-8.png",
+    "src": "resources/img/bg/banner-bg-8.png"
+  },
+  "resources/img/bg/banner-bg.png": {
+    "file": "icons/banner-bg2.png",
+    "src": "resources/img/bg/banner-bg.png"
+  },
+  "resources/img/bg/book-bg-1.png": {
+    "file": "icons/book-bg-1.png",
+    "src": "resources/img/bg/book-bg-1.png"
+  },
+  "resources/img/bg/card-bg-small.png": {
+    "file": "icons/card-bg-small.png",
+    "src": "resources/img/bg/card-bg-small.png"
+  },
+  "resources/img/bg/category-bg.jpg": {
+    "file": "icons/category-bg.jpg",
+    "src": "resources/img/bg/category-bg.jpg"
+  },
+  "resources/img/bg/choose-bg-4.png": {
+    "file": "icons/choose-bg-4.png",
+    "src": "resources/img/bg/choose-bg-4.png"
+  },
+  "resources/img/bg/circle-bg.png": {
+    "file": "icons/circle-bg.png",
+    "src": "resources/img/bg/circle-bg.png"
+  },
+  "resources/img/bg/count-bg.png": {
+    "file": "icons/count-bg.png",
+    "src": "resources/img/bg/count-bg.png"
+  },
+  "resources/img/bg/doctor-shape-img1.png": {
+    "file": "icons/doctor-shape-img1.png",
+    "src": "resources/img/bg/doctor-shape-img1.png"
+  },
+  "resources/img/bg/doctor-shape-img2.png": {
+    "file": "icons/doctor-shape-img2.png",
+    "src": "resources/img/bg/doctor-shape-img2.png"
+  },
+  "resources/img/bg/experiance-bg.jpg": {
+    "file": "icons/experiance-bg.jpg",
+    "src": "resources/img/bg/experiance-bg.jpg"
+  },
+  "resources/img/bg/footer-01.png": {
+    "file": "icons/footer-01.png",
+    "src": "resources/img/bg/footer-01.png"
+  },
+  "resources/img/bg/footer-bg-12.png": {
+    "file": "icons/footer-bg-12.png",
+    "src": "resources/img/bg/footer-bg-12.png"
+  },
+  "resources/img/bg/footer-bg.jpg": {
+    "file": "icons/footer-bg.jpg",
+    "src": "resources/img/bg/footer-bg.jpg"
+  },
+  "resources/img/bg/hero-three-bg.jpg": {
+    "file": "icons/hero-three-bg.jpg",
+    "src": "resources/img/bg/hero-three-bg.jpg"
+  },
+  "resources/img/bg/home-menu-img-1.png": {
+    "file": "icons/home-menu-img-1.png",
+    "src": "resources/img/bg/home-menu-img-1.png"
+  },
+  "resources/img/bg/home-menu-img-2.png": {
+    "file": "icons/home-menu-img-2.png",
+    "src": "resources/img/bg/home-menu-img-2.png"
+  },
+  "resources/img/bg/home10-menu-img-1.png": {
+    "file": "icons/home10-menu-img-1.png",
+    "src": "resources/img/bg/home10-menu-img-1.png"
+  },
+  "resources/img/bg/home10-pattern-02.png": {
+    "file": "icons/home10-pattern-02.png",
+    "src": "resources/img/bg/home10-pattern-02.png"
+  },
+  "resources/img/bg/home11-menu-img-1.png": {
+    "file": "icons/home11-menu-img-1.png",
+    "src": "resources/img/bg/home11-menu-img-1.png"
+  },
+  "resources/img/bg/home11-pattern-02.png": {
+    "file": "icons/home11-pattern-02.png",
+    "src": "resources/img/bg/home11-pattern-02.png"
+  },
+  "resources/img/bg/home12-menu-img-1.png": {
+    "file": "icons/home12-menu-img-1.png",
+    "src": "resources/img/bg/home12-menu-img-1.png"
+  },
+  "resources/img/bg/home12-pattern-02.png": {
+    "file": "icons/home12-pattern-02.png",
+    "src": "resources/img/bg/home12-pattern-02.png"
+  },
+  "resources/img/bg/home2-menu-img-1.png": {
+    "file": "icons/home2-menu-img-1.png",
+    "src": "resources/img/bg/home2-menu-img-1.png"
+  },
+  "resources/img/bg/home2-pattern-02.png": {
+    "file": "icons/home2-pattern-02.png",
+    "src": "resources/img/bg/home2-pattern-02.png"
+  },
+  "resources/img/bg/home3-menu-img-1.png": {
+    "file": "icons/home3-menu-img-1.png",
+    "src": "resources/img/bg/home3-menu-img-1.png"
+  },
+  "resources/img/bg/home3-pattern-02.png": {
+    "file": "icons/home3-pattern-02.png",
+    "src": "resources/img/bg/home3-pattern-02.png"
+  },
+  "resources/img/bg/home4-menu-img-1.png": {
+    "file": "icons/home4-menu-img-1.png",
+    "src": "resources/img/bg/home4-menu-img-1.png"
+  },
+  "resources/img/bg/home4-pattern-02.png": {
+    "file": "icons/home4-pattern-02.png",
+    "src": "resources/img/bg/home4-pattern-02.png"
+  },
+  "resources/img/bg/home5-menu-img-1.png": {
+    "file": "icons/home5-menu-img-1.png",
+    "src": "resources/img/bg/home5-menu-img-1.png"
+  },
+  "resources/img/bg/home5-pattern-02.png": {
+    "file": "icons/home5-pattern-02.png",
+    "src": "resources/img/bg/home5-pattern-02.png"
+  },
+  "resources/img/bg/home6-menu-img-1.png": {
+    "file": "icons/home6-menu-img-1.png",
+    "src": "resources/img/bg/home6-menu-img-1.png"
+  },
+  "resources/img/bg/home6-pattern-02.png": {
+    "file": "icons/home6-pattern-02.png",
+    "src": "resources/img/bg/home6-pattern-02.png"
+  },
+  "resources/img/bg/home7-menu-img-1.png": {
+    "file": "icons/home7-menu-img-1.png",
+    "src": "resources/img/bg/home7-menu-img-1.png"
+  },
+  "resources/img/bg/home7-pattern-02.png": {
+    "file": "icons/home7-pattern-02.png",
+    "src": "resources/img/bg/home7-pattern-02.png"
+  },
+  "resources/img/bg/home8-menu-img-1.png": {
+    "file": "icons/home8-menu-img-1.png",
+    "src": "resources/img/bg/home8-menu-img-1.png"
+  },
+  "resources/img/bg/home8-pattern-02.png": {
+    "file": "icons/home8-pattern-02.png",
+    "src": "resources/img/bg/home8-pattern-02.png"
+  },
+  "resources/img/bg/home9-menu-img-1.png": {
+    "file": "icons/home9-menu-img-1.png",
+    "src": "resources/img/bg/home9-menu-img-1.png"
+  },
+  "resources/img/bg/home9-pattern-02.png": {
+    "file": "icons/home9-pattern-02.png",
+    "src": "resources/img/bg/home9-pattern-02.png"
+  },
+  "resources/img/bg/layer-img.jpg": {
+    "file": "icons/layer-img.jpg",
+    "src": "resources/img/bg/layer-img.jpg"
+  },
+  "resources/img/bg/service-01.png": {
+    "file": "icons/service-01.png",
+    "src": "resources/img/bg/service-01.png"
+  },
+  "resources/img/bg/slider-bg.png": {
+    "file": "icons/slider-bg.png",
+    "src": "resources/img/bg/slider-bg.png"
+  },
+  "resources/img/bg/team-bg-01.png": {
+    "file": "icons/team-bg-01.png",
+    "src": "resources/img/bg/team-bg-01.png"
+  },
+  "resources/img/bg/team-bg.png": {
+    "file": "icons/team-bg.png",
+    "src": "resources/img/bg/team-bg.png"
+  },
+  "resources/img/bg/team.png": {
+    "file": "icons/team.png",
+    "src": "resources/img/bg/team.png"
+  },
+  "resources/img/bg/testimonial-01.png": {
+    "file": "icons/testimonial-01.png",
+    "src": "resources/img/bg/testimonial-01.png"
+  },
+  "resources/img/bg/testimonial-bg-1.jpg": {
+    "file": "icons/testimonial-bg-1.jpg",
+    "src": "resources/img/bg/testimonial-bg-1.jpg"
+  },
+  "resources/img/doctors-dashboard/doctor-sidebar-bg.jpg": {
+    "file": "icons/doctor-sidebar-bg.jpg",
+    "src": "resources/img/doctors-dashboard/doctor-sidebar-bg.jpg"
+  },
+  "resources/img/doctors-dashboard/patient-sidebar-bg.jpg": {
+    "file": "icons/patient-sidebar-bg.jpg",
+    "src": "resources/img/doctors-dashboard/patient-sidebar-bg.jpg"
+  },
+  "resources/img/footer-arrow.png": {
+    "file": "icons/footer-arrow.png",
+    "src": "resources/img/footer-arrow.png"
+  },
+  "resources/img/home/pattern-img-1.png": {
+    "file": "icons/pattern-img-1.png",
+    "src": "resources/img/home/pattern-img-1.png"
+  },
+  "resources/img/home/pattern-img-2.png": {
+    "file": "icons/pattern-img-2.png",
+    "src": "resources/img/home/pattern-img-2.png"
+  },
+  "resources/img/icons/active-icon-1.png": {
+    "file": "icons/active-icon-1.png",
+    "src": "resources/img/icons/active-icon-1.png"
+  },
+  "resources/img/icons/active-icon-2.png": {
+    "file": "icons/active-icon-2.png",
+    "src": "resources/img/icons/active-icon-2.png"
+  },
+  "resources/img/icons/badge.svg": {
+    "file": "icons/badge.svg",
+    "src": "resources/img/icons/badge.svg"
+  },
+  "resources/img/icons/bone-icon.svg": {
+    "file": "icons/bone-icon.svg",
+    "src": "resources/img/icons/bone-icon.svg"
+  },
+  "resources/img/icons/check.svg": {
+    "file": "icons/check.svg",
+    "src": "resources/img/icons/check.svg"
+  },
+  "resources/img/icons/eye-icon-02.svg": {
+    "file": "icons/eye-icon-02.svg",
+    "src": "resources/img/icons/eye-icon-02.svg"
+  },
+  "resources/img/icons/fluent-password.svg": {
+    "file": "icons/fluent-password.svg",
+    "src": "resources/img/icons/fluent-password.svg"
+  },
+  "resources/img/icons/footer-star-icon.png": {
+    "file": "icons/footer-star-icon.png",
+    "src": "resources/img/icons/footer-star-icon.png"
+  },
+  "resources/img/icons/password-duotone.svg": {
+    "file": "icons/password-duotone.svg",
+    "src": "resources/img/icons/password-duotone.svg"
+  },
+  "resources/img/icons/phone.png": {
+    "file": "icons/phone.png",
+    "src": "resources/img/icons/phone.png"
+  },
+  "resources/img/icons/service-element-1.svg": {
+    "file": "icons/service-element-1.svg",
+    "src": "resources/img/icons/service-element-1.svg"
+  },
+  "resources/img/icons/slide-icon-01.svg": {
+    "file": "icons/slide-icon-01.svg",
+    "src": "resources/img/icons/slide-icon-01.svg"
+  },
+  "resources/img/icons/slide-icon-02.svg": {
+    "file": "icons/slide-icon-02.svg",
+    "src": "resources/img/icons/slide-icon-02.svg"
+  },
+  "resources/img/icons/slide-icon-03.svg": {
+    "file": "icons/slide-icon-03.svg",
+    "src": "resources/img/icons/slide-icon-03.svg"
+  },
+  "resources/img/icons/slide-icon-04.svg": {
+    "file": "icons/slide-icon-04.svg",
+    "src": "resources/img/icons/slide-icon-04.svg"
+  },
+  "resources/img/icons/slide-icon-05.svg": {
+    "file": "icons/slide-icon-05.svg",
+    "src": "resources/img/icons/slide-icon-05.svg"
+  },
+  "resources/img/icons/slide-icon-07.svg": {
+    "file": "icons/slide-icon-07.svg",
+    "src": "resources/img/icons/slide-icon-07.svg"
+  },
+  "resources/img/icons/slide-icon-09.svg": {
+    "file": "icons/slide-icon-09.svg",
+    "src": "resources/img/icons/slide-icon-09.svg"
+  },
+  "resources/img/icons/slide-icon-10.svg": {
+    "file": "icons/slide-icon-10.svg",
+    "src": "resources/img/icons/slide-icon-10.svg"
+  },
+  "resources/img/icons/star-twelve.png": {
+    "file": "icons/star-twelve.png",
+    "src": "resources/img/icons/star-twelve.png"
+  },
+  "resources/img/icons/tag-icon.png": {
+    "file": "icons/tag-icon.png",
+    "src": "resources/img/icons/tag-icon.png"
+  },
+  "resources/img/icons/title-bg-1.svg": {
+    "file": "icons/title-bg-1.svg",
+    "src": "resources/img/icons/title-bg-1.svg"
+  },
+  "resources/img/icons/title-bg.svg": {
+    "file": "icons/title-bg.svg",
+    "src": "resources/img/icons/title-bg.svg"
+  },
+  "resources/img/icons/title-icon.svg": {
+    "file": "icons/title-icon.svg",
+    "src": "resources/img/icons/title-icon.svg"
+  },
+  "resources/img/icons/work-icon-5.png": {
+    "file": "icons/work-icon-5.png",
+    "src": "resources/img/icons/work-icon-5.png"
+  },
+  "resources/img/icons/x-icon.svg": {
+    "file": "icons/x-icon.svg",
+    "src": "resources/img/icons/x-icon.svg"
+  },
+  "resources/img/location.png": {
+    "file": "icons/location.png",
+    "src": "resources/img/location.png"
+  },
+  "resources/img/mail-box.png": {
+    "file": "icons/mail-box.png",
+    "src": "resources/img/mail-box.png"
+  },
+  "resources/img/pharmacy-app-bg.png": {
+    "file": "icons/pharmacy-app-bg.png",
+    "src": "resources/img/pharmacy-app-bg.png"
+  },
+  "resources/img/search-bg.png": {
+    "file": "icons/search-bg.png",
+    "src": "resources/img/search-bg.png"
+  },
+  "resources/img/search.png": {
+    "file": "icons/search.png",
+    "src": "resources/img/search.png"
+  },
+  "resources/img/testimonial-bg.jpg": {
+    "file": "icons/testimonial-bg.jpg",
+    "src": "resources/img/testimonial-bg.jpg"
+  },
+  "resources/js/script.js": {
+    "file": "js/script.js",
+    "name": "script",
+    "src": "resources/js/script.js",
+    "isEntry": true
+  }
+}

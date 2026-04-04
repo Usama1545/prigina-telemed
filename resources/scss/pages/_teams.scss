@@ -1,0 +1,807 @@
+@use "../utils/mixins" ;
+@use "../utils/variables" ;
+
+
+.team-section {
+    &-three {
+        position: relative;
+        .element-1 {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            animation: rotate 9s linear forwards infinite;
+            @include mixins.respond-below(sm) {
+                display: none;
+            }
+        }
+    }
+    &-six {
+        position: relative;
+        .element-one {
+            position: absolute;
+            transform: rotateY(180deg);
+            top: 100px;
+            left: 50px;
+        }
+    }
+    &-seven {
+        position: relative;
+        background: variables.$primary-transparent url('../img/bg/team-bg-01.png');
+        background-repeat: repeat-x;
+        background-size: cover;
+    }
+    &-nine {
+        position: relative;
+        .icon-one {
+            position: absolute;
+            top: 5%;
+            left: 9%;
+            animation: rotate 9s linear forwards infinite;
+            z-index: -1;
+        }
+    }
+    &-twelve {
+        background: variables.$linear-gradient;
+        position: relative;
+        .team-icon-1{
+            position: absolute;
+            top: 0;
+            right: 0;
+            transform: rotateY(190deg);
+            @include mixins.respond-below(lg) {
+                display: none;
+            }
+        }
+        .team-slider-twelve {
+            position: relative;
+            z-index: 1;
+        }
+    }
+}
+
+.team-item {
+    &-three {
+        &:hover {
+            .team-overley {
+                &::before {
+                    background: variables.$background-gradient;
+                    height: 100%;
+                    transition: all 1.7s;
+                    z-index: unset !important;
+                }
+            }
+            .icons {
+                transform: translateY(0) !important;
+                &:hover {
+                    transform: rotate(45deg) !important;
+                    background: variables.$primary;
+                    color: variables.$white;
+                }
+            }
+        }
+        .team-overley {
+            background: url(../img/bg/team-bg.png);
+            background-size: 100% 100%;
+            padding: 22px 22px 0px 22px;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            &:before {
+                content: "";
+                background: variables.$light-gradient;
+                position: absolute;
+                inset: 0;
+                z-index: -1;
+                transition: all 1.7s;
+            }
+            .img-1 {
+
+                
+            }
+            .date {
+                background: variables.$white;
+                width: fit-content;
+                padding: 13px;
+                border-radius: 0px 0px 12px 12px;
+                font-size: 16px;
+                font-weight: 600;
+                color: variables.$gray-900;
+                position: absolute;
+                right: -62px;
+                top: 60px;
+                transform: rotate(90deg);
+            }
+            .icons {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 80px;
+                height: 80px;
+                background: variables.$white;
+                border-radius: 50%;
+                font-size: 40px;
+                font-weight: variables.$font-weight-semibold;
+                color: variables.$gray-900;
+                position: absolute;
+                margin: auto;
+                transform: translateY(275px);
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                transition:  all 0.7s;
+            }
+        }
+        .team-details {
+            padding: 20px;
+            text-align: center;
+            .author-name {
+                margin-bottom: 4px;
+            }
+            .author-dest {
+                margin-bottom: 0;
+            }
+        }
+    }
+    &-five {
+        background: variables.$white;
+        border-radius: variables.$border-radius-lg;
+        box-shadow: variables.$box-shadow;
+        transition: all 0.6s;
+        &:hover {
+            transform: translateY(-5px);
+            box-shadow: variables.$box-shadow-lg;
+            .team-overley {
+                .img-2 {
+                    opacity: 1;
+                }
+            }
+        }
+        .team-overley {
+            padding: 13px;
+            background: variables.$pink-gradient;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            .img-1 {
+                position: relative;
+                z-index: 1;
+            }
+            .img-2 {
+                position: absolute;
+                inset: 0;
+                margin: auto;
+                opacity: 0.2;
+                transition: all 0.6s;
+            }
+        }
+        .team-details {
+            padding: 20px;
+            text-align: center;
+            .author-name {
+                margin-bottom: 8px;
+            }
+            .author-dest {
+                margin-bottom: 0px;
+            }
+        }
+    }
+    &-six {
+        text-align:center;
+        transition: all 0.4s;
+        &:hover {
+            transform : translateY(-10px);
+            .team-overly-img  {
+                .img-three  {
+                    right: 20px;
+                }
+            }
+        }
+        .team-overly-img {
+            margin-bottom: 24px;
+            background: variables.$primary-gradient;
+            border-radius : 100%;
+            padding: 20px 0px 0px;
+            overflow: hidden;
+            position: relative;
+            @include mixins.respond-below(xxl) {
+                border-radius: 48%;
+            }
+            .img-three {
+                position: absolute;
+                top: 63px;
+                right: -45px;
+                transition: all 0.5s
+            }
+        }
+        .team-content {
+            .custom-title {
+                margin-bottom: 8px;
+            }
+            p {
+                margin-bottom: 0px;
+            }
+        }
+        .element-one {
+            position: absolute;
+            top: 30%;
+            left: 50px;
+        }
+    }
+	&-seven {
+		position: relative;
+        transition: all 0.4s;
+		.team-img {
+			background: variables.$primary-100;
+			border-radius: variables.$border-radius-lg;
+			padding: 30px 30px 0;
+			margin-bottom: 44px;
+            transition: all 0.4s;
+            text-align: center;
+            display: block;
+            img {
+                transition: all 0.4s;
+            }
+		}
+		.team-content {
+			background: variables.$white;
+			border-radius: variables.$border-radius-lg;
+			padding: 20px;
+			text-align: center;
+			width: calc(100% - 40px);
+			position: absolute;
+			bottom: 0;
+			left: 50%;
+			@include mixins.transform(translateX(-50%));
+			z-index: 1;
+            .custom-title {
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                margin-bottom: 4px;
+            }
+            p {
+                margin-bottom: 0;
+            }
+		}
+        &:hover {
+            .team-img {
+                background: variables.$primary url('../img/bg/team.png');
+                background-repeat: repeat-x;
+                background-size: cover;
+                img {
+                    transform: scale(1.02);
+                    transition: all 0.4s;
+                }
+            }
+        }
+	}
+    &-eight {
+        position: relative;
+        border-radius: 12px 12px 0px 12px;
+        overflow: hidden;
+        border: 1px solid variables.$gray-200;
+        text-align: center;
+        box-shadow: variables.$box-shadow;
+        transition: all 0.6s;
+        &:hover {
+            transform: translateY(-10px);
+            .team-overlay  {
+                &::before {
+                    height: 100%;
+                }
+                .team-icon {
+                    transform: translateY(0);
+                }
+            }
+        }
+        .team-overlay {
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            &::before {
+                content: "";
+                background: variables.$linear-gradient;
+                position: absolute;
+                height: 0;
+                width: 100%;
+                bottom: 0;
+                transition: all 0.6s;
+            }
+            .img-one {
+                width: 100%;
+            }
+            .team-icon {
+                position: absolute;
+                top: 12px;
+                right: 12px;
+                width: 56px;
+                height: 56px;
+                background: variables.$white;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 24px;
+                font-weight: variables.$font-weight-bold;
+                color: variables.$gray-900;
+                transform: translateY(-70px);
+                transition: all 0.6s;
+                &:hover {
+                    background: variables.$primary;
+                    color: variables.$white;
+                }
+            }
+        }
+        .team-content {
+            padding: 40px;
+            @include mixins.respond-below(xxl) {
+                padding: 20px;
+            }
+            @include mixins.respond-below(xl) {
+                padding: 14px;
+            }
+            @include mixins.respond-below(lg) {
+                padding: 20px;
+            }
+            .custom-title {
+                margin-bottom: 4px;
+                @include mixins.respond-below(xl) {
+                    font-size: 18px;
+                }
+            }
+            .description {
+                margin-bottom: 0;
+                @include mixins.respond-below(xl) {
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+    &-nine {
+        border-radius: 12px;
+        overflow: hidden;
+        margin: 0px 12px;
+        &:hover {
+            .img-one  {
+                transform: scale(1.1);
+            }
+        }
+        .team-overlay {
+            position: relative;
+            .img-one {
+                transition: all 0.5s;
+            }
+            .team-exp {
+                padding: 12px;
+                border-radius: 12px 12px 0px 0px;
+                background: var(--white);
+                position: absolute;
+                bottom: 96px;
+                left: 0;
+                right: 0;
+                margin: auto;
+                width: fit-content;
+                color: variables.$gray-900;
+                font-weight: variables.$font-weight-semibold;
+                @include mixins.respond-below(md) {
+                    bottom: 86px;
+                }   
+                @include mixins.respond-below(sm) {
+                    bottom: 88px;
+                }
+            }
+            .team-content {
+                padding: 20px;
+                background: variables.$light-200;
+                backdrop-filter: blur(20px);
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                text-align: center;
+                .custom-title {
+                    color: variables.$darkmode-text-white;
+                    margin-bottom: 4px;
+                    a {
+                        color: variables.$darkmode-text-white;
+                        transition: all 0.5s;
+                        &:hover {
+                            color: variables.$primary;
+                        }
+                    }
+                }
+                .team-name {
+                    margin-bottom: 0;
+                    color: variables.$darkmode-text-white;
+                    font-weight: variables.$font-weight-normal;
+                }
+            }
+        }
+    }
+    &-ten {
+		position: relative;
+        transition: all 0.4s;
+		.team-img {
+			background: variables.$primary-gradient-100;
+			border-radius: 100px 100px 0 0;
+			padding: 16px 16px 0;
+			margin-bottom: 24px;
+            transition: all 0.4s ease-in-out;
+            text-align: center;
+            display: block;
+            overflow: hidden;
+            position: relative;
+            .team-icon {
+                position: absolute;
+                top: 53px;
+                right: 30px;
+                animation: topBottom 3s ease-in-out infinite;
+                opacity: 0;
+                transition: all 0.4s ease-in-out;
+            }
+            &::before {
+                content: "";
+                background: variables.$secondary-gradient;
+                position: absolute;
+                height: 0;
+                width: 100%;
+                left: 0;
+                top: 0;
+                transition: all 0.6s;
+            }
+            img {
+                transition: all 0.4s;
+            }
+		}
+		.team-content {
+			text-align: center;
+            .custom-title {
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                margin-bottom: 4px;
+            }
+            p {
+                margin-bottom: 0;
+            }
+		}
+        &:hover {
+            .team-img {
+                transition: all 0.4s ease-in-out;
+                .team-icon {
+                    opacity: 1;
+                }
+                &::before {
+                    opacity: 1;
+                    height: 100%;
+                }
+                img {
+                    transform: scale(1.02);
+                    transition: all 0.4s;
+                }
+            }
+        }
+	}
+    &-eleven {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 40px;
+        border-top: 1px solid variables.$gray-200;
+        position: relative;
+        transition: all 0.6s;
+        @include mixins.respond-below(md) {
+            padding: 20px;
+            flex-direction: column;
+            align-items: start;
+            gap: 16px;
+        }
+        @include mixins.respond-below(sm) {
+            padding: 24px 4px;
+        }
+
+        &:hover ,  &.active {
+            .team-img {
+                opacity: 1;
+                transform: rotate(12deg);
+            }
+            .team-name {
+                .name {
+                    -webkit-text-stroke: unset;
+                    color: variables.$gray-900 !important;
+                    transition: all 0.6s;
+                }
+            }
+
+        }
+        .team-left {
+            display: flex;
+            align-items: center;
+            width: 63%;
+            @include mixins.respond-below(lg) {
+                width: 85%;
+            }
+            @include mixins.respond-below(md) {
+                width: 100%;
+                flex-direction: column;
+                align-items: start;
+                gap: 16px;
+            }
+            .team-header {
+                width: 38%;
+                @include mixins.respond-below(sm) {
+                    width: 100%;
+                }
+                .designation {
+                    font-size: 18px;
+                    font-weight: variables.$font-weight-bold;
+                    color: variables.$gray-600;
+                    margin-bottom: 0;
+                    transition: all 0.6s;
+                    @include mixins.respond-below(xl) {
+                        font-size: 16px;
+                    }
+                }
+            }
+            .team-name {
+                white-space: nowrap;
+                .name {
+                    font-size: 40px;
+                    font-weight: variables.$font-weight-bold;
+                    margin-bottom: 0;
+                    -webkit-text-stroke: 1.5px variables.$gray-900;
+                    color: transparent;
+                    transition: all 0.6s;
+                    @include mixins.respond-below(xl) {
+                        font-size: 30px;
+                    }
+                }
+            }
+        }
+        .team-img {
+            position: absolute;
+            top: -7%;
+            right: 265px;
+            opacity: 0;
+            -webkit-transition: all 0.5s ease-in-out;
+            -ms-transition: all 0.5s ease-in-out;
+            transition: all 0.5s ease-in-out;
+            width: 165px;
+            border-radius: 20px;
+            overflow: hidden;
+            transform: rotate(0deg);
+            z-index: 1;
+            @include mixins.respond-below(lg) {
+                display: none;
+            }
+        }
+        .team-social {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            .icon {
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                background: variables.$light;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 20px;
+                color: variables.$gray-900;
+                transition: all 0.6s;
+                @include mixins.respond-below(lg) {
+                    width: 30px;
+                    height: 30px;
+                    font-size: 14px;
+                }
+                &:hover {
+                    background: variables.$primary;
+                    color: variables.$white;
+                }
+            }
+        }
+        
+    }
+    &-twelve {
+        border-radius: 20px;
+        overflow: hidden;
+        margin: 12px;
+        padding: 24px;
+        background-color: variables.$white;
+        border: 1px solid variables.$gray-200;
+        box-shadow: variables.$box-shadow;
+        transition: all 0.6s;
+        position: relative;
+        z-index: 1;
+        &:hover {
+            transform: translateY(-10px);
+            .team-overlay {
+                background: variables.$primary-gradient;
+                transition: all 0.6s;
+                .img-one {
+                    transform: scale(1.1);
+                }
+            }
+        }
+        @include mixins.respond-below(sm) {
+            width: 86%;
+            margin: auto;
+        }
+        .team-overlay {
+            position: relative;
+            background: linear-gradient(176.93deg, rgba(0, 163, 114, 0.1) 3.25%, rgba(43, 76, 211, 0.1) 93.23%);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.6s;
+            .img-one {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 12px;
+                transition: all 0.6s;
+            }
+            margin-bottom: 20px;
+        }
+        .team-content {
+            text-align: center;
+            .custom-title {
+                margin-bottom: 4px;
+            }
+            .team-name {
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+
+.health-section {
+    &-thirteen {
+        .section-header-thirteen {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid variables.$gray-200;
+            @include mixins.respond-below(sm) {
+                flex-wrap: wrap;
+                gap: 16px;
+            }
+            .btn {
+                
+                i {
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+}
+
+
+.health-item {
+    &-thirteen {
+        text-align: center;
+        transition: all 0.6s ease-in-out;
+        &:hover {
+            transform: translateY(-10px);
+            transition: all 0.6s ease-in-out;
+        }
+        &.two {
+            .health-overlay {
+                background: variables.$indigo-transparent;
+                .shadow-1 {
+                    background: variables.$indigo-300;
+                }
+                .shadow-2 {
+                    background: variables.$indigo-200;
+                }
+            }
+        }
+        &.three {
+            .health-overlay {
+                background: variables.$danger-transparent;
+                .shadow-1 {
+                    background: variables.$danger-300;
+                }
+                .shadow-2 {
+                    background: variables.$danger-200;
+                }
+            }
+        }
+        &.four {
+            .health-overlay {
+                background: variables.$cyan-transparent;
+                .shadow-1 {
+                    background: variables.$cyan-300;
+                }
+                .shadow-2 {
+                    background: variables.$cyan-200;
+                }
+            }
+        }
+        &.five {
+            .health-overlay {
+                background: variables.$warning-transparent;
+                .shadow-1 {
+                    background: variables.$warning-300;
+                }
+                .shadow-2 {
+                    background: variables.$warning-200;
+                }
+            }
+        }
+        &.six {
+            .health-overlay {
+                background: variables.$pink-transparent;
+                .shadow-1 {
+                    background: variables.$pink-300;
+                }
+                .shadow-2 {
+                    background: variables.$pink-200;
+                }
+            }
+        }
+        .health-overlay {
+            width: 200px;
+            height: 220px;
+            background: variables.$success-transparent;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+            @include mixins.respond-below(xxl) {
+                width: 100%;
+            }
+            .shadow-1 {
+                background: variables.$success-300;
+                position: absolute;
+                top: -30px;
+                right: -33px;
+                width: 170px;
+                height: 170px;
+                border-radius: 50%;
+                filter: blur(37px);
+            }
+            .shadow-2 {
+                background: variables.$success-200;
+                position: absolute;
+                bottom: -52px;
+                left: -20px;
+                width: 170px;
+                height: 170px;
+                border-radius: 50%;
+                filter: blur(25px);
+            }
+            .health-icon {
+                width: 120px;
+                height: 120px;
+                border-radius: 50%;
+                background: rgba(variables.$white-rgb, 0.2);
+                border: 1px solid variables.$white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                z-index: 1;
+            }
+        }
+        .health-content {
+            .custom-title {
+                margin-bottom: 0;
+                @include mixins.respond-below(xxl) {
+                    font-size: 18px;
+                }
+            }
+        }
+    }
+}
+
+
+
+

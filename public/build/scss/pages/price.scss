@@ -1,0 +1,458 @@
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.pricing-section {
+	background-color: colors.$white;
+    padding: 60px 0 36px;
+    @include mixins.respond-below(lg) {
+        padding: 40px 0 16px;
+    }
+}
+.pricing-inner-header {
+	margin-bottom: 80px;
+    @include mixins.respond-below(lg) {
+        margin-bottom: 40px;
+    }
+}
+.plan-choose-info {
+	@extend %flex-align-center;
+	padding-top: 8px;
+	label {
+		margin-bottom: 0;
+	}
+	.monthly-plan {
+		color:  variables.$gray-900;
+	}
+	.yearly-plan {
+		color: colors.$bodycolor;
+	}
+	.status-toggle, .form-switch {
+        margin: 0 16px;
+	}
+	.checktoggle {
+		background-color: variables.$primary;
+		border: 1px solid colors.$blue__14;
+	}
+	.check {
+		&:checked {
+			& + .checktoggle {
+				background-color: colors.$white;
+				border: 1px solid colors.$blue__14;
+				&:after {
+					background-color: variables.$primary;
+				}
+			}
+		}
+	}
+    .monthly-plan, .yearly-plan {
+        font-weight: variables.$font-weight-medium;
+        font-size: variables.$font-size-16;
+        @include mixins.respond-below(md) {
+            font-size: variables.$font-size-16;
+        }
+    }
+}
+.pricing-card {
+	background: variables.$light-300;
+	border: 1px solid variables.$border-color;
+	border-radius: 24px;
+    @include mixins.transition(0.7s);
+	&:hover, &.active {
+		background: variables.$primary;
+        @include mixins.transition(0.7s);
+		.pricing-icon {
+			span {
+				background: colors.$white;
+                @include mixins.transition(0.7s);
+                @include mixins.transform(rotate(90deg));
+				img {
+                    @include mixins.transform(rotate(-90deg));
+                    @include mixins.transition(0.7s);
+				}
+			}
+		}
+		.pricing-title {
+			p {
+				color: colors.$flash_color;
+                @include mixins.transition(0.7s);
+			}
+			h4 {
+				color: colors.$white;
+                @include mixins.transition(0.7s);
+			}
+		}
+		.pricing-header {			
+			.badge {
+				background: rgba(variables.$white, 0.2);
+				color: variables.$white;
+			}
+		}
+		.pricing-header-text {
+			p {
+				color: colors.$white;
+                @include mixins.transition(0.7s);
+			}
+		}
+		.pricing-amount {
+			h2 {
+				color: colors.$white;
+                @include mixins.transition(0.7s);
+				span {
+					color: colors.$fog_color;
+                    @include mixins.transition(0.7s);
+				}
+			}
+			h6 {
+				color: colors.$white;
+                @include mixins.transition(0.7s);
+			}
+		}
+		.pricing-list {
+			ul {
+				li {
+					color: colors.$white;
+                    @include mixins.transition(0.7s);
+					&:before {
+						color: colors.$white;
+                        @include mixins.transition(0.7s);
+					}
+				}
+			}
+		}
+		.pricing-btn {
+			.btn {
+				color: variables.$gray-900 !important;
+				background: variables.$gray-transparent !important;
+			}
+		}
+	}
+	.card-body {
+        padding: 30px;
+        @include mixins.respond-below(lg) {
+            @include mixins.margin-padding(0, 20px);
+        }
+        @include mixins.respond-below(md) {
+            @include mixins.margin-padding(0, 15px);
+        }
+	}
+}
+.pricing-card-active {
+	background: variables.$primary;
+	.pricing-icon {
+		span {
+			background: colors.$white;
+            @include mixins.transition(0.7s);
+            @include mixins.transform(rotate(90deg));
+			img {
+                @include mixins.transform(rotate(-90deg));
+                @include mixins.transition(0.7s);
+			}
+		}
+	}
+	.pricing-title {
+		p {
+			color: colors.$flash_color;
+            @include mixins.transition(0.7s);
+		}
+		h4 {
+			color: colors.$white;
+            @include mixins.transition(0.7s);
+		}
+	}
+	.pricing-tag {
+	    margin-left: variables.$auto;
+		span {
+			background: colors.$tag__blue;
+			color: colors.$white;
+			font-weight: variables.$font-weight-medium;
+			border-radius: 10px;
+			padding: 12px 13px;
+		}
+	}
+	.pricing-header-text {
+		p {
+			color: colors.$white;
+            @include mixins.transition(0.7s);
+		}
+	}
+	.pricing-amount {
+		h2 {
+			color: colors.$white;
+            @include mixins.transition(0.7s);
+			span {
+				color: colors.$fog_color;
+                @include mixins.transition(0.7s);
+			}
+		}
+		h6 {
+			color: colors.$white;
+            @include mixins.transition(0.7s);
+		}
+	}
+	.pricing-list {
+		ul {
+			li {
+				color: colors.$white;
+                @include mixins.transition(0.7s);
+				&:before {
+					color: colors.$white;
+                    @include mixins.transition(0.7s);
+				}
+			}
+		}
+	}
+	.pricing-btn {
+		.btn {
+			color: colors.$white;
+			border: 1px solid colors.$broken_blue;
+			box-shadow: inset 0 0 0 50px colors.$broken_blue;
+		}
+	}
+}
+.pricing-header {
+	padding-bottom: 10px;
+	display: flex;
+	justify-content: space-between;
+	.badge {
+		background: rgba(variables.$dark, 0.2);
+		@include mixins.rounded(10px);
+		padding: 13px 14px;
+		color: variables.$gray-900;
+		font-size: variables.$font-size-14;
+	}
+}
+.pricing-header-info {
+	@extend %flex__center;
+	padding-bottom: 8px;
+	.badge {
+		margin-bottom: 8px;
+	}
+}
+.pricing-icon {
+	margin-right: 16px;
+	span {
+		min-width: 70px;
+		height: 70px;
+		background: colors.$white;
+		border-radius: 16px;
+		@extend %flex-align-center;
+        @include mixins.transition(0.7s);
+        @include mixins.transform(rotate(0));
+		img {
+            @include mixins.transform(rotate(0));
+            @include mixins.transition(0.7s);
+			@include mixins.respond-below(md) {
+				width: 24px;
+			}
+		}
+		@include mixins.respond-below(md) {
+			min-width: 60px;
+			height: 60px;
+		}
+	}
+}
+.pricing-title {
+	p {
+		font-size: variables.$font-size-16;
+		margin-bottom: 0;
+        @include mixins.transition(0.7s);
+        @include mixins.respond-below(md) {
+            font-size: typography.$font__size__15;
+        }
+	}
+	h4 {
+		margin-bottom: 0;
+        @include mixins.transition(0.7s);
+	}
+}
+.pricing-header-text {
+	p {
+		color: colors.$bodycolor;
+		margin-bottom: 0;
+        @include mixins.transition(0.7s);
+	}
+}
+.pricing-amount {
+	padding-bottom: 20px;
+	h2 {
+		margin-bottom: 20px;
+        @include mixins.transition(0.7s);
+		span {
+			font-weight: variables.$font-weight-normal;
+			font-size: variables.$font-size-14;
+			color: variables.$gray-300;
+            @include mixins.transition(0.7s);
+		}
+	}
+	h6 {
+		font-weight: variables.$font-weight-semibold;
+		font-size: typography.$font__size__20;
+		margin-bottom: 0;
+        @include mixins.transition(0.7s);
+        @include mixins.respond-below(md) {
+            font-size: variables.$font-size-16;
+        }
+	}
+}
+.pricing-list {
+	padding-bottom: 20px;
+	ul {
+        @include mixins.margin-padding(0, 0);
+		list-style: none;
+		li {
+			position: variables.$relative;
+			font-size: variables.$font-size-16;
+			color: variables.$gray-600;
+			padding-left: 25px;
+			margin-bottom: 14px;
+            @include mixins.transition(0.7s);
+			&:last-child {
+				margin-bottom: 0;
+			}
+			&:before {
+                @include mixins.position(variables.$absolute, 50%, null, null, 0);
+                @include mixins.transform(translateY(-50%));
+				content: "\f058";
+				font-family: variables.$font-awesome;
+				font-size: variables.$font-size-16;
+				font-weight: 900;
+				color: variables.$primary;
+				border: 0;
+                @include mixins.transition(0.7s);
+			}
+            @include mixins.respond-below(md) {
+                font-size: variables.$font-size-14;
+            }
+		}
+	}
+    @include mixins.respond-below(lg) {
+        padding-bottom: 30px;
+    }
+    @include mixins.respond-below(md) {
+        padding-bottom: 20px;
+    }
+}
+.pricing-btn {
+	text-align: variables.$center;
+	.btn {
+		font-weight: variables.$font-weight-medium;
+		font-size: variables.$font-size-16;
+        @include mixins.margin-padding(0, 9px 15px);
+		min-width: variables.$full__width;
+		display: variables.$inline__block;
+		border: 0;
+		@include mixins.rounded(44px);
+        @include mixins.respond-below(md) {
+            @include mixins.margin-padding(0, 8px 15px);
+            font-size: variables.$font-size-14;
+        }
+	}
+}
+
+.price-item {
+	background: variables.$white;
+	border: 1px solid variables.$border-color;
+	border-radius: variables.$border-radius-lg;
+	padding: 20px;
+	position: relative;
+	&.active {
+		margin-top: 30px;
+		border: 1px solid transparent;
+        background-image: linear-gradient(var(--white), var(--white)), var(--primary-gradient);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+		.btn {
+			background: variables.$primary-gradient !important;
+			border-color: variables.$primary !important;
+		}
+	}	
+	&:hover {
+		border: 1px solid transparent;
+        background-image: linear-gradient(var(--white), var(--white)), var(--primary-gradient);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+		.btn {
+			background: variables.$primary-gradient !important;
+			border-color: variables.$primary !important;
+		}
+	}
+	.recommend {
+		position: absolute;
+		background: variables.$primary-gradient;
+		padding: 4px 16px;
+		border-radius: variables.$border-radius variables.$border-radius 0 0;
+		color: variables.$darkmode-text-white;
+		right: 30px;
+		top: -32px;
+	}
+	.price-header {		
+		margin-bottom: 24px;
+		padding-bottom: 24px;
+		border-bottom: 1px solid variables.$border-color;
+		text-align: center;
+		.sub-title {
+			color: variables.$gray-900;
+			margin-bottom: 8px;
+		}
+		.price {
+			font-size: 48px;
+			font-weight: variables.$font-weight-bold;
+			background: variables.$primary-gradient;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+			margin-bottom: 24px;
+			@include mixins.respond-below(lg) {
+				font-size: 38px;
+			}
+			@include mixins.respond-below(md) {
+				font-size: 30px;
+			}
+			span {
+				font-size: 16px;
+				color: variables.$gray-600;
+				font-weight: variables.$font-weight-normal;
+				-webkit-text-fill-color: variables.$gray-600;
+				background: none;
+				
+			}
+		}
+		.btn {
+			width: 100%;
+			border: 0 !important;
+			&:hover {
+				background: variables.$primary-gradient !important;
+			}
+		}
+	}
+	.price-body {
+		h3 {
+			font-size: 18px;
+			margin-bottom: 20px;
+			@include mixins.respond-below(md) {
+				font-size: 16px;
+			}
+		}
+	}
+	ul {
+		li {
+			margin-bottom: 14px;
+			position: relative;
+			padding-left: 26px;
+			&:before {
+                position: absolute;
+				top: 50%;
+				left: 0;
+                transform: translateY(-50%);
+				content: "\f058";
+				font-family: variables.$font-awesome;
+				color: variables.$gray-200;
+                @include mixins.transition(0.7s);
+			}
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+}

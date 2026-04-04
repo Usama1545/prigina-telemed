@@ -1,0 +1,255 @@
+@use "../base/colors";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.nav-tabs {
+	border-bottom: 1px solid colors.$light-silver;
+	@include mixins.respond-below(md) {
+		border-bottom: 0;
+	    position: variables.$relative;
+	    background-color: variables.$white;
+	    border: 1px solid variables.$border-color;
+	    @include mixins.margin-padding(null, 5px 0);
+	    @include mixins.rounded(3px);
+	}
+	& > li {
+		& > a {
+			margin-right: 0;
+			color: colors.$dark__gray;
+			@include mixins.rounded(3px);
+			@include mixins.respond-below(md) {
+				border-width: 2px;
+				border-left-color: variables.$transparent;
+			}
+			&:hover, &:focus {
+				border-color: variables.$transparent;
+				color: colors.$dark__blue;
+				@include mixins.respond-below(md) {
+					background-color: colors.$light__white;
+				}
+			}
+			&.active {
+				@include mixins.respond-below(md) {
+					border-color: variables.$transparent variables.$transparent variables.$transparent variables.$primary !important;
+    				border-left-width: 2px;
+    			}
+			}
+		}
+		&.open:not(.active) {
+			& > a, & > a:hover, & > a:focus {
+				background-color: colors.$light__white;
+			}
+		}
+	}
+	.nav-item {
+		@include mixins.respond-below(md) {
+			margin-bottom: 0;
+		}
+		&.show {
+			.nav-link {
+				@include mixins.respond-below(md) {
+					border-color: variables.$transparent variables.$transparent variables.$transparent variables.$primary !important;
+    				border-left-width: 2px;
+    			}
+			}
+		}
+	}
+	.nav-link {
+		@include mixins.rounded(0);
+		@include mixins.respond-below(md) {
+			border-width: 2px;
+		}
+		&:focus, &:hover {
+			background-color: colors.$cloud__gray;
+		    border-color: variables.$transparent;
+			color: colors.$dark__blue;
+		}
+	}
+	&.nav-justified {
+		@include mixins.respond-below(md) {
+			border-bottom: 1px solid variables.$border-color;
+		}
+		& > li {
+			& > a {
+				margin-bottom: 0;
+				@include mixins.rounded(0);
+				&:hover, &:focus {
+					border-bottom-color: variables.$border-color;
+				}
+				&.active {
+					@include mixins.respond-below(md) {
+						border-color: variables.$transparent variables.$transparent variables.$transparent variables.$primary;
+    					border-left-width: 2px !important;
+					}
+				}
+			}
+		}
+		&.nav-tabs-solid {
+			& > li {
+				& > a {
+					color: colors.$dark__blue;
+				}
+			}
+		}
+		&.nav-tabs-top {
+			border-bottom: 1px solid variables.$border-color;
+			& > li {
+				& > a, & > a:hover, & > a:focus {
+					border-width: 2px 0 0 0;
+				}
+			}
+		}
+	}
+	&.nav-tabs-top {
+		& > li {
+			margin-bottom: 0;
+			& > a {
+				border-width: 2px 0 0 0;
+				&.open {
+					border-top-color: variables.$border-color;
+				}
+				&:hover, &:focus {
+				border-width: 2px 0 0 0;
+				border-top-color: variables.$border-color;
+				}
+				&.active, &.active:hover, &.active:focus {
+					border-top-color: variables.$primary;
+				}
+			}
+			& + li {
+				& > a {
+					margin-left: 1px; 
+				}
+			}
+		}
+	}
+	&.nav-tabs-bottom {
+		& > li {
+			& > a {
+				&.active, &.active:hover, &.active:focus {
+					border-bottom-width: 2px;
+					border-color: variables.$transparent;
+					border-bottom-color: variables.$primary;
+					background-color: variables.$transparent;
+					@include mixins.transition(none 0s ease 0s);
+					@include mixins.respond-below(md) {
+						background-color: colors.$dark__light;
+				    }
+				}
+			}
+		}
+	}
+	.nav-tabs-justified {
+		@include mixins.respond-below(md) {
+			border-bottom: 1px solid variables.$border-color;
+		}
+		& > li {
+			& > a {
+				border-radius: 0;
+				margin-bottom: 0;
+				&:hover, &:focus {
+					border-bottom-color: variables.$border-color;
+				}
+				&.active, &.active:focus, &.active:hover {
+					border-width: 0 0 0 2px;
+					border-left-color: variables.$primary;
+				}
+			}
+		}
+		&.nav-tabs-solid {
+			& > li {
+				& > a {
+					border-color: variables.$transparent;
+				}
+			}
+		}
+		&.nav-tabs-top {
+			border-bottom: 1px solid variables.$border-color;
+			& > li {
+				& a, & a:hover, & a:focus {
+					border-width: 2px 0 0 0;
+				} 
+			}
+		}
+	}	
+	&.nav-tabs-solid {
+		background-color: colors.$light__white;
+		border: 0;
+		@include mixins.respond-below(md) {
+			@include mixins.margin-padding(null, 5px);
+		}
+		& > li {
+			margin-bottom: 0;
+			& a {
+				color: colors.$dark__blue;
+				&.active, &.active:hover, &.active:focus {
+					background-color: variables.$primary;
+					border-color: variables.$primary;
+					color: variables.$white;
+				} 
+			}
+			& > a {
+				border-color: variables.$transparent;				
+				@include mixins.respond-below(md) {
+					border-left-width: 0 !important;
+				}
+				&:hover, &:focus {
+					background-color: colors.$dark__light;
+				}
+				&.active, &.active:hover, &.active:focus {
+					background-color: variables.$primary;
+					border-color: variables.$primary;
+					color: variables.$white;
+				}
+			}
+		}
+		.active {
+			& > a, & a:hover, & a:focus {
+				background-color: variables.$primary;
+				border-color: variables.$primary;
+				color: variables.$white;
+			}
+		}
+		&.nav-tabs-rounded {
+			@include mixins.rounded(50px);			
+			@include mixins.respond-below(md) {
+				@include mixins.rounded(5px);	
+			}
+			& > li {
+				& > a {
+					@include mixins.rounded(50px);
+					&.active, &.active:hover, &.active:focus {
+						@include mixins.rounded(50px);
+						@include mixins.respond-below(md) {
+							border-color: transparent transparent transparent variables.$primary !important;
+	    					border-left-width: 2px;
+					    }
+					}
+				}
+			}
+			@include mixins.respond-below(md) {
+				@include mixins.rounded(5px);
+			}
+		}
+		& > .open:not(.active) {
+			& > a {
+				background-color: colors.$dark__light;
+				border-color: variables.$transparent;
+			}
+		}
+	}
+	.nav-link {
+		&.active {
+			@include mixins.respond-below(md) {
+				border-color: variables.$transparent variables.$transparent variables.$transparent variables.$primary !important;
+    			border-left-width: 2px;
+    		}
+		}
+	}
+}
+.tab-content {
+	padding-top: 20px;
+}
+.card-header-tabs {
+    border-bottom: 0;
+}

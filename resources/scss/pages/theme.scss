@@ -1,0 +1,1999 @@
+@use "../utils/variables";
+@use "../utils/mixins";
+
+/*============================
+  58.theme
+============================*/
+
+.dark-mode {
+    body {
+        .plan-card{
+            background: variables.$darkmode-white !important;
+        }
+        .badge{
+            background: variables.$darkmode-white;
+        }
+        .counter-wrap{
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .bg-white {
+            background: variables.$darkmode-white !important; 
+        }
+        .card {
+            background: variables.$darkmode-white !important; 
+            border-color: variables.$darkmode-light !important;
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.5);
+        }
+        .place-item{
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.5);
+        }
+        .form-control {
+            color: variables.$darkmode-text;
+        }
+        .main-header.main-header-four .header-nav .main-menu-wrapper .main-nav > li > a {
+            color: variables.$darkmode-text;
+            i {
+                color: variables.$darkmode-text;
+            }
+        }
+        header {
+            &.inner-header {
+                &.header-fixed {
+                    background: variables.$darkmode-white;
+                }
+                .header-nav {
+                    background: variables.$darkmode-white;
+                }
+            }
+            &.header-fixed {
+                border-color: variables.$darkmode-light;
+            }
+            .header-logo.logo-dark {
+                display: none;
+            }
+            .header-logo.logo-white {
+                display: block;
+            }
+        } 
+        header.fixed {
+            background: variables.$darkmode-white;
+        }
+        .dropdown-menu {
+            background: variables.$darkmode-white;
+            border-color: variables.$darkmode-light;
+        }
+        .border,.border-bottom,.border-top,.border-start,.border-end,.border-white {
+            border-color: variables.$darkmode-light !important;
+        }
+        .banner-form-tab {
+            background: variables.$darkmode-white;
+            .nav {
+                li {
+                    .nav-link {
+                        color: variables.$darkmode-text;
+                    }
+                }
+            }
+        }
+        .select2-container--default {
+            .select2-results>.select2-results__options{
+                background: variables.$darkmode-white;
+                color: variables.$white;
+            }
+        }
+        .rounded-arrow-next {
+            color: variables.$darkmode-white;
+        }
+        .bg-light-200 {
+            background: variables.$darkmode-light-200 !important;
+        }
+        .place-item {
+            .place-content {
+                background: variables.$darkmode-white; 
+            }
+        }
+        .form-check-input:checked ~ .form-check-label {
+            color: variables.$darkmode-gray-900;
+        }
+        .offer-counter-inner {
+            .counter  {
+                color: variables.$white;
+            }
+        }
+        .slider-video-btn .video-btn {
+            background: variables.$darkmode-white; 
+        }
+        .text-white {
+            color: variables.$darkmode-text !important;
+        }
+        .loc-view-bottom {
+            background: variables.$darkmode-white;
+        }
+        .accordion-item {
+            background: variables.$darkmode-white;
+        }
+        .accordion-header .accordion-button {
+            background: variables.$darkmode-white;
+            color: variables.$darkmode-text;
+        }
+        .blog-grid .blog-date {
+            background: variables.$darkmode-white;
+        }
+        .owl-carousel .owl-nav button.owl-next, .owl-carousel .owl-nav button.owl-prev {
+            background: variables.$darkmode-white;
+            color: variables.$darkmode-text;
+        }
+    }
+
+    // Home 1
+    .doctor-footer .book-btn {
+        background: variables.$darkmode-light-200;
+        color: variables.$darkmode-text-white;
+        &:hover {
+            background: variables.$primary;
+            color: variables.$darkmode-text-white;
+        }
+    }
+    .reason-section {
+        .reason-item {
+            box-shadow: unset !important;
+        }
+    }
+    .bookus-section {
+        .section-header p {
+            color: variables.$darkmode-text-white;
+        }
+        .faq-info .accordion-item .accordion-button::after {
+            background: variables.$darkmode-light-200;
+        }
+    }
+    .select2-results__option {
+        color: variables.$darkmode-text-white;
+    }
+
+    .header-theme {
+        border: 1px solid variables.$gray-800;
+        .theme-toggle:not(.active) {
+            color: variables.$gray-200;
+        }
+    }
+    .call-info, .banner-section-two .banner-img  {
+        .call-item {
+            border: 1px solid variables.$gray-800;
+        }
+        .item {
+            color: variables.$gray-100;
+        }
+    }
+    .bg-light-300 {
+        background: variables.$darkmode-light-300 !important;
+    }
+    .btn-light {
+        background: variables.$darkmode-light;
+        border-color: variables.$darkmode-light;
+    }
+    header.fixed .header-btn .theme-toggle {
+        color: variables.$white;
+    }
+    .card .card-header {
+        border-color: variables.$darkmode-light;
+    }
+    .header-five .header-nav {
+        background: variables.$darkmode-white;
+        box-shadow: unset !important;
+    }
+    .header-top-six .dropdown > a,.text-gray-9 {
+        color: variables.$darkmode-text !important;
+    }
+    .table {
+        --bs-table-bg: $darkmode-white;
+        tr {
+            td {
+                border-color: variables.$darkmode-light;  
+            }
+            th {
+                background: variables.$darkmode-light-200 !important; 
+                color: variables.$darkmode-text;
+                border-color: variables.$darkmode-light !important;  
+            }
+        }
+    }
+    .form-control {
+        background: variables.$darkmode-light-200;
+        border-color: variables.$darkmode-light;  
+    }
+    .table .thead-light th {
+        color: variables.$darkmode-text;
+    }
+    .chat-cont-left .chat-users-list .chat-member,.chat-cont-right .msg_head {
+        background: variables.$darkmode-light-200;
+        border-color: variables.$darkmode-light;
+    }
+    .msg_card_body .media .media-body .msg-box:first-child .sent-message {
+        background: variables.$darkmode-light-200 !important;
+        border-color: variables.$darkmode-light !important;
+    }
+    .msg_card_body .media .media-body .msg-box:first-child .received-message {
+        background: variables.$darkmode-light-200 !important;
+        border-color: variables.$darkmode-light !important;
+    }
+    .select2-selection.select2-selection--single {
+        background: variables.$darkmode-light-200 !important;
+        border-color: variables.$darkmode-light !important;
+    }
+    .accordion-item,.accordion-button,.faq-accordion .accordion-item .accordion-body {
+        border-color: variables.$darkmode-light !important;
+    }
+    header .header-nav .main-menu-wrapper .main-nav > li .submenu li a {
+        color: variables.$gray-600;
+    }
+    .hotel-type-item,.recommend-wrap {
+        background: variables.$darkmode-light-200;
+        border-color: variables.$darkmode-light;
+        box-shadow: 0 0 0 2px rgba(0,0,0,0.5);
+    }
+    .btn.btn-white,header.fixed .header__hamburger .sidebar-menu {
+        color: variables.$darkmode-text;
+    }
+    .offcanvas-wrap,.mean-container .mean-bar,.mean-container .mean-nav {
+        background: variables.$darkmode-white;
+    }
+    .mean-container .mean-nav > ul > li {
+        border-color: variables.$darkmode-light;
+    }
+    .offcanvas-info {
+        background: variables.$darkmode-white !important;
+    }
+    .white-logo-responsive {
+        display: block;
+    }
+    .black-logo-responsive {
+        display: none;
+    }
+    .offcanvas-close {
+        color: variables.$darkmode-text !important; 
+    }
+    .wishlist-info,.header-dropdown {
+        background: variables.$darkmode-light-200;
+    }
+    header {
+        &.header-five {
+            .header-logo {
+                &.logo-dark {
+                    display: block !important;
+                }
+                &.logo-white {
+                    display: none !important;
+                }
+            }
+        }
+       &.header-four {
+            .header-logo {
+                &.logo-dark {
+                    display: block !important;
+                }
+                &.logo-white {
+                    display: none !important;
+                }
+            }
+        }
+       &.header-three {
+            .header-logo {
+                &.logo-dark {
+                    display: block !important;
+                }
+                &.logo-white {
+                    display: none !important;
+                }
+            }
+        }
+    }
+    .header-topbar.topbar-four {
+        border-color: variables.$darkmode-light;
+    }
+    .footer-five .footer-bottom {
+        border-color: variables.$darkmode-light;
+    }
+    .footer-five .footer-about .footer-input .input-group {
+        background: variables.$darkmode-light;
+    }
+    .input-group-text {
+        background: variables.$darkmode-light-200 !important;
+        border-color: variables.$darkmode-light !important;
+    }
+    .footer-five .footer-bottom .social-icon a {
+        background:  variables.$darkmode-light;
+    }
+    .package-sec {
+        .card  {
+            background: variables.$darkmode-light-200 !important;
+        }
+    }
+    .accordion .accordion-body {
+        background: variables.$darkmode-white;
+    }
+    .bg-light {
+        background: variables.$darkmode-light !important;
+        border-color: variables.$darkmode-light !important;
+    }
+    .faq-secpath-two,.faq-accordion-five {
+        background: variables.$darkmode-light;
+    }
+    .flight-loc .loc-name {
+        background: variables.$darkmode-white;
+        border-color: variables.$darkmode-light;
+    }
+    .form-checkbox {
+        background: variables.$darkmode-light-500;
+    }
+    .menu-img img,.btn-outline-light {
+        border-color: variables.$darkmode-light !important;
+    }
+    .review-item .review-info.reply {
+        background: variables.$darkmode-light-200;
+        border-color: variables.$darkmode-light;
+    }
+    .bg-light-500 {
+        background: variables.$darkmode-light-500 !important;
+    }
+    .text-editor .note-toolbar {
+        background: variables.$darkmode-light-200;
+        border-color: variables.$darkmode-light;
+    }
+    .text-editor .note-editor.note-frame {
+        border-color: variables.$darkmode-light;
+    }
+    .btn.btn-light {
+        color: variables.$darkmode-text !important;
+    }
+    .alert.badge-amenity {
+        border-color: variables.$darkmode-light;
+        color: variables.$darkmode-text;
+    }
+    .accordion.accordion-list .accordion-item .accordion-header .accordion-button {
+        color: variables.$darkmode-text;
+    }
+    .policy-wrap {
+        border-color: variables.$darkmode-light;
+    }
+    .pagination-nav .pagination .page-item .page-link {
+        background: variables.$darkmode-light-200;
+    }
+    .list-item .list-icon {
+        background: variables.$darkmode-light-200;
+    }
+    .modal-header,.modal-body,.modal-footer {
+        background: variables.$darkmode-white;
+        border-color: variables.$darkmode-light;
+    }
+    .accordion.custom-accordion > .accordion-item > .accordion-collapse > .accordion-body {
+        border-color: variables.$darkmode-light;
+    }
+    .badge.badge-light {
+        background: variables.$darkmode-light;
+    }
+    .service-wrap.slider-wrap-four .slider-nav-thumbnails img {
+        border-color: variables.$darkmode-light;
+    }
+    .stage-flow .flows-step .flow-content::before {
+        border-color: variables.$darkmode-light;
+    }
+    .file-upload {
+        border-color: variables.$darkmode-light;
+    }
+    .choose-us-section {
+        background: variables.$darkmode-light-400;
+    }
+    .bg-light-400 {
+        background: variables.$darkmode-light-400 !important;
+    }
+    .pricing-plan-tab .nav .tab-btn {
+        background: variables.$darkmode-light;
+        border-color: variables.$darkmode-light;
+    }
+    .team-member {
+        background: variables.$darkmode-light;    
+    }
+    .invoice-table {
+        border-color: variables.$darkmode-light;
+    }
+    .invoice-logo-dark {
+        display: none;
+    }
+    .invoice-logo-white {
+        display: block;
+    }
+    .bg-light-100 {
+        background: variables.$darkmode-light !important;
+    }
+    .blog-post,.blog-search .search-content .search-feild {
+        border-color: variables.$darkmode-light;
+    }
+    .category-tag a.badge {
+        background: variables.$darkmode-light-400;
+    }
+    .blog-search .search-content {
+        background: variables.$darkmode-light;
+        border-color: variables.$darkmode-light;
+    }
+    .blog-search .search-content .search-feild {
+        background: variables.$darkmode-white;
+    }
+    .update-sec {
+        background: variables.$darkmode-light-400;
+    }
+    .update-sec .input-group {
+        background: variables.$darkmode-white;
+    }
+    .update-sec .input-group {
+        outline-color: variables.$darkmode-light;
+    }
+    .header-navigation {
+        border-color: variables.$darkmode-light;
+    }
+    .credit-card-details .card-form .user-icon {
+        border-color: variables.$darkmode-light;
+    }
+    .settings .card-body {
+        .notification-content,.security-content,.preference-content {
+            border-color: variables.$darkmode-light;
+        }
+    } 
+    .galley-wrap.more-gallery {
+        background: variables.$darkmode-light;
+    }
+    .header-three .header-btn a {
+        color: variables.$darkmode-text;
+    }
+    .footer-input .input-group {
+        background: variables.$darkmode-white;
+    }
+    .footer-logo-dark {
+        display: block;
+    }
+    .footer-logo-light {
+        display: none !important;
+    }
+    .tourism-text-info .card {
+        background: variables.$darkmode-light-200 !important;
+    }
+    .faq-cards-six .accordion-item.show {
+        background: variables.$darkmode-white;
+    }
+    .dropdown-divider {
+        border-color: variables.$darkmode-light;
+    }
+    .rounded-edit {
+        background: variables.$darkmode-light !important;
+    }
+    .card .card-footer {
+        border-color: variables.$darkmode-light;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: variables.$darkmode-text !important;
+    }
+    .bg-transparent-success,.credit-card-details .card-detials .card-add {
+        background: variables.$darkmode-light !important;
+    }
+    .rebook-btn {
+        background: variables.$darkmode-light;
+    }
+    .credit-card-details .card-detials .card-content {
+        border-color: variables.$darkmode-light;
+    }
+    .fancybox-image {
+        border-color: variables.$darkmode-light;
+    }
+    .about-progress {
+        background: variables.$darkmode-light;
+    }
+    .video-wrap .video-btn {
+        background: variables.$darkmode-light;
+    }
+    .place-item .place-img .fav-item .fav-icon {
+        background: variables.$darkmode-light;
+    }
+    #loader-wrapper {
+        background: variables.$darkmode-white;
+    }
+    .header-topbar {
+        .logo-dark {
+            display: none;
+        }
+        .logo-white  {
+            display: block;
+        }
+    }
+    .paginations .page-link-1 {
+        background: variables.$darkmode-light;
+        border-color: variables.$darkmode-light;
+    }
+    .modal .modal-body .upcoming-content .upcoming-title {
+        background: variables.$darkmode-light;
+        border-color: variables.$darkmode-light;
+    }
+    .upcoming-details  {
+        border-color: variables.$darkmode-light !important;
+    }
+    .btn-close {
+        --bs-btn-close-color: $darkmode-white;
+    }
+    .text-dark,.hotel-list .table tbody tr td a {
+        color: variables.$darkmode-text !important;
+    }
+    .note-toolbar {
+        background: variables.$darkmode-light-500;
+        border-color: variables.$darkmode-light;
+    }
+    .note-btn {
+        background: variables.$darkmode-light;
+        border-color: variables.$darkmode-light;
+        color: variables.$darkmode-text;
+    }
+    .bg-gray-transparent {
+        background: variables.$darkmode-light !important;
+    }
+    .user-sidebar.agent-sidebar .user-sidebar-body > ul > li.logout-link {
+        border-color: variables.$darkmode-light;
+    }
+    .bg-success-100, .bg-pink-100, .bg-danger-100, .bg-purple-100, .bg-cyan-100 {
+        h6 {
+            color: variables.$darkmode-light;
+        }
+    }
+    .edit-delete-item a {
+        color: variables.$darkmode-light;
+    }
+    .banner-section.banner-sec-one .banner-content .rating-appointment {
+        background: variables.$darkmode-light-200;
+    }
+    .banner-section.banner-sec-one .banner-img .banner-appointment {
+        background: variables.$darkmode-white;
+    }
+    .header-topbar .header-info p {
+        color: variables.$darkmode-text;
+    }
+    .banner-section.banner-sec-one .search-box-one {
+        background: variables.$darkmode-light-200;
+    }
+    .search-box-one .form-control:hover, .search-box-one .form-control:focus {
+        background-color: variables.$darkmode-white !important;
+    }
+    .spaciality-item .spaciality-img .spaciality-icon {
+        background: variables.$darkmode-light;
+    }
+    .doctor-section {
+        background: variables.$darkmode-light;
+    }
+    .reason-item {
+        border-color: variables.$darkmode-light;
+    }
+    .faq-info .accordion-item .accordion-body {
+        background: transparent;
+    }
+    .faq-info .accordion-header,.bookus-section .faq-info .accordion-item .accordion-button {
+        background: transparent;
+    }
+    .testimonial-section-one {
+        background-image: none;
+    }
+    .faq-section-one .faq-info .accordion-item,.app-section {
+        background: variables.$darkmode-white;
+    }
+    .footer.inner-footer .footer-top {
+        background: variables.$darkmode-white;
+    }
+    .footer.inner-footer .footer-top .footer-title {
+        color: variables.$darkmode-text;
+    }
+    .footer.inner-footer .subscribe-input input {
+        border-color: variables.$darkmode-light;
+    }
+    .footer.inner-footer .footer-bottom {
+        background: variables.$darkmode-light;
+        border-color: variables.$darkmode-light;
+    }
+    .footer.inner-footer .footer-top .footer-widget.footer-menu ul li a {
+        color: variables.$darkmode-text-light;
+    }
+    .header .header-nav .main-nav > li .submenu li a {
+        border-color: variables.$darkmode-light;
+    }
+    .togglesearch {
+        background: variables.$darkmode-white; 
+    }
+    .search-input.search-line::before,.search-input.search-map-line::before {
+        background: variables.$darkmode-light;
+    }
+    .header.home-head-one.header-fixed {
+        background: variables.$darkmode-light;
+    }
+    .header-one .main-menu-wrapper .main-nav li a {
+        color: variables.$darkmode-text;
+    }
+    .banner-section::after {
+        background: url(../img/bg/ban-bg.png), variables.$darkmode-light;
+    }
+    .search-box-one {
+        background: variables.$darkmode-light-200;
+        border-color: variables.$darkmode-light;
+    }
+    .specialities-section-one {
+        background: variables.$darkmode-white; 
+    }
+    .serv-wrap {
+        border-color: variables.$darkmode-light;
+    }
+    .specialities-section-one .specialities-item {
+        background: variables.$darkmode-white; 
+        border-color: variables.$darkmode-light;
+    }
+    .specialities-section-one .specialities-item p {
+        color: variables.$darkmode-text;
+    }
+    .doctors-section {
+        background: variables.$darkmode-light;
+    }
+    .doctor-amount span {
+        background: variables.$darkmode-white; 
+    }
+    .doctor-profile-widget {
+        background: variables.$darkmode-white; 
+        border-color: variables.$darkmode-light;
+    }
+    .doctor-profile-widget.doc-item .doc-pro-info {
+        border-color: variables.$darkmode-light;
+    }
+    .doc-pro-info .doc-pro-name a {
+        color: variables.$darkmode-text;
+    }
+    .pricing-section {
+        background: variables.$darkmode-white; 
+    }
+    .work-section {
+        background: variables.$darkmode-light;
+    }
+    .work-info .work-content h5 {
+        color: variables.$darkmode-text;
+    }
+    .articles-section {
+        background: variables.$darkmode-white; 
+    }
+    .articles-grid {
+        border-color: variables.$darkmode-light;
+    }
+    .btn-outline-primary {
+        background-image: linear-gradient(#0D0D0D, #0D0D0D), linear-gradient(90.08deg, #0E82FD 0.09%, #06AED4 70.28%);
+    }
+    .faq-section,.home-one .faq-info .accordion-button:not(.collapsed) {
+        background: variables.$darkmode-white; 
+    }
+    .home-one .faq-info .accordion-item .accordion-body {
+        background: variables.$darkmode-white; 
+    }
+    .testimonial-section {
+        background: variables.$darkmode-light;
+    }
+    .partners-section {
+        background: variables.$darkmode-white; 
+    }
+    .footer-one .footer-top {
+        background: variables.$darkmode-light;
+    }
+    .footer-one .footer-top .footer-widget .footer-title {
+        color: variables.$darkmode-text;
+    }
+    .section-search {
+        background: variables.$darkmode-white; 
+    }
+    .header.header-trans {
+        background: variables.$darkmode-white !important; 
+    }
+    .section-search .banner-wrapper .search-box .search-location .form-control {
+        background-color: variables.$darkmode-white;
+        border-color: variables.$darkmode-light;
+    }
+    .section-search .banner-wrapper .search-box .search-info .form-control {
+        background-color: variables.$darkmode-white;
+        border-color: variables.$darkmode-light;
+    }
+    .home-tile-section {
+        background: variables.$darkmode-light;
+    }
+    .section-specialities {
+        background-color: variables.$darkmode-white;
+    }
+    .section-specialities .specialities-slider .speicality-item .speicality-img,.section-doctor,.section-blogs{
+        background: variables.$darkmode-light;
+    }
+    .profile-widget,.blog {
+        background-color: variables.$darkmode-white;
+        border-color: variables.$darkmode-light;
+    }
+    .section-features {
+        background: variables.$darkmode-white;
+    }
+    .blog .blog-content .entry-meta,.header.header-three .header-nav .header-navbar-rht li {
+        color: variables.$darkmode-text-light;
+    }
+    .header.header-three .header-nav .header-navbar-rht li::before {
+        background: variables.$darkmode-light;
+    }
+    .our-doctors-section,.our-doctors-section .our-doctors-card .doctors-body,.our-blog-section {
+        background: variables.$darkmode-white;
+    }
+    .home-three .our-blog-section .our-blogs,.our-blog-section .our-blogs .blogs-info {
+        background: variables.$darkmode-white;
+        border-color: variables.$darkmode-light;
+    }
+    .home-three .our-blog-section .our-blogs .blogs-info .blogs-nav {
+        border-color: variables.$darkmode-light;
+    }
+    .store-tab li a,.store-item {
+        background: variables.$darkmode-white;
+    }
+    .header.veterinary-header {
+        background: variables.$darkmode-white !important;
+    }
+    .main-wrapper.home-twelve .accordion-item .accordion-button {
+        background: variables.$darkmode-white;
+    }
+    .main-wrapper.home-twelve.home-thirteen .services-section-thirteen .service-thirteen-main .service-thirteen-all {
+        border-color: variables.$darkmode-light;
+    }
+    .main-wrapper.home-twelve.home-thirteen .services-section-thirteen .service-thirteen-main:hover {
+        background: variables.$darkmode-white;
+    }
+    .main-wrapper.home-twelve.home-thirteen .services-section-thirteen .service-thirteen-main:hover .service-thirteen-all {
+        background: variables.$darkmode-white;
+    }
+    .main-wrapper.home-twelve.home-thirteen .our-doctor-thirteen {
+        background: variables.$darkmode-light;
+    }
+    .main-wrapper.home-twelve.home-thirteen .our-doctor-thirteen .our-doctors-card .doctors-body {
+        background: variables.$darkmode-white;
+    }
+    .main-wrapper.home-twelve.home-thirteen .our-doctor-thirteen .our-doctors-card .doctors-body .location {
+        border-color: variables.$darkmode-light;
+    }
+    .main-wrapper.home-twelve.home-thirteen .choose-us-section-thirteen {
+        background: variables.$darkmode-light;
+    }
+    .main-wrapper.home-twelve.home-thirteen .client-us-section-thirteen {
+        background: variables.$darkmode-light-200;
+    }
+    .main-wrapper.home-twelve.home-thirteen .latest-articles-thirteen .articles-thirteen {
+        border-color: variables.$darkmode-light;
+    }
+    .main-wrapper.home-twelve.home-thirteen .latest-articles-thirteen .articles-thirteen .articles-thirteen-content .article-footer {
+        border-color: variables.$darkmode-light;
+    }
+    .main-wrapper.home-twelve.home-thirteen .feedback-section-thirteen {
+        background: variables.$darkmode-light-200;
+    }
+    .services-section-fifteen .doctor-profile-widget-fifteen {
+        background-color: variables.$darkmode-white;
+    }
+    .Patients-section-fifteen {
+        background: variables.$darkmode-light;
+    }
+    .doctors-section-fifteen {
+        background: variables.$darkmode-light-200;
+    }
+    .doc-content-fift .rate-fifteen,.item.item-fifteen .doctor-profile-widget .doc-pro-img.doc-pro-img-fifteen {
+        border-color: variables.$darkmode-light;
+    }
+    .appointment-section-fifteen .appointment-schedule-main ul li {
+        background: variables.$darkmode-light;
+    }
+    .appointment-section-fifteen .appointment-schedule-main ul li span {
+        color: variables.$darkmode-text;
+    }
+    .header .header-nav .main-nav > li .submenu li .submenu li a {
+        border-color: variables.$darkmode-light;
+    }
+    .test-slider-card {
+        background: variables.$darkmode-white;
+    }
+    .home-dentist .section-header h2 {
+        color: variables.$darkmode-text;
+    }
+    .home-dentist .faq-info .accordion-item {
+        background: variables.$darkmode-white;
+    }
+    .home-dentist .faq-info .accordion-item .accordion-button,.home-dentist .faq-info .accordion-item .accordion-content p {
+        color: variables.$darkmode-text;
+    }
+    .cart-search form,.shopping-cart-list .nav li,.cart-section {
+        border-color: variables.$darkmode-light;
+    }
+    .cart-section,.cart-search .enter-pincode,.welcome-section {
+        background: variables.$darkmode-white;
+    }
+    .pharmacy-body .header .header-nav .main-nav li a {
+        color: variables.$darkmode-text;
+    }
+    .deals-section {
+        background: variables.$darkmode-light-200;
+    }
+    .pharmacy-section-header .pharmacy-title h4,.deals-grid .deals-content a,.categorie-grid .categorie-content h5 a,.categorie-grid .categorie-content p {
+        color: variables.$darkmode-text;
+    }
+    .categorie-section,.categorie-grid {
+        background: variables.$darkmode-white;
+        border-color: variables.$darkmode-light;
+    }
+    .seller-section,.seller-card .seller-time .nav li {
+        background: variables.$darkmode-light-200;
+    }
+    .seller-card .seller-time .nav li h5,.seller-card .seller-time .nav li p,.seller-grid .seller-text h5 a,.seller-grid .seller-text p {
+        color: variables.$darkmode-text;
+    }
+    .seller-grid {
+        background: variables.$darkmode-white;
+        border-color: variables.$darkmode-light;
+    }
+    .seller-section .seller-info {
+        border-color: variables.$darkmode-light;
+    }
+    .products-sec {
+        background: variables.$darkmode-light;
+        border-color: variables.$darkmode-light;
+    }
+    .products-card,.best-sell-box,.coupon-card {
+        background: variables.$darkmode-white;
+        border-color: variables.$darkmode-light;
+    }
+    .products-card .product-card-img,.products-card .product-content .product-cart {
+        border-color: variables.$darkmode-light;
+    }
+    .products-card .product-content h4 a,.products-card .product-content .product-cart .cart-price h5,.coupon-card .coupon-info h4 {
+        color: variables.$darkmode-text;
+    }
+    .trusted-section,.news-section,.news-grid {
+        background: variables.$darkmode-white;
+    }
+    .trusted-info .trusted-content h4,.trusted-info .trusted-text h6,.news-grid .news-content .news-title a{
+        color: variables.$darkmode-text;
+    }
+    .header .main-menu-wrapper .main-nav > li.has-submenu .submenu .has-submenu .submenu::before {
+        border-color: transparent variables.$darkmode-white variables.$darkmode-white transparent !important;
+    }
+    .dashboard-widget-box .dashboard-content-info h6,.dashboard-widget-box .dashboard-content-info h4,.input-block-new label {
+        color: variables.$darkmode-text;
+    }
+    .profile-sidebar .dashboard-widget .dashboard-menu > ul > li a i,.dashboard-table.table .appointment-date-created h6 {
+        color: variables.$darkmode-text;
+    }
+    .dashboard-widget-box,.dashboard-card,.dashboard-card .dashboard-card-head,.header-dropdown .dropdown-toggle {
+        border-color: variables.$darkmode-light;
+    }
+    .dashboard-widget-box .dash-icon-box {
+        background: variables.$darkmode-light;
+    }
+    .dashboard-table.table tbody tr:hover,.doctor-available-head {
+        background: variables.$darkmode-light;
+    }
+    .upcoming-appointment-card .appointment-card-footer .btn-appointments a,.dashboard-table.table .apponiment-view a {
+        background: variables.$darkmode-light;
+    }
+    .profile-sidebar,.widget-profile,.recent-patient-grid {
+        background: variables.$darkmode-white;
+        border-color: variables.$darkmode-light;
+    }
+    .recent-patient-grid .date-info {
+        border-color: variables.$darkmode-light;
+    }
+    .clinic-available,.breadcrumb-bar {
+        background: variables.$darkmode-light;
+    }
+    .clinic-available .clinic-head .clinic-info h6,.breadcrumb-bar .breadcrumb-title,.breadcrumb-bar .page-breadcrumb ol li.active {
+        color: variables.$darkmode-text;
+    }
+    .clinic-available .available-time {
+        background: variables.$darkmode-white;
+    }
+    .widget-profile .profile-info-widget .booking-doc-img {
+        background: variables.$darkmode-white;
+    }
+    .dashboard-header .header-list-btns li .dash-search-input .search-icon i{
+        color: variables.$darkmode-text;
+    }
+    .dashboard-header .header-list-btns li .dash-search-input .form-control,.dashboard-header,.appointment-wrap,.detail-card-bottom-info {
+        border-color: variables.$darkmode-light;
+    }
+    .appointment-tab-head .filter-head .daterange-wraper input.form-control {
+        color: variables.$darkmode-text;
+        border-color: variables.$darkmode-light;
+    }
+    .appointment-tab-head .filter-head .daterange-wraper i,.appointment-info .apponitment-types li,.patinet-information .patient-info h6 a {
+        color: variables.$darkmode-text;
+    }
+    .appointment-action ul li a,.input-block-new .bootstrap-tagsinput {
+        background: variables.$darkmode-light;
+        border-color: variables.$darkmode-light;
+    }
+    .create-appointment-details .session-end-head,.create-details-card .patient-info-box,.create-details-card-body .form-bg-title {
+        background: variables.$darkmode-light;
+    }
+    .create-appointment-details .session-end-head h6 span,.create-appointment-details .session-end-head h6,.create-details-card .card-title-text h5,.create-details-card .patient-info-box .info-list li,.create-appointment-details .head-text {
+        color: variables.$darkmode-text;
+    }
+    .input-block-new .input-text-field input,.create-details-card,.slot-box {
+        border-color: variables.$darkmode-light;
+    }
+    .btn-load,.card .card-header,.modal-content {
+        background: variables.$darkmode-white;
+        border-color: variables.$darkmode-light;
+    }
+    .appointment-type p.md-text,.appointment-info p.md-text,.appointment-info p i,.custom-card .card-header h3 {
+        color: variables.$darkmode-text;
+    }
+    .available-tab .form-label,.slot-box .slot-header h5,.timing-content .col-form-label,.filter-checks .checkboxs .check-title {
+        color: variables.$darkmode-text;
+    }
+    .custom-modals .modal-content .modal-header .modal-title,.custom-modals .modal-content .col-form-label {
+        color: variables.$darkmode-text;
+    }
+    .slot-box .slot-header,.grid-patient .appointment-action,.accordion .filter-set-content + .filter-set-content {
+        border-color: variables.$darkmode-light;
+    }
+    .appointment-wrap.appointment-grid-wrap > ul .appointment-info {
+        background: variables.$darkmode-light;
+    }
+    .grid-patient .appointment-wrap.appointment-grid-wrap .patinet-information .patient-info ul li::before {
+        background: variables.$darkmode-light;
+    }
+    .form-sorts .filter-dropdown-menu,.user-accordion-item,.doc-review > ul > li {
+        background: variables.$darkmode-white;
+        border-color: variables.$darkmode-light;
+    }
+    .form-sorts .filter-set-content .filter-set-content-head a {
+        background: variables.$darkmode-light;
+        color: variables.$darkmode-text;
+    }
+    .user-accordion-item .accordion-wrap,.add-billing-info, .add-prescripe-info, .add-info {
+        border-color: variables.$darkmode-light;
+        color: variables.$darkmode-text;
+    }
+    .user-accordion-item .content-collapse,.comments .comment-head,.daterange-wraper input.form-control {
+        border-color: variables.$darkmode-light;
+    }
+    .form-label,.col-form-label {
+        color: variables.$darkmode-text;
+    }
+    .doc-review > ul > li ul li .replied-comment {
+        background: variables.$darkmode-light;
+    }
+    .dashboard-pagination ul li .page-link {
+        background: variables.$darkmode-light;
+        border-color: variables.$darkmode-light;
+        color: variables.$darkmode-text;
+    }
+    .dashboard-pagination ul li .page-link:hover,.dashboard-pagination ul li .page-link.active {
+        background: variables.$primary;
+    }
+    .account-details-box .account-payment-info .payment-amount,.accounts-tab,table.table thead,.custom-new-table,.custom-table {
+        border-color: variables.$darkmode-light;
+    }
+    .custom-new-table .table-responsive .table tbody tr td,.custom-new-table .table-responsive .table thead tr th {
+        border-color: variables.$darkmode-light;
+    }
+    .custom-new-table .table-responsive .table thead tr th {
+        color: variables.$darkmode-text;
+    }
+    .custom-table .table tr th h2 a, .custom-table .table tr td h2 a,.custom-table .table > thead > tr > th {
+        color: variables.$darkmode-text;
+    }
+    .main-chat-blk .main-wrapper .content .sidebar-group .sidebar,.main-chat-blk .user-chat-search input[type=text] {
+        background: variables.$darkmode-white;
+        border-color: variables.$darkmode-light;
+    }
+    .main-chat-blk .chat-page-wrapper .left-chat-title,.main-chat-blk .sidebar .user-list li a {
+        border-color: variables.$darkmode-light;
+    }
+    .main-chat-blk .sidebar .user-list li .users-list-body h5,.main-chat-blk .fav-title h6,.main-chat-blk .chat .chat-header .user-details h5 {
+        color: variables.$darkmode-text;
+    }
+    .main-chat-blk .chat,.main-chat-blk .chat .chat-footer form {
+        background: variables.$darkmode-white;
+        border-color: variables.$darkmode-light;
+    }
+    .main-chat-blk .chat .chat-header,.main-chat-blk .chat .chat-body .messages .chats .message-content {
+        background: variables.$darkmode-light;
+    }
+    .setting-tab,.setting-card,.business-wrap {
+        border-color: variables.$darkmode-light;
+    }
+    .img-upload .upload-img h5 {
+        color: variables.$darkmode-text;
+    }
+    .business-nav li a {
+        background: variables.$darkmode-light;
+        border-color: variables.$darkmode-light;
+    }
+    .business-nav li a.active, .business-nav li a:hover {
+        background: variables.$primary;
+        border-color: variables.$primary;
+        color: variables.$darkmode-text;
+    }
+    .business-info .tab-items.active,.login-right,.span-or {
+        background: variables.$darkmode-white;
+        border-color: variables.$darkmode-light;
+    }
+    .or-line {
+        background: variables.$darkmode-light;
+    }
+    .chart-over-all-report {
+        border-color: variables.$darkmode-light;
+    }
+    .apponiment-dates ul li a {
+        border-color: variables.$darkmode-light;
+    }
+    .apponiment-dates ul li a h5 span {
+        color: variables.$darkmode-text;
+    }
+    .appointment-dash-card,.profile-widget.patient-favour .fav-head,.dependent-wrap {
+        border-color: variables.$darkmode-light;
+    }
+    .appointment-dash-card .date-time p,.chart-tabs .nav-item .nav-link,table.table td h2 a {
+        color: variables.$darkmode-text;
+    }
+    .profile-widget.patient-favour .fav-head .pro-content .available-info li {
+        color: variables.$darkmode-text;
+    }
+    .dependent-wrap .dependent-status .edit-icon {
+        border-color: variables.$darkmode-light;
+        color: variables.$darkmode-text;
+    }
+    .prescribe-download,.view-prescribe.invoice-content,.patient-infos,.view-prescribe.invoice-content .other-info {
+        background: variables.$darkmode-light;
+    }
+    .view-prescribe-details .inv-table,.view-prescribe-details .inv-table .invoice-table tbody tr {
+        border-color: variables.$darkmode-light;
+    }
+    .other-accounts-info > ul > li,.view-prescribe.invoice-content,.view-prescribe.invoice-content .invoice-table-wrap .invoice-table tbody tr {
+        border-color: variables.$darkmode-light;
+    }
+    .view-prescribe.invoice-content .invoice-table-wrap .invoice-table {
+        border-color: variables.$darkmode-light;
+    }
+    .other-accounts-info > ul > li ul li span,.invoice-item .customer-text {
+        color: variables.$darkmode-text;
+    }
+    .about-section,.why-choose-section,.way-section {
+        background: variables.$darkmode-white;
+    }
+    .faq-info .accordion-item .accordion-body,.fixed-header,.call-footer {
+        border-color: variables.$darkmode-light;
+    }
+    .call-window {
+        background: variables.$darkmode-white;
+        border-color: variables.$darkmode-light;
+    }
+    .voice-call-avatar .username {
+        color: variables.$darkmode-text;
+    }
+    .invoice-content {
+        background: variables.$darkmode-white;
+        border-color: variables.$darkmode-light;
+    }
+    table.table tbody tr {
+        border-color: variables.$darkmode-light;
+    }
+    .faq-inner-page,.list-group-item {
+        background: variables.$darkmode-white;
+        border-color: variables.$darkmode-light;
+    }
+    .card .card-header .card-title {
+        color: variables.$darkmode-text;
+    }
+    .filter-lists .filter-head,.filter-lists .filter-badge {
+        background: variables.$darkmode-light;
+    }
+    .doctor-info-detail,.head-icon,.schedule-widget .schedule-header {
+        border-color: variables.$darkmode-light;
+    }
+    .time-slot.time-slot-blk li .timing {
+        background: variables.$darkmode-light;
+        border-color: variables.$darkmode-light;
+    }
+    .booking-range .btn {
+        background: variables.$darkmode-light;
+        border-color: variables.$darkmode-light;
+    }
+    .card-label > label {
+        background: variables.$darkmode-light;
+    }
+    .info-widget,.booking-total,.nav-tabs {
+        border-color: variables.$darkmode-light; 
+    }
+    .experience-list > li .experience-content,.btn-search {
+        background: variables.$darkmode-white;
+        border-color: variables.$darkmode-light; 
+    }
+    .experience-list::before {
+        background: variables.$darkmode-light;
+    }
+    .custom-increment input[type=text] {
+        background: variables.$darkmode-light;
+        border-color: variables.$darkmode-light;
+    }
+    .custom-increment button.btn-danger,.custom-increment button.btn-success {
+        background: variables.$darkmode-light-200;
+        border-color: variables.$darkmode-light; 
+    }
+    .card-table .card-body .table tr th, .card-table .card-body .table tr td,.search-widget .input-group {
+        border-color: variables.$darkmode-light;
+    }
+    .tag {
+        background: variables.$darkmode-light-200;
+    }
+    .doctor-available-profile {
+        background: variables.$darkmode-light-200;
+    }
+    .visits .visit-btns {
+        background: variables.$darkmode-white;
+    }
+    .banner-section.banner-sec-one,.banner-section-fifteen {
+        background-image: none;
+    }
+    .card {
+        box-shadow: none !important;
+    }
+    .banner-section.banner-sec-one .banner-content .rating-appointment,.search-box-one {
+        box-shadow: none
+    }
+    .banner-section.banner-sec-one .banner-img .banner-appointment,.article-item,.serv-wrap {
+        box-shadow: none
+    }
+    .footer.inner-footer .footer-bg {
+        display: none;
+    }
+    .accordion-item,.our-blogs,.listing-card,.testimonial-card,.blog,.grid-blog,.search-box-fourteen,.our-doctors-card {
+        box-shadow: none !important;
+    }
+    .benifit-wrap,.doctor-profile-widget-fifteen,.doctor-profile-widget-fift,.aboutus-fifteen-main,.faq-card {
+        box-shadow: none !important;
+    }
+    .doctor-profile-widget,.description-item,.products-card {
+        box-shadow: none !important;
+    }
+    .profile-sidebar,.appointment-wrap,.profile-widget.patient-favour,.dependent-wrap {
+        box-shadow: none !important;
+    }
+    .header-topbar .topbar-info > ul > li,.chart-tabs ul {
+        border-color: variables.$darkmode-light;
+    }
+    .dashboard-card-head .header-dropdown-two::before {
+        background: variables.$darkmode-light;
+    }
+    .reason-section {
+        background-image: none;
+    }
+    .footer.inner-footer .footer-bottom .copyright-text p,.footer.inner-footer .footer-bottom .policy-menu li a {
+        color: variables.$darkmode-text-light;
+    }
+    .table-hover tbody tr:hover {
+        background: variables.$darkmode-light-200;
+    }
+    .bookus-section,.bg-dark {
+        background-color: variables.$darkmode-light !important;
+    }
+
+    // Home 3 
+    .header-three {
+        .navbar {
+            .main-nav {
+                li {
+                    .main-menu {
+                        color: variables.$darkmode-dark;
+                        @include mixins.respond-below(lg) {
+                            color: variables.$darkmode-text-white;
+                        }
+                    }
+                    &.active {
+                        .main-menu {
+                            color: variables.$primary;
+                           
+                        }
+                    }
+                } 
+            } 
+        } 
+        .header-theme {
+            .theme-toggle {
+                background: variables.$darkmode-dark;
+                color: variables.$darkmode-text-white;
+            }
+        } 
+        .header-navbar-rht {
+            .details-btn {
+                color: variables.$darkmode-text-white;
+                background: variables.$darkmode-dark;
+            }
+        }
+        &.fixed {
+            .navbar {
+                .main-nav {
+                    li {
+                        .main-menu {
+                            color: variables.$darkmode-text-white;
+                        }
+                        &.active {
+                            .main-menu {
+                                color: variables.$primary !important;
+                            }
+                        }
+                    } 
+                } 
+            } 
+        }
+    } 
+
+    .bookus-section {
+        .bookus-sec {
+            .book-item p {
+                color: variables.$gray-600;
+            }
+        }
+    }
+    .company-section {
+        .section-header {
+            p {
+                color: variables.$darkmode-text-white !important;
+            }
+        }
+    }
+    .article-item {
+        .article-img {
+            .date-icon {
+                background: variables.$darkmode-dark;
+            }
+        } 
+    }
+    .bookus-section {
+        .faq-info .accordion-item {
+            .accordion-content p {
+                color: variables.$darkmode-text-white !important;
+            }
+        }
+    }
+    .banner-section-three {
+        .banner-content-three {
+            .title{
+                color: variables.$darkmode-white;
+            }
+            .description {
+                color: variables.$gray-400;
+            }
+        }
+    } 
+
+    // Mission 3
+    .mission-item {
+        &-three {
+            box-shadow: unset !important;
+        }
+    }
+    .testimonial-item {
+        &-three {
+            box-shadow: unset !important;
+        }
+    }
+    .footer-three {
+        .footer-bottom {
+            background: transparent;
+        }
+    }
+    .speciality-item-two, .blog-item-two {
+        box-shadow: none;
+    }
+    .company-slider-two img, .speciality-item-two .speciality-info .speciality-icon img {
+        filter: brightness(0) invert(1);
+    }
+    .category-item-four {
+        background: rgba(0, 0, 0, 0.7);
+    }
+    .category-section-four {
+        .section-header {
+            .section-title {
+                color: variables.$darkmode-gray900;
+            }
+        }
+    }
+    .header-four .header-nav {
+        .header-navbar-rht li .details-btn {
+            color: variables.$darkmode-gray900;
+        }
+    }
+    .theme-3 {
+        .btn-secondary {
+            color: variables.$darkmode-gray900 !important;
+            span {
+                color: variables.$darkmode-gray900 !important;
+            }
+        }
+    }
+    .slide-four {
+        .services-slide h3 {
+            color: variables.$darkmode-gray900;
+        }
+    }
+    .services-item-four {
+        .service-content {
+            background: rgba(255, 255, 255, 0.7);
+            border-color: variables.$darkmode-text-white;
+            .custom-title {
+                color: variables.$darkmode-gray900;
+            }
+            p {
+                color: #757C8B;
+            }
+        }
+    }
+    .service-slider {
+        .slick-prev, .slick-next {
+            color: variables.$darkmode-gray900;
+            &:hover {
+                color: variables.$darkmode-text-white;
+            }
+        }
+    } 
+    .video-section .video-icon {
+        color: variables.$darkmode-gray900;
+    }
+    .choose-item {
+        &-five {
+            box-shadow: unset !important;
+            .choose-icon {
+                .icon-1 {
+                    filter: invert(1);
+                }
+            }
+        }
+    }
+    .whychoose-section {
+        &-five {
+            .star-icon {
+                filter: invert(1);
+            }
+        }
+    } 
+    .services-item {
+        &-five {
+            .services-content {
+                .services-icon {
+                    img {
+                        filter: invert(1);
+                    }
+                }
+            }
+        }
+    }
+    .about-item {
+        &-five {
+            .about-icon {
+                img {
+                    filter: invert(1);
+                }
+            } 
+        }
+    } 
+    .star-5 {
+        filter: invert(1);
+    }
+    .team-item {
+        &-five {
+           box-shadow: unset !important; 
+        }
+    }
+    .journey-item {
+        &-five {
+            box-shadow: unset !important;
+        }
+    }
+    .experience-section {
+        &-five {
+           .form {
+            background: variables.$darkmode-white;
+           } 
+        }
+    }
+    .review-section {
+        &-five {
+            .element-1 {
+                opacity: 0.2;
+            }
+        }
+    }
+    .testimonial-item {
+        box-shadow: unset !important;
+    }
+    .company-slider-five {
+        .slide-item {
+            img {
+                filter: invert(1);
+            }
+        }
+    }
+    .footer-five .footer-widget .footer-menu li a {
+        color: variables.$gray-800;
+    }
+    .footer-five .footer-contact .contact-info p, .footer-five .footer-contact .contact-info a {
+        color: variables.$gray-800;
+    }
+    .footer-five .footer-widget .footer-subscribe .subscribe-input input::placeholder {
+        color: variables.$gray-600;
+    }
+    .dark-mode .header-theme .theme-toggle:not(.active) {
+        color: var(--gray-200);
+    }
+    .progress-wrap.progress-four::after {
+        color: variables.$darkmode-gray900;
+    }
+    // Header 1 
+    .header.header-default .header-nav .main-nav .has-submenu.active > a {
+        i {
+            color: variables.$primary;
+        }
+    }
+    .header .header-nav .main-nav li > ul {
+        background: variables.$white;
+    }
+    .header-two .header-nav .main-nav .has-submenu.active > a i {
+        color: variables.$darkmode-text-white;
+    }
+    header .header-nav .header-navbar-rht .btn-dark {
+        background: variables.$gray-100!important;
+        border-color: transparent !important;
+        color: variables.$darkmode-text-white;
+    }
+    .home-menu .mega-submenu .megamenu-wrapper .single-demo {
+        box-shadow: unset !important;
+    }
+    .home-menu .mega-submenu .megamenu-wrapper::before {
+        opacity: 0.5;
+    }
+
+    .header-three {
+        .header #mobile_btn {
+            i {
+                color: variables.$gray-100 !important;
+            }
+        }
+        .header-theme {
+            @include mixins.respond-below(lg) {
+                border: none !important;
+            }
+        }
+    }
+    .header-three .navbar #mobile_btn {
+        color: variables.$gray-100 !important;
+        i {
+            color: variables.$gray-100 !important;
+        }
+    }
+    .header-three .navbar .main-nav li .main-menu span {
+        @include mixins.respond-below(lg) {
+            color: variables.$darkmode-text-white;
+        }
+    }
+    .header-three {
+        &.fixed {
+            .navbar #mobile_btn {
+                color: variables.$gray-800 !important;
+                border-color: variables.$gray-800 !important;
+                i {
+                    color: variables.$gray-800 !important;
+                }
+                &:hover {
+                    color: variables.$primary !important;
+                    i {
+                        color: variables.$primary !important;
+                    }
+                }
+            }
+            .main-nav li .main-menu span {
+                color: variables.$darkmode-text-white;
+            }
+        }
+    }
+    .about-img-three .wrapper .scroller__thumb {
+        filter: invert(1);
+    }
+    .header-items .header-items-button a {
+        color: variables.$darkmode-text-white !important;
+        &.btn-dark {
+            background: variables.$darkmode-dark !important;
+            border-color: variables.$darkmode-dark !important;
+            &:hover {
+                background: variables.$primary !important;
+                border-color: variables.$primary !important;
+            }
+        }
+    }
+    .header-five .header-nav .logo {
+        filter: brightness(25.5);
+    }
+    .banner-section-six {
+        .btn span {
+            color: variables.$darkmode-text-white !important;
+        }
+    } 
+    .services-section-six {
+        .section-header-six {
+            .section-sub-title {
+                color: variables.$darkmode-text-white !important;
+            }
+        }
+    } 
+    .home-six {
+        .section-sub-title {
+            color: variables.$darkmode-text-white !important;
+        }
+        .section-title {
+            color: variables.$darkmode-text-white;
+        }
+        .custom-title {
+            color: variables.$darkmode-text-white;
+        }
+    }
+
+    .faq-section-six {
+        .faq-info .accordion-item .accordion-button:not(.collapsed)::after {
+            background: variables.$darkmode-dark !important;
+            color: variables.$darkmode-text-white !important;
+        }
+    } 
+    .subscribe-item-six h2 {
+        color: variables.$darkmode-text-white;
+    }
+    .about-content-six {
+        .about-vision  {
+            &:hover, &.active {
+                .custom-title , .para{
+                    color: variables.$gray-100;
+                }
+            }
+            .custom-title , .para{
+                color: variables.$darkmode-text-white;
+            }   
+        }
+    } 
+
+    .section-header-eight .section-title {
+        color: variables.$darkmode-text-white;
+    }
+    .journey-item-eight .journey-icon {
+        color: variables.$darkmode-dark;
+    }
+    .book-item-eight .book-icon {
+        color: variables.$darkmode-dark;
+    }
+    .header-eight .header-navbar-rht .support-icon .number {
+        color: variables.$gray-100;
+        a {
+            color: variables.$gray-100;
+        }
+       
+    }
+
+    // Eight
+    .banner-section {
+        &-eight {
+            .section-header {
+                &-eight {
+                    .section-sub-title , .section-title {
+                        color: variables.$gray-100;
+                        .dot {
+                            border: 3px solid variables.$darkmode-text-white;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .about-section-eight {
+        .about-img {
+            .animate-button {
+                span {
+                    color: variables.$darkmode-text-white;
+                }
+            }
+        }
+    } 
+    .team-item-eight, 
+    .book-item-eight {
+        box-shadow: unset !important;
+    }
+    .video-section-eight {
+        .animate-button {
+            .button-text {
+                span {
+                    color: variables.$darkmode-text-white;
+                }
+            }
+            .button-circle {
+                color: variables.$darkmode-text-white;
+            }
+        }
+    }   
+
+    
+    .header-eight.fixed .header-navbar-rht .support-icon .number {
+        color: var(--gray-800);
+        a {
+            color: var(--gray-800);
+        }
+    }
+    .team-section-seven {
+        .section-header {
+            .section-title, .section-sub-title {
+                color: variables.$darkmode-gray900;
+            }
+        }
+    }
+    .footer-seven .footer-middle {
+        border-color: variables.$darkmode-gray900;
+    }
+    .mission-item-five .mission-icon {
+        background: variables.$darkmode-gray900;
+    }
+    .work-item-two {
+        .work-info {
+            .work-icon {
+                img {
+                    filter: brightness(0) invert(1);
+                }
+            }
+        }
+    }
+    .slide-seven::before {
+        filter: brightness(0.3);
+    }
+
+    // Nine Home Page
+    .header-nine {
+        .header-nav {
+            .header-navbar-rht {
+                li {
+                    border: none !important;
+                }
+            }
+        } 
+        .theme-toggle {
+            background-color: variables.$white;
+            color: variables.$darkmode-text-white !important;
+            transition: all 0.4s;
+            &:hover {
+                background-color: variables.$primary;
+                color: variables.$darkmode-text-white;
+            }
+        }
+    } 
+    .about-section-nine {
+        background: #262626;
+        .about-item-nine {
+            box-shadow: unset;
+        }
+        .element-one {
+            filter: invert(1) brightness(0.1);
+        }
+    }
+    .company-section-nine {
+        img {
+            filter: brightness(35.5);
+        }
+    }
+    .team-section-nine .icon-one {
+        filter: brightness(0.1) invert(1);
+    }
+    .journey-item-nine {
+        background: variables.$darkmode-dark !important;
+        .bg-one {
+            filter: invert(1);
+        }
+    }
+    .health-nine {
+        background: variables.$light !important;
+    }
+    .footer-nine {
+        background: variables.$light !important;
+        .footer-bottom {
+            background: variables.$light !important;
+        }
+        .footer-img-one {
+            filter: invert(1);
+        }
+    }
+
+    .testimonial-image {
+        .testimonial-reviews {
+            h3, p {
+                color: variables.$darkmode-gray900;
+            }
+        }
+    }
+    .header-nav .navbar-header {
+        #mobile_btn  {
+            border-color: variables.$darkmode-text-white;
+            i {
+                color: variables.$darkmode-gray900;
+            }
+        }
+    }
+
+    // Eleven
+    .header-eleven {
+        .header-nav {
+            .header-navbar-rht {
+                .header-theme {
+                    border: none;
+                }   
+            }
+        }
+    }
+    .banner-section-eleven {
+        .banner-left {
+            .section-header {
+                .section-title {
+                    color: variables.$darkmode-dark;
+                    .text-stroke {
+                        -webkit-text-stroke: 1.5px variables.$darkmode-dark;
+                    }
+                }
+            }
+        }
+    }
+
+    .about-section-eleven .animate-text {
+        color: variables.$gray-100
+    }
+    
+    .services-section-eleven {
+        background: variables.$darkmode-white;
+        .accordion-item {
+            .accordion-button {
+                background: transparent !important;
+                &:not(.collapses) {
+                    background: #151515;
+                    .text {
+                        color: variables.$darkmode-text-white;
+                    }
+                }
+            }
+        }
+    }
+
+    .work-section-eleven {
+        background: variables.$darkmode-white;
+        .work-item-eleven {
+            .step {
+                border: 1px solid variables.$gray-200;
+            }
+        }
+    }
+    .work-item-eleven .arrow-img::before {
+        border-left: 1px dashed variables.$gray-200;
+    }
+    .whychoose-section-eleven {
+        background: variables.$darkmode-white;
+    }
+    .choose-item-eleven {
+        .choose-overlay {
+            .choose-icon {
+                background: variables.$white;
+                outline: 12px solid variables.$darkmode-white;
+                &::before {
+                    box-shadow: 8px 8px 0 0 variables.$darkmode-white;
+                }
+                &::after {
+                    box-shadow: 9px 7px 0 0 variables.$darkmode-white;
+                }
+            }
+        }
+    }
+    .footer-eleven {
+        background: variables.$darkmode-white;
+    }
+    .testimonial-section-eleven .testimonial-author-slide {
+        background: linear-gradient(180deg, #151515 0%, #1F6F5F 100%);
+    }
+
+    // Tweleve
+    .plan-item-twelve {
+        background: #060606 !important;
+        border-radius: 12px;
+        .icon-1 {
+            filter: invert(1) brightness(4.5);
+            opacity: 0.1;
+        }
+    }
+    .services-item-twelve , .about-item-twelve {
+        box-shadow: unset !important;
+    }
+    .works-section-twelve {
+        background: variables.$light !important;
+    }
+    .categories-item-twelve {
+        background: #060606 !important;
+        border-radius: 12px;
+        .category-img-1 {
+            opacity: 0.1;
+        }
+    }
+    .about-item-twelve {
+        background: #060606 !important;
+        .img-two {
+            opacity: 0.1;
+        }
+    } 
+    .team-section-twelve {
+        background: unset;
+        .team-item-twelve {
+            box-shadow: unset !important;
+        }
+    }
+    .testimonial-section-twelve {
+        .testimonial-item-twelve {
+            box-shadow: unset !important;
+        }
+        .testimonial-icon-3 {
+            opacity: 0.1;
+        }
+    }
+    .blog-item-twelve {
+        box-shadow: unset !important;
+    }
+    .footer-twelve {
+        .footer-support {
+            border: 1px solid variables.$gray-200;
+            .suppor-icon {
+                background: variables.$gray-200;
+            }   
+        }
+        .social-icon {
+            a{
+                background: variables.$gray-200;
+            }
+        } 
+        .footer-bottom {
+            .copyright {
+                border-top: 1px solid var(--gray-200);
+            }
+        } 
+    } 
+    .about-item-ten {
+        background: #000C28;
+        .custom-title {
+            color: variables.$darkmode-text-white;
+        }
+    }
+    .counter-item-ten h3 {
+        color: rgba(255, 255, 255, 0.3);
+    }
+    .choose-item-ten {
+        p {
+            color: variables.$darkmode-light-text;
+        }
+    }
+    .banner-section-ten .banner-content {
+        p {
+            color: variables.$darkmode-light-text;
+        }
+    }
+    .banner-section-ten {
+        .banner-bg-03, .banner-bg-02 {
+            filter: brightness(0.3);
+        }
+    }
+
+    .theme-12-btn {
+        color: variables.$darkmode-text-white;
+    }
+    .header-thirteen.fixed {
+        box-shadow: 0px 4px 34px 0px rgb(0 0 0 / 25%);
+    }
+    .banner-section-thirteen {
+        .banner-bg-01 , .banner-bg-05{
+            opacity: 0.3;
+        }
+        .banner-item {
+            background: #161a23;
+            border: 1px solid #262d3d;
+        }
+    }
+    .health-item-thirteen {
+        .health-overlay {
+            .health-icon {
+                border: 1px solid variables.$gray-400;
+            }
+            .shadow-1 {
+                opacity: 0.1;
+            }
+            .shadow-2 {
+                opacity: 0.1;
+            }
+        }
+    } 
+    .deals-item-thirteen {
+        box-shadow: unset !important;
+        .delas-overlay {
+            background: #262626;
+        }
+        .deals-footer .btn {
+            background: #262626;
+            color: variables.$darkmode-text-white;
+        }
+        .price-item .count {
+            box-shadow: unset !important;
+        }
+    } 
+    .offers-item-thirteen {
+        background: #262626  !important;
+        &.three {
+            background: #262626;
+        }
+    }
+    .offers-item-thirteen .shadow-1 {
+        opacity: 0.1;
+    }
+    .sales-section-thirteen {
+        background: #262626;
+    }
+    .medicines-item-thirteen .shadow-1 {
+        opacity: 0.1;
+    }
+    .medicines-item-thirteen .medicines-img::before {
+        opacity: 0.1;
+    }
+    .medicines-item-thirteen .medicines-img::after {
+        opacity: 0.1;
+    }
+    .brands-section-thirteen .slide-item .imgs {
+        box-shadow: unset !important;
+        img {
+            filter: brightness(42.5);
+        }
+    }
+    .testimonial-item-thirteen , .app-section-thirteen .app-thirteen {
+        background: #262626;
+    }
+    .app-section-thirteen .app-thirteen .element-1 {
+        opacity: 0.1;
+    }
+    .blog-item-thirteen {
+        box-shadow: unset !important;
+    }
+    .footer-thirteen {
+        background: #151515;
+        .footer-top {
+            &::before {
+                opacity: 0.2;
+            }
+        }
+        .animated-text {
+            color: #262626;
+            opacity: 0.3;
+        }
+    }
+    .grid-overlay-item {
+        .fav-icon {
+            background: variables.$darkmode-text-white;
+            border-color: variables.$darkmode-text-white;
+        }
+    }
+    .whychoose-section-three .element-1, .whychoose-section-three .element-2,
+    .technology-section-three .element-1, .technology-section-three .element-2,
+    .footer-three .img-2, .hero-section-three .element-01 {
+        display: none;
+    }
+    .head-icon {
+        color: variables.$darkmode-text-white;
+        &.active {
+            color: variables.$darkmode-text-white;
+        }
+    }
+}

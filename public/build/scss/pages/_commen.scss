@@ -1,0 +1,654 @@
+
+@use "../utils/mixins";
+@use "../utils/variables";
+
+
+// Setion Header
+.section-header {
+    margin-bottom: 40px;
+    &-one {
+        .title {
+            font-size: variables.$font-size-15;
+            @include mixins.rounded(20px);
+            font-weight: variables.$font-weight-medium;
+            padding: 4px 26px;
+            position: relative;
+            margin-bottom: 15px;
+            box-shadow: none;
+            background: variables.$primary-gradient;
+            width: fit-content;
+            margin: 0px auto 8px;
+            color: variables.$darkmode-text-white;
+
+            &::before, &::after {
+                content:  "";
+                background: variables.$darkmode-text-white;
+                width: 5px;
+                height: 5px;
+                @include mixins.rounded(50%);
+                position: absolute;
+                top: 50%;
+                @include mixins.transform(translateY(-50%));
+            }
+            &::before {
+                left: 12px;
+            }
+            &::after {
+                right: 12px;
+            }
+        }
+    }
+    .text-gradient{
+        background: variables.$primary-gradient;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: animate 15s linear infinite;
+    }
+    &-two {
+        text-align: center;
+        .section-sub-title {
+            background: variables.$primary-gradient;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 16px;
+            color: variables.$darkmode-text-white;
+            margin-bottom: 12px;
+            font-weight: variables.$font-weight-semibold;
+            img {
+                animation: rotate 5s linear forwards infinite;
+                margin-right: 8px;
+            }
+        }
+        .section-title {
+            span {
+                background: variables.$primary-gradient;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+        }
+    }
+    &-three {
+        .title {
+            box-shadow: 0px 4px 10px 0px #C4C4C440 inset;
+            border: 1px solid variables.$gray-100;
+            padding: 8px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border-radius: 30px;
+            width: fit-content;
+            margin: 0px auto 8px;
+            position: relative;
+            background: variables.$white;
+            color: variables.$gray-900;
+            font-weight: variables.$font-weight-semibold;
+            i {
+                color: variables.$secondary;
+                font-size: 8px;
+            }
+            &::before {
+                content: "";
+                background: url(../img/icons/title-icon.svg);
+                background-size: 100% 100%;
+                width: 62px;
+                height: 3px;
+                position: absolute;
+                bottom: -2px;
+                left: 0;
+                right: 0;
+                margin: auto;
+                animation: line 7s linear infinite;
+            }
+        }
+        .subtitle {
+            font-size: 18px;
+            margin-top: 8px;
+            @include mixins.respond-below(sm) {
+                font-size: 16px;
+            }
+        }
+    }
+    &-four {
+        .section-sub-title {
+            background: variables.$primary-gradient;
+            border-radius: 50px;
+            font-size: 15px;
+            padding: 6px 16px;
+            color: variables.$darkmode-text-white;
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            &::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -2px;
+                width: 13px;
+                height: 12px;
+                background: variables.$secondary;
+                border-radius: 0 0 7px 0;
+            }
+            &::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                right: -2px;
+                width: 13px;
+                height: 12px;
+                background: variables.$primary;
+                border-radius: 7px 0 0 0;
+            }
+        }  
+        .section-title {
+            span {
+                color: variables.$primary;
+                font-style: italic;
+                text-decoration: underline;
+            }
+        } 
+    }
+    &-five {
+        .section-sub-title {
+            font-size: 16px;
+            font-weight: variables.$font-weight-semibold;
+            color: variables.$darkmode-text-white;
+            background: variables.$primary;
+            padding: 10px 22px;
+            border-radius: 30px;
+            width: fit-content;
+            margin: 0px auto 12px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            gap: 10px;
+            &::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                padding: 2px;
+                border-radius: inherit;
+                background: variables.$secondary-gradient;
+                -webkit-mask:
+                linear-gradient(variables.$white 0 0) content-box,
+                linear-gradient(variables.$white 0 0);
+                -webkit-mask-composite: xor;
+                mask-composite: exclude;
+            }
+            &::after {
+                content: "";
+                position: absolute;
+                border-radius: inherit;
+                background: variables.$secondary-gradient;
+                width: 25px;
+                height: 20px;
+                filter: blur(8px);
+                margin: auto;
+                top: 4px;
+                right: 8px;
+            }
+        }
+    }
+    &-six {
+        margin-bottom: 40px;
+        .section-sub-title {
+            background: url(../img/icons/title-bg.svg);
+            background-size: 100% 100%;
+            padding: 12px 34px;
+            font-size: 16px;
+            font-weight: variables.$font-weight-semibold;
+            color: variables.$darkmode-text-white;
+            margin-bottom: 12px;
+            width: fit-content;
+            margin: 0px auto 12px;
+        }
+        .section-title {
+            .line-6 {
+                text-decoration: underline;
+                font-style: italic;
+                color: variables.$secondary;
+            }
+        }
+        p {
+            margin-bottom: 0px;
+        }
+    }
+    &-seven {
+        .section-sub-title {
+            font-weight: variables.$font-weight-bold;
+            color: variables.$gray-900;
+            margin-bottom: 12px;
+            border-bottom: 2px solid variables.$primary;
+            display: inline-block;
+        }
+        .section-title {
+            span {
+                color: variables.$primary;
+                font-style: italic;
+            }
+        } 
+    }
+    &-eight {
+        margin-bottom: 60px;
+        @include mixins.respond-below(sm) {
+            margin-bottom: 40px;
+        }
+        .section-sub-title {
+            font-size: 18px;
+            font-weight: variables.$font-weight-normal;
+            color: variables.$gray-900;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            .dot {
+                width: 15px;
+                background: variables.$primary;
+                height: 15px;
+                border-radius: 50%;
+                display: inline-flex;
+                border: 3px solid variables.$white;
+                outline: 1px solid variables.$primary;
+            }
+        }
+        .section-title {
+            font-size: 72px;
+            font-weight: variables.$font-weight-bold;
+            color: variables.$gray-900;
+            margin-bottom: 24px;
+            @include mixins.respond-below(xxl) {
+                font-size: 55px;
+            }
+            @include mixins.respond-below(sm) {
+                font-size: 30px;
+                text-align: start !important;
+            }
+            .img-container {
+                width: 108px;
+                height: 50px;
+                border-radius: 70px;
+                border: 3px solid variables.$white;
+                overflow: hidden;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                @include mixins.respond-below(lg) {
+                    width: 80px;
+                    height: 40px;
+                }
+                @include mixins.respond-below(sm) {
+                    width: 75px;
+                    height: 33px;
+                    position: relative;
+                    top: 5px;
+                }
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    object-position: center;
+                }
+            }
+            .text-gradient {
+                font-style: italic;
+            }
+        }
+    }
+    &-nine {
+        position: relative;
+        .title {
+            font-size: 16px;
+            font-weight: variables.$font-weight-semibold;
+            color: variables.$gray-900;
+            padding: 8px 16px;
+            border: 1px solid variables.$primary-200;
+            border-radius: 80px;
+            background: variables.$white;
+            backdrop-filter: blur(34px);
+            width: fit-content;
+            margin: 0 auto 12px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            gap: 10px;
+            .dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: variables.$primary-gradient;
+            }
+            &::before {
+                content: "";
+                background: variables.$primary;
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                position: absolute;
+                right: -10px;
+                top: 7px;
+                filter: blur(12px);
+            }
+            &::after {
+                content: "";
+                background: variables.$primary;
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                position: absolute;
+                left: -22px;
+                filter: blur(16px);
+            }
+        }
+        .section-title {
+            span {
+                font-style: italic;
+            }
+        }
+    }
+    &-eleven {
+        .title {
+            font-size: 20px;
+            font-weight: variables.$font-weight-bold;
+            color: variables.$gray-900;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            @include mixins.respond-below(sm) {
+                font-size: 16px;
+            }
+            img {
+                @include mixins.respond-below(sm) {
+                    max-width: 12px;   
+                } 
+            }
+        }
+        .section-title {
+            font-size: 42px;
+            font-weight: variables.$font-weight-bold;
+            color: variables.$gray-900;
+            @include mixins.respond-below(sm) {
+                font-size: 26px;
+            }
+        }
+    }
+    &-twelve {
+        .description {
+            margin-top: 8px;
+        }
+    }
+    &-thirteen {
+        .section-title {
+            font-size: 36px;
+            @include mixins.respond-below(sm) {
+                font-size: 24px;
+            }
+        }
+    }
+    &.section-white {
+        .section-title {
+            color: variables.$darkmode-text-white;
+        }
+    }
+    @keyframes animate {
+        from {
+          background-position: 0 0;
+        }
+        to {
+          background-position: calc(100% - 100vw) 0;
+        }
+    }
+    &-ten {
+        .section-sub-title {
+            position: relative;
+            display: inline-block;
+            color: variables.$secondary;
+            font-weight: variables.$font-weight-semibold;
+            .sec-circle {
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                background: variables.$secondary;
+                display: inline-block;
+                position: relative;
+                margin-right: 16px;
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: 3px;
+                    left: 9px;
+                    width: 12px;
+                    height: 6px;
+                    border-radius: 100px 100px 0 0;
+                    background: variables.$primary;
+                    transform: rotate(90deg);
+                }
+                &::after {
+                    content: "";
+                    position: absolute;
+                    top: 3px;
+                    left: 15px;
+                    width: 12px;
+                    height: 6px;
+                    border-radius: 100px 100px 0 0;
+                    background: variables.$primary;
+                    transform: rotate(90deg);
+                }
+            }
+        }
+    }
+}
+  
+.section {
+    padding: 80px 0px;
+    @include mixins.respond-below(lg) {
+        padding: 50px 0px;
+    }
+}
+.section-top {
+    padding-top: 80px;
+    @include mixins.respond-below(lg) {
+        padding-top: 50px;
+    }
+}
+.section-bottom {
+    padding-bottom: 80px;
+    @include mixins.respond-below(lg) {
+        padding-bottom: 50px;
+    }
+}
+
+// Hero Section
+.hero-section {
+    &-eight {   
+        background: variables.$secondary-gradient;
+        position: relative;
+        overflow: hidden;
+        .element-eight-01 {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+    }
+    &-nine {
+        background: variables.$dark;
+        position: relative;
+        overflow: hidden;   
+        .img-one {
+            position: absolute;
+            bottom: -615px;
+            width: 100%;
+            left: 0;
+            @include mixins.respond-below(xxl) {
+                bottom: -257px;
+            }
+            @include mixins.respond-below(xl) {
+                right: -190px;
+            }
+            @include mixins.respond-below(lg) {
+                right: -230px;
+                left: unset;
+                bottom: -390px;
+            }
+            @include mixins.respond-below(sm) {
+                right: -28px;
+                left: unset;
+                bottom: -132px;
+                opacity: 0.5;
+            }
+        }
+        .img-two {
+            position: absolute;
+            bottom: -15px;
+            width: 100%;
+            left: -35px;
+            @include mixins.respond-below(xl) {
+                left: -1px;
+            }
+            @include mixins.respond-below(sm) {
+                bottom: 0;
+                left: 0;
+            }
+        }
+        .img-three {
+            position: absolute;
+            bottom: 60px;
+            right: 0;
+            left: 0;
+            margin: auto;
+            opacity: 0.6;
+        }
+        .name {
+            font-size: 300px;
+            font-weight: variables.$font-weight-bold;
+            color: variables.$light-200;
+            position: absolute;
+            top: 0;
+            z-index: 1;
+            left: 0;
+            right: 0;
+            margin: auto;
+            white-space: nowrap;
+            @include mixins.respond-below(xxl) {
+                font-size: 232px;
+            }
+            @include mixins.respond-below(xl) {
+                font-size: 200px;
+            }
+            @include mixins.respond-below(lg) {
+                font-size: 140px
+            }
+            @include mixins.respond-below(sm) {
+                font-size: 63px
+            }
+            &.one {
+                transform: translateY(-50%);
+            }
+            &.two {
+                top: 0;
+                bottom: 0;
+                margin: auto;
+                transform: translateY(13%);
+                @include mixins.respond-below(sm) {
+                    transform: translateY(40%);
+                }
+            }
+            &.three {
+                bottom: -42px;
+                top: unset;
+                line-height: 1;
+                @include mixins.respond-below(sm) {
+                    bottom: 0;
+                }
+            }
+        }
+    }
+    &-eleven {
+        position: relative;
+        overflow: hidden;
+        @include mixins.respond-below(lg) {
+            background: variables.$secondary;
+        }
+        .container {
+            position: relative;
+            z-index: 100;
+        }
+        .banner-eleven {
+            position: absolute;
+            bottom: 0;
+            left: 220px;
+            right: 0;
+            margin: auto;
+            width: 100%;
+            max-width: 560px;
+            z-index: 10;
+            @include mixins.respond-below(lg) {
+                display: none;
+            }
+        }
+    }
+}
+
+.home {
+    &-nine {
+        .section {
+            overflow: hidden !important;
+        }
+    }
+    &-eleven {
+        .section {
+            overflow: hidden !important;
+        }
+    }
+    &-twelve {
+        .section {
+            overflow: hidden !important;
+        }
+    }
+    &-thirteen {
+        .section {
+            overflow: hidden !important;
+        }
+        .header-theme-two {
+            box-shadow: variables.$box-shadow;
+            .theme-toggle:not(.activate) {
+                background: variables.$secondary-hover;
+                color: variables.$darkmode-text-white;
+            }
+        } 
+    }
+}
+
+
+.theme-12-btn {
+    padding: 14px 20px;
+    border-radius: 100px;
+    border: 1px solid variables.$gray-200;
+    background: variables.$white;
+    color: variables.$gray-900;
+    display: flex;
+    align-items: center;
+    transition: all 0.6s;
+    flex-shrink: 0;
+    @include mixins.respond-below(sm) {
+        padding: 8px 16px;
+    }
+    &:hover {
+        background: variables.$primary;
+        color: variables.$darkmode-text-white;
+        border: 1px solid variables.$primary;
+        i {
+            color: variables.$darkmode-text-white;
+        }
+    }
+    i {
+        font-size: 16px;
+        font-weight: variables.$font-weight-bold;
+        color: variables.$gray-900;
+        transition: all 0.6s;
+    }
+}

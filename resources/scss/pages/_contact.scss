@@ -1,0 +1,106 @@
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.contact-section {
+    padding: 60px 0 40px;
+    @include mixins.respond-below(lg) {
+       padding: 40px 0 20px;
+    }
+}
+.contact-inner-header {
+	margin-bottom: 20px;
+	h6 {
+		margin-bottom: 16px;
+	}
+}
+.contact-card {
+	border-radius: 10px;
+	margin-bottom: 20px;
+	.card-body {
+		@extend %flex__center;
+       	padding: 20px;
+		border-color: variables.$border-color;
+	}
+}
+.contact-icon {
+	width: 50px;
+	height: 50px;
+	color: variables.$primary;
+	@include mixins.rounded(10px);
+	font-size: variables.$font-size-24;
+	margin-right: 16px;
+	background: variables.$light;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+    @include mixins.respond-below(lg) {
+        font-size: typography.$font__size__40;
+        margin-right: 15px;
+    }
+}
+.contact-details {
+	h4 {
+		font-weight: variables.$font-weight-semibold;
+		font-size: typography.$font__size__20;
+		margin-bottom: 4px;
+        @include mixins.respond-below(lg) {
+            font-size: typography.$font__size__18;
+        }
+	}
+	p {
+		font-size: variables.$font-size-16;
+		margin-bottom: 0;
+        @include mixins.respond-below(lg) {
+            font-size: variables.$font-size-14;
+        }
+	}
+}
+.contact-form-card {
+	background: variables.$light-300;
+	border-radius: 10px;
+	.card-body {
+        padding: 20px;
+	}
+	.form-group {
+		margin-bottom: 25px;
+		label {
+			font-size: typography.$font__size__12;
+			color:  variables.$gray-900;
+			margin-bottom: 8px;
+		}
+		.form-control {
+			font-weight: variables.$font-weight-medium;
+			color: colors.$bodycolor;
+			&::placeholder {
+				font-weight: variables.$font-weight-medium;
+				color: colors.$bodycolor;
+			}
+		}
+		textarea {
+			&.form-control {
+				min-height: 150px;
+				resize: none;
+			}
+		}
+	}
+	.form-group-btn {
+		.btn {
+			border-radius: 44px;
+			font-size: variables.$font-size-16;
+            @include mixins.margin-padding(0, 9px 16px);
+			font-weight: variables.$font-weight-medium;
+			@include mixins.respond-below(lg) {
+				font-size: variables.$font-size-14;
+			}
+		}
+	}
+}
+.contact-map {
+	iframe {
+		width: variables.$full__width;
+		border: none;
+		height: 450px;
+	}
+}

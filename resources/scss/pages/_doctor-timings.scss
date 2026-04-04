@@ -1,0 +1,1285 @@
+@use "sass:color";
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.custom-card {	
+	border: 1px solid variables.$border-color;
+	box-shadow: 0px 7.5px 17.5px 0px #0000000D;
+	@include mixins.rounded(10px);
+	.card-header {
+		border-color: variables.$gray-transparent;
+		@include mixins.margin-padding(0 0 24px, 0);		
+		h3 {
+			font-weight: variables.$font-weight-semibold;
+			margin-bottom: 24px;
+			color: variables.$gray-900;
+			font-size: variables.$font-size-24;
+		}
+	}
+	.card-body {
+		padding: 24px;
+		.modal-btn {
+			margin-top: 40px;
+		}
+	}
+}
+.timing-content {
+	.col-form-label {
+		color: variables.$gray-900;
+	}
+	.form-control {
+		min-height: 40px;
+		box-shadow: 0px 1px 2px 0px #0000000D;
+		padding: 7px 15px;
+		border-color: variables.$border-color;
+		color: variables.$gray-900;
+	}
+}
+.slot-box {
+	border: 2px solid variables.$border-color;
+	@include mixins.margin-padding(0 0 30px, 15px 15px 0);
+	border-radius: 8px;
+	.slot-header {
+		display: flex;
+		display: -webkit-flex;
+		align-items:center;
+		-webkit-align-items:center;
+		justify-content: space-between;
+		-webkit-justify-content: space-between;
+		border-bottom: 1px solid variables.$border-color;
+		margin-bottom: 15px;
+		h5 {
+			font-size: variables.$font-size-18;
+			font-weight: variables.$font-weight-semibold;
+			color: variables.$gray-900;
+			margin-bottom: 15px;
+			@include mixins.respond-below(lg) {
+				font-size: variables.$font-size-16;
+			}
+		}
+		ul {
+			li {
+				font-size: variables.$font-size-14;
+				font-weight: variables.$font-weight-medium;
+				margin: 0 15px 15px 0;
+				display: inline-block;
+				&:last-child {
+					margin-right: 0;
+				}
+				a {
+					font-size: variables.$font-size-14;
+					font-weight: variables.$font-weight-medium;
+				}
+				.add-slot {
+					color: variables.$primary;
+					&:hover {
+						color: variables.$primary-hover;
+					}
+				}
+				.del-slot {
+					color: variables.$danger;
+					&:hover {
+						color: variables.$danger-hover;
+					}
+				}				
+				@include mixins.respond-below(md) {
+					margin-right: 8px;
+				}
+			}
+		}
+	}
+	.slot-body {
+		p {
+			font-size: variables.$font-size-16;
+			color: variables.$gray-900;
+			margin-bottom: 15px;
+			@include mixins.respond-below(md) {
+				font-size: variables.$font-size-15;
+			}
+		}
+		.time-slots {
+			li {
+				background: variables.$gray-transparent;
+				@include mixins.margin-padding(0 15px 15px 0, 12px 13px);
+				border-radius: 6px;
+				display: inline-block;
+				font-size: variables.$font-size-15;
+				font-weight: variables.$font-weight-semibold;
+				color: variables.$gray-900;
+				min-width: 120px;
+    			text-align: center;
+    			position: relative;
+				transition: 0.5s;
+    			&:hover {
+    				&::before {
+    					content: "Space : 2";
+    					background: variables.$dark;
+						color: variables.$white;
+						width: 100%;
+						height: 100%;
+						position: absolute;
+    					left: 0;
+    					top: 0;
+    					border-radius: 6px;
+    					@include mixins.margin-padding(0 15px 15px 0, 12px 13px);
+    					transition: 0.5s;
+    				}
+    			}
+				i {
+					margin-right: 10px;
+				}
+				&.slot-space {
+					background: variables.$dark;
+					color: variables.$white;
+				}
+				&:last-child {
+					margin-right: 0;
+				}
+			}
+		}
+	}
+}
+.available-tab {
+	margin-bottom: 15px;
+	.form-label {
+		color: variables.$gray-900;
+		font-size: variables.$font-size-14;
+		font-weight: variables.$font-weight-medium;
+		margin-bottom: 10px;
+	}
+	ul {
+		li {
+			@include mixins.margin-padding(0 15px 15px 0, null);
+			a {
+				border: 1px solid variables.$border-color;
+				background: variables.$light-transparent;
+				color: variables.$gray-900;
+				font-size: variables.$font-size-14;
+				font-weight: variables.$font-weight-medium;
+				display: inline-block;
+				text-align: center;
+				@include mixins.margin-padding(null, 10px 22px);
+				border-radius: 10px;
+				@include mixins.respond-below(md) {
+					@include mixins.margin-padding(null, 9px 17px);
+				}
+				@include mixins.respond-below(sm) {
+					display: block;
+				}
+				&.active, &:hover {
+					background: variables.$primary;
+					border-color: variables.$primary;
+					color: variables.$white;
+				}
+			}
+			@include mixins.respond-below(sm) {
+				margin-right: 0;
+			}
+		}
+		@include mixins.respond-below(sm) {
+			display: block;
+		}
+	}
+}
+.modal-btn {
+	.btn {
+		font-size: variables.$font-size-13;
+		font-weight: variables.$font-weight-medium;
+		padding: 0.35rem 0.85rem;
+		& + .btn {
+			margin-left: 15px;
+		}
+	}
+}
+.timing-modal {
+	.form-wrap {
+		margin-bottom: 15px;
+		.custom-control-inline {
+			font-weight: variables.$font-weight-medium;
+			margin: 0 10px 5px 0;
+			color: variables.$gray-900;
+			font-size: variables.$font-size-16;
+			display: inline-block;
+			@include mixins.respond-below(lg) {
+				font-size: variables.$font-size-15;
+			}
+		}
+	}
+}
+.clinic-wrap {
+	border: 1px solid variables.$border-color;
+	border-radius: 10px;
+	@include mixins.margin-padding(0 0 24px, 24px);
+	h5 {
+		font-size: variables.$font-size-18;
+		color: variables.$gray-900;
+		font-weight: variables.$font-weight-semibold;
+		margin-bottom: 15px;
+		@include mixins.respond-below(md) {
+			font-size: variables.$font-size-16;
+		}
+	}
+	.select2-container {
+		width: 100% !important;
+		.select2-selection--single {
+			border-color: colors.$athens_grey;
+			border-radius: 10px;
+			box-shadow: 0px 1px 2px 0px #0000000D;
+			height: 40px;
+			.select2-selection__rendered {
+				line-height: 36px;
+				padding-left: 5px;
+				font-size: variables.$font-size-14;
+				color: variables.$gray-900;
+				.clinic-img {
+					border-radius: 8px;
+				}
+			}
+			.select2-selection__arrow {
+				height: 40px;
+			}
+		}
+	}
+}
+.select2-results__option {
+    padding: 6px 10px;
+}
+.select2-results__option .clinic-img {
+	border-radius: 8px;
+}
+.form-wrap {
+	margin-bottom: 15px;
+}
+.custom-modals {
+	.modal-content {
+		padding: 20px;
+		.modal-header {
+			padding: 0 0 15px;
+			.modal-title {
+				font-size: variables.$font-size-20;
+				font-weight: variables.$font-weight-semibold;
+				color: variables.$gray-900;
+			}
+			.btn-close {
+				width: 24px;
+				height: 24px;
+				border-radius: 50%;
+				background: variables.$gray-600;
+				color: variables.$white;
+				box-shadow: none;
+				font-size: variables.$font-size-14;
+				display: flex;
+				display: -webkit-flex;
+				align-items:center;
+				-webkit-align-items:center;
+				justify-content: center;
+				-webkit-justify-content: center;
+				padding: 0;
+				opacity: 1;
+				&:focus {
+					box-shadow: none;
+				}
+				&:hover {
+					background: variables.$danger;
+					color: variables.$white;
+				}
+			}
+		}
+		.col-form-label {
+			color: variables.$gray-900;
+		}
+		.modal-body {
+			padding: 15px 0;
+		}
+		.modal-footer {
+			padding: 15px 0 0;
+			.modal-btn {
+				margin: 0;
+			}
+		}
+	}
+}
+.custom-table {
+	border: 1px solid variables.$border-color;
+	border-radius: 10px;
+	.table {
+	    	& > thead {
+	    		& > tr {
+	    			& > th {
+	    				border-top: 0;
+	    				background: variables.$gray-100;
+	    				color: variables.$gray-900;
+						padding: 8px 12px;
+	    				font-size: variables.$font-size-14;
+	    				font-weight: variables.$font-weight-medium;
+	    				&:first-child {
+		    				border-top-left-radius: 10px;
+		    			}
+		    			&:last-child {
+		    				border-top-right-radius: 10px;
+		    			}
+	    			}
+	    		}
+	    	}
+	    	tr {
+	    		th, td {
+	    			border-top: 1px solid variables.$gray-transparent;
+				    white-space: nowrap;
+				    padding: 12px 12px;
+				    color: variables.$gray-600;
+				    font-size: variables.$font-size-14;
+				    h2 {
+				    	a {
+				    		color: variables.$gray-900;
+				    		&:hover {
+				    			color: variables.$primary;
+				    		}
+				    	}
+				    }
+	    			&:first-child {
+	    				padding-left: 1.5rem;
+	    			}
+	    			&:last-child {
+	    				padding-right: 1.5rem;
+	    			}
+	    		}
+	    	}
+	    	tbody {
+	    		tr {
+	    			&:last-child {
+	    				td {
+	    					&:first-child {
+		    					border-bottom-left-radius: 10px;
+		    				}
+	    					&:last-child {
+		    					border-bottom-right-radius: 10px;
+		    				}
+	    				}
+		    		}
+	    		}
+	    	}
+	    }
+}
+.action-item {
+	display: flex;
+	display: -webkit-flex;
+	align-items:center;
+	-webkit-align-items:center;
+	a {
+		width: 30px;
+		height: 30px;
+		border-radius: 50%;
+		border: 1px solid variables.$border-color;
+		color: variables.$gray-900;
+		display: flex;
+		display: -webkit-flex;
+		align-items:center;
+		-webkit-align-items:center;
+		justify-content: center;
+		-webkit-justify-content: center;
+		margin-right: 4px;
+		font-size: variables.$font-size-14;
+		&:last-child {
+			margin-right: 0;
+		}
+		&:hover {
+			background:variables.$primary;
+			color: variables.$white;
+		}
+	}
+}
+.badge-yellow {
+	background: variables.$warning !important;
+}
+.badge-green {
+	background: variables.$teal !important;
+}
+.status-badge {
+	font-size: variables.$font-size-12;
+	font-weight: variables.$font-weight-medium;
+	@include mixins.margin-padding(null, 5px 10px);
+	border-radius: 60px;
+}
+.search-field {
+	position: relative;
+	.form-control {
+		height: 36px;
+		min-height: 36px;
+		border: 1px solid variables.$border-color;
+		border-radius: 10px;
+	}
+	.search-icon {
+		position: absolute;
+		right: 15px;
+		top: 50%;
+		transform: translateY(-50%);
+		color: colors.$slate-500;
+	}
+}
+.search-header {
+	display: flex;
+	display: -webkit-flex;
+	align-items:center;
+	-webkit-align-items:center;
+	justify-content: space-between;
+	-webkit-justify-content: space-between;
+	flex-wrap: wrap;
+	margin-bottom: 9px;
+	.search-field {
+		margin-bottom: 15px;
+		.form-control { 
+			min-width: 240px;
+		}
+	}
+	.btn {
+		font-size: variables.$font-size-15;
+		font-weight: variables.$font-weight-semibold;
+		margin-bottom: 15px;
+		padding: 7px 10px;
+	}
+}
+.patient-wrap {
+	box-shadow: 0px 7.5px 17.5px 0px #0000000D;
+	@include mixins.margin-padding(0 0 24px, 24px 24px 9px);
+	display: flex;
+	display: -webkit-flex;
+	align-items:center;
+	-webkit-align-items:center;
+	justify-content: space-between;
+	-webkit-justify-content: space-between;
+	flex-wrap: wrap;
+	.patient-info {
+		display: flex;
+		display: -webkit-flex;
+		align-items:center;
+		-webkit-align-items:center;
+		margin-bottom: 10px;
+		margin-top: 0;
+		img {
+			width: 64px;
+			height: 64px;
+			border-radius: 10px;
+			margin-right: 10px;
+		}
+		.user-patient {
+			h6 {
+				font-size: variables.$font-size-12;
+				font-weight: variables.$font-weight-medium;
+				color: variables.$primary;
+				margin-bottom: 5px;
+			}
+			h5 {
+				font-weight: variables.$font-weight-semibold;
+				margin-bottom: 5px;
+				color: variables.$gray-900;
+			}
+			ul {
+				li {
+					color: variables.$gray-900;
+					font-size: variables.$font-size-12;
+					@include mixins.margin-padding(0 10px 0 0, 0 10px 0 0);
+					position: relative;
+					display: inline-block;
+					&::before {
+						content: "";
+						background: variables.$gray-transparent;
+						width: 1px;
+						height: 16px;
+						@include mixins.position(absolute, 50%, 0, null, null);
+						@include mixins.transform(translateY(-50%));
+					}
+					&:last-child {
+						@include mixins.margin-padding(0, 0);
+						&::before {
+							content: none;
+						}
+					}
+				}
+			}
+		}
+	}
+	.patient-book {
+		margin-bottom: 10px;
+		p {
+			font-size: variables.$font-size-12;
+			color: variables.$gray-900;
+			margin-bottom: 5px;
+			i {
+				margin-right: 5px;
+			}
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+}
+.lab-icon {
+	display: flex;
+	display: -webkit-flex;
+	align-items:center;
+	-webkit-align-items:center;
+	span {
+		width: 24px;
+		height: 24px;
+		border-radius: 5px;
+		background: colors.$grey__01;
+		color: variables.$purple-600;
+		display: flex;
+		display: -webkit-flex;
+		align-items:center;
+		-webkit-align-items:center;
+		justify-content: center;
+		-webkit-justify-content: center;
+		margin-right: 5px;
+	}
+	&.prescription {
+		span {
+			background: colors.$orange-50;
+			color: colors.$orange-600;
+		}
+	}
+}
+.upload-file {
+	border: 1px dashed variables.$gray-transparent;
+	background: colors.$light-white-grey;
+	border-radius: 10px;
+	@include mixins.margin-padding(null, 30px);
+	position: relative;
+	text-align: center;
+	cursor: pointer;
+	input {
+		@include mixins.position(absolute, 0, null, null, 0);
+		opacity: 0;
+		width: 100%;
+		height: 100%;
+	}
+	p {
+		font-size: variables.$font-size-14;
+		font-weight: variables.$font-weight-medium;
+		color: colors.$grey_white__01;
+		margin-bottom: 0;
+	}
+}
+.modal-content {
+	.bootstrap-tagsinput {
+		border-radius: 6px;
+	}
+	.form-control {
+		border-radius: 6px;
+	}
+}
+.rating-list {
+	i {
+		color: variables.$gray-transparent;
+		margin-right: 4px;
+		font-size: variables.$font-size-16;
+		&.selected {
+			color: variables.$warning;
+		}
+	}
+}
+.rating-selction {
+    direction: rtl !important;
+    label {
+        display: inline-block;
+        color: variables.$light;
+        cursor: pointer;
+        font-size: variables.$font-size-16;
+        transition: color 0.2s;
+        &:hover {
+            color: variables.$warning;
+
+            ~label {
+                color: variables.$warning;
+            }
+        }
+    }
+    input {
+        display: none;
+        &:checked {
+            ~label {
+                color: variables.$warning;
+            }
+        }
+    }
+}
+.prescribe-download {
+	background: variables.$light-transparent;
+	padding: 15px;
+	margin-bottom: 15px;
+	@include mixins.rounded(5px);
+	display: flex;
+	display: -webkit-flex;
+	align-items:center;
+	-webkit-align-items:center;
+	justify-content: space-between;
+	-webkit-justify-content: space-between;
+	h5 {
+		font-size: variables.$font-size-16;
+		font-weight: variables.$font-weight-semibold;
+		margin-bottom: 0;
+		@include mixins.respond-below(md) {
+			font-size: variables.$font-size-14;
+			margin-bottom: 4px;
+		}
+		@include mixins.respond-below(sm) {
+			margin-bottom: 15px;
+		}
+	}
+	ul {
+		li {
+			display: inline-block;
+			margin-right: 15px;
+			&:last-child {
+				margin-right: 0;
+			}
+			.btn {
+				font-size: variables.$font-size-14;
+				font-weight: variables.$font-weight-medium;
+				@include mixins.margin-padding(null, 9px 13px);				
+			}
+		}
+	}
+	@include mixins.respond-below(sm) {
+		display: block;
+	}
+}
+.view-prescribe {
+	&.invoice-content {
+		border: 1px solid variables.$border-color;
+		padding: 20px;
+		.invoice-item {
+			.invoice-details {
+				font-size: variables.$font-size-14;
+				color: variables.$gray-600;
+				font-weight: variables.$font-weight-normal;
+				strong {
+					color: variables.$gray-900;
+					font-weight: variables.$font-weight-semibold;
+				}
+				span {
+					color: variables.$gray-900;
+				}
+			}
+			.customer-text {
+				margin-bottom: 8px;
+			}
+			.invoice-info {
+				margin-bottom: 20px;
+			}
+		}
+		.invoice-table-wrap {
+			h6 {
+				font-size: variables.$font-size-14;
+				font-weight: variables.$font-weight-medium;
+				margin-bottom: 10px;
+			}
+			.invoice-table {
+				border: 1px solid variables.$border-color;
+				@include mixins.rounded(10px);
+				margin-bottom: 20px;
+				tr {
+					th {
+						font-size: variables.$font-size-14;
+						font-weight: variables.$font-weight-medium;
+						background: variables.$gray-100;
+						white-space: nowrap;
+						color: variables.$gray-900;
+						&:first-child {
+							border-top-left-radius: 10px;
+						}
+						&:last-child {
+							border-top-right-radius: 10px;
+						}
+					}
+				}
+				tbody {
+					tr {
+						border-color: variables.$border-color;
+						td {
+							font-size: variables.$font-size-14;
+							color: variables.$gray-600;
+							font-weight: variables.$font-weight-normal;
+							white-space: nowrap;
+							span {
+								font-size: variables.$font-size-12;
+								display: block;
+							}
+						}
+						&:last-child {
+							border-color: transparent;
+							td {
+								&:first-child {
+									border-bottom-left-radius: 10px;
+								}
+								&:last-child {
+									border-bottom-right-radius: 10px;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		.other-info {
+			background: variables.$light-transparent;
+			border-radius: 10px;
+			padding: 15px;
+			margin-bottom: 20px;
+			h4 {
+				font-size: variables.$font-size-18;
+				margin-bottom: 8px;
+				font-weight: variables.$font-weight-semibold;
+				@include mixins.respond-below(md) {
+					font-size: variables.$font-size-16;
+				}
+			}
+			p {
+				&.text-muted {
+					color: colors.$black__ash !important; 
+					font-size: variables.$font-size-14;
+				}
+			}
+		}
+		.prescriber-info {
+			text-align: right;
+			h6 {
+				font-weight: variables.$font-weight-semibold;
+				margin-bottom: 5px;
+			}
+			p {
+				font-size: variables.$font-size-12;
+				color: variables.$gray-600;
+				margin-bottom: 0;
+			}
+		}
+		.invoice-table-two {
+			tr {
+				border: 0;
+				th {
+					font-size: variables.$font-size-14;
+					font-weight: variables.$font-weight-medium;
+					color: variables.$gray-600;
+					padding: 4px;
+				}
+				td {
+					color: variables.$gray-900;
+					font-weight: variables.$font-weight-normal;
+					padding: 4px;
+				}
+			}
+		}
+	}
+}
+.appointment-tabs {
+	&.user-tab {
+		border-bottom: 1px solid variables.$border-color;
+		margin-bottom: 24px;
+		ul {
+			margin-bottom: 4px;
+		}
+	}
+}
+.doctor-content {
+	.profile-sidebar {
+		margin-bottom: 0;		
+		@include mixins.respond-below(lg) {
+			margin-bottom: 24px;	
+		}
+	}
+}
+.review-wrap {
+	background: variables.$light-transparent;
+	padding: 15px;
+	@include mixins.rounded(10px);
+}
+.grid-patient {
+	.appointment-wrap {
+		&.appointment-grid-wrap {
+			.patinet-information {	
+				img {
+					width: 64px;
+					height: 64px;
+				}
+				.patient-info {
+					ul {
+						li {
+							color: variables.$gray-600;
+							font-size: variables.$font-size-12;
+							@include mixins.margin-padding(0 10px 0 0, 0 10px 0 0);
+							position: relative;
+							display: inline-block;
+							&::before {
+								content: "";
+								background: variables.$gray-transparent;
+								width: 1px;
+								height: 16px;
+								@include mixins.position(absolute, 50%, 0, null, null);
+								@include mixins.transform(translateY(-50%));
+							}
+							&:last-child {
+								@include mixins.margin-padding(0, 0);
+								&::before {
+									content: none;
+								}
+							}
+						}
+					}
+				}
+			}
+			.appointment-action {
+				.patient-book {
+					p {
+						font-size: variables.$font-size-14;
+						color: variables.$gray-900;
+						margin-bottom: 5px;
+						position: relative;
+						display: flex;
+						align-items: center;
+						i {
+							margin-right: 5px;
+						}
+						&:last-child {
+							margin-bottom: 0;
+						}
+						span {
+							color: variables.$gray-600;	
+							display: inline-block;
+							margin-left: 5px;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+.patient-infos {
+	background: variables.$light-transparent;
+	padding: 15px;
+	@include mixins.rounded(10px);
+	margin-bottom: 15px;
+	p {
+		margin-bottom: 0;
+	}
+}
+.view-prescribe-details {
+	border: 1px solid variables.$border-color;
+	@include mixins.rounded(6px);
+	@include mixins.margin-padding(null, 20px);
+	.clinic-image {
+		width: 80px;
+		height: 80px;
+		background: variables.$light-transparent;
+		border: 1px solid variables.$border-color;
+		@include mixins.rounded(5px);
+		margin-right: 10px;
+	}
+	.hospital-addr {
+		border-bottom: 1px solid variables.$border-color;
+		margin-bottom: 20px;
+		text-align: center;
+		.invoice-logo {
+			margin-bottom: 20px;
+		}
+		h5 {
+			font-weight: variables.$font-weight-semibold;
+			margin-bottom: 10px;
+		}
+		p {	
+			font-size: variables.$font-size-14;
+		}
+	}
+	.invoice-info {
+		margin-bottom: 20px;
+		h6 {
+			color: variables.$gray-900;
+			font-weight: variables.$font-weight-semibold;
+			font-size: variables.$font-size-20;
+			margin-bottom: 2px;
+			@include mixins.respond-below(lg) {
+				font-size: variables.$font-size-18;
+			}
+			@include mixins.respond-below(md) {
+				font-size: variables.$font-size-16;
+			}
+		}
+		p {
+			font-size: variables.$font-size-14;
+			margin-bottom: 0;
+		}
+	}
+	.invoice-info2 {
+		text-align: right;
+		margin-bottom: 20px;
+		p {
+			font-size: variables.$font-size-14;
+			margin-bottom: 3px;
+			span {
+				font-weight: variables.$font-weight-medium;
+				color: variables.$gray-900;
+			}
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}		
+		@include mixins.respond-below(md) {
+			text-align: left;
+		}
+	}
+	.patient-id {
+		h6 {
+			font-weight: variables.$font-weight-medium;
+			font-size: variables.$font-size-14;
+			margin-bottom: 8px;
+		}
+	}
+	.patient-det {
+		background: colors.$white__shade;
+		@include mixins.margin-padding(0 0 20px, 5px 10px 0);
+		display: flex;
+		display: -webkit-flex;
+		align-items:center;
+		-webkit-align-items:center;
+		justify-content: space-between;
+		-webkit-justify-content: space-between;
+		flex-wrap: wrap;
+		h6 {
+			font-weight: variables.$font-weight-semibold;
+			color: variables.$gray-900;
+			margin-bottom: 5px;
+		}
+		ul {
+			li {
+				display: inline-block;
+				margin: 0 18px 5px 0;
+				color: variables.$gray-900;
+				font-size: variables.$font-size-12;
+				font-weight: variables.$font-weight-semibold;
+				&:last-child {
+					margin-right: 0;
+				}
+				@include mixins.respond-below(xxl) {
+					margin-right: 12px;
+				}
+			}
+		}
+	}
+	.appointment-notes {
+		h3 {
+			font-size: variables.$font-size-20;
+			font-weight: typography.$bold;
+			text-align: center;
+			margin-bottom: 20px;
+			@include mixins.respond-below(lg) {
+				font-size: variables.$font-size-18;
+			}
+			@include mixins.respond-below(md) {
+				font-size: variables.$font-size-16;
+			}
+		}
+	}
+	.appoint-wrap {
+		margin-bottom: 20px;
+		h5 {
+			margin-bottom: 15px;
+		}
+		p {
+			font-size: variables.$font-size-14;
+		}
+		ul {
+			li {
+				font-size: variables.$font-size-14;
+				display: inline-block;
+				margin: 0 24px 5px 0;
+				span {
+					color: colors.$black__05;
+					font-weight: variables.$font-weight-semibold;
+				}
+			}
+		}
+	}
+	.inv-table {
+		border: 1px solid variables.$border-color;
+		border-radius: 6px;
+		margin-bottom: 20px;
+		.invoice-table {
+				tr {
+					th {
+						font-size: variables.$font-size-14;
+						font-weight: variables.$font-weight-medium;
+						white-space: nowrap;
+					}
+				}
+				tbody {
+					tr {
+						border-color: variables.$gray-transparent;
+						td {
+							font-size: variables.$font-size-14;
+							color: variables.$gray-600;
+							white-space: nowrap;
+							vertical-align: middle;
+							span {
+								font-size: variables.$font-size-12;
+								display: block;
+							}
+							&.report-title {
+								color: variables.$gray-900;
+								font-weight: variables.$font-weight-semibold;
+							}
+						}
+					}
+				}
+			}
+	}
+	.scan-wrap {
+		margin-bottom: 15px;
+		h6 {
+			font-weight: variables.$font-weight-medium;
+			font-size: variables.$font-size-14;
+			margin-bottom: 5px;
+		}
+	}
+	.prescriber-info {
+		text-align: right;
+		margin-bottom: 15px;
+		h6 {
+			font-weight: variables.$font-weight-medium;
+			font-size: variables.$font-size-14;
+			margin-bottom: 5px;
+		}
+		p {
+			font-size: variables.$font-size-12;
+			margin-bottom: 0;
+		}	
+		@include mixins.respond-below(md) {
+			text-align: left;
+		}
+	}
+	.inv-paginate {
+		margin-top: 9px;
+	}
+}
+.add-billing-info,
+.add-prescripe-info, .add-info {
+	border-bottom: 1px solid variables.$border-color;
+	margin-bottom: 24px;
+}
+.bill-cont, .prescripe-cont {
+	.trash {
+		font-size: variables.$font-size-14;
+		font-weight: variables.$font-weight-medium;
+		color: variables.$danger;
+	}
+}
+.trash-icon {
+	font-size: variables.$font-size-14;
+	font-weight: variables.$font-weight-medium;
+	color: variables.$danger;
+}
+.add-bill,
+.add-prescribe, .more-item {
+	font-size: variables.$font-size-14;
+	font-weight: variables.$font-weight-medium;
+	margin-bottom: 20px;
+	color: variables.$primary;
+	text-align: right;
+	display: inline-block;
+	&:hover {
+		color: variables.$gray-900;
+	}
+}
+.sign-wrapper {
+	width: 165px;
+	text-align: center;
+	float: right;
+}
+.wrap-sign {
+	background: colors.$light-white-grey;
+	border: 1px dashed variables.$gray-transparent;
+	@include mixins.rounded(10px);
+	@include mixins.margin-padding(null, 24px);
+}
+.upload-sign {
+	border: 1px dashed variables.$gray-transparent;
+	@include mixins.rounded(10px);
+	margin-bottom: 10px;
+	min-width: 165px;
+	@include mixins.margin-padding(0 0 10px, 20px);
+	font-size: variables.$font-size-14;
+	font-weight: variables.$font-weight-medium;
+	p {		
+		font-size: variables.$font-size-14;
+		font-weight: variables.$font-weight-medium;
+		color: variables.$gray-900;
+		margin-bottom: 0;
+	}
+}
+.info-name {
+	h6 {
+		font-size: variables.$font-size-14;
+		font-weight: variables.$font-weight-medium;
+		color: variables.$gray-900;
+		margin-bottom: 5px;
+	}
+	p {
+		font-size: variables.$font-size-14;
+		color: variables.$gray-900;
+		margin-bottom: 0;
+	}
+}
+.patient-book {
+	&.patien-inv {
+		h6 {
+			font-weight: variables.$font-weight-semibold;
+			margin-bottom: 5px;
+			color: variables.$primary;
+			text-align: right;			
+			@include mixins.respond-below(sm) {
+				text-align: left;
+			}
+		}
+		p {
+			font-size: variables.$font-size-12;
+			margin-bottom: 0;
+		}
+	}
+}
+.user-accordion-item {  
+    background: variables.$white;
+    border: 1px solid variables.$border-color;
+    border-radius: 10px;
+    box-shadow: 0px 7.5px 17.5px 0px #0000000D;
+    margin-bottom: 24px;
+    .accordion-wrap {
+        @include mixins.margin-padding(null, 24px 38px 24px 24px);
+        font-weight: variables.$font-weight-semibold;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+		justify-content: space-between;
+		-webkit-justify-content: space-between;
+        position: relative;
+        color: variables.$gray-900;
+        font-size: variables.$font-size-16;
+        span {
+           color: variables.$danger;
+            margin-right: 8px;  
+            font-size: variables.$font-size-14;
+            font-weight: variables.$font-weight-medium;          
+			&.edit {
+				color: colors.$zinc-900;
+			}
+        }
+        &::before {
+            content: "\f078";
+            font-family: 'Font Awesome 5 Free';
+            @include mixins.position(absolute, 50%, 24px, null, null);
+            @include mixins.transform(translateY(-50%));
+        } 
+        &:not(.collapsed) {                 
+            &::before {
+                content: "\f077";
+            }           
+        }
+        &:hover {
+        	color: colors.$dark-blue;
+        	&::before {
+        		color: colors.$dark-blue;
+        	}
+        }
+    }
+    .content-collapse {
+        border-top: 1px solid variables.$border-color;
+        @include mixins.margin-padding(null, 24px);         
+    }
+    .accordion-collapse {
+        .form-wrap {
+            margin-bottom: 24px;
+            &.mb-wrap {
+                margin-bottom: 0;
+                @include mixins.respond-below(md) {
+                    margin-bottom: 24px;
+                }
+            }
+        }       
+    }
+}
+.modal {
+    z-index: 1050;
+}
+.modal-backdrop {
+    z-index: 1040;
+}
+.stripe-wrapper {
+	display: flex;
+	display: -webkit-flex;
+	align-items:center;
+	-webkit-align-items:center;
+}
+.payout-wrap {
+	background: variables.$dark;
+	@include mixins.margin-padding(0 0 24px, 24px 24px 14px);
+	@include mixins.rounded(10px);
+	.payout-title {
+		border-bottom: 1px solid colors.$black__ash;
+		margin-bottom: 24px;
+	}
+	h4 {
+		font-size: variables.$font-size-20;
+		font-weight: variables.$font-weight-semibold;
+		color: variables.$white;
+		margin-bottom: 10px;
+	}
+	p {
+		font-size: variables.$font-size-14;
+		font-weight: variables.$font-weight-medium;
+		color: variables.$white;
+		margin-bottom: 10px;
+	}
+	.stripe-box {
+		@include mixins.margin-padding(0 24px 10px 0, 20px);
+		background: variables.$white;
+		@include mixins.rounded(10px);
+		position: relative;
+		.stripe-img {
+			@include mixins.margin-padding(0 0 10px, 0 0 10px);
+			border-bottom: 1px solid variables.$border-color;
+		}
+		a {
+			@include mixins.rounded(40px);
+			@include mixins.margin-padding(null, 4px 9px);
+			background: variables.$gray-transparent;
+			color: variables.$gray-900;
+			font-size: variables.$font-size-14;
+			font-weight: variables.$font-weight-medium;
+			i {
+				margin-right: 5px;
+			}
+				&:hover {
+					background: variables.$primary-200;
+					color: variables.$primary;
+				}
+		}
+		&:last-child {
+			margin-right: 0;
+		}
+		&.active {
+			&::before {
+				content: "";
+				background-color: variables.$white;
+				width: 20px;
+				height: 20px;
+				@include mixins.rounded(50%);
+				@include mixins.position(absolute, -5px, -5px, null, null);
+				background-image: url('../img/icons/badge.svg');
+				background-repeat: no-repeat;
+				background-position: center;
+			}
+		}
+	}
+}

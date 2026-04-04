@@ -1,0 +1,486 @@
+@use "../base/colors";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.account-card {
+	border-radius: 10px;
+    font-size: variables.$font-size-16;
+    text-align: center;
+    @include mixins.margin-padding(0 0 30px, 10px);
+    span {
+        font-size: variables.$font-size-24;
+        display: block;
+        margin-bottom: 5px;
+        font-weight: variables.$font-weight-medium;
+    }
+}
+.info-list {
+	margin-bottom: 10px;
+    .title {
+        color: colors.$dark__blue;
+        font-weight: variables.$font-weight-medium;
+    }
+    .text {
+        color: colors.$smokey-gray;
+        display: block;
+        overflow: hidden;
+    }
+}
+.account-details-box {
+    background: variables.$dark;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    .account-payment-info {
+        h4 {
+            color: variables.$white;
+            font-size: variables.$font-size-20;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #334155;
+        }
+        .payment-amount {
+            border: 1px solid variables.$border-color;
+            @include mixins.rounded(10px);
+            padding: 15px;
+            margin-bottom: 16px;
+            h6 {
+                color: variables.$white; 
+                display: inline-flex;
+                align-items: center;
+                font-size: variables.$font-size-14;
+                font-weight: variables.$font-weight-medium;
+                i {
+                    margin-right: 8px;
+                    &.text-orange {
+                        color: #F97316;
+                    }
+                    &.text-pink {
+                        color: #DB2777;
+                    }
+                }
+            }
+            span {
+                color: variables.$white;
+                font-size: variables.$font-size-24;
+                font-weight: variables.$font-weight-medium;
+                display: block;
+            }
+        }
+        .payment-request {
+            span {
+                display: block;
+                font-size: variables.$font-size-14;
+                font-weight: variables.$font-weight-medium;
+                color: variables.$light;
+                margin-bottom: 16px;
+            }
+        }
+    }
+}
+.bank-details-info {
+    @include mixins.respond-below(lg) {
+        margin-top: 24px;
+    }
+    h3 {
+        font-size: variables.$font-size-20;
+        margin-bottom: 16px;
+        color: variables.$white;
+        @include mixins.respond-below(lg) {
+            font-size: variables.$font-size-18;
+        }
+    }
+    ul {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        li {
+            margin-right: 15px;
+            margin-bottom: 8px;
+            &:last-child {
+                margin-right: 0;
+            }
+            h5 {
+                color: variables.$white;
+                font-size: variables.$font-size-16;
+                font-weight: variables.$font-weight-medium;
+                margin-bottom: 0;
+            }
+            h6 {
+                color: variables.$white;
+                font-size: variables.$font-size-14;
+                margin-bottom: 5px;
+            }
+        }
+    }
+    .edit-detail-link {
+        display: flex;
+        align-items: center;
+        margin-top: 8px;
+        a {
+            color: variables.$primary;
+            font-size: variables.$font-size-14;
+            margin-right: 8px;
+            padding-right: 8px;
+            display: inline-block;
+            border-right: 1px solid variables.$border-color;
+            &:last-child {
+                border: 0;
+            }
+            &:hover {
+                color: variables.$white;
+            }
+        }
+    }
+}
+.accounts-tab {
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid variables.$border-color;
+    .nav-tabs-bottom {
+        .nav-link {
+            background: variables.$light-transparent;
+            border-radius: 10px;
+            padding: 5px 20px;
+            color: variables.$gray-900;
+            margin-right: 15px;
+            &.active {
+                background: variables.$primary;
+                color: variables.$white;
+            }
+            &:hover {
+                background: variables.$primary;
+                color: variables.$white;
+            }
+        }
+    }
+}
+.custom-new-table {
+    border: 1px solid variables.$gray-transparent;
+    border-radius: 10px;
+    .table-responsive {
+        border-radius: 10px;
+        .table {
+            thead {
+                tr {
+                    th {
+                        border: 0;
+                        background: variables.$gray-transparent;                        
+                        color: variables.$gray-900;
+                        font-size: variables.$font-size-14;
+                        padding: 8px 12px;
+                        white-space: nowrap;
+                    }
+                }
+            }
+            tbody {
+                tr {
+                    border: 0;
+                    td {
+                        border-bottom: 1px solid variables.$gray-transparent;
+                        padding: 12px;
+                        font-size: variables.$font-size-14;
+                        padding: 12px;
+                        white-space: nowrap;
+                        color: variables.$gray-600;
+                        span {
+                            &.text-blue {
+                                color: variables.$primary;
+                                &:hover {
+                                    color: variables.$gray-900;
+                                }
+                            }
+                            &.badge {
+                                padding: 8px 8px;
+                                border-radius: 4px;
+                                font-weight: variables.$font-weight-medium;
+                                display: inline-flex;
+                                font-size: variables.$font-size-10;
+                                line-height: 1;
+                                &.badge-warning-bg {
+                                    background: variables.$warning;
+                                }
+                                &.badge-success-bg {
+                                    background: variables.$teal;
+                                }
+                                &.badge-danger-bg {
+                                    background: variables.$danger;
+                                }
+                            }
+                           
+                        }
+                        .table-avtatar {
+                            a {
+                                display: inline-flex;
+                                align-items: center;
+                                img {
+                                    width: 24px;
+                                    height: 24px;
+                                    border-radius: 5px;
+                                    margin-right: 12px;
+
+                                }
+                            }
+                        }
+                        .account-action {
+                            border: 1px solid variables.$border-color;
+                            border-radius: 50%;
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: 30px;
+                            height: 30px;
+                            background: variables.$white;
+                            &:hover {
+                                background: variables.$primary;
+                                color: variables.$white;
+                            }
+                        }
+                    }
+                    &:last-child {
+                        td {
+                            border: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.input-block-new {
+    margin-bottom: 24px;
+}
+.modal-header {
+    h5 {
+        display: inline-flex;
+        align-items: center;
+        .request-id {
+            font-size: variables.$font-size-16;
+            font-weight: variables.$font-weight-medium;
+            margin-left: 10px;
+        }
+        .badge {
+            padding: 5px 10px;
+            border-radius: 50px;
+            font-weight: variables.$font-weight-medium;
+            display: inline-block;
+            margin-left: 10px;
+            font-size: variables.$font-size-12;
+            &.badge-success-bg {
+                background: colors.$teal;
+            }
+            &.badge-danger-bg {
+                background: #EF444E;
+            }
+        }
+    }
+}
+.other-accounts-info {
+    >ul {
+        >li {
+            border: 1px solid variables.$gray-transparent;
+            padding: 15px 15px 0;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            &:last-child {
+                margin-bottom: 0;
+            }
+            ul {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                @include mixins.respond-below(lg) {
+                    flex-direction: column;
+                    align-items: start;
+                }
+                li {
+                    margin-bottom: 15px;
+                    &:first-child  {
+                        flex-basis: 16%;
+                    }
+                    &:nth-child(2) {
+                        flex-basis: 27%;
+                    }
+                    &:nth-child(3) {
+                        flex-basis: 12%;
+                    }
+                    &:nth-child(4) {
+                        flex-basis: 25%;
+                    }
+                    &:last-child {
+                        flex-basis: 20%;
+                        text-align: right;
+                    }
+                    @include mixins.respond-below(lg) {
+                        flex-basis: auto !important;
+                    }
+                    h6 {
+                        font-size: variables.$font-size-14;
+                        font-weight: variables.$font-weight-medium;
+                        margin-bottom: 5px;
+                        color: variables.$gray-600;
+                    }
+                    span {
+                        color: variables.$gray-900;
+                    }
+                    a {
+                        font-size: variables.$font-size-16;
+                        color: variables.$primary;
+                        text-decoration: underline;
+                        font-weight: variables.$font-weight-medium;
+                    }
+                }
+            }
+        }
+    }
+}
+.completed-request {
+    ul {
+        border: 1px solid variables.$gray-transparent;
+        padding: 15px 15px 0;
+        border-radius: 10px;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        li {
+            margin-bottom: 15px;
+            h6 {
+                margin-bottom: 5px;
+            }
+            span {
+                color: variables.$gray-900;
+                &.text-blue {
+                    color: variables.$primary;
+                }
+            }
+        }
+    }
+    .bank-detail {
+        padding: 24px 24px 9px;
+        background: colors.$sky__04;
+        border-radius: 10px;
+        margin-bottom: 24px;
+        h4 {
+            margin-bottom: 15px;
+        }
+        .accont-information {
+            margin-bottom: 15px;
+            h6 {
+                margin-bottom: 5px;
+            }
+            span {
+                color: variables.$gray-900;
+            }
+        }
+    }
+    .request-des {
+        margin-bottom: 24px;
+        h4 {
+            margin-bottom: 15px; 
+        }
+        p {
+            color: variables.$gray-900;
+            margin-bottom: 0;
+        }
+    }
+}
+.canceled-user-info {
+    justify-content: space-between;
+    margin-bottom: 24px;
+    @include mixins.respond-below(sm) {
+        display: block !important;
+    }
+    .email-info {
+        ul {
+            @include mixins.respond-below(sm) {
+                margin-top: 15px;
+            }
+            li {
+                color: colors.$black__05;
+                display: flex;
+                align-items: center;
+                i {
+                    margin-right: 5px;
+                }
+                & +li {
+                    margin-top: 5px;
+                }
+            }
+        }
+    }
+}
+.cancellation-fees {
+    padding: 24px 24px 9px;
+    background: colors.$sky__04;
+    border-radius: 10px;
+    margin-bottom: 24px;
+    .cancellation-info {
+        display: flex;
+        align-items: center;
+        @include mixins.respond-below(sm) {
+            display: block;
+        }
+        .appointment-type {
+            margin-right: 24px;
+            margin-bottom: 15px;
+        }
+    }
+}
+.cancel-reason {
+    border: 1px solid variables.$gray-transparent;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 24px;
+    h5 {
+        font-size: variables.$font-size-15;
+        margin-bottom: 10px;
+    }
+    p {
+        color: colors.$black__05;
+        margin-bottom: 10px;
+    }
+}
+span {
+    &.refund {
+        color: variables.$primary;
+        font-weight: variables.$font-weight-medium;
+    }
+}
+.card {
+    &.pass-card {
+        box-shadow: 0px 7.5px 17.5px 0px #0000000D;
+        border: 1px solid colors.$white;
+    }
+}
+.refund-status {
+
+    span {
+        display: block;
+        & +span {
+            margin-top: 10px;
+        }
+    }
+}
+.file-upload {
+    position: relative;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-medium;
+    padding: 7px 8px;
+    @include mixins.rounded(5px);
+    background: variables.$primary;
+    color: variables.$white;
+    display: inline-block;
+    p {
+        margin: 0;
+    }
+    input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+    }
+}

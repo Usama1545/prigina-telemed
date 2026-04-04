@@ -1,0 +1,139 @@
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.widget-profile {
+    background-color: variables.$white;
+    border-bottom: 1px solid variables.$border-color;
+    .profile-info-widget {
+		display: variables.$block !important;
+		text-align: variables.$center !important;
+		.booking-doc-img {
+		    display: variables.$inline__block;
+		    width: variables.$auto;
+		    background-color: variables.$white;
+			margin: 0 0 20px !important;
+			padding: 8px;
+		    @include mixins.rounded(50%);
+		    img {
+			    height: 120px !important;
+			    width: 120px !important;
+			    @include mixins.rounded(50% !important);
+			}
+		}
+	}
+	&.pat-widget-profile {
+		.profile-info-widget {
+			.booking-doc-img {
+				padding: 0;
+				img {
+				    height: 100px !important;
+				    width: 100px !important;
+				    @include mixins.rounded(50%);
+				}
+			}
+		}
+	}
+}
+.appointment-list {
+	.profile-info-widget {
+		display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	    margin-right: variables.$auto;
+	    text-align: variables.$left;
+	    @include mixins.respond-below(custom479) {
+	    	text-align: variables.$center;
+	    	-ms-flex-direction: column;
+    		flex-direction: column;
+	    }
+	    .booking-doc-img {
+		    @include mixins.respond-below(custom479) {
+		    	@include mixins.margin-padding(0 0 15px, null);
+		    }
+	    	img {
+			    height: 120px;
+			    object-fit: variables.$cover;
+			    width: 120px;
+			    @include mixins.rounded(4px);
+			    @include mixins.respond-below(custom479) {
+				    height: 100px;
+				    width: 100px;
+				    @include mixins.rounded(50%);
+			    }
+	    	}
+	    }
+	}
+	.profile-det-info {
+		@include mixins.respond-below(custom479) {
+			margin-bottom: 15px;
+		}
+	}
+
+}
+.appointments {
+	.appointment-list {
+		background-color: colors.$white;
+	    border: 1px solid colors.$light-silver;
+		display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	    @extend %flex-wrap;
+	    @include mixins.margin-padding(0 0 20px, 20px);
+	    @include mixins.rounded(4px);
+	    &:last-child {
+			margin-bottom: 30px;
+		}
+		@include mixins.respond-below(lg) {
+			display: variables.$block;
+		}
+		@include mixins.respond-below(xl) {
+			flex-direction: column;
+		}
+		@include mixins.respond-below(custom479) {
+			text-align: variables.$center;
+		}
+		.profile-det-info {
+			@include mixins.respond-below(custom479) {
+			    margin-bottom: 15px;
+			}
+		}
+	}
+	.appointment-action {
+		@extend %align-items-center;
+		@extend %inline-flex;
+		@include mixins.respond-below(xl) {
+			margin-top: 10px;
+		}
+		@include mixins.respond-below(custom479) {
+			margin-top: 0;
+		}
+		a {
+			font-size: typography.$font__size__13;
+			& + a {
+				margin-left: 5px;
+			}
+		}
+	}
+}
+.info-details {
+	list-style: none;
+    @include mixins.margin-padding(0, 0);
+    li {
+		margin-bottom: 10px;
+		&:last-child {
+			margin-bottom: 0;
+		}
+		.title {
+		    color: colors.$dark__blue;
+		    font-weight: variables.$font-weight-medium;
+		}
+		.text {
+		    color: colors.$smokey-gray;
+		    display: variables.$block;
+		    font-size: variables.$font-size-16;
+		    overflow: variables.$hidden;
+		}
+	}
+}

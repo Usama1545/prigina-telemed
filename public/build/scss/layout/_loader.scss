@@ -1,0 +1,51 @@
+@use "../base/colors";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+#loader {
+	background-color: colors.$white;
+	z-index: 999999;
+	@include mixins.position(variables.$fixed, 0, 0, 0, 0);
+}
+.loader {
+	display: variables.$inline__block;
+	height: 50px;
+	margin-left: -25px;
+	margin-top: -25px;
+	width: 50px;
+	@include mixins.position(variables.$absolute, 50%, null, null, 50%);
+	span {
+		-webkit-animation: loader 1.3s linear infinite;
+		animation: loader 1.3s linear infinite;
+		background-color: colors.$sky__blue;
+		@include mixins.rounded(100%);
+		display: variables.$inline__block;
+		height: 50px;
+		position: variables.$absolute;
+		width: 50px;
+		&:last-child {
+			animation-delay: -0.8s;
+			-webkit-animation-delay: -0.8s;
+		}
+	}
+}
+@keyframes loader {
+	0% {
+		transform: scale(0, 0);
+		opacity: 0.5;
+	}
+	100% {
+		transform: scale(1, 1);
+		opacity: 0;
+	}
+}
+@-webkit-keyframes loader {
+	0% {
+		-webkit-transform: scale(0, 0);
+		opacity: 0.5;
+	}
+	100% {
+		-webkit-transform: scale(1, 1);
+		opacity: 0;
+	}
+}

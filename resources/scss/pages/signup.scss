@@ -1,0 +1,302 @@
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.signup-option-btns {
+	.signup-btn-info {
+		width: 100%;
+		background: variables.$white;
+		border: 1px solid variables.$border-color;
+		border-radius: 10px;
+        padding: 15px;
+		margin-bottom: 16px;
+		display: flex;
+		display: -webkit-flex;
+		align-items:center;
+		-webkit-align-items:center;
+		justify-content: space-between;
+		-webkit-justify-content: space-between;
+        @include mixins.transition(0.7s);
+		&:hover {
+			box-shadow: variables.$box-shadow;
+            @include mixins.transition(0.7s);
+			.signup-arrow {
+				background: variables.$primary;
+				color: variables.$white;
+                @include mixins.transition(0.4s);
+			}
+		}
+		&:last-child {
+			margin-bottom: 0;
+		}
+        @include mixins.respond-below(lg) {
+            @include mixins.margin-padding(0, 10px);
+            margin-bottom: 20px;
+        }
+	}
+}
+		
+
+.signup-info {
+	@extend %flex__center;
+	.signup-icon {
+		margin-right: 16px;
+	}
+}
+.signup-content {
+	text-align: variables.$left;
+	h4 {
+		font-weight: variables.$font-weight-semibold;
+		font-size: variables.$font-size-20;
+		margin-bottom: 0;
+        @include mixins.respond-below(lg) {
+            font-size: variables.$font-size-18;
+        }
+	}
+	p {
+		color: variables.$text-color;
+		margin-bottom: 0;
+		font-size: variables.$font-size-14;
+	}
+}
+.signup-arrow {
+	width: 40px;
+	height: 40px;
+	background: variables.$gray-transparent;
+	color: variables.$gray-900;
+	font-size: variables.$font-size-24;
+	border-radius: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+    @include mixins.transition(0.4s);
+	flex-shrink: 0;
+}
+.terms-check-box {
+	label {
+		a {
+			color: variables.$gray-900;
+			font-weight: variables.$font-weight-medium;
+			&:hover {
+				color: variables.$primary;
+			}
+		}
+	}
+}
+.account-signup {
+	text-align: variables.$center;
+	margin-top: 40px;
+	p {
+		margin-bottom: 0;
+		a {
+			font-weight: variables.$font-weight-medium;
+			color: variables.$primary;;
+			&:hover {
+				color: variables.$primary-hover;
+			}
+		}
+	}
+}
+.otp-box {
+	margin-bottom: 40px;
+	.forms-block {
+		display: flex;
+		display: -webkit-flex;
+		align-items:center;
+		-webkit-align-items:center;
+		justify-content: space-between;
+		-webkit-justify-content: space-between;
+		@include mixins.respond-below(md) {
+			justify-content: start;
+		}
+	}
+	input {
+		width: 70px;
+		height: 70px;
+		background: variables.$white;
+		border: 1px solid variables.$border-color;
+		border-radius: 10px;
+		text-align: variables.$center;
+		margin-right: 24px;
+		font-weight: variables.$font-weight-semibold;
+		font-size: variables.$font-size-20;
+		color: variables.$gray-900;
+		outline: none;
+		&:last-child {
+			margin-right: 0;
+		}
+		&:focus {
+			border-color: variables.$primary;
+		}
+		@include mixins.respond-below(lg) {
+			width: 68px;
+			height: 68px;
+		}
+		@include mixins.respond-below(md) {
+			width: 60px;
+			height: 60px;
+			font-size: variables.$font-size-18;
+		}
+	}
+}
+.otp-info {
+	display: flex;
+    display: -webkit-flex;
+    align-items:center;
+    -webkit-align-items:center;
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
+}
+.otp-code {
+	p {
+		margin-bottom: 0;
+		a {
+			font-weight: variables.$font-weight-medium;
+			color: variables.$primary;
+			&:hover {
+				color: variables.$primary-hover;
+			}
+		}
+	}
+}
+.otp-sec {
+	p {
+		background: variables.$danger-100;
+		border-radius: 20px;
+		color: variables.$danger;
+		font-size: variables.$font-size-10;
+		font-weight: variables.$font-weight-medium;
+		padding: 4px 7px;
+		@extend %inlineflex-align-center;
+		margin-bottom: 0;
+		i {
+			margin-right: 5px;
+		}
+	}
+}
+.forgot-link {
+	font-weight: variables.$font-weight-medium;
+	color: variables.$primary;
+	margin-bottom: 4px;
+	@include mixins.transition(0.7s);
+	&:hover {
+		color: variables.$primary-hover;
+		@include mixins.transition(0.7s);
+	}
+}
+.form-group-flex {
+	display: flex;
+    display: -webkit-flex;
+    align-items:center;
+    -webkit-align-items:center;
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
+}
+.signup-code {
+	font-size: variables.$font-size-14;
+	margin-top: 4px;
+}
+.multistep-form {
+	#first {
+		display: variables.$block;
+	}
+	fieldset {
+		display: none;
+		width: variables.$full__width;
+	}
+}
+.widget-setcount {
+	padding-bottom: 30px;
+	ul {
+		@include mixins.margin-padding(0, 0);
+		display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+		@extend %flex__between;
+		@extend %flex__wrap;
+		list-style: none;
+		li {
+			margin-right: 0;
+			margin-bottom: 10px;
+			position: variables.$relative;
+			&:last-child {
+				margin-right: 0;
+				&:before {
+					display: none;
+				}
+			}
+			&:before {
+				position: absolute;
+				top: 50%;
+				right: -66px;
+				content: "";
+				width: 50px;
+				height: 2px;
+				background: variables.$border-color;
+			}
+		}
+	}
+	.step-box {
+		@extend %flex-align-center;
+	}
+	.step-icon {
+		width: 42px;
+		height: 42px;
+		background: variables.$primary;
+		border-radius: 50px;
+		margin-right: 8px;
+		@extend %flex-align-center;
+		color: variables.$white;
+		opacity: 20%;
+	}
+	.step-content {
+		p {
+			font-size: variables.$font-size-14;
+			font-weight: variables.$font-weight-medium;
+			margin-bottom: 0;
+			opacity: 20%;
+		}
+		h4 {
+			font-weight: variables.$font-weight-semibold;
+			font-size: variables.$font-size-16;
+			margin-bottom: 0;
+			opacity: 20%;
+		}
+	}
+	.progress-activated {
+		.step-icon {
+			background: variables.$primary;
+			opacity: 1;
+		}
+		.step-content {
+			p {
+				opacity: 1;
+			}
+			h4 {
+				opacity: 1;
+			}
+		}
+	}
+	.progress-active {
+		.step-icon {
+			background: variables.$primary;
+			opacity: 1;
+		}
+		.step-content {
+			p {				
+				opacity: 1;
+			}
+			h4 {				
+				opacity: 1;
+			}
+		}
+	}
+}
+
+.form-check-box .custom_check {
+	margin-bottom: 0;
+}
+.form-check-box .custom_check .checkmark::after {
+    top: 50%;
+    left: 50%;
+	@include mixins.transform(translate(-50%, -50%));
+}

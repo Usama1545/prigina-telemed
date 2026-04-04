@@ -1,0 +1,413 @@
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.consultation-info {
+	padding-bottom: 25px;
+	p {
+		font-weight: variables.$font-weight-medium;
+		font-size: variables.$font-size-16;
+        color: variables.$gray-900;
+		margin-bottom: 20px;
+		@include mixins.respond-below(lg) {
+            margin-bottom: 15px;
+        }
+	}
+}
+.consultation-list {
+	ul {
+        @include mixins.margin-padding(0, 0);
+		list-style: none;
+		li {
+			display: variables.$block;
+			margin-bottom: 15px;
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+}
+.consultation-types {
+	@extend %flex__center;
+	a {
+		font-weight: variables.$font-weight-medium;
+		font-size: variables.$font-size-16;
+		color: colors.$dove_grey;
+		background: colors.$white;
+		border: 1px solid colors.$light_grey;
+		border-radius: 6px;
+		min-width: 413px;
+        @include mixins.margin-padding(0, 10px 15px);
+		@extend %flex-align-center;
+		&:hover {
+			color: variables.$primary;
+			background: colors.$white;
+			border: 1px solid colors.$blue__14;
+		}
+		i {
+			font-size: typography.$font__size__18;
+			margin-right: 10px;
+		}        
+        @include mixins.respond-below(lg) {
+            min-width: 300px;
+        }
+        @include mixins.respond-below(md) {
+            font-size: variables.$font-size-14;
+            min-width: 250px;
+            @include mixins.margin-padding(0, 7px 15px);
+        }
+	}
+	span {
+		margin-left: 18px;
+		font-size: typography.$font__size__20;
+		color: variables.$success;
+		display: none;
+	}	
+	&.active {
+		a {
+			color: variables.$primary;
+			background: colors.$white;
+			border: 1px solid colors.$blue__14;
+			box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.07);
+		}
+		span {
+			display: variables.$block;
+		}
+	}
+}
+.booking-doctor-details {
+	display: flex;
+    display: -webkit-flex;
+    align-items:center;
+    -webkit-align-items:center;
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
+}
+.booking-device {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+}
+.booking-device-img {
+	margin-right: 15px;
+}
+.booking-doctor-info {
+	h3 {
+		font-weight: variables.$font-weight-medium;
+		font-size: variables.$font-size-16;
+		margin-bottom: 5px;
+	}
+	.device-text {
+		margin-bottom: 12px;
+	}
+	.btn {
+		font-weight: variables.$font-weight-medium;
+		font-size: variables.$font-size-14;
+        @include mixins.margin-padding(0, 4px 10px);
+		min-width: 109px;
+		color: variables.$primary;
+		background: colors.$white;
+		border: 2px solid colors.$blue__14;
+		box-shadow: inset 0 0 0 0 colors.$blue__14;
+		border-radius: 6px;
+        @include mixins.transition(0.7s);
+		&:hover {
+			color: colors.$white;
+			background: variables.$primary;
+			box-shadow: inset 0 0 0 50px colors.$blue__14;
+			border: 2px solid colors.$blue__14;
+            @include mixins.transition(0.7s);
+		}
+	}
+}
+.app-images a {
+	margin-right: 8px;
+    &:last-child {
+        margin-right: 0;
+    }
+}
+.booking-date {
+	@extend %flex__center;
+	padding-bottom: 30px;
+	p {
+		color: colors.$grey_600;
+        @include mixins.margin-padding(0 10px 0 0, 0);
+		margin-right: 10px;
+		margin-bottom: 0;
+        @include mixins.respond-below(md) {
+            @include mixins.margin-padding(0 0 10px 0, 0);
+        }
+	}
+    @include mixins.respond-below(md) {
+        display: variables.$block;
+        padding-bottom: 20px
+    }
+}
+.time-slot-card-body {
+    @include mixins.respond-below(md) {
+        padding-bottom: 0 !important;
+    }
+}
+.booking-range {
+	.btn {
+		background: colors.$white;
+		border: 1px solid colors.$white_shade;
+		border-radius: 6px;
+		font-size: variables.$font-size-14;
+		font-weight: variables.$font-weight-normal;
+		color: colors.$grey_dark;
+        @include mixins.margin-padding(0, 10px 15px);
+		@extend %flex__center;
+        @include mixins.respond-below(md) {
+            font-size: typography.$font__size__13;
+            @include mixins.margin-padding(0, 10px);
+            position: variables.$relative;
+        }
+	}
+	img {
+		margin-right: 10px;
+	}
+	i {
+		font-size: variables.$font-size-16;
+		margin-left: 10px;
+		color: colors.$zambesi_grey;
+	}
+}
+.booking-card {
+	border: 2px solid variables.$border-color;
+	border-radius: 8px;
+	margin-bottom: 25px;
+}
+.booking-date-slider {
+	padding-bottom: 30px;
+}
+.date-slider {
+	text-align: variables.$center;
+	list-style: none;
+    @include mixins.margin-padding(0, 0);
+	.slick-slide {
+		display: variables.$block;
+        @include mixins.margin-padding(0, 0 5px);
+	}
+	li {
+		h4 {
+			font-weight: variables.$font-weight-medium;
+			font-size: variables.$font-size-16;
+			margin-bottom: 5px;
+            @include mixins.respond-below(xl) {
+                font-size: typography.$font__size__13;
+            }
+            @include mixins.respond-below(lg) {
+                font-size: variables.$font-size-16;
+            }
+		}
+		p {
+			color: colors.$darkish_grey;
+			margin-bottom: 0;
+		}
+		&.active {
+			h4 {
+				color: variables.$gray-900;
+			}
+			p {
+				color: colors.$silver_grey;
+			}
+		}
+	}
+	.slick-prev {
+		&:before {
+			content: ' \e92f';
+		}
+	}
+	.slick-next {
+		&:before {
+			content: ' \e930';
+		}
+	}
+}
+.date-slider .slick-prev, 
+.date-slider .slick-next {
+	background: variables.$transparent;
+	color: variables.$gray-900;
+	line-height: variables.$normal;
+}
+.date-slider .slick-prev:hover,
+.date-slider .slick-prev:focus,
+.date-slider .slick-next:hover,
+.date-slider .slick-next:focus {
+	background-color: variables.$transparent;
+	color: variables.$primary;
+	opacity: 1;
+}
+.date-slider .slick-prev:hover:before, 
+.date-slider .slick-prev:focus:before, 
+.date-slider .slick-next:hover:before, 
+.date-slider .slick-next:focus:before {
+	color: variables.$primary;
+}
+.date-slider .slick-prev:before, 
+.date-slider .slick-next:before {
+	font-family: "feather";
+	font-size: typography.$font__size__26;
+}
+.time-slot {
+	text-align: variables.$center;
+	h4 {
+		font-weight: variables.$font-weight-medium;
+		font-size: variables.$font-size-16;
+		margin-bottom: 20px;
+	}
+	ul {
+		list-style: none;
+        @include mixins.margin-padding(0, 0);
+		li {
+			display: variables.$block;
+			margin-bottom: 15px;
+		}
+	}
+	li {
+		&:last-child {
+			margin-bottom: 0;
+		}
+		.timing {
+			background: colors.$grey_400;
+			border: 2px solid colors.$white_smoke;
+			border-radius: 8px;
+			color: colors.$davy_grey;
+			@include mixins.margin-padding(0, 10px 15px);
+			text-align: variables.$center;
+			position: variables.$relative;
+			@extend %flex-align-center;
+			box-shadow: inset 0 0 0 0 colors.$white;
+            @include mixins.transition(0.7s);
+			&:hover {
+				background: colors.$white;
+				box-shadow: inset 0 0 0 50px colors.$white;
+                @include mixins.transition(0.7s);
+			}
+			&.active {
+				background: variables.$primary;
+				border: 2px solid variables.$primary;
+				color: colors.$white;
+				box-shadow: inset 0 0 0 0 variables.$primary;
+				&:hover {
+					background: variables.$primary;
+					border: 2px solid variables.$primary;
+					color: colors.$white;
+					box-shadow: inset 0 0 0 50px variables.$primary;
+				}
+			}
+			i {
+				margin-right: 4px;
+			}
+		}
+		.load-more-timings {
+			a {
+				font-weight: variables.$font-weight-medium;
+				text-decoration: underline;
+				color: variables.$primary;
+				&:hover {
+					color: variables.$gray-900;
+				}
+			}
+		}
+	}
+	.time-slot-open {
+		display: none;
+	}
+    @include mixins.respond-below(lg) {
+        padding-bottom: 15px;
+    }
+}
+.success-content {
+	text-align: variables.$center;
+	padding-bottom: 40px;
+    h4 {
+        font-weight: variables.$font-weight-medium;
+        font-size: typography.$font__size__18;
+        margin-bottom: 0;
+        @include mixins.respond-below(lg) {
+            font-size: variables.$font-size-16;
+        }
+    }
+    @include mixins.respond-below(lg) {
+        padding-bottom: 30px;
+    }
+}
+.success-icon {
+	padding-bottom: 15px;
+    i {
+        font-size: typography.$font__size__50;
+        color: variables.$success;
+        @include mixins.respond-below(lg) {
+            font-size: typography.$font__size__36;
+        }
+    }
+}
+.booking-success-info {
+	padding-bottom: 20px;
+	.booking-doctor-img {
+		width: 90px;
+		height: 90px;
+		border-radius: 10px;
+		margin-right: 15px;
+		img {
+			width: 90px;
+			height: 90px;
+			border-radius: 10px;
+		}
+	}
+	.booking-doctor-info {
+		p {
+			margin-bottom: 15px;
+		}
+	}
+}
+.success-btn {
+	text-align: variables.$center;
+	padding-bottom: 25px;
+	.btn {
+		@extend %display-inline-flex;
+		font-weight: variables.$font-weight-medium;
+		padding: 8px 18px;
+        @include mixins.respond-below(md) {
+            display: variables.$flex;
+        }
+	}
+	.btn-primary {
+		margin-right: 15px;
+        @include mixins.respond-below(md) {
+            @include mixins.margin-padding(0 0 10px 0, 8px 18px);
+        }
+	}
+	.btn-light {
+		color: colors.$fog_silver;
+		background: colors.$grey_400;
+	}
+}
+.success-dashboard-link {
+	text-align: variables.$center;
+	a {
+		display: inline-flex;
+		display: -webkit-inline-flex;
+		align-items:center;
+		-webkit-align-items:center;
+		font-weight: variables.$font-weight-medium;
+		font-size: typography.$font__size__15;
+		color: colors.$nickel_color;
+		&:hover {
+			color: variables.$primary;
+		}
+		i {
+			margin-right: 12px;
+			font-size: variables.$font-size-16;
+		}
+        @include mixins.respond-below(md) {
+            font-size: variables.$font-size-14;
+        }
+	}
+}
+
+
+

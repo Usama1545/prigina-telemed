@@ -1,0 +1,245 @@
+@use "../base/colors";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.doc-review {
+	&.review-listing {
+		@include mixins.margin-padding(0, null);
+	}
+}
+.doc-review {
+	& > ul {
+		& > li {
+			background-color: variables.$white;
+			border: 1px solid variables.$gray-transparent;
+			border-radius: 10px;
+			box-shadow: 0px 7.5px 17.5px 0px #0000000D;
+			padding: 0;
+			margin-bottom: 24px;
+			.review-content {
+				padding: 24px;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				.daterange-wraper {
+					margin-bottom: 0;
+				}
+			}
+			.star-rated {
+				display: flex;
+				align-items: center;
+				span {
+					color: variables.$gray-900;
+					font-size: variables.$font-size-30;
+					margin-right: 10px;
+					font-weight: variables.$font-weight-semibold;
+				}
+				i {
+					color: variables.$gray-transparent;
+					margin: 0 2px;
+					&.filled {
+						color: variables.$warning;
+					}
+				}
+			}
+			ul {
+				li {
+					padding: 0 24px 24px;
+					.replied-comment {
+						padding: 15px;
+						background: variables.$light-transparent;
+						border-radius: 10px;
+						.patient-info {
+							span {
+								display: block;
+								color: variables.$gray-900;
+								font-size: variables.$font-size-14;
+							}
+						}
+						.review-info {
+							margin-top: 10px;
+						}
+					}
+					.comment-reply {
+						display: flex;
+						align-items: center;
+						.reply-text {
+							color: variables.$primary;
+							font-size: variables.$font-size-14;
+							margin-right: 15px;
+							font-weight: variables.$font-weight-medium;
+							&.replied-text {
+								color: #1E293B;
+							}
+						}
+						span {
+							font-size: variables.$font-size-14;
+							font-weight: variables.$font-weight-medium;
+							&.no-views {
+								color: colors.$grey_white__01;
+							}
+							&.replied-views {
+								color: variables.$primary;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+	}
+}
+.comments {
+	width: 100%;
+	.comment-head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 15px;
+		border-bottom: 1px solid #E2E8F0;
+		.patinet-information {
+			.patient-info {
+				span {
+					display: block;
+					color: variables.$gray-600;
+				}
+			}
+		}
+	}
+	.review-info {
+		padding: 24px;
+		p {
+			color: variables.$gray-600;
+			margin-bottom: 15px;
+		}
+	}
+	.comment-reply {
+		display: flex;
+		align-items: center;
+		.reply-text {
+			color: variables.$gray-900;
+			font-size: variables.$font-size-14;
+			margin-right: 15px;
+			font-weight: variables.$font-weight-medium;
+			&:hover {
+				color: variables.$primary;
+			}
+			&.replied-text {
+				color: variables.$gray-900;
+			}
+			i {
+				line-height: inherit;
+			}
+		}
+		span {
+			font-size: variables.$font-size-14;
+			font-weight: variables.$font-weight-medium;
+			&.no-views {
+				color: colors.$grey_white__01;
+			}
+			&.replied-views {
+				color: variables.$primary;
+			}
+		}
+	}
+}
+.durations {
+	margin-bottom: 5px;
+}
+
+
+// Review section
+.review-section {
+	&-five {
+		background-color: variables.$white;
+		position: relative;
+		.section-header-five {
+			margin-bottom: 24px;
+		}
+		.review-img-five {
+			border-radius: variables.$border-radius-lg;
+			position: relative;
+			overflow: hidden;
+			margin-right: 16px;
+			@include mixins.respond-below (lg) {
+                display: none;
+            }
+			&:hover {
+				.img-1 {
+					transform: scale(1.2) rotate(4deg);
+				}
+			}
+			.img-1 {
+				width: 100%;
+				height: 534px;
+				transition: all 0.7s;
+			}
+			.review-item {
+				background: variables.$gray-100;
+				backdrop-filter: blur(60px);
+				border-radius: variables.$border-radius-lg;
+				padding: 24px;
+				position: absolute;
+				bottom: 0;
+				margin: 24px;
+				.count {
+					font-size: 48px;
+					font-weight: variables.$font-weight-bold;
+					color: variables.$darkmode-text-white;
+					margin: 24px 0px 4px 0px;
+				}
+				.description {
+					font-size: 18px;
+					font-weight: variables.$font-weight-normal;
+					color: variables.$darkmode-text-white;
+					margin: 0;
+				}
+			}
+		}
+		.review-right {
+			position: relative;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			flex-wrap: wrap;
+			gap: 16px;
+			.section-sub-title {
+				margin-left: unset !important;
+			}
+			.slide-btn {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				.slick-arrow {
+					width: 40px;
+					height: 40px;
+					border-radius: 50%;
+					display: inline-flex;
+					align-items: center;
+					justify-content: center;
+					background: transparent;
+					border: none;
+					color: variables.$gray-900;
+					margin: 0;
+					font-size: 24px;
+					transition: all 0.6s;
+					border: 1px solid variables.$border-color;
+					&:hover {
+						background: variables.$secondary;
+						border: 1px solid variables.$secondary;
+					}
+				}
+			}
+		}
+		.element-1 {
+			position: absolute;
+			inset: 0;
+			margin: auto;
+		}
+		.container {
+			position: relative;
+    		z-index: 1;
+		}
+	}
+}
+

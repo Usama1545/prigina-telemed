@@ -1,0 +1,358 @@
+@use "../utils/mixins";
+@use "../utils/variables";
+
+
+.display-1 {
+  font-size: 40px;
+  font-weight: variables.$font-weight-bold;
+  @include mixins.respond-below(xxl) {
+    font-size: 36px;
+  }
+  @include mixins.respond-below(xl) {
+    font-size: 36px;
+  }
+  @include mixins.respond-below(lg) {
+    font-size: 32px;
+  }
+  @include mixins.respond-below(md) {
+    font-size: 26px;
+  }
+}
+.display-4 {
+  font-size: 20px;
+  font-weight: variables.$font-weight-bold;
+  @include mixins.respond-below(lg) {
+    font-size: 18px;
+  }
+  @include mixins.respond-below(md) {
+    font-size: 16px;
+  }
+}
+.display-5 {
+  font-size: 44px;
+  font-weight: variables.$font-weight-bold;
+  @include mixins.respond-below(xl) {
+    font-size: 38px;
+  }
+  @include mixins.respond-below(lg) {
+    font-size: 30px;
+  }
+  @include mixins.respond-below(md) {
+    font-size: 28px;
+  }
+}
+.display-6 {
+  font-size: 38px;
+  font-weight: variables.$font-weight-bold;
+  @include mixins.respond-below(xl) {
+    font-size: 36px;
+  }
+  @include mixins.respond-below(lg) {
+    font-size: 34px;
+  }
+  @include mixins.respond-below(md) {
+    font-size: 30px;
+  }
+}
+.fs-sm {
+  font-size: 0.6875rem; //11px
+}
+.fs-base {
+  font-size: 0.875rem; //14px
+}
+.fs-lg {
+  font-size: 1.125rem; //18px
+}
+
+// (1px-30px are linear, above 30px are step increment of 1)
+.fs-1 {
+  font-size: 0.0625rem; //1px
+}
+.fs-2 {
+  font-size: 0.125rem; //2px
+}
+.fs-3 {
+  font-size: 0.1875rem; //3px
+}
+.fs-4 {
+  font-size: 0.25rem !important; //4px
+}
+.fs-5 {
+  font-size: 0.3125rem !important; //5px
+}
+.fs-6 {
+  font-size: 0.375rem  !important; //6px
+}
+.fs-7 {
+  font-size: 0.4375rem; //7px
+}
+.fs-8 {
+  font-size: 0.5rem  !important; //8px
+}
+.fs-9 {
+  font-size: 0.5625rem; //9px
+}
+.fs-10 {
+  font-size: 0.75em !important;
+}
+.fs-11 {
+  font-size: 0.6875rem; //11px
+}
+.fs-12 {
+  font-size: 0.75rem; //12px
+}
+.fs-13 {
+  font-size: 0.8125rem; //13px
+}
+.fs-14 {
+  font-size: 0.875rem !important; //14px
+}
+.fs-15 {
+  font-size: 0.9375rem; //15px
+}
+.fs-16 {
+  font-size: 1rem; //16px
+}
+.fs-17 {
+  font-size: 1.0625rem; //17px
+}
+.fs-18 {
+  font-size: 1.125rem; //18px
+}
+.fs-19 {
+  font-size: 1.1875rem; //19px
+}
+.fs-20 {
+  font-size: 1.25rem; //20px
+}
+.fs-21 {
+  font-size: 1.3125rem; //21px
+}
+.fs-22 {
+  font-size: 1.375rem; //22px
+}
+.fs-23 {
+  font-size: 1.4375rem; //23px
+}
+.fs-24 {
+  font-size: 1.5rem; //24px
+}
+.fs-25 {
+  font-size: 1.5625rem; //25px
+}
+.fs-26 {
+  font-size: 1.625rem; //26px
+}
+.fs-27 {
+  font-size: 1.6875rem; //27px
+}
+.fs-28 {
+  font-size: 1.75rem; //28px
+}
+.fs-29 {
+  font-size: 1.8125rem; //29px
+}
+.fs-30 {
+  font-size: 1.875rem; //30px
+}
+.fs-32 {
+  font-size: 2rem; //32px
+}
+.fs-34 {
+  font-size: 2.125rem; //34px
+}
+.fs-36 {
+  font-size: 2.25rem; //36px
+}
+.fs-38 {
+  font-size: 2.375rem; //38px
+}
+.fs-40 {
+  font-size: 2.5rem; //40px
+}
+
+.text-default {
+  color: variables.$text-color !important;
+}
+.text-primary {
+  color: variables.$primary !important;
+  opacity: 1;
+  &.text-opacity-75 {
+    color: rgba(variables.$primary, 0.75) !important;
+  }
+  &.text-opacity-25 {
+    color: rgba(variables.$primary, 0.25) !important;
+  }
+  &.text-opacity-50 {
+    color: rgba(variables.$primary, 0.50) !important;
+  }
+}
+.text-secondary {
+  color: variables.$secondary !important;
+  opacity: 1;
+}
+.text-info {
+  color: variables.$info !important;
+  opacity: 1;
+}
+.text-success {
+  color: variables.$success !important;
+  opacity: 1;
+}
+.text-warning {
+  color: variables.$warning !important;
+  opacity: 1;
+}
+.text-danger {
+  color: variables.$danger !important;
+  opacity: 1;
+}
+.text-pink {
+  color: variables.$pink !important;
+}
+.text-purple {
+  color: variables.$purple !important;
+}
+.text-orange {
+  color: variables.$orange !important;
+}
+.text-cyan {
+  color: variables.$cyan !important;
+}
+.text-dark {
+  color: variables.$dark !important;
+}
+.text-light {
+  color: variables.$light !important;
+}
+.text-gray {
+  color: variables.$gray-500 !important;
+}
+.text-black {
+  color: variables.$black !important;
+}
+.text-white {
+  color: variables.$white !important;
+}
+.text-gray-1 {
+  color: variables.$gray-100;
+}
+.text-gray-2 {
+  color: variables.$gray-200;
+}
+.text-gray-3 {
+  color: variables.$gray-300;
+}
+.text-gray-4 {
+  color: variables.$gray-400;
+}
+.text-gray-5 {
+  color: variables.$gray-500;
+}
+.text-gray-6 {
+  color: variables.$gray-600 !important;
+}
+.text-gray-7 {
+  color: variables.$gray-700;
+}
+.text-gray-8 {
+  color: variables.$gray-800;
+}
+.text-gray-9 {
+  color: variables.$gray-900 !important;
+}
+.text-title {
+  color: variables.$gray-900 !important;
+}
+.text-primary-gradient {
+    background: variables.$primary_gradient;
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent;
+    background-clip: text; /* Standard property */
+    color: transparent; /* Fallback for non-supporting browsers */
+  }
+a {
+  color: variables.$gray-900;
+  cursor: pointer;
+  text-decoration: none;
+  @include mixins.transition(all 0.5s ease);
+  &:hover {
+    color: variables.$primary;
+    @include mixins.transition(all 0.5s ease);
+  }
+  &:focus {
+    outline: 0;
+  }
+}
+.link-primary {
+  color: variables.$primary !important;
+  &:hover,
+  &:focus,
+  &:active {
+    color: variables.$primary-hover !important;
+  }
+}
+.link-secondary {
+  color: variables.$secondary !important;
+  &:hover,
+  &:focus,
+  &:active {
+    color: variables.$secondary !important;
+  }
+}
+.link-success {
+  color: variables.$success !important;
+  &:hover,
+  &:focus,
+  &:active {
+    color: variables.$success !important;
+  }
+}
+.link-danger {
+  color: variables.$danger !important;
+  &:hover,
+  &:focus,
+  &:active {
+    color: variables.$danger !important;
+  }
+}
+.link-warning {
+  color: variables.$warning !important;
+  &:hover,
+  &:focus,
+  &:active {
+    color: variables.$warning !important;
+  }
+}
+.link-info {
+  color: variables.$info !important;
+  &:hover,
+  &:focus,
+  &:active {
+    color: variables.$info !important;
+  }
+}
+.link-light {
+  color: variables.$light !important;
+  &:hover,
+  &:focus,
+  &:active {
+    color: variables.$light !important;
+  }
+}
+.link-dark {
+  color: variables.$dark !important;
+  &:hover,
+  &:focus,
+  &:active {
+    color: variables.$dark !important;
+  }
+}
+hr {
+  &.text-danger {
+    border-color: variables.$danger !important;
+  }
+}
+
+
+

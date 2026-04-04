@@ -1,0 +1,111 @@
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.carousel-fade {
+    .carousel-item {
+        opacity: 0;
+        transition-duration: .6s;
+        transition-property: opacity;
+        &.active {
+            opacity: 1;
+        }
+    }
+    .carousel-item-next {
+        @include mixins.transform(translateX(0));
+        @include mixins.transform(translate3d(0, 0, 0));
+        .carousel-item-left {
+            opacity: 1;
+        }
+    }
+    .carousel-item-prev {
+        @include mixins.transform(translateX(0));
+        @include mixins.transform(translate3d(0, 0, 0));
+        .carousel-item-right {
+            opacity: 1;
+        }
+    }
+    .active {
+        @include mixins.transform(translateX(0));
+        @include mixins.transform(translate3d(0, 0, 0));
+        .carousel-item-left, .carousel-item-right {
+            opacity: 0;
+            @include mixins.transform(translateX(0));
+            @include mixins.transform(translate3d(0, 0, 0));
+        }
+    }
+}
+.carousel-item {
+    height: 75vh;
+    min-height: 350px;
+    background: no-repeat variables.$center variables.$center scroll;
+    -webkit-background-size: variables.$cover;
+    -moz-background-size: variables.$cover;
+    -o-background-size: variables.$cover;
+    background-size: variables.$cover;
+    z-index: -1 !important;
+  }
+  .divider {
+    .carousel-caption {
+        @include mixins.position(variables.$absolute, 110px, 0, 20px, 5%);
+    }
+  }
+  .carousel-caption {
+    z-index: 10;
+    padding-bottom: 20px;
+    color: colors.$white;
+    @include mixins.position(variables.$absolute, 110px, 0, 20px, 15%);
+    span {
+        font-size: typography.$font__size__32;
+        font-weight: typography.$bold;
+        color: rgb(46, 56, 66);
+    }
+    h2 {
+        font-size: typography.$font__size__54;
+        font-weight: typography.$bold;
+        color: rgb(30, 92, 146);
+    }
+    p {
+        font-size: typography.$font__size__18;
+        font-weight: typography.$bold;
+        color: rgb(46, 56, 66);
+    }
+}
+.carousel-inner {
+    @include mixins.respond-below(lg) {
+        height: 430px;
+    }
+    @include mixins.respond-below(md) {
+        height: 200px;
+    }
+}
+.slide-nav-1 button.owl-next, .slide-nav-1 button.owl-prev, .slide-nav-2 button.owl-next, .slide-nav-2 button.owl-prev, .slide-nav-3 button.owl-next, .slide-nav-3 button.owl-prev, .slide-nav-4 button.owl-next, .slide-nav-4 button.owl-prev {
+    width: 34px;
+    height: 34px;
+    background: colors.$sky__01;
+    text-shadow: none;
+    top: 4px;
+    cursor: variables.$pointer;
+    border: 0;
+    color: colors.$white;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    @include mixins.transform(rotate(-44deg));
+    @include mixins.respond-below(md) {
+        width: 28px;
+        height: 28px;
+    }
+}
+.owl-theme .owl-dots, .owl-nav button {
+    margin-top: 30px;
+    @include mixins.respond-below(md) {
+        margin-top: 10px;
+    }
+}
+.custom-arrow {
+    @include mixins.transform(rotate(44deg));
+}
+.owl-nav button.owl-next {
+    margin-left: 20px;
+}

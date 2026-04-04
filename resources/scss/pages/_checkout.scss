@@ -1,0 +1,179 @@
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.info-widget {
+    border-bottom: 1px solid colors.$light-silver;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+	h4 {
+		color: variables.$gray-900;
+	}
+	.exist-customer {
+		color: variables.$gray-600;
+		font-size: variables.$font-size-15;
+		a {
+			color: variables.$primary;
+		}
+	}
+	.terms-accept {
+		font-size: variables.$font-size-15;
+		color: variables.$gray-600;
+	}
+}
+.card-label {
+	& > label {
+		background-color: colors.$white;
+	    color: colors.$battleship__gray;
+	    display: variables.$inline__block;
+	    font-size: variables.$font-size-13;
+	    font-weight: variables.$font-weight-medium;
+	    @include mixins.margin-padding(6px auto auto 8px, 0 7px);
+	    @include mixins.respond-below(lg) {
+	    	font-size: variables.$font-size-12;
+	    }
+	}
+	& > input {
+		background-color: colors.$white;
+	    border: 1px solid colors.$beige;
+	    @include mixins.box-shadow(null, 0, 1px, 3px, 0, rgba(0, 0, 0, .05));
+	    display: block;
+	    height: 50px;
+	    margin-top: -13px;
+	    @include mixins.transition(border-color .3s);
+	    width: variables.$full__width;
+	    @include mixins.rounded(4px);
+	    @include mixins.margin-padding(null, 5px 15px 0);
+	}
+}
+.exist-customer {
+	a {
+		color: colors.$sky__blue;
+		font-weight: variables.$font-weight-medium;
+	}
+}
+.payment-widget {
+	.payment-list {
+		& + .payment-list {
+			margin-bottom: 15px;
+		}
+	}
+}
+.payment-radio {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: variables.$font-size-16;
+    @extend %user-none;
+    font-weight: typography.$bold;
+    color: variables.$gray-900;
+    text-transform: capitalize;
+    input {
+	    position: variables.$absolute;
+	    opacity: 0;
+	    cursor: pointer;
+	    height: 0;
+	    width: 0;
+	}
+	.checkmark {
+	    width: 19px;
+	    height: 19px;
+	    border: 2px solid variables.$border-color;
+	    @include mixins.rounded(50%);
+	    @include mixins.transition(all .3s);
+	    @include mixins.margin-padding(3px 0 0 0, null);
+	    @include mixins.position(variables.$absolute, 0, null, null, 0);
+	    &::after {
+		    content: '';
+		    width: 9px;
+		    height: 9px;
+		    background-color: colors.$sky__blue;
+		    opacity: 0;
+		    visibility: variables.$hidden;
+		    @include mixins.transform(scale(0.1));
+		    @include mixins.rounded(50%);
+		    @include mixins.transition(all .3s);
+		    position: absolute;
+			top: 3px;
+			left: 3px;
+		}
+	}
+	input {
+		&:checked ~ .checkmark {
+		    border-color: variables.$primary;
+			color: variables.$primary;
+		    &::after {
+			    opacity: 1;
+			    visibility: visible;
+			    @include mixins.transform(scale(1));
+			}
+		}
+	}
+}
+.booking-date {
+    list-style: none;
+    @include mixins.margin-padding(null, 0);
+    li {
+	    position: relative;
+	    font-size: variables.$font-size-14;
+	    font-weight: variables.$font-weight-medium;
+	    color: variables.$gray-600;
+	    text-transform: capitalize;
+	    margin-bottom: 15px;
+		margin-right: 5px;
+	    span {
+		    float: right;
+		    color: colors.$smokey-gray;
+		    font-weight: variables.$font-weight-normal;
+		    font-size: variables.$font-size-15;
+		}
+	}
+}
+.booking-fee {
+    list-style: none;
+    @include mixins.margin-padding(null, 0);
+    li {
+	    position: relative;
+	    font-size: variables.$font-size-14;
+	    font-weight: variables.$font-weight-medium;
+	    color: variables.$gray-600;
+	    text-transform: capitalize;
+	    margin-bottom: 15px;
+	    span {
+		    float: right;
+		    color: variables.$gray-600;
+		    font-weight: variables.$font-weight-normal;
+		    font-size: variables.$font-size-15;
+		}
+	}
+}
+.booking-total {
+    border-top: 1px solid colors.$light__beige;
+    margin-top: 20px;
+    padding-top: 20px;
+    ul {
+		list-style: none;
+		@include mixins.margin-padding(0, 0);
+		li {
+			span {
+				font-size: variables.$font-size-18;
+			    font-weight: typography.$bold;
+			    color: variables.$gray-900;
+			    @include mixins.respond-below(md) {
+			    	font-size: variables.$font-size-14;
+			    }
+			}
+			.total-cost {
+			    color: variables.$primary;
+			    font-size: variables.$font-size-16;
+			    float: right;
+			    @include mixins.respond-below(md) {
+			    	font-size: variables.$font-size-14;
+			    }
+			}
+		}
+	}
+}

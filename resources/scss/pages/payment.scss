@@ -1,0 +1,332 @@
+@use "../base/colors";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.doctor-content {
+	background-color: variables.$white;
+    @include mixins.margin-padding(0, 140px 0 60px);
+    @include mixins.respond-below(lg) {
+        @include mixins.margin-padding(0, 100px 0 40px);
+    }
+    @include mixins.respond-below(md) {
+        @include mixins.margin-padding(0, 100px 0 20px);
+    }
+	&.content {
+		@include mixins.margin-padding(0, 60px 0);
+		@include mixins.respond-below(lg) {
+			@include mixins.margin-padding(0, 40px 0);
+		}
+	}
+}
+.back-link {
+	padding-bottom: 30px;
+	a {
+		font-size: variables.$font-size-15;
+		color: colors.$nickel_color;
+		display: inline-flex;
+		display: -webkit-inline-flex;
+		align-items:center;
+		-webkit-align-items:center;
+		&:hover {
+			color: variables.$primary;
+		}
+		i {
+			margin-right: 10px;
+		}
+	}
+    @include mixins.respond-below(md) {
+        padding-bottom: 25px;
+    }
+}
+.paitent-header {
+	padding-bottom: 40px;
+    .paitent-title {
+        font-size: variables.$font-size-22;
+        margin-bottom: 0;
+        @include mixins.respond-below(lg) {
+            font-size: variables.$font-size-20;
+        }
+        @include mixins.respond-below(md) {
+            font-size: variables.$font-size-18;
+        }
+    }
+    @include mixins.respond-below(lg) {
+        padding-bottom: 30px;
+    }
+    @include mixins.respond-below(md) {
+        padding-bottom: 20px;
+    }
+}
+.booking-header {
+	padding-bottom: 25px;
+    .booking-title {
+        font-weight: variables.$font-weight-medium;
+        font-size: variables.$font-size-18;
+        margin-bottom: 0;
+    }
+    @include mixins.respond-below(md) {
+        padding-bottom: 20px;
+    }       
+}
+.payment-form-group {
+	margin-bottom: 10px;
+}
+.payments-form {
+    .custom_radio {
+        font-weight: variables.$font-weight-medium;
+        color: variables.$gray-900;
+        padding-left: 26px;
+        margin-bottom: 0;
+        input {
+            &:checked {
+                ~ .checkmark {
+                    border: 5px solid colors.$blue__14;
+                }
+            }
+        }
+        .checkmark {
+            top: inherit;
+            border: 2px solid variables.$border-color;
+            &:after {
+                top: -1px;
+                left: -1px;
+                background: variables.$white;
+				width: 0;
+				height: 0;
+            }
+        }
+    }
+}
+.card-label {
+	& > label {
+		background-color: variables.$white;
+		color: variables.$gray-300;
+		display: inline-block;
+		font-size: variables.$font-size-13;
+		font-weight: variables.$font-weight-medium;
+		@include mixins.margin-padding(6px variables.$auto variables.$auto 8px, 0 7px);
+	}
+	& > .form-control {
+		color: variables.$gray-600;
+		@include mixins.margin-padding(-13px 0 0, 6px 15px 0);
+		min-height: 48px;
+		&::placeholder {
+			font-weight: variables.$font-weight-medium;
+			color: variables.$gray-600;
+		}
+	}
+}
+.booking-btn {
+	.btn {
+		min-width: 123px;
+		font-weight: variables.$font-weight-medium;
+		@extend %display-inline-flex;
+		@include mixins.margin-padding(0, 8px 10px);
+		border-radius: 5px;
+		i {
+			font-size: variables.$font-size-18;
+			color: variables.$white;
+			position: relative;
+			left: 8px;
+			@include mixins.transition(0.7s);
+		}
+		&:hover {
+			i {
+				color: variables.$primary;
+				left: 12px;
+				@include mixins.transition(0.7s);
+			}
+		}
+        @include mixins.respond-below(md) {
+            min-width: 100px;
+			@include mixins.margin-padding(0, 7px 10px);
+        }  
+	}
+    @include mixins.respond-below(lg) {
+        padding-bottom: 25px;
+    }
+}
+.booking-card {
+	border: 2px solid colors.$grey_whitish;
+	border-radius: 8px;
+	margin-bottom: 25px;
+    .booking-card-body {
+        padding: 15px;
+    }
+    @include mixins.respond-below(lg) {
+        margin-bottom: 20px;
+    }
+}
+.booking-doctor-details {
+	 display: flex;
+    display: -webkit-flex;
+    align-items:center;
+    -webkit-align-items:center;
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
+}
+.booking-doctor-left {
+	@extend %flex__center;
+}
+.booking-doctor-img {
+	width: 45px;
+	height: 45px;
+	margin-right: 15px;
+	border-radius: 50%;
+	img {
+		width: 45px;
+		height: 45px;
+		border-radius: 50%;
+	}
+}
+.booking-doctor-info {
+	h4 {
+		font-weight: variables.$font-weight-medium;
+		font-size: variables.$font-size-16;
+		margin-bottom: 5px;
+		a {
+			&:hover {
+				color: variables.$primary;
+			}
+		}
+	}
+	p {
+		margin-bottom: 0;
+	}
+}
+.booking-doctor-right {
+	p {
+		@extend %flex__center;
+		margin-bottom: 0;
+	}
+	i {
+		margin-right: 18px;
+		font-size: variables.$font-size-20;
+		color: variables.$success;
+	}
+	a {
+		font-weight: variables.$font-weight-medium;
+		text-decoration: underline;
+		color: variables.$primary;
+		&:hover {
+			color: variables.$gray-900;
+		}
+	}
+}
+.booking-list-body {
+	padding-bottom: 5px !important;
+	.booking-doctor-right {
+		padding-bottom: 10px;
+	}
+}
+.booking-list {
+	 display: flex;
+    display: -webkit-flex;
+    align-items:center;
+    -webkit-align-items:center;
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
+	@extend %flex__wrap;
+}
+.booking-date-list {
+	width: 300px;
+	ul {
+		@include mixins.margin-padding(0, 0);
+		list-style: none;
+		li {
+			font-weight: variables.$font-weight-medium;
+			color: variables.$gray-900;
+			padding-bottom: 10px;
+			display: variables.$flex;
+    		justify-content: space-between;
+			span {
+				display: inline-flex;
+		display: -webkit-inline-flex;
+		align-items:center;
+		-webkit-align-items:center;
+				font-weight: variables.$font-weight-normal;
+				float: variables.$right;
+				text-align: variables.$right;
+				i {
+					font-size: variables.$font-size-16;
+					margin-right: 6px;
+				}
+			}
+		}
+	}
+    @include mixins.respond-below(xxl) {
+        width: 100%;
+    }
+    &.consultation-date-list {
+        width: variables.$full__width;
+    }
+}
+.proceed-btn {
+	text-align: variables.$right;
+	.btn {
+        @include mixins.margin-padding(0, 8px 15px);
+		min-width: 209px;
+        @include mixins.respond-below(md) {
+            min-width: 200px;
+        }
+	}
+    @include mixins.respond-below(lg) {
+        padding-bottom: 0;
+    }
+}
+.custom_radio {
+	color: colors.$grey_800;
+	display: inline-flex;
+		display: -webkit-inline-flex;
+		align-items:center;
+		-webkit-align-items:center;
+	position: relative;
+	font-size: variables.$font-size-14;
+	padding-left: 30px;
+	margin-bottom: 10px;
+	cursor: variables.$pointer;
+	user-select: none;
+	input {
+		position: variables.$absolute;
+		opacity: 0;
+		&:checked {
+			& ~ .checkmark {
+				border: 1px solid colors.$blue__14;
+				&:after {
+					@include mixins.transform(scale(1));
+					opacity: 1;
+					visibility: variables.$visible;
+				}
+			}
+		}
+	}
+	.checkmark {
+        @include mixins.position(variables.$absolute, 0, null, null, 0);
+		height: 18px;
+		width: 18px;
+		background-color: variables.$white;
+		border: 1px solid colors.$pearl_white;
+		border-radius: 50%;
+		@include mixins.transition(all 0.3s ease-in-out);
+		&:after {
+			display: variables.$block;
+			content: "";
+			@include mixins.position(variables.$absolute, 4px, null, null, 3px);
+			opacity: 0;
+			width: 9px;
+			height: 9px;
+			border-radius: 50%;
+			background: variables.$primary;
+			visibility: variables.$hidden;
+			@include mixins.transform(scale(0.1));
+			@include mixins.transition(all 0.3s ease-in-out);
+		}
+	}
+}
+.radio_input {
+	.custom_radio {
+		& + .custom_radio {
+			margin-left: 15px;
+		}
+	}
+}

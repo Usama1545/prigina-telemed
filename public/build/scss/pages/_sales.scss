@@ -1,0 +1,520 @@
+@use "../utils/mixins" ;
+@use "../utils/variables" ;
+
+
+// Sales Section
+.sales-section {
+    &-thirteen {
+        background: variables.$light;
+        margin: 0 !important;
+        .section-header-thirteen {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid variables.$gray-200;
+            @include mixins.respond-below(sm) {
+                flex-wrap: wrap;
+                gap: 16px;
+            }
+            .sales-header {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                @include mixins.respond-below(lg) {    flex-wrap: wrap;
+                    flex-wrap: wrap;
+                }
+            }
+            .timer-list {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                .timer-cover {
+                    width: 52px;
+                    height: 48px;
+                    background: variables.$danger;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 6px;
+                    font-size: 24px;
+                    font-weight: variables.$font-weight-bold;
+                    color: variables.$darkmode-text-white;
+                    @include mixins.respond-below(sm) {
+                        width: 40px;
+                        height: 40px;
+                        font-size: 20px;
+                    }
+                }
+                .divider {
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: variables.$gray-900;
+                }
+            }
+            .btn {
+                flex-shrink: 0;
+            }
+        }
+        .deals-item-thirteen {
+            background: variables.$white;
+            margin: 0 !important;
+            &:hover {
+                .delas-badge {
+                    .delas-fav {
+                        transform: translateX(0px);
+                    }
+                }
+            }
+            .delas-badge {
+                justify-content: end;
+                .delas-fav {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 18px;
+                    transition: all 0.3s ease;
+                    transform: translateX(85px);
+                    .icon {
+                        width: 36px;
+                        height: 36px;
+                        background: variables.$white;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 20px;
+                        color: variables.$gray-900;
+                        border: none !important;
+                        transition: all 0.6s;
+                        &:hover {
+                            background: variables.$primary;
+                            color: variables.$darkmode-text-white;
+                        }
+                    }
+                }
+            }
+            .progress {
+                margin-top: 16px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 40px;
+                background: transparent;
+                .progress-bg {
+                    background: variables.$light;
+                    height: 5px;
+                    width: 100%;
+                    border-radius: 40px;
+                    position: unset;
+                    box-shadow: unset;
+                    .progress-bar {
+                        background-color: variables.$secondary-hover;
+                        height: 100%;
+                        border-radius: 40px;
+                        transition: width 0.3s ease;
+                    }
+                }
+                .progress-count {
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+}
+
+// Products Section
+.products-section {
+    &-thirteen {
+        .section-header-thirteen {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid variables.$gray-200;
+            @include mixins.respond-below(md) {
+                flex-wrap: wrap;
+                gap: 16px;
+            }
+        }
+        .nav-tabs {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: none;
+            margin-bottom: 20px;
+            li {
+                .nav-link  {
+                    padding: 8px 16px;
+                    border-radius: 60px;
+                    background: variables.$white;
+                    border: 1px solid variables.$gray-200;
+                    font-size: 16px;
+                    font-weight: variables.$font-weight-medium;
+                    color: variables.$gray-900;
+                    transition: all 0.6s;
+                    &.active {
+                        background: variables.$secondary-hover;
+                        border: 1px solid variables.$secondary-hover;
+                        color: variables.$darkmode-text-white;
+                    }
+                    &:hover {
+                        background: variables.$secondary-hover;
+                        border: 1px solid variables.$secondary-hover;
+                        color: variables.$darkmode-text-white;
+                    }
+                }
+            }
+        }
+        .deals-item-thirteen {
+            margin: 0 !important;
+        }
+    }
+}
+
+.deals-section-thirteen  {
+    .deals-item-thirteen {
+        @include mixins.respond-below(sm) {
+            width: 90%;
+            margin: auto !important;
+            box-shadow: unset;
+        }
+    }
+}
+
+
+// Medicines Section
+.medicines-section {
+    &-thirteen {
+        .section-header-thirteen {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid variables.$gray-200;
+            @include mixins.respond-below(sm) {
+                flex-wrap: wrap;
+                gap: 16px;
+            }
+        }
+    }
+}
+
+.medicines-item {
+    &-thirteen {
+    background: variables.$success-transparent;
+    padding: 40px;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    min-height: 390px;
+    transition: all 0.6s;
+    @include mixins.respond-below(xxl) {
+        padding: 24px;
+        min-height: 405px;
+    }
+    &:hover {
+        transform: translateY(-5px);
+        .medicines-img {
+            img {
+                transform: scale(1.1);
+            }
+        }
+    }
+        &.two {
+            background: variables.$indigo-transparent;
+            .medicines-img {
+                &::before {
+                    content: '';
+                    background: variables.$indigo-300;
+                }
+                &::after {
+                    content: '';
+                    background: variables.$indigo-300;
+                }
+            }
+            .shadow-1 {
+                background: variables.$indigo-200;
+            }
+        }   
+        &.three {
+            background: variables.$danger-transparent;
+            .medicines-img {
+                &::before {
+                    content: '';
+                    background: variables.$danger-300;
+                }
+                &::after {
+                    content: '';
+                    background: variables.$danger-300;
+                }
+            }
+            .shadow-1 { 
+                background: variables.$danger-200;
+            }
+        }
+        .btn {
+            margin-top: 16px;
+            display: inline-flex;
+        }
+        .medicines-content {
+            .custom-title {
+                margin-bottom: 8px;
+            }
+        }
+        .medicines-img {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            transition: all 0.6s;
+            img {
+                height: 230px;
+                z-index: 1;
+                position: relative;
+                transition: all 0.6s;
+            }
+            &::before {
+                content: '';
+                position: absolute;
+                top: -29px;
+                left: 26px;
+                width: 206px;
+                height: 206px;
+                border-radius: 50%;
+                background: variables.$success-300;
+            }
+            &::after {
+                content: '';
+                position: absolute;
+                top: 69px;
+                left: -47px;
+                width: 206px;
+                height: 206px;
+                border-radius: 50%;
+                background: variables.$success-300;
+            }
+        }
+        .shadow-1 {
+            position: absolute;
+            background: variables.$success-200;
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            left: -32px;
+            bottom: -35px;
+            filter: blur(28px);
+        }
+    }
+}
+
+// brands
+.brands-section {
+    &-thirteen {
+        .section-header-thirteen {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 20px;
+            margin-bottom: 0;
+            border-bottom: 1px solid variables.$gray-200;
+        }
+        .slide-item {
+            @include mixins.respond-below(xxl) {
+                margin: 0px 12px;
+            }
+            @include mixins.respond-below(sm) {
+                margin: 0px !important;
+            }
+            .imgs {
+                height: 65px;
+                border: 1px solid variables.$gray-200;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: variables.$box-shadow;
+                margin: 20px 12px;
+                padding: 0px 20px;
+                transition: all 0.3s ease;
+                &:hover {
+                    transform: translateY(-5px);
+                }
+                
+            }
+        }
+    }
+}
+
+// Technology
+.technology-section-thirteen {
+    background: variables.$primary-gradient;
+    position: relative;
+    .section-header-thirteen {
+        position: relative;
+        z-index: 1;
+        .section-title {
+            font-size: 42px;
+            color: variables.$darkmode-text-white;
+            font-weight: variables.$font-weight-bold;
+            margin-bottom: 40px;
+            @include mixins.respond-below(sm) {
+                font-size: 24px;
+                margin-bottom: 30px;
+            }
+        }
+        .description {
+            font-size: 16px;
+            color: variables.$darkmode-text-white;
+            margin-bottom: 0;
+        }
+    }
+    .technology-list-thirteen {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        @include mixins.respond-below(sm) {
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+        }
+        .technology-item-thirteen {
+            padding: 20px;
+            border-radius: 12px;
+            background: rgba(variables.$white-rgb, 0.1);
+            width: 185px;
+            .custom-title {
+                font-size: 40px;
+                color: variables.$darkmode-text-white;
+                font-weight: variables.$font-weight-bold;
+                margin-bottom: 4px;
+                span {
+                    color: variables.$secondary-hover;
+                }
+            }   
+            p {
+                color: variables.$darkmode-text-white;
+                margin-bottom: 0px;
+            }
+        }
+    }
+    .technology-img-thirteen {
+        width: 100%;
+        max-width: 390px;
+        @include mixins.respond-below(xxl) {
+            max-width: 440px;
+        }
+        @include mixins.respond-below(xl) {
+            display: none;
+        }   
+        .img-1 {
+            position: relative;
+            z-index: 1;
+        }
+        .img-2 {
+            position: absolute;
+            ;left: 0;
+            top: 0;
+        }
+    }
+}
+
+// 
+.app-section-thirteen {
+    .section-header-thirteen {
+        position: relative;
+        z-index: 1;
+    }
+    .app-thirteen {
+        background: variables.$primary-gradient-100;
+        padding: 60px 100px 0px;
+        border-radius: 20px;
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+        @include mixins.respond-below(xl) {
+            padding: 40px 40px 0px;
+        }
+        @include mixins.respond-below(lg) {
+            padding: 40px;
+            overflow: hidden;
+        }
+        @include mixins.respond-below(sm) {
+            padding: 24px;
+            border-radius: 16px;
+        }
+        .section-title {
+            margin-bottom: 20px;
+        }
+        .app-img-thirteen{
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 320px;
+            margin: 0px auto -315px;
+            @include mixins.respond-below(lg) {
+                display: none;
+            }
+        }
+        .element-1 {
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: -1;
+        }
+    }
+}
+
+.shipping-section-thirteen {
+    background: variables.$black;
+    position: relative;
+    overflow: hidden;
+    .shipping-item-thirteen {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        width: 90%;
+        @include mixins.respond-below(xxl) {
+            width: 100%;
+        }
+        .shipping-icon {
+            background: variables.$primary-gradient;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-size: 20px;
+            color: variables.$darkmode-text-white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .content {
+            padding: unset;
+            min-height: unset !important;
+            .title {
+                color: variables.$darkmode-text-white;
+                margin-bottom: 4px;
+                font-size: 20px;
+                font-weight: variables.$font-weight-semibold;
+            }
+            p {
+                color: variables.$darkmode-text-white;
+                margin-bottom: 0;
+            }
+        }
+        
+    }
+    .element-1 {
+        position: absolute;
+        left: 0;
+        top: 28%;
+    }
+    .element-2 {
+        position: absolute;
+        right: 0;
+        bottom: -60px;
+    }
+}
+

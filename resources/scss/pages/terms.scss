@@ -1,0 +1,36 @@
+@use "../utils/variables";
+
+.terms-text {
+    margin-bottom: 16px;
+	&:last-child {
+		margin-bottom: 0;
+	}
+    h6 {
+	    margin-bottom: 16px;
+	}
+	p {
+		margin-bottom: 8px;
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+	ul {
+		li {
+			margin-bottom: 8px;
+			position: relative;
+			padding-left: 18px;
+			&::before {
+				content: "\f111";
+				font-family: variables.$font-awesome;
+				position: absolute;
+				top: 4px;
+				left: 0;
+				font-size: variables.$font-size-10;
+				color: variables.$primary;
+			}
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+}

@@ -1,0 +1,127 @@
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.comp-header {
+    margin-bottom: 1.875rem;
+    .comp-title {
+	    color: colors.$dark__blue;
+	}
+}
+.line {
+    background-color: colors.$sky__blue;
+    height: 2px;
+    margin: 0;
+    width: 60px;
+}
+.comp-buttons {
+	.btn {
+		margin-bottom: 5px;
+	}
+}
+.pagination-box {
+	.pagination {
+		margin-top: 0;
+	}
+}
+.comp-dropdowns {
+	.btn-group {
+		margin-bottom: 5px;
+	}
+}
+.progress-example {
+	.progress {
+		margin-bottom: 1.5rem;
+	}
+}
+.progress-xs {
+	height: 4px;
+}
+.progress-sm {
+	height: 15px;
+}
+.progress-lg {
+	.page-link {
+		@include mixins.respond-below(sm) {
+			font-size: variables.$font-size-16;
+			@include mixins.margin-padding(null, 0.5rem 0.625rem);
+		}
+	}
+}
+.progress {
+	&.progress-sm {
+		height: 6px;
+	}
+	&.progress-md {
+		height: 8px;
+	}
+	&.progress-lg {
+		height: 18px;
+	}
+}
+.row {
+	&.row-sm {
+	    margin-left: -3px;
+    	margin-right: -3px;
+		& > div {
+    		padding-left: 3px;
+    		padding-right: 3px;
+    	}
+    }
+}
+.pagination-lg {
+	.page-link {
+		@include mixins.respond-below(sm) {
+		    font-size: variables.$font-size-16;
+		    @include mixins.margin-padding(null, 0.5rem 0.625rem);
+		}
+	}
+}
+.custom-edit-service {
+ 	textarea.form-control {
+    	min-height: 200px;
+	}
+	.service-upload {
+		border: 1px solid colors.$light-gray;
+		border-radius: .25rem;
+		text-align: variables.$center;
+		background-color: colors.$white;
+		position: variables.$relative;
+		@include mixins.margin-padding(0 0 30px, 70px 0);
+		i {
+			font-size: typography.$font__size__50;
+			color: colors.$granite;
+		}
+		span {
+			font-size: typography.$font__size__15;
+			color: colors.$granite;
+			margin-top: 14px;
+			display: variables.$block;
+		}
+		input[type="file"] {
+			width: variables.$full__width;
+			height: variables.$full__height;
+			opacity: 0;
+			cursor: variables.$pointer;
+			@include mixins.position(variables.$absolute, 0, null, null, 0);
+		}
+	}
+}
+
+.upload-wrap {
+	@extend %equal-heights;
+	@extend %ul_reset;
+	li {
+		margin: 10px;
+		list-style: none;
+		&:first-child {
+			margin-left: 0;
+		}
+	}
+}
+@include mixins.respond-below(sm) {
+.custom-components {
+	margin-bottom: 10px;
+}
+}

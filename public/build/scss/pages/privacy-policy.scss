@@ -1,0 +1,89 @@
+@use "../base/colors";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.terms-section {
+    padding: 60px 0;
+    @include mixins.respond-below(lg) {
+        padding: 40px 0;
+    }
+    .terms-content {
+        padding-bottom: 50px;
+        .terms-text {
+            padding-bottom: 24px;
+            &:last-child {
+                padding-bottom: 0;
+            }
+            p {
+                font-size: variables.$font-size-16;
+                color: colors.$bodycolor;
+                margin-bottom: 24px;
+                &:last-child {
+                    margin-bottom: 0;
+                }
+                @include mixins.respond-below(md) {
+                    font-size: variables.$font-size-14;
+                    margin-bottom: 20px
+                }
+            }            
+            &.terms-list {
+                p {
+                    @extend %display-inline-flex;
+                    @extend %align__start;
+                    margin-bottom: 10px;
+                    i {
+                        position: variables.$relative;
+                        top: 4px;
+                        margin-right: 8px;
+                        color: variables.$primary;
+                    }
+                }
+            }
+        }
+        @include mixins.respond-below(lg) {
+            padding-bottom: 30px;
+        }
+    }
+}
+.terms-btn {
+	.btn {
+		@extend %inlineflex-align-center;
+	}
+	.btn-right-now {
+		font-weight: variables.$font-weight-medium;
+		font-size: variables.$font-size-16;
+        @include mixins.margin-padding(0 15px 0 0, 5px 15px);
+		min-width: 149px;
+		border-radius: 8px;
+		color: colors.$mine_grey;
+		background: colors.$white_smoke;
+		border: 1px solid colors.$white_smoke;
+		box-shadow: inset 0 0 0 0 colors.$blue__14;
+        @include mixins.transition(0.7s);
+		&:hover {
+			color: colors.$white;
+			background: variables.$primary;
+			border-color: variables.$primary;
+			box-shadow: inset 0 0 0 50px colors.$blue__14;
+            @include mixins.transition(0.7s);
+		}
+        @include mixins.respond-below(md) {
+            font-size: variables.$font-size-14;
+            min-width: 130px;
+            margin-right: 0;
+        }
+	}
+	.btn-primary {
+		padding: 5px 15px;
+		min-width: 166px;
+		font-weight: variables.$font-weight-semibold;
+        @include mixins.respond-below(md) {
+            min-width: 150px;
+        }
+	}
+    @include mixins.respond-below(md) {
+        display: variables.$flex;
+        align-items: variables.$center;
+        justify-content: variables.$space_between;
+    }
+}

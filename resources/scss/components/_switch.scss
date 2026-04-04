@@ -1,0 +1,169 @@
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.check {
+	display: variables.$block;
+    @include mixins.margin-padding(0, 0);
+	width: 0;
+	height: 0;
+	visibility: variables.$hidden;
+	opacity: 0;
+	pointer-events: none;
+	position: variables.$absolute;
+	&:checked {
+		& + .checktoggle {
+			background-color: variables.$success;
+			border: 1px solid variables.$success;
+			&:after {
+				background-color: colors.$white;
+				left: 100%;
+				@include mixins.transform(translate(calc(-100% - 5px), -50%));
+			}
+		}
+	}
+}
+.checktoggle {
+	background-color: variables.$danger;
+	border: 1px solid variables.$danger;
+	border-radius: 12px;
+	cursor: variables.$pointer;
+	display: variables.$block;
+	font-size: 0;
+	height: 24px;
+	margin-bottom: 0;
+	position: variables.$relative;
+	width: 42px;
+	&:after {
+		content: ' ';
+		display: variables.$block;
+        @include mixins.position(variables.$absolute, 50%, null, null, 0);
+		@include mixins.transform(translate(5px, -50%));
+		width: 14px;
+		height: 14px;
+		background-color: colors.$white;
+		border-radius: 50%;
+		transition: left 300ms ease, transform 300ms ease;
+	}
+}
+.status-toggle {
+    .check {
+        &:checked {
+            & + .checktoggle {
+                background-color: variables.$success;
+                border: 1px solid variables.$success;
+				&:after {
+					@include mixins.transform(translate(calc(-100% - 2px), -50%));
+				}
+            }
+        }
+    }
+	.checktoggle {
+		width: 41px;
+		height: 21px;
+		&::after {
+			width: 17px;
+    		height: 17px;
+			@include mixins.transform(translate(2px, -50%));
+		}
+	}
+}
+.status-tog {
+	.checktoggle {
+		height: 28px;
+		width: 50px;
+		border-radius: 999px;
+		background-color: colors.$athens_grey;
+		border-color: colors.$athens_grey;
+		&:before {
+			content: ' ';
+			display: block;
+			position: absolute;
+			top: 50%;
+			right: 0;
+			background-image: url(../img/icons/check.svg);
+			background-repeat: no-repeat;
+			background-size: 11px 20px;
+			width: 20px;
+			height: 20px;
+			transform: translate(3px, -50%);
+		}
+		&:after {
+			width: 24px;
+			height: 24px;
+			background-image: url(../img/icons/x-icon.svg);
+			background-repeat: no-repeat;
+			background-size: 12px 21px;
+			transform: translate(1px, -50%);
+			background-position: center;
+			box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1), 0px 1px 1px rgba(0, 0, 0, 0.06);
+		}
+	}
+	.check {
+		&:checked {
+			& + .checktoggle {
+				&:before {
+					content: ' ';
+					display: block;
+					position: absolute;
+					left: 0;
+					background-image: url(../img/icons/x-icon.svg);
+					background-repeat: no-repeat;
+					background-size: 13px 21px;
+					width: 20px;
+					height: 20px;
+					filter: brightness(0) invert(1);
+				}
+				&:after {
+					background-image: url(../img/icons/check.svg);
+					background-repeat: no-repeat;
+					background-size: 12px 21px;
+					transform: translate(calc(-100% - 1px), -50%);
+					background-position: center;
+				}
+			}
+		}
+	}
+}
+
+
+.bootstrap-tagsinput {
+	display: variables.$block;
+	border-radius: 5px;
+	background: colors.$white;
+	border: 1px solid colors.$white_shade;
+	height: 46px;
+	@include mixins.margin-padding(0, 4px 10px 0 10px);
+	width: variables.$full__width;
+	box-shadow: none;
+	overflow-y: variables.$auto;
+	.tag {
+		margin-right: 5px;
+		margin-bottom: 2px;
+		color: colors.$white_silver;
+		background: colors.$grey_whitish !important;
+		font-size: typography.$font__size__12;
+		font-weight: variables.$font-weight-medium;
+		border-radius: 5px;
+		&:hover {
+			color: colors.$white_silver;
+		}
+		[data-role="remove"] {
+			@include mixins.position(variables.$relative, null, null, null, 7px);
+			cursor: variables.$pointer;
+		}
+		[data-role="remove"]:after {
+			content: "x";
+			@include mixins.margin-padding(0, 0px 2px);
+		}
+	}
+	input {
+		line-height: 36px;
+		border: 1px solid variables.$transparent;
+		background: variables.$transparent;
+		&:focus-visible {
+			border: 1px solid variables.$transparent;
+		}
+	}
+}

@@ -1,0 +1,94 @@
+/****** UTILS ******/
+@use "utils/variables";
+@use "utils/mixins";
+
+/******* BASE *******/
+@use "base/reset";
+@use "base/typography";
+@use "base/colors"; 
+@use "base/base";
+@use "base/background";
+
+/******* COMPONENTS ******/
+@use "components/button";
+@use "components/cursor";
+@use "components/switch";
+@use "components/typography" as typography2;
+@use "components/forms";
+@use "components/badge";
+@use "components/avatar";
+@use "components/table";
+@use "components/nav-tabs";
+@use "components/bootstrap-classes";
+
+/****** LAYOUT ******/
+@use "layout/avatar" as avatar2;
+@use "layout/breadcrumb";
+@use "layout/loader";
+@use "layout/content";
+@use "layout/header";
+@use "layout/footer";
+
+/****** PLUGINS ******/
+@use "plugins/select2";
+@use "plugins/slick-slider";
+@use "plugins/slider";
+
+/****** PAGES ******/
+@use "pages/home";
+@use "pages/blog";
+@use "pages/booking";
+@use "pages/appoitment-list";
+@use "pages/doctor-profile";
+@use "pages/doctor-dashboard";
+@use "pages/add-billing";
+@use "pages/patient-profile";
+@use "pages/patient-dashboard";
+@use "pages/chat";
+@use "pages/review";
+@use "pages/login";
+@use "pages/voice-call";
+@use "pages/map-list";
+@use "pages/search";
+@use "pages/checkout";
+@use "pages/calendar";
+@use "pages/components";
+@use "pages/invoice";
+@use "pages/terms";
+@use "pages/account";
+@use "pages/pharmacy";
+@use "pages/payment";
+@use "pages/price";
+@use "pages/about";
+@use "pages/onboard";
+@use "pages/signup";
+@use "pages/contact";
+@use "pages/error";
+@use "pages/privacy-policy";
+@use "pages/consultation";
+@use "pages/doctor-request";
+@use "pages/doctor-appointment";
+@use "pages/doctor-timings";
+@use "pages/settings";
+@use "pages/patient-appointments";
+@use "pages/dependent";
+@use "pages/hospital";
+@use "pages/doctor-grid";
+@use "pages/appointment";
+@use "pages/home-1";
+@use "pages/theme";
+@use "pages/service";
+@use "pages/speciality";
+@use "pages/banner";
+@use "pages/category";
+@use "pages/whychoose";
+@use "pages/teams";
+@use "pages/testimonial";
+@use "pages/faq";
+@use "pages/journey";
+@use "pages/counter";
+@use "pages/partner";
+@use "pages/commen";
+@use "pages/sales";
+
+

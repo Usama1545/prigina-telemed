@@ -1,0 +1,83 @@
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.breadcrumb-bar {
+    background-color: variables.$light-200;
+    padding: 40px 0;
+	position: relative;
+	z-index: 1;
+	overflow: hidden;
+    @include mixins.respond-below(md) {
+    	padding: 76px 0 20px;
+    }
+    .breadcrumb-title {
+	    color: variables.$title-color;
+	    font-size: variables.$font-size-36;
+	    font-weight: variables.$font_weight_bold;
+	    @include mixins.respond-below(lg) {
+	    	font-size: variables.$font-size-30;
+	    }
+	    @include mixins.respond-below(md) {
+	    	font-size: variables.$font-size-24;
+	    }
+	}
+	.page-breadcrumb {
+		ol {
+		    background-color: transparent;
+		    font-size: variables.$font-size-16;
+			margin-bottom: 5px;
+			justify-content: center;
+		    li {
+				color: variables.$text-color;
+		    	&.active {
+		    		color:variables.$title-color;
+		    	}
+		    	a {
+		    		background: variables.$primary_gradient;
+					-webkit-background-clip: text; 
+					-webkit-text-fill-color: transparent; 
+					background-clip: text;
+					color: transparent; 
+		    	}
+		    }
+		}
+		.breadcrumb-item + .breadcrumb-item {
+			padding-left: 10px;
+			&::before {
+				color: variables.$text-color;
+				font-size: variables.$font-size-14;
+				content: "\f054";
+				font-family: variables.$font-awesome;
+				padding-right: 10px;
+			}
+		}
+	}
+	.breadcrumb-bg {
+		.breadcrumb-bg-01 {
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: -1;
+			height: 165px;
+		}
+		.breadcrumb-bg-02 {
+			position: absolute;
+			top: 0;
+			right: 0;
+			z-index: -1;
+			height: 165px;
+		}
+		.breadcrumb-bg-03 {
+			position: absolute;
+			top: 56px;
+			left: 30%;
+			z-index: -1;
+		}
+		.breadcrumb-bg-04 {
+			position: absolute;
+			bottom: 0;
+			right: 20%;
+			z-index: -1;
+		}
+	}
+}

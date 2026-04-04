@@ -1,0 +1,192 @@
+@use "../base/colors";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.dependent-wrap {
+	border: 1px solid variables.$border-color;
+	box-shadow: variables.$box-shadow;
+	border-radius: 10px;
+	margin-bottom: 15px;
+	padding: 20px 20px 11px;
+	display: flex;
+	display: -webkit-flex;
+	align-items:center;
+	-webkit-align-items:center;
+	justify-content: space-between;
+	-webkit-justify-content: space-between;
+	flex-wrap: wrap;
+	&:last-child {
+		margin-bottom: 0;
+	}
+	.dependent-info {
+		display: flex;
+		display: -webkit-flex;
+		align-items:center;
+		-webkit-align-items:center;
+		margin-bottom: 5px;
+		flex-wrap: wrap;
+	}
+	.patinet-information {
+		min-width: 350px;
+		margin-bottom: 5px;	
+		@include mixins.respond-below(sm) {
+			min-width: auto;
+		}
+		img {
+			width: 60px;
+			height: 60px;
+			margin-right: 16px;
+		}
+	}
+	.patient-info {
+		font-weight: variables.$font-weight-semibold;
+		margin-bottom: 5px;
+		h5 {
+			font-size: variables.$font-size-16;
+		}
+		ul {
+			li {
+				font-size: variables.$font-size-14;
+				font-weight: variables.$font-weight-normal;
+				color: variables.$gray-600;
+				margin-right: 6px;
+				padding-right: 14px;
+				position: relative;
+				display: inline-block;
+				&::before {
+					content: "\f111";
+					display: block;
+					font-family: "FontAwesome";
+					@include mixins.position(absolute, 50%, 0, null, null);
+					font-size: 7px;
+					@include mixins.transform(translateY(-50%));
+					color: variables.$primary;
+				}
+				&:last-child {
+					@include mixins.margin-padding(0, 0);
+					&::before {
+						content: none;
+					}
+				}
+			}
+			li + li {
+				margin-top: 0;
+			}
+		}
+	}
+	.blood-info {
+		margin-bottom: 5px;
+		p {			
+			font-size: variables.$font-size-14;
+			margin-bottom: 2px;
+		}
+		h6 {
+			font-weight: variables.$font-weight-semibold;
+			font-size: variables.$font-size-16;
+			margin-bottom: 0;
+		}
+	}
+	.dependent-status {
+		display: flex;
+		display: -webkit-flex;
+		align-items:center;
+		-webkit-align-items:center;
+		margin-bottom: 2px;
+		.status-toggle {
+			margin-right: 8px;
+			margin-bottom: 8px;
+			display: flex;
+			display: -webkit-flex;
+			align-items:center;
+			-webkit-align-items:center;
+			.checktoggle {
+				width: 28px;
+				height: 15px;
+				margin: 0 5px;
+				background: variables.$gray-transparent;
+				border-color: variables.$gray-transparent;
+				&::after {
+					width: 12px;
+		    		height: 12px;
+		    	}
+			}
+			.check {
+		        &:checked {
+		    	    & + .checktoggle {
+		        	    background-color: variables.$success;
+                		border: 1px solid variables.$success;
+		         	}	
+		         }
+		    }
+			span {
+				font-weight: variables.$font-weight-normal;
+				color: colors.$slate-500;
+				font-size: variables.$font-size-14;
+			}
+			&.checked {
+				.deactive {
+					color: variables.$gray-900;
+				}
+				
+			}
+			
+		}
+		.edit-icon {
+			width: 22px;
+			height: 22px;
+			border-radius: 50%;
+			border: 1px solid variables.$border-color;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: variables.$font-size-12;
+			color: variables.$gray-900;
+			margin-bottom: 10px;
+			&:hover {
+				background: variables.$primary;
+				border-color: variables.$primary;
+				color: variables.$white;
+			}
+		}
+	}
+}
+.add-dependent {
+	.img-upload {
+		.profile-img {
+			width: 80px;
+			height: 80px;
+			background: variables.$light-transparent;
+			border: 1px dashed variables.$border-color;
+		}
+		.upload-img {
+			h5 {
+				margin-bottom: 10px;
+			}
+			.imgs-load {
+				margin-bottom: 0;
+			}
+		}
+	}
+}
+.dashboard-header {
+	.appointment-tabs {
+		ul {
+			li {
+				margin-bottom: 10px;
+			}
+		}
+	}
+	.btn {
+		font-weight: variables.$font-weight-medium;    
+		margin-bottom: 10px;
+	}
+}
+.radio-selection {
+	@include mixins.rounded(5px);
+	padding: 4px;
+	.btn {
+		color: variables.$gray-600;
+		padding: 3px 10px;
+		width: 100%;
+	}
+}

@@ -1,0 +1,462 @@
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+// .modal-open {
+// 	.main-wrapper {
+// 	    @include filter(blur(1px));
+// 	}
+// }
+.call-main-row {
+	overflow: variables.$auto;
+	padding-bottom: variables.$inherit;
+	padding-top: variables.$inherit;
+	@include mixins.position(variables.$absolute, 0, 0, 0, 0);
+}
+.call-main-wrapper {
+	display: variables.$table;
+	height: variables.$full__height;
+	table-layout: variables.$fixed;
+	width: variables.$full__width;
+}
+.call-view {
+	display: table-cell;
+	height: variables.$full__height;
+	float: none;
+	position: variables.$static;
+	vertical-align: variables.$top;
+	width: 75%;
+	@include mixins.margin-padding(null, 0);
+}
+.call-window {
+	display: variables.$table;
+	height: variables.$full__height;
+	table-layout: variables.$fixed;
+	width: variables.$full__width;
+	background-color: colors.$white;
+	border: 1px solid variables.$border-color;
+	@include mixins.rounded(10px);
+}
+.fixed-header {
+	background-color: transparent;
+	border-bottom: 1px solid variables.$border-color;
+	@include mixins.margin-padding(null, 10px 15px);
+	.navbar {
+		border: 0 none;
+		min-height: variables.$auto;
+		@include mixins.margin-padding(0, 0);
+	}
+	.user-info {
+		a {
+		    color: variables.$gray-900;
+		    font-weight: variables.$font-weight-semibold;
+			font-size: variables.$font-size-18;
+			@include mixins.respond-below(lg) {
+				font-size: variables.$font-size-16;
+			}
+		}
+	}
+	.custom-menu {
+		@include mixins.margin-padding(0 0 1px, null);
+		.user-icon {
+			width: 40px;
+			height: 40px;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			@include mixins.rounded(50%);
+			background: variables.$gray-transparent;
+			color: variables.$gray-900;
+			font-size: variables.$font-size-20;
+			&:hover {
+				background: variables.$primary;
+				color: variables.$white;
+			}
+		}
+	}
+}
+.typing-text {
+	color: colors.$sky__blue;
+	font-size: typography.$font__size__12;
+	text-transform: variables.$lowercase;
+}
+.last-seen {
+	color: variables.$gray-600;
+	display: variables.$block;
+	font-size: variables.$font-size-14;
+}
+.custom-menu {
+	margin-top: 6px;
+	&.nav {
+		& > li {
+			& > a {
+				color: colors.$metalic__gray;
+			    font-size: typography.$font__size__26;
+			    line-height: 32px;
+			    margin-left: 15px;
+			    @include mixins.margin-padding(null, 0);
+			}
+		}
+	}
+	&.navbar-nav {
+		& > li {
+			& > a {
+				&:hover, &:focus {
+					background-color: variables.$transparent;
+				}
+			}
+		}
+	}
+	.dropdown-menu {
+		left: variables.$auto;
+		right: 0;
+	}
+}
+.call-contents {
+	display: table-row;
+	height: variables.$full__height;
+}
+.call-content-wrap {
+	height: variables.$full__height;
+	position: variables.$relative;
+	width: variables.$full__width;
+}
+.voice-call-avatar {
+	-ms-flex-direction: column;
+	flex-direction: column;
+	-ms-flex: 2;
+	flex: 2;
+	@extend %flex-align-center;
+	padding: 50px 0 0;
+	.call-avatar {
+		width: 150px;
+		height: 150px;
+		background-color: colors.$white;
+		@include mixins.margin-padding(16px, 3px);
+		@include mixins.rounded(100%);
+		@include mixins.respond-below(md) {
+			height: 100px;
+			width: 100px;
+		}
+		@include mixins.respond-below(sm) {
+			height: 80px;
+			width: 80px;
+		}
+	}
+	.call-timing-count {
+		font-size: variables.$font-size-16;
+		color: variables.$gray-600;
+	}
+	.username {
+		font-size: typography.$font__size__20;
+		font-weight: variables.$font-weight-medium;
+		color: variables.$gray-900;
+	}
+}
+.call-duration {
+	display: variables.$inline__block;
+	font-size: typography.$font__size__30;
+	margin-top: 4px;
+	@include mixins.position(variables.$absolute, null, null, null, 0);
+	@include mixins.respond-below(md) {
+		font-size: typography.$font__size__24;
+	}
+	@include mixins.respond-below(sm) {
+		display: variables.$block;
+		margin-top: 0;
+		margin-bottom: 10px;
+		position: variables.$inherit;
+	}
+}
+.call-footer {
+	background-color: transparent;
+	border-top: 1px solid variables.$border-color;
+	@include mixins.margin-padding(null, 15px);
+}
+.call-icons {
+	text-align: variables.$center;
+	position: variables.$relative;
+	.call-items {
+		list-style: none;
+		display: variables.$inline__block;
+		@include mixins.rounded(5px);
+		@include mixins.margin-padding(0, 0);
+		.call-item {
+			display: variables.$inline__block;
+			text-align: variables.$center;
+			margin-right: 16px;
+			&:last-child {
+				margin-right: 0;
+			}
+			a {
+				background: variables.$gray-transparent;
+				color: variables.$gray-900;
+				width: 40px;
+				height: 40px;				
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				font-size: typography.$font__size__20;
+				@include mixins.rounded(50px);
+				&:hover {
+					background: variables.$primary;
+					color: variables.$white;
+				}
+				&.call-end {
+					background: variables.$danger;
+					color: variables.$white;
+				}
+			}
+		}
+		li { 
+			&.end-call-new {
+				display: variables.$inline__block;
+				text-align: variables.$center;
+				margin-right: 5px;
+				a {
+					background-color: variables.$danger;
+				    color: colors.$white;
+				    display: variables.$inline__block;
+				    line-height: 10px;
+				    text-transform: variables.$uppercase;
+				    @include mixins.rounded(50px);
+				    @include mixins.margin-padding(null, 8px 25px);
+				}
+			}
+		}
+	}
+}
+.user-video {
+	overflow: variables.$auto;
+	z-index: 10;
+	padding: 15px;
+	@include mixins.position(variables.$absolute, 0, 0, 0, 0);
+	img, video {
+		width: 100%;
+		max-width: variables.$full__width;
+		height: variables.$auto;
+		max-height: variables.$full__height;
+		display: variables.$block;
+		object-fit: cover;
+		@include mixins.margin-padding(0 variables.$auto, null);
+	}
+}
+.my-video {
+	z-index: 99;
+	position: absolute;
+	right: 40px;
+	bottom: 40px;
+	ul {
+		list-style: none;
+		@include mixins.margin-padding(0, 0);
+		li {
+			float: variables.$left;
+			width: 100px;
+			@include mixins.respond-below(xl) {
+				display: none;
+			}
+			img {
+				border: 1px solid variables.$border-color;
+				@include mixins.rounded(10px);
+			}
+		}
+	}
+}
+.end-call {
+	@include mixins.position(variables.$absolute, 7px, 0, null, null);
+	@include mixins.respond-below(sm) {
+		margin-top: 10px;
+		position: variables.$inherit;
+	}
+	a {
+		background-color:  variables.$danger;
+	    color: colors.$white;
+	    display: variables.$inline__block;
+	    line-height: 10px;
+	    text-transform: variables.$uppercase;
+	    @include mixins.margin-padding(null, 8px 25px);
+	    @include mixins.rounded(50px);
+	}
+}
+.call-users {
+	z-index: 99;
+	@include mixins.position(variables.$absolute, null, 20px, 20px, null);
+	ul {
+		list-style: none;
+		@include mixins.margin-padding(0, 0);
+		li {
+			float: variables.$left;
+			width: 60px;
+			margin-left: 10px;
+			@include mixins.respond-below(md) {
+				width: 50px;
+			}
+			img {
+				background-color: colors.$white;
+				border: 1px solid variables.$gray-transparent;
+				@include mixins.rounded(10px);
+				@include mixins.margin-padding(null, 2px);
+			}
+			a {
+				&:hover {
+					.call-mute {
+						display: variables.$block;
+					}
+				}
+			}
+		}
+	}
+}
+.call-mute {
+	width: 60px;
+	height: 60px;
+	background-color: rgba(0, 0, 0, 0.5);
+	text-align: variables.$center;
+	line-height: 60px;
+	font-size: typography.$font__size__30;
+	color: colors.$white;
+	display: none;
+	border: 3px solid variables.$transparent;
+	@include mixins.rounded(6px);
+	@include mixins.position(variables.$absolute, 0, null, null, null);
+	@include mixins.respond-below(md) {
+		font-size: typography.$font__size__20;
+		height: 50px;
+		line-height: 50px;
+		width: 50px;
+	}
+}
+.call-details {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	@include mixins.margin-padding(10px 0 0, null);
+}
+.call-info {
+	margin-left: 10px;
+	width: variables.$full__width;
+}
+.call-user-details, .call-timing {
+	display: variables.$block;
+	text-overflow: ellipsis;
+	overflow: variables.$hidden;
+	white-space: variables.$nowrap;
+}
+.call-description {
+	white-space: variables.$nowrap;
+	vertical-align: variables.$bottom;
+}
+.call-timing {
+	color: colors.$dark__smokeygray;
+	font-size: variables.$font-size-14;
+	margin-top: 1px;
+	overflow: variables.$hidden;
+	white-space: pre;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+}
+.content-full {
+	height: variables.$full__height;
+	position: variables.$relative;
+	width: variables.$full__width;
+}
+.video-window {
+	.fixed-header {
+		@include mixins.margin-padding(0, 0);
+		.nav {
+			& > li {
+				& > a {
+					@include mixins.margin-padding(null, 18px 15px);
+				}
+			}
+		}
+	}
+}
+.user-img {
+    display: variables.$inline__block;
+    position: variables.$relative;
+}
+span{
+	&.call-duration {
+		&.float-end {
+			display: variables.$inline__block;
+			font-size: typography.$font__size__22;
+			margin-top: 0px;
+			color: variables.$success;
+			@include mixins.position(variables.$absolute, null, 0, null, variables.$unset);
+		}
+	}
+}
+.toggle-voice-video {
+	display: variables.$inline__block;
+	font-size: typography.$font__size__30;
+	margin-top: 4px;
+	@include mixins.position(variables.$absolute, null, null, null, 0);
+	.switch {
+		position: variables.$relative;
+	  	display: variables.$inline__block;
+	  	width: 90px;
+	  	height: 34px;
+	  	input {
+	  		display: none;
+	  	}
+	}
+	.slider {
+		cursor: variables.$pointer;
+		background-color: colors.$primary__light;
+		@include mixins.transition(.4s);
+		@include mixins.rounded(34px);
+		@include mixins.position(variables.$absolute, 0, 0, 0, 0);
+		&:before {
+		  	content: "";
+		  	height: 26px;
+		  	width: 26px;
+		  	background-color: colors.$white;
+		  	@include mixins.transition(.4s);
+			@include mixins.rounded(50%);
+			@include mixins.position(variables.$absolute, null, null, 4px, 4px);
+		}
+		&:after {
+			content:'VOICE';
+			color: colors.$white;
+			display: variables.$block;
+			font-size: typography.$font__size__10;
+			font-family: Verdana, sans-serif;
+			@include mixins.transform(translate(-50%,-50%));
+			@include mixins.position(variables.$absolute, 50%, null, null, 50%);
+		}
+	}
+	input {
+		&:checked {
+			& + .slider {
+				background-color: variables.$success;
+				&:before {
+				  @include mixins.transform(translateX(55px));
+				}
+				&:after {
+				  content:'VIDEO';
+				}
+			}
+		}
+		&:focus {
+			& + .slider {
+				box-shadow: 0 0 1px colors.$primary__light;
+			}
+		}
+	}
+}
+a {
+	&.mute-bt
+	{
+	   &.stop {
+		   background: #EB4132;
+		  }
+	}
+}
+a {
+	&.mute-video.stop {
+		background: #EB4132;
+	}
+}

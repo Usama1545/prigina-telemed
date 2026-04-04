@@ -1,0 +1,76 @@
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.map-page {
+	.footer {
+		display: none;
+	}
+	.header {
+		z-index: 1030;
+		@include mixins.position(variables.$fixed, 0, 0, null, 0);
+	}
+	.content {
+		padding-top: 115px;
+		@include mixins.respond-below(lg) {
+			padding-top: 100px;
+		}
+	}
+}
+.map-right {
+    height: variables.$full__width;
+    min-height: 100%;
+	padding-right: 30px;
+    z-index: 1029;
+    @include mixins.position(variables.$fixed, 115px, 0, 0, null);
+    @include mixins.respond-below(xl) {
+        height: 450px;
+	    position: variables.$static;
+	    min-height: variables.$inherit;
+	    margin-bottom: 30px;
+	    padding-right: 15px;
+    }
+    .available-info {
+		margin-bottom: 0;
+	}
+}
+.map-listing {
+    height: calc(100vh - 145px);
+    width: variables.$full__width;
+    @include mixins.respond-below(xl) {
+    	height: 450px;
+    }
+    .profile-widget {
+	    width: 200px !important;
+	    border: 0;
+		margin-bottom: 0;		
+	    @include mixins.margin-padding(null, 0);
+	}
+}
+.view-icons {
+    display: variables.$inline__flex;
+    float: variables.$right;
+    a {
+		background-color: colors.$white;
+		border: 1px solid variables.$border-color;
+		color: colors.$dark__ash;
+		font-size: typography.$font__size__20;
+		text-align: variables.$center;
+		margin-left: 10px;
+		width: 44px;
+		height: 38px;
+		@extend %flex-align-center;
+		@include mixins.rounded(4px);		
+	    @include mixins.margin-padding(null, 4px 10px);
+		&:hover {
+			border-color: colors.$sky__blue;
+			color: colors.$sky__blue;
+		}
+		&.active {
+		    background-color: colors.$sky__blue;
+			border-color: colors.$sky__blue;
+			color: colors.$white;
+		}
+	}
+}

@@ -1,0 +1,319 @@
+@use "../base/colors";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.setting-tab {
+	box-shadow: 0px 7.5px 17.5px 0px #0000000D;
+	border-radius: 10px;
+	@include mixins.margin-padding(0 0 24px, 15px 15px 5px);
+	ul {
+		li {
+			margin-bottom: 10px;
+		}
+	}
+}
+.setting-card {
+	border: 1px solid variables.$border-color;
+	padding: 20px 20px 4px;
+	margin-bottom: 24px;
+	border-radius: 10px;
+	.add-info, .more-item {
+		margin-bottom: 15px;
+	}
+	.input-block-new .bootstrap-tagsinput  {
+		padding-top: 0;
+		border-radius: 6px;
+	}
+	.input-block-new .bootstrap-tagsinput .badge-info {
+		margin-bottom: 6px;	
+	}
+}
+.accordions  {
+	.form-control {
+		border-color: variables.$border-color;
+		border-radius: 6px;
+		min-height: 40px;
+    	padding: 7px 15px;
+	}
+	.select2-container {
+		.select2-selection--single {
+		    border: 1px solid variables.$border-color;
+		    height: 40px;
+		    border-radius: 6px;
+		    .select2-selection__rendered {
+		    	line-height: 40px;
+		    }
+		    .select2-selection__arrow {
+		    	height: 40px;
+		    	b {
+		    		border-color: colors.$slate-500;
+		    	}
+		    }
+		}
+	}
+	.form-icon .form-control {
+	    padding: 7px 30px 7px 15px;
+	}
+	.img-upload {
+		.profile-img {
+		    width: 80px;
+		    height: 80px;
+		}
+		.upload-img h5 {
+			margin-bottom: 5px;
+		}
+	}
+
+}
+.img-upload {
+	@include mixins.respond-below(sm) {
+        display: block;
+    }
+	.profile-img {
+		width: 80px;
+		height: 80px;
+		background: variables.$light-transparent;
+		border: 1px dashed variables.$border-color;
+		border-radius: 10px;
+		display: flex;
+		display: -webkit-flex;
+		align-items:center;
+		-webkit-align-items:center;
+		justify-content: center;
+		-webkit-justify-content: center;
+		margin-right: 20px;
+		margin-bottom: 16px;	
+		font-size: variables.$font-size-24;	
+		color: variables.$gray-300;
+		@include mixins.respond-below(sm) {
+	        margin-right: 0;
+	        justify-content: center;
+			-webkit-justify-content: center;
+	    }
+	}
+	.upload-img {
+		margin-bottom: 16px;
+		h5 {
+			font-size: variables.$font-size-18;
+			font-weight: variables.$font-weight-medium;
+			color: variables.$gray-900;
+			margin-bottom: 10px;
+			@include mixins.respond-below(md) {
+				margin-bottom: 10px;
+			}
+		}
+		.imgs-load {
+			margin-bottom: 0;
+			@include mixins.respond-below(md) {
+				margin-bottom: 0;
+			}
+		}
+		.change-photo {
+			position: relative;
+			color: variables.$primary;
+			margin: 0 15px 4px 0 ;
+			cursor: pointer;
+			font-size: variables.$font-size-14;
+    		font-weight: variables.$font-weight-medium;
+			input {
+				width: 100%;
+			    height: 100%;
+			    opacity: 0;
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+		}
+		.upload-remove {
+			color: variables.$danger;
+			display: inline-block;
+			margin-bottom: 4px;
+			font-size: variables.$font-size-14;
+    		font-weight: variables.$font-weight-medium;
+		}
+		p {
+			font-size: variables.$font-size-14;
+			margin: 0;
+			color: variables.$gray-600;
+		}
+	}
+}
+.setting-title h5 {
+	font-weight: variables.$font-weight-semibold;
+}
+.drop-file {
+	position: relative;
+	background: colors.$light-white-grey;
+	border: 1px solid variables.$border-color;
+	border-radius: 10px;
+	cursor: pointer;
+	@include mixins.margin-padding(null, 30px);
+	text-align: center;
+	p {
+		font-size: variables.$font-size-14;
+		font-weight: variables.$font-weight-medium;
+		margin-bottom: 0;
+		color: variables.$gray-600;
+	}
+	input {
+		width: 100%;
+		height: 100%;
+		opacity: 0;
+		@include mixins.position(absolute,0,null,null, 0);
+	}
+}
+.view-imgs {
+	display: flex;
+	display: -webkit-flex;
+	align-items:center;
+	-webkit-align-items:center;
+	.view-img {
+		box-shadow: 0px 7.5px 17.5px 0px #0000000D;
+		@include mixins.margin-padding(10px 10px 0 0, 15px);
+		@include mixins.rounded(10px);
+		text-align: center;
+		img {
+			width: 80px;
+			height: 80px;
+			object-fit: cover;
+			border-radius: 10px;
+			display: block;
+			margin-bottom: 8px;
+		}
+		a {
+			font-size: variables.$font-size-14;
+			font-weight: variables.$font-weight-medium;
+			color: colors.$cart__red;
+		}
+
+	}
+}
+.form-icon {
+	position: relative;
+	.form-control {
+		padding: 7px 30px 7px 15px;
+	}
+	.icon {
+		position: absolute;
+		top: 50%;
+		right: 15px;
+		@include mixins.transform(translateY(-50%));
+	}
+}
+.user-accordion-item {
+	.reset {
+		color: colors.$cart__red;
+		margin-bottom: 0;
+	}
+	.form-check-label {
+		color: colors.$midnight_black;
+	}
+}
+.business-wrap {
+	border: 1px solid variables.$border-color;
+	@include mixins.rounded(10px);
+	@include mixins.margin-padding(0 0 24px, 24px 24px 9px);
+	h4 {
+		margin-bottom: 10px;
+	}
+}
+.business-nav {
+	li {
+		@include mixins.margin-padding(0 15px 10px 0, null);
+		display: inline-block;
+		a {
+			font-size: variables.$font-size-14;
+			font-weight: variables.$font-weight-medium;
+			@include mixins.margin-padding(null, 12px 20px);
+			color: colors.$black__05;
+			background: colors.$light-white-grey;
+			border: 1px solid variables.$border-color;
+			@include mixins.rounded(10px);
+			display: inline-block;
+			&.active, &:hover {
+				background: variables.$primary;
+				border-color: variables.$primary;
+				color: colors.$white;
+			}
+		}
+	}
+}
+.business-info {
+	.tab-items {
+		background: colors.$light-white-grey;
+		&.active {
+			background: colors.$white;
+		}
+	}
+}
+.setting-tab {
+	border: 1px solid colors.$white__shade;
+	.appointment-tabs {
+		ul {
+			li {
+				.nav-link {
+					background: colors.$white;
+					padding: 7px 20px;
+					&:hover, &.active {
+						background: variables.$primary;
+						color: colors.$white;
+					}
+				}
+			}
+		}
+	}
+}
+.bootstrap-tagsinput {
+	border-radius: 5px;
+}
+.settings-tab {
+	.nav-item {
+		.nav-link {
+			border: 1px solid variables.$border-color;
+			border-radius: 5px;
+			color: variables.$gray-600;
+			margin-right: 16px;
+			margin-bottom: 16px;
+			padding: 4px 12px;
+			font-size: variables.$font-size-14;
+			&.active {
+				background: variables.$primary;
+				color: variables.$white;
+				border-color: variables.$primary;
+			}
+			&:hover {
+				background: variables.$primary;
+				color: variables.$white;
+				border-color: variables.$primary;
+			}
+		}
+	}
+}
+.otp-box.setting-otp {
+	margin: 0;
+	input {
+		width: 40px;
+		height: 40px;
+		background: variables.$white;
+		border: 1px solid variables.$border-color;
+		border-radius: 5px;
+		text-align: center;
+		margin-right: 8px;
+		font-weight: variables.$font-weight-normal;
+		font-size: variables.$font-size-14;
+		color: variables.$gray-900;
+		outline: none;
+		&:last-child {
+			margin-right: 0;
+		}
+	}
+}
+.success-wraps {
+	max-width: 310px;
+	margin: 0 auto;
+}
+.icon-success {
+	width: 64px;
+	height: 64px;
+	@include mixins.rounded(50%);
+}

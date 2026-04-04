@@ -1,0 +1,265 @@
+@use "../base/colors";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+table {
+	&.table {
+		color: variables.$gray-900;
+		max-width: 100%;
+		margin-bottom: 0;
+		width: 100%;
+		thead {
+			border-bottom: 1px solid variables.$border-color;
+			tr {
+				th {
+					border-bottom: 1px solid variables.$border-color;
+					background: variables.$gray-100;
+					color: variables.$gray-900;
+					font-size: variables.$font-size-14;
+					padding: 8px 12px;
+				}
+			}
+		}
+		tbody {
+			tr {
+				border-bottom: 1px solid variables.$border-color;
+				&:last-child {
+					border-color: transparent;
+				}
+				td {					
+					color: variables.$gray-600;
+					font-size: variables.$font-size-14;
+					padding: 12px 12px;
+					color: variables.$gray-600;
+					.table-action {
+						a {
+							border-radius: 4px;
+							padding: 4px 8px;
+							font-size: variables.$font-size-12;
+						}
+					}
+				}
+			}
+		}
+		&.table-center {
+			td, th {
+				color: variables.$gray-900;
+				vertical-align: middle;
+			}
+		}
+		& > tbody {
+			& > tr {
+				& > th {
+					border-top: 0;
+					@include mixins.margin-padding(null, 10px 8px);
+				}
+				td {
+					font-size: variables.$font-size-15;
+					color: variables.$gray-600 !important;
+				}
+			}
+		}
+		.no-border {
+			& > tbody {
+				& > tr {
+					& > th {
+						border-top: 0;
+						@include mixins.margin-padding(null, 10px 8px);
+					}
+				}
+				& > tfoot, thead {
+					& > tr {
+						& > th, & > td {
+							border-top: 0;
+							@include mixins.margin-padding(null, 10px 8px);
+						}
+					}
+				}
+			}
+		}
+		.dataTable {
+			border-collapse: collapse !important;
+		}
+	}
+	.table-striped {
+		thead {
+			tr {
+				border-color: transparent;
+			}
+		}
+		tbody {
+			tr {
+				border-color: transparent;
+				&:nth-of-type(even) {
+					background-color: rgba(255, 255, 255, 0.3);
+				}
+				&:nth-of-type(odd) {
+					background-color: rgba(235, 235, 235, 0.4);
+				}
+			}
+		}
+		& > tbody {
+			& > tr {
+				&:nth-of-type(2n+1) {
+					background-color: colors.$light-pale-blue;
+				}
+			}
+		}
+	}
+	.table-bordered {
+		border: 1px solid rgba(0, 0, 0, 0.05) !important;
+		th, td {
+			border-color: rgba(0, 0, 0, 0.05);
+		}
+	}
+	.table-nowrap td, .table-nowrap th {
+		white-space: nowrap;
+	}
+	&.table {
+		td h2 {
+			display: inline-block;
+			font-size: inherit;
+			font-weight: regular;
+			vertical-align: middle;
+			@include mixins.margin-padding(0, 0);
+			.table-avatar {
+				@extend %align-items-center;
+				@extend %inline-flex;
+			    font-size: inherit;
+			    font-weight: regular;
+			    vertical-align: middle;
+				white-space: nowrap;
+				@include mixins.margin-padding(0, 0);
+			}
+			a {
+				color: variables.$gray-900;
+				&:hover {
+					color: variables.$primary-hover;
+				}
+			}
+			span {
+				color: colors.$dark__gray;
+				display: block;
+				font-size: variables.$font-size-12;
+				margin-top: 3px;
+			}
+			&.table-avatar {
+			    font-size: inherit;
+			    font-weight: variables.$font-weight-normal;
+			    vertical-align: middle;
+			    white-space: nowrap;
+			    @extend %inline-flex;
+			    @extend %align-items-center;
+			    @include mixins.margin-padding(0, 0);
+				.avatar {
+					&.avatar-sm {
+						width: 40px;
+						height: 40px;
+					}
+				}
+			}
+		}
+	}
+	.table-hover {
+		tbody {
+			tr {
+				&:hover {
+					background-color: colors.$mix__gray;
+					& td {
+						color: variables.$gray-900;
+					}
+				}
+			}
+		}
+	}
+}
+.table-hover {
+		tbody {
+			tr {
+				&:hover {
+					background: variables.$gray-transparent;
+					& td {
+						color: variables.$gray-900;
+					}
+				}
+			}
+		}
+	}
+.card-table {
+	card-body {
+		@include mixins.margin-padding(null, 0);
+		.table {
+			& > thead {
+				& > tr {	
+					&> th {
+						border-top: 0;
+					}
+				}
+			}
+			tr {
+				th, td {
+					border-top: 1px solid variables.$border-color;
+				    @include mixins.margin-padding(null, 1rem 0.75rem);
+				    white-space: nowrap;
+					&:first-child {
+					    padding-left: 1.5rem;
+					}
+					&:last-child {
+					    padding-right: 1.5rem;
+					}
+				}
+			}
+		}
+	}
+}
+.card-table {
+	.card-body {
+	    padding: 0;
+	    .table {
+	    	& > thead {
+	    		& > tr {
+	    			& > th {
+	    				border-top: 0;
+	    			}
+	    		}
+	    	}
+	    	tr {
+	    		th, td {
+	    			border-top: 1px solid variables.$border-color;
+				    white-space: nowrap;
+				    @include mixins.margin-padding(null, 1rem 0.75rem);
+	    			&:first-child {
+	    				padding-left: 1.5rem;
+	    			}
+	    			&:last-child {
+	    				padding-right: 1.5rem;
+	    			}
+	    		}
+	    	}
+	    }
+	}
+}
+th {
+	&.custom-class {
+		width: 80px;
+	}
+	&.table-name {
+		min-width: 200px;
+	}
+	&.table-days {
+		min-width: 80px;
+	}
+	&.table-head-name {
+		width: 200px;
+	}
+	&.table-head-days {
+		width: 100px;
+	}
+}
+
+.table {
+	.form-control {
+		font-size: variables.$font-size-14;
+		min-height: 38px;
+	}
+}

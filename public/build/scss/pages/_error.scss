@@ -1,0 +1,89 @@
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.error-img {
+	padding-bottom: 50px;
+    @include mixins.respond-below(md) {
+        padding-bottom: 25px;
+    }
+}
+.error-info {
+    padding: 40px;
+    @include mixins.respond-below(md) {
+        padding: 20px;
+    }
+}
+.error-404-img {
+	position: variables.$relative;
+    img {
+        margin-bottom: 24px;
+    }
+}
+.error-404-content {
+	width: variables.$full__width;
+    @include mixins.position(variables.$absolute, null, null, 30px, null);
+    @include mixins.respond-below(xxl) {
+        bottom: 0;
+    }
+    @include mixins.respond-below(md) {
+        position: variables.$static;
+        margin-top: 20px;
+    }
+}
+.error-content {
+	h2 {
+		font-weight: variables.$font-weight-semibold;
+		font-size: typography.$font__size__38;
+		color: variables.$gray-900;
+		margin-bottom: 10px;
+        @include mixins.respond-below(lg) {
+            font-size: typography.$font__size__32;
+        }
+        @include mixins.respond-below(md) {
+            font-size: typography.$font__size__22;
+        }
+	}
+	p {
+		font-size: variables.$font-size-14;
+		margin-bottom: 20px;
+	}
+}
+.coming-soon-info {
+	@extend %flex-align-center;
+    margin-bottom: 40px;
+}
+.coming-soon-count {
+	width: 80px;
+	height: 72px;
+    margin-right: 24px;    
+	border-radius: 10px;
+	background: variables.$gray-transparent;
+	flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+	&:last-child {
+		margin-right: 0;
+	}
+	h4 {
+		font-weight: variables.$font-weight-semibold;
+		font-size: variables.$font-size-20;
+		color: variables.$gray-900;
+		margin-bottom: 0;
+        @include mixins.respond-below(md) {
+            font-size: variables.$font-size-18;
+        }
+	}
+	p {
+		font-size: variables.$font-size-14;
+		margin-bottom: 0;
+	}
+    @include mixins.respond-below(md) {
+        width: 66px;
+        height: 66px;
+        @include mixins.margin-padding(0 10px 0 0, 8px);
+    }
+}

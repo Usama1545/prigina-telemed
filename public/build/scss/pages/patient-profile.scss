@@ -1,0 +1,43 @@
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.add-new-btn {
+    background-color: colors.$celeste;
+    color: colors.$white;
+    display: variables.$inline__block;
+    font-weight: variables.$font-weight-medium;
+    @include mixins.margin-padding(0 0 20px, 10px 20px);
+    @include mixins.rounded(30px);
+    &:focus, &:hover, &.active {
+    	background-color: colors.$celeste;
+    	color: colors.$white;
+    }
+}
+.patient-info {
+	margin-top: 15px;
+	ul {
+	    list-style: none;
+		font-size: .875rem;
+		@include mixins.margin-padding(0, 0);
+		li {
+		    position: variables.$relative;
+		    font-size: .875rem;
+		    font-weight: variables.$font-weight-medium;
+		    color: colors.$dark__blue;
+		    text-transform: variables.$capitalize;
+		    & + li {
+				margin-top: 15px;
+			}
+			i {
+				width: 18px;
+			}
+			span {
+			    color: colors.$smokey-gray;
+			    float: variables.$right;
+			    font-weight: typography.$regular;
+			}
+		}
+	}
+}

@@ -1,0 +1,130 @@
+@use "../utils/mixins";
+@use "../utils/variables";
+
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+$feather__font__family:"feather";
+$fontawesome__family: "Font Awesome 5 Free";
+
+$bold:700;
+$semibold:600;
+$__medium:500;
+$regular:400;
+$light:300;
+
+$font__size__10:10px;
+$font__size__11:11px;
+$font__size__12:12px;
+$font__size__13:13px;
+$font__size__14:14px;
+$font__size__15:15px;
+$font__size__16:16px;
+$font__size__17:17px;
+$font__size__18:18px;
+$font__size__20:20px;
+$font__size__22:22px;
+$font__size__24:24px;
+$font__size__26:26px;
+$font__size__28:28px;
+$font__size__30:30px;
+$font__size__32:32px;
+$font__size__34:34px;
+$font__size__36:36px;
+$font__size__38:38px;
+$font__size__40:40px;
+$font__size__42:42px;
+$__font__size__44:44px;
+$font__size__46:46px;
+$__font__size__48:48px;
+$font__size__50:50px;
+$font__size__54:54px;
+$font__size__60:60px;
+
+h1{
+	font-weight: variables.$font-weight-bold;
+	font-size: 48px;
+	@include mixins.respond-below(lg){
+		font-size: 38px;
+	}
+	@include mixins.respond-below(md){
+		font-size: 32px;
+	}
+}
+h2{
+	font-weight:variables.$font-weight-bold;
+	font-size: 36px;
+	@include mixins.respond-below(lg){
+		font-size: 32px;
+	}
+	@include mixins.respond-below(md){
+		font-size: 30px;
+	}
+}
+h3{
+	font-weight:variables.$font-weight-bold;
+	font-size: 30px;
+	@include mixins.respond-below(lg){
+		font-size: 28px;
+	}
+	@include mixins.respond-below(md){
+		font-size: 26px;
+	}
+}
+h4{
+	font-weight:variables.$font-weight-bold;
+	font-size: 24px;
+	@include mixins.respond-below(lg){
+		font-size: 22px;
+	}
+	@include mixins.respond-below(md){
+		font-size: 20px;
+	}
+}
+h5{
+	font-weight:variables.$font-weight-bold;
+	font-size: 20px;
+	@include mixins.respond-below(lg){
+		font-size: 18px;
+	}
+	@include mixins.respond-below(md){
+		font-size: 17px;
+	}
+}
+h6{
+	font-weight:variables.$font-weight-bold;
+	font-size: 18px;
+	@include mixins.respond-below(md){
+		font-size: 16px;
+	}
+}
+.section-title {
+	font-size: 42px;
+	font-weight: variables.$font-weight-bold;  
+	@include mixins.respond-below(lg){
+		font-size: 36px;
+	}
+	@include mixins.respond-below(md){
+		font-size: 32px;
+	}
+	@include mixins.respond-below(sm){
+		font-size: 26px;
+	}
+}
+.custom-title {
+	font-size: 24px;
+	font-weight: variables.$font-weight-bold; 
+	@include mixins.respond-below(lg){
+		font-size: 22px;
+	}
+	@include mixins.respond-below(md){
+		font-size: 18px;
+	}
+}
+.sub-title {
+	font-size: 18px;
+	@include mixins.respond-below(md){
+		font-size: 16px;
+	}
+}

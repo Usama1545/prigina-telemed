@@ -1,0 +1,567 @@
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.btn {
+	&.focus, &:focus {
+		box-shadow: variables.$unset;
+	}
+	&.btn-rounded {
+		@include mixins.rounded(50px);
+	}
+}
+.bg-primary,
+.badge-primary {
+	background-color: variables.$primary !important;
+}
+a, button {
+	&.bg-primary {
+		&:focus, &:hover {
+			 background-color: variables.$primary-hover !important;
+		}
+	}
+}
+.bg-success,
+.badge-success {
+	background-color: variables.$success !important;
+}
+a, button {
+	&.bg-success {
+		&:focus, &:hover {
+			 background-color: variables.$success-hover !important;
+		}
+	}
+}
+.bg-info,
+.badge-info {
+	background-color: variables.$info !important;
+}
+a, button {
+	&.bg-info {
+		&:focus, &:hover {
+			 background-color: variables.$info-hover !important;
+		}
+	}
+}
+.bg-warning,
+.badge-warning {
+	background-color: variables.$warning !important;
+}
+a, button {
+	&.bg-warning {
+		&:focus, &:hover {
+			 background-color: variables.$warning-hover !important;
+		}
+	}
+}
+.bg-danger,
+.badge-danger {
+	background-color: variables.$danger !important;
+}
+a, button {
+	&.bg-danger {
+		&:focus, &:hover {
+			 background-color: variables.$danger-hover !important;
+		}
+	}
+}
+.bg-white {
+	background-color: variables.$white;
+}
+.bg-purple,
+.badge-purple {
+    background-color: variables.$purple !important;
+}
+.text-primary {
+	color: variables.$primary !important;
+}
+.dropdown-menu {
+	& li {
+		& > a {
+			&.text-primary {
+				color: variables.$primary !important;
+			}
+			&.text-success {
+				color: variables.$success-hover !important;
+			}
+			&.text-danger {
+				color: variables.$danger !important;
+			}
+			&.text-info {
+				color: variables.$info !important;
+			}
+			&.text-warning {
+				color: variables.$warning !important;
+			}
+			&.text-purple {
+				color: variables.$purple !important;
+			}
+		}
+	}
+}
+.text-success {
+	color: variables.$success !important;
+}
+.text-danger {
+	color: variables.$danger !important;
+}
+.text-info {
+	color: variables.$info !important;
+}
+.text-warning {
+	color: variables.$warning !important;
+}
+.text-purple {
+	color: variables.$purple !important;
+}
+.text-muted {
+    color: colors.$smokey-gray !important;
+}
+.text-teal {
+    color: variables.$teal !important;
+}
+.btn-primary {
+	background-color: variables.$primary;
+	border: 1px solid variables.$primary;
+	&:focus, &:hover, &:active, &.active {
+		color: colors.$white;
+	    background-color: variables.$primary-hover;
+	    border-color: variables.$primary-hover;
+		.open {
+			& > .dropdown-toggle {
+				&.btn-primary {
+					background-color: variables.$primary-hover;
+					border: 1px solid variables.$primary-hover;
+				}
+			}
+		}
+	}
+	&.active, .focus {
+		&.focus, &:focus, &:hover {
+			.open {
+				& > .dropdown-toggle {
+					&.btn-primary {
+						&.focus, &:focus, &:hover {
+							background-color: variables.$primary-hover;
+							border: 1px solid variables.$primary-hover;
+						}
+					}
+				}
+			}
+		}
+	}
+	&:active {
+		&:focus, &:hover {
+			background-color: variables.$primary-hover;
+			border: 1px solid variables.$primary-hover;
+		}
+	}
+	.active, &:active {
+		&:not(:disabled):not(.disabled) {
+			background-color: variables.$primary-hover;
+			border-color: variables.$primary-hover;
+			color: colors.$white;
+		}
+		&:focus {
+			&:not(:disabled):not(.disabled) {
+				box-shadow: variables.$unset;
+			}
+		}
+	}
+	.show {
+		& > .btn-primary {
+			&.dropdown-toggle {
+				background-color: variables.$primary-hover;
+				border-color: variables.$primary-hover;
+				color: colors.$white;
+				&:focus {
+					box-shadow: variables.$unset;
+				}
+			}
+		}
+	}
+	&.disabled, &:disabled {
+		background-color: variables.$primary;
+	    border-color: variables.$primary;
+	    color: colors.$white;
+	}
+}
+.btn-secondary {
+	&.active, &:active {
+		&:focus {
+			:not(:disabled):not(.disabled) {
+				box-shadow: variables.$unset;
+			}
+		}
+	}
+}
+.show {
+	& > .btn-secondary {
+		&.dropdown-toggle {
+			&:focus {
+				box-shadow: variables.$unset;
+			}
+		}
+	}
+	& > .btn-success {
+		&.dropdown-toggle {
+			background-color: variables.$success-hover;
+			border-color: variables.$success-hover;
+			color: colors.$white;
+			&:focus {
+				box-shadow: variables.$unset;
+			}
+		}
+	}
+	& > .btn-info {
+		&.dropdown-toggle {
+			background-color: variables.$info-hover;
+			border-color: variables.$info-hover;
+			color: colors.$white;
+			&:focus {
+				box-shadow: variables.$unset;
+			}
+		}
+	}
+	& > .btn-warning {
+		&.dropdown-toggle {
+			background-color: variables.$warning-hover;
+			border-color: variables.$warning-hover;
+			color: colors.$white;
+			&:focus {
+				box-shadow: variables.$unset;
+			}
+		}
+	}
+	& > .btn-danger {
+		&.dropdown-toggle {
+			background-color: variables.$danger-hover;
+			border-color: variables.$danger-hover;
+			color: colors.$white;
+			&:focus {
+				box-shadow: variables.$unset;
+			}
+		}
+	}
+	& > .btn-light, & > .btn-dark {
+		&.dropdown-toggle {
+			&:focus {
+				box-shadow: variables.$unset;
+			}
+		}
+	}
+	& > .btn-outline-primary {
+		&.dropdown-toggle {
+			background-color: variables.$primary;
+			border-color: variables.$primary;
+			&:focus {
+				box-shadow: none;
+			}
+		}
+	}
+	& > .btn-outline-success { 
+		&.dropdown-toggle {
+			background-color: variables.$success;
+			border-color: variables.$success;
+			&:focus {
+				box-shadow: none;
+			}
+		}
+	}
+	& > .btn-outline-info { 
+		&.dropdown-toggle {
+			background-color: variables.$info;
+			border-color: variables.$info;
+			&:focus {
+				box-shadow: none;
+			}
+		}
+	}
+	& > .btn-outline-warning { 
+		&.dropdown-toggle {
+			color: colors.$dark__ash;
+			background-color: variables.$warning;
+			border-color: variables.$warning;
+			&:focus {
+				box-shadow: none;
+			}
+		}
+	}
+	& > .btn-outline-danger { 
+		&.dropdown-toggle {
+			color: colors.$dark__ash;
+			background-color: variables.$warning;
+			border-color: variables.$warning;
+			&:focus {
+				box-shadow: none;
+			}
+		}
+	}
+}
+.btn-success {
+	background-color: variables.$success;
+	border: 1px solid variables.$success;
+	&:hover, &:focus &.active, &:active {
+		background-color: variables.$success-hover;
+		border: 1px solid variables.$success-hover;
+		color: colors.$white;
+	}
+	.open {
+		& > .dropdown-toggle {
+			&.btn-success {
+				background-color: variables.$success-hover;
+				border: 1px solid variables.$success-hover;
+				color: colors.$white;
+				&.focus, &:hover, &:focus{
+					background-color: variables.$success-hover;
+					border: 1px solid variables.$success-hover;
+				}
+			}
+		}
+	}
+	&.active:focus, &.active.focus, &.active:hover, &.focus, &:active:focus, &:active:hover {
+		background-color: variables.$success-hover;
+		border: 1px solid variables.$success-hover;
+	}
+	&.active, &:active {
+		&:not(:disabled):not(.disabled) {
+			background-color: variables.$success-hover;
+			border-color: variables.$success-hover;
+			color: colors.$white;
+		}
+		&:focus {
+			&:not(:disabled):not(.disabled) {
+				box-shadow: variables.$unset;
+			}
+		}
+	}
+	&.disabled, &:disabled {
+	    background-color: variables.$success;
+	    border-color: variables.$success;
+	    color: colors.$white;
+	}
+}
+.btn-info {
+	background-color: variables.$info;
+	border: 1px solid variables.$info;
+	&:hover, &:focus, &:active, &.active {
+		background-color: variables.$info-hover;
+		border: 1px solid variables.$info-hover;
+	}
+	&.active:focus, &.active.focus, &.active:hover, &.focus, &:active:focus, &:active:hover {
+		background-color: variables.$info-hover;
+		border: 1px solid variables.$info-hover;
+	}
+	&.active, &:active {
+		&:not(:disabled):not(.disabled) {
+			background-color: variables.$info-hover;
+			border-color: variables.$info-hover;
+			color: colors.$white;
+			&:focus {
+				box-shadow: variables.$unset;
+			}
+		}
+	}
+	&.disabled, &:disabled {
+		background-color: variables.$info;
+	    border-color: variables.$info;
+	    color: colors.$white;
+	}
+}
+.btn-warning {
+	background-color: variables.$warning;
+	border: 1px solid variables.$warning;
+	&:hover, &:focus, &:active, &.active {
+		background-color: variables.$warning-hover;
+		border: 1px solid variables.$warning-hover;
+	}
+	&.active:focus, &.active.focus, &.active:hover, &.focus, &:active:focus, &:active:hover {
+		background-color: variables.$warning-hover;
+		border: 1px solid variables.$warning-hover;
+	}
+	&.active, &:active {
+		&:not(:disabled):not(.disabled) {
+			background-color: variables.$warning-hover;
+			border-color: variables.$warning-hover;
+			color: colors.$white;
+			&:focus {
+				box-shadow: variables.$unset;
+			}
+		}
+	}
+	&.disabled, &:disabled {
+		background-color: variables.$warning;
+	    border-color: variables.$warning;
+	    color: colors.$white;
+	}
+}
+.btn-danger {
+	background-color: variables.$danger;
+	border: 1px solid variables.$danger;
+	&:hover, &:focus, &:active, &.active {
+		background-color: variables.$danger-hover;
+		border: 1px solid variables.$danger-hover;
+	}
+	&.active:focus, &.active.focus, &.active:hover, &.focus, &:active:focus, &:active:hover {
+		background-color: variables.$danger-hover;
+		border: 1px solid variables.$danger-hover;
+	}
+	&.active, &:active {
+		&:not(:disabled):not(.disabled) {
+			background-color: variables.$danger-hover;
+			border-color: variables.$danger-hover;
+			color: colors.$white;
+			&:focus {
+				box-shadow: variables.$unset;
+			}
+		}
+	}
+	&.disabled, &:disabled {
+		background-color: variables.$danger;
+	    border-color: variables.$danger;
+	    color: colors.$white;
+	}
+}
+.open {
+	& > .dropdown-toggle {
+		&.btn-info {
+			background-color: variables.$info-hover;
+			border: 1px solid variables.$info-hover;
+			&.focus, &:focus, &:hover {
+				background-color: variables.$info-hover;
+				border: 1px solid variables.$info-hover;
+			}
+		}
+		&.btn-warning {
+			background-color: variables.$warning-hover;
+			border: 1px solid variables.$warning-hover;
+			&.focus, &:focus, &:hover {
+				background-color: variables.$warning-hover;
+				border: 1px solid variables.$warning-hover;
+			}
+		}
+		&.btn-danger {
+			background-color: variables.$danger-hover;
+			border: 1px solid variables.$danger-hover;
+			&.focus, &:focus, &:hover {
+				background-color: variables.$danger-hover;
+				border: 1px solid variables.$danger-hover;
+			}
+		}
+	}
+}
+.btn-light, .btn-dark {
+	&.active, &:active {
+		&:focus {
+			&:not(:disabled):not(.disabled) {
+				box-shadow: variables.$unset;
+			}
+		}
+	}
+}
+.pagination {
+	& > .active {
+		& > a, & > a:hover, & > a:focus, & > span, & > span:hover, & > span:focus  {
+			background-color: colors.$sky__blue;
+			border-color: colors.$sky__blue;
+		}
+		// & > a, & > span {
+		// 	color: $__sky__blue;
+		// }
+	}
+	& > li {
+		& > a, & > span {
+			color: colors.$sky__blue;
+		}
+	}
+}
+.page-link {
+	&:hover {
+		color: colors.$sky__blue;
+	}
+	&:focus {
+		box-shadow: variables.$unset;
+	}
+}
+.page-item {
+	&.active {
+		.page-link {
+			background-color: colors.$sky__blue;
+			border-color: colors.$sky__blue;
+		}
+	}
+}
+.dropdown-menu {
+    background-color: colors.$white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: variables.$inherit;
+	font-size: variables.$font-size-14;
+	@include mixins.rounded(3px);
+    @include mixins.transform-origin(left top 0);
+}
+.dropdown-item {
+	&.active, &:active {
+		background-color: colors.$celeste;
+	}
+}
+.navbar-nav__.open--.dropdown-menu {
+	border: 0;
+	@include mixins.box-shadow(null, 0, 0, 10px, null, rgba(0, 0, 0, 0.1));
+	background-color: colors.$white;
+}
+.bootstrap-datetimepicker-widget {
+	table {
+		td {
+			&.active, &.active:hover {
+				background-color: colors.$sky__blue;
+				text-shadow: variables.$unset;
+			}
+			&.today {
+				&::before {
+					border-bottom-color: colors.$sky__blue;
+				}
+			}
+		}
+	}
+}
+.bg-info-light {
+	background-color: variables.$info-100 !important;
+	color: variables.$info !important;
+}
+.bg-primary-light {
+	background-color: variables.$primary-100 !important;
+	color: variables.$primary !important;
+}
+.bg-danger-light {
+	background-color: variables.$danger-100 !important;
+	color: variables.$danger !important;
+}
+.bg-warning-light {
+	background-color: variables.$warning-100 !important;
+	color: variables.$warning !important;
+}
+.bg-success-light {
+	background-color: variables.$success-100 !important;
+	color: variables.$success !important;
+}
+.text-xs {
+	font-size: typography.$font__size__12 !important;
+}
+.text-sm {
+	font-size: typography.$font__size__14 !important;
+}
+.text-lg {
+	font-size: typography.$font__size__20 !important;
+}
+.text-xl {
+	font-size: typography.$font__size__24 !important;
+}
+.control-label {
+	margin-bottom: 5px;
+}
+.dropdown-item {
+	&:hover, &:focus {
+		background-color: variables.$white;
+	}
+}

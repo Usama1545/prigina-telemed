@@ -1,0 +1,84 @@
+@use "../base/colors";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.biller-info, .billing-info {
+	margin-bottom: 15px;
+}
+.add-more-item {
+	margin-bottom: 10px;
+	a {
+		color: colors.$celeste;
+		font-weight: variables.$font-weight-medium;
+	}
+}
+.signature-wrap {
+    float: variables.$right;
+    margin-bottom: 20px;
+    text-align: variables.$center;
+    width: 220px;
+}
+.signature {
+    border: 2px dashed variables.$border-color;
+	color: colors.$dark__blue;
+	cursor: variables.$pointer;
+    height: 85px;
+	margin-bottom: 15px;
+    width: variables.$full__width;
+	@extend %align-items-center;
+    @include mixins.rounded(4px);
+    @extend %flex-align-center;
+    &:hover {
+	    background-color: colors.$water__white;
+	}
+	.sign-name {
+		width: variables.$full__width;
+		float: variables.$right;
+	}
+}
+.pat-widget-profile {
+	.pro-widget-content {
+		@include mixins.margin-padding(null, 0 0 20px);
+	}
+	.booking-date {
+		li {
+			font-size: variables.$font-size-14;
+			span {
+			    font-size: variables.$font-size-14;
+			}
+		}
+	}
+}
+.edit-billing-content {
+	table {
+		td {
+			input {
+				min-width: 300px;
+			}
+		}
+	}
+}
+
+.view-button {
+	margin-top: 16px;
+	@include mixins.respond-below(md) {
+		margin-top: 6px;
+	}
+}
+.view-button {
+	.view-all {
+        color: variables.$gray-900;
+        font-weight: variables.$font-weight-medium;
+        font-size: variables.$font-size-16;
+        &:hover {
+            color: variables.$primary;
+        }
+    }
+}
+.searchinputs {
+	&.dropdown-toggle {
+		&::after {
+			display: none;
+		}
+	}
+}
