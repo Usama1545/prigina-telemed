@@ -32,18 +32,14 @@ abstract class BaseModel
     {
         $doc = $this->firestore->find($this->collection, $id);
 
-        $mapped = $this->mapDocument($doc);
+        $this->authorize('view', $doc);
 
-        $this->authorize('view', $mapped);
-
-        return $mapped;
+        return $this->mapDocument($doc);
     }
 
     public function all(array $filters = [])
     {
-        $response = $this->firestore->get($this->collection, $filters);
-
-        $documents = $response['documents'] ?? []; // ✅ FIX HERE
+        $documents = $this->firestore->get($this->collection);
 
         return collect($documents)
             ->map(fn($doc) => $this->mapDocument($doc))
@@ -79,41 +75,8 @@ abstract class BaseModel
     {
         if (!$doc) return null;
 
-        $fields = $doc['fields'] ?? [];
-
-        $data = [];
-
-        foreach ($fields as $key => $value) {
-            $data[$key] = $this->extractValue($value);
-        }
-
-        // Extract document ID
-        if (isset($doc['name'])) {
-            $parts = explode('/', $doc['name']);
-            $data['id'] = end($parts);
-        }
-
-        return $data;
-    }
-
-    protected function extractValue($value)
-    {
-        if (isset($value['stringValue'])) return $value['stringValue'];
-        if (isset($value['integerValue'])) return (int) $value['integerValue'];
-        if (isset($value['doubleValue'])) return (float) $value['doubleValue'];
-        if (isset($value['booleanValue'])) return (bool) $value['booleanValue'];
-        if (isset($value['mapValue'])) {
-            return collect($value['mapValue']['fields'] ?? [])
-                ->map(fn($v) => $this->extractValue($v))
-                ->toArray();
-        }
-        if (isset($value['arrayValue'])) {
-            return collect($value['arrayValue']['values'] ?? [])
-                ->map(fn($v) => $this->extractValue($v))
-                ->toArray();
-        }
-
-        return null;
+        // Already normalized by FirestoreService
+        return $doc;
     }
 
     // -------------------------

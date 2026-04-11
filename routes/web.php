@@ -3,19 +3,16 @@
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\DoctorController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Services\FirestoreService;
 use PhpParser\Comment\Doc;
+use Illuminate\Support\Facades\Broadcast;
+use App\Http\Controllers\PatientController;
 
-Route::get('/firebase-test', function (FirestoreService $fs) {
+Broadcast::routes();
+require base_path('routes/channels.php');
+Route::post('/auth/login', [AuthController::class, 'login']);
 
-    $response = $fs->create('test', [
-        'message' => 'hello from laravel',
-        'type' => 'test',
-        'created_at' => now()->toDateTimeString(),
-    ]);
-
-    return response()->json($response);
-});
 Route::get('/', [IndexController::class,'index'])->name('index');
 Route::prefix('doctors')->controller(DoctorController::class)->group(function () {
     Route::get('/', 'index');
@@ -23,6 +20,12 @@ Route::prefix('doctors')->controller(DoctorController::class)->group(function ()
     Route::post('/', 'store');
     Route::put('/{id}', 'update');
     Route::delete('/{id}', 'delete');
+});
+
+Route::middleware(['firebase.auth'])->prefix('patient')->controller(PatientController::class)->group(function () {
+    Route::get('/dashboard', 'profile');
+    Route::get('/', 'profile');
+    Route::put('/', 'update');
 });
 
 Route::get('/doctor-details/{id}', [DoctorController::class, 'show']);

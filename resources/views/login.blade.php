@@ -19,10 +19,11 @@
                                 <div class="login-header">
                                     <h3>Login <span>PriGina Global Telemed</span></h3>
                                 </div>
-                                <form action="{{ url('index') }}">
+                                <form onsubmit="return handleLogin(event)">    
+                                    @csrf                                
                                     <div class="mb-3">
                                         <label class="form-label">E-mail</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" id="email" class="form-control">
                                     </div>
                                     <div class="mb-3">
                                         <div class="form-group-flex">
@@ -30,7 +31,7 @@
                                             <a href="{{ url('forgot-password') }}" class="forgot-link">Forgot password?</a>
                                         </div>
                                         <div class="pass-group">
-                                            <input type="password" class="form-control pass-input">
+                                            <input type="password" id="password" class="form-control pass-input">
                                             <span class="feather-eye-off toggle-password"></span>
                                         </div>
                                     </div>
@@ -58,13 +59,9 @@
                                         <span class="span-or">or</span>
                                     </div>
                                     <div class="social-login-btn">
-                                        <a href="javascript:void(0);" class="btn w-100">
+                                        <a href="javascript:void(0);" onclick="googleLogin()" class="btn w-100">
                                             <img src="{{ URL::asset('build/img/icons/google-icon.svg') }}"
                                                 alt="google-icon">Sign in With Google
-                                        </a>
-                                        <a href="javascript:void(0);" class="btn w-100">
-                                            <img src="{{ URL::asset('build/img/icons/facebook-icon.svg') }}"
-                                                alt="fb-icon">Sign in With Facebook
                                         </a>
                                     </div>
                                     <div class="account-signup">
@@ -84,3 +81,60 @@
     </div>
     <!-- /Page Content -->
 @endsection
+@push('scripts')
+<script>
+async function handleLogin(e) {
+        e.preventDefault();
+
+    console.log('handleLogin');
+
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    try {
+        const userCredential = await auth.signInWithEmailAndPassword(email, password);
+        const token = await userCredential.user.getIdToken();
+
+        await sendTokenToBackend(token);
+
+    } catch (error) {
+        alert(error.message);
+    }
+}
+</script>
+<script>
+async function googleLogin() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+
+    try {
+        const result = await auth.signInWithPopup(provider);
+        const token = await result.user.getIdToken();
+
+        await sendTokenToBackend(token);
+
+    } catch (error) {
+        alert(error.message);
+    }
+}
+async function sendTokenToBackend(token) {
+    const response = await fetch('/auth/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Accept': 'application/json',
+        },
+        credentials: 'same-origin', // ✅ VERY IMPORTANT
+        body: JSON.stringify({ token })
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+        window.location.href = '/patient/dashboard';
+    } else {
+        alert(data.error || 'Login failed');
+    }
+}
+</script>
+@endpush

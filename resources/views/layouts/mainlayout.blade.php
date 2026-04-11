@@ -3,6 +3,7 @@
 
 <head>
     @include('partials.head-css')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     @include('partials.title-meta')
 </head>
 
@@ -92,7 +93,69 @@
                                                                     @endif
 
                                                                     @include('partials.vendor-scripts')
+                                                                    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+                                                                    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
+                                                                    <script>
+                                                                        const firebaseConfig = {
+                                                                            apiKey: "AIzaSyDdtNU3YTCSTyLJ5W09NRjlMuT2JBwlzTI",
+                                                                            authDomain: "doctorapp-f33bf.firebaseapp.com",
+                                                                        };
+
+                                                                        firebase.initializeApp(firebaseConfig);
+                                                                        const auth = firebase.auth();
+                                                                    </script>
+                                                                    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+                                                                    <script src="https://cdnjs.cloudflare.com/ajax/libs/laravel-echo/1.15.0/echo.iife.js"></script>
+                                                                    <script>
+                                                                        window.Pusher = Pusher;
+
+                                                                        window.Echo = new Echo({
+                                                                            broadcaster: 'pusher',
+                                                                            key: "{{ config('broadcasting.connections.pusher.key') }}",
+                                                                            cluster: "{{ config('broadcasting.connections.pusher.options.cluster') }}",
+                                                                            forceTLS: true,
+                                                                            authEndpoint: '/broadcasting/auth',
+                                                                        });
+
+                                                                        const userId = "22";
+                                                                        Pusher.logToConsole = true;
+//todo need to change
+                                                                        Echo.channel('chat.22')
+                                                                            .listen('.new.message', (e) => {
+                                                                                showNotification(e);
+                                                                                // if (typeof window.fetchMessages === 'function') {
+                                                                                //     window.fetchMessages();
+                                                                                // }
+                                                                            });
+                                                                            function showNotification(data) {
+                                                                                const popup = document.createElement('div');
+                                                                                popup.innerHTML = `
+                                                                                    <div style="
+                                                                                        position: fixed;
+                                                                                        top: 20px;
+                                                                                        right: 20px;
+                                                                                        background: #333;
+                                                                                        color: #fff;
+                                                                                        padding: 12px 16px;
+                                                                                        border-radius: 8px;
+                                                                                        z-index: 9999;
+                                                                                        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                                                                                    ">
+                                                                                        <strong>New Message</strong><br>
+                                                                                        ${data.text ?? ''}
+                                                                                    </div>
+                                                                                `;
+
+                                                                                document.body.appendChild(popup);
+
+                                                                                // auto remove after 4 sec
+                                                                                setTimeout(() => {
+                                                                                    popup.remove();
+                                                                                }, 10000);
+                                                                            }
+                                                                    </script>
+                                                                    @stack('scripts')
                                                                 </body>
 
 </html>

@@ -2,55 +2,48 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Firestore\Patient;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Services\FirestoreService;
 
 class PatientController extends Controller
 {
-    protected Patient $patients;
+    protected $firestore;
 
-    public function __construct(Patient $patients)
+    public function __construct(FirestoreService $firestore)
     {
-        $this->patients = $patients;
+        $this->firestore = $firestore;
     }
 
-    public function index()
+    public function profile(Request $request)
     {
-        return response()->json(
-            $this->patients->all()
-        );
+        $uid = $request->auth_uid;
+
+        $patient = $this->firestore->find('patients', $uid);
+
+        if (!$patient) {
+            return response()->json(['error' => 'Patient not found'], 404);
+        }
+
+        return view('patient.dashboard', compact('patient'));
     }
 
-    public function show($id)
+    public function update(Request $request)
     {
-        return response()->json(
-            $this->patients->find($id)
-        );
-    }
+        $uid = $request->auth_uid;
 
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email',
+        $data = $request->only([
+            'name',
+            'phone',
+            'gender',
+            'dob',
         ]);
 
-        return response()->json(
-            $this->patients->create($data)
-        );
-    }
+        $patient = $this->firestore->update('patients', $uid, $data);
 
-    public function update(Request $request, $id)
-    {
-        return response()->json(
-            $this->patients->update($id, $request->all())
-        );
-    }
-
-    public function destroy($id)
-    {
-        $this->patients->delete($id);
-
-        return response()->json(['message' => 'Deleted']);
+        return response()->json([
+            'message' => 'Profile updated',
+            'data' => $patient
+        ]);
     }
 }
