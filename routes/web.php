@@ -24,9 +24,13 @@ Route::prefix('doctors')->controller(DoctorController::class)->group(function ()
     Route::put('/{id}', 'update');
     Route::delete('/{id}', 'delete');
 });
+
+Route::get('/doctor-details/{id}', [DoctorController::class, 'show']);
+
 Route::get('/index', function () {
     return view('index');
 })->name('index');
+
 
 Route::get('/about-us', function () {
     return view('about-us');

@@ -237,7 +237,7 @@
                                 <div class="doctor-info">
                                     <div class="doctor-info-detail">
                                         <h3 class="mb-1 custom-title"><a
-                                                href="{{ url('doctor-profile', $doctor['id']) }}">{{ $doctor['name'] }}</a>
+                                                href="{{ url('doctor-details', $doctor['id']) }}">{{ $doctor['name'] }}</a>
                                         </h3>
                                         <div class="doctor-location">
                                             <p class="location-title"></i><span class="fw-medium">Experience:
@@ -251,7 +251,7 @@
                                             <p class="mb-1">Consultation Fees</p>
                                             <div class="price">{{ $doctor['consultationFee'] }}</div>
                                         </div>
-                                        <a href="{{ url('booking', $doctor['id']) }}" class="btn btn-md book-btn">
+                                        <a href="{{ url('doctor-details', $doctor['id']) }}" class="btn btn-md book-btn">
                                             <i class="isax isax-calendar-1 icon-1"></i>
                                             <i class="isax isax-export-3 icon-2"></i>
                                         </a>

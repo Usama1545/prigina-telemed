@@ -125,7 +125,7 @@
                 </div>
                 <div class="col-xl-9">
 
-                    <div class="row">
+                    <div class="row" id="doctor-list">
                         @foreach ($doctors as $doctor)
                             <div class="col-xxl-4 col-md-6">
                                 <div class="card">
@@ -136,9 +136,7 @@
                                         <div class="grid-overlay-item">
                                             <span class="badge bg-orange"><i
                                                     class="fa-solid fa-star me-1"></i>{{ $doctor['rating'] }}</span>
-                                            <a href="javascript:void(0)" class="fav-icon">
-                                                <i class="fa fa-heart"></i>
-                                            </a>
+
                                         </div>
                                     </div>
                                     <div class="card-body p-0">
@@ -160,7 +158,7 @@
                                         <div class="p-3 pt-0">
                                             <div class="doctor-info-detail">
                                                 <h3 class="mb-1 custom-title"><a
-                                                        href="{{ url('doctor-profile', $doctor['uid']) }}">{{ $doctor['name'] }}</a>
+                                                        href="{{ url('doctor-details', $doctor['uid']) }}">{{ $doctor['name'] }}</a>
                                                 </h3>
                                                 <div class="doctor-location">
                                                     <p class="location-title"></i><span class="fw-medium">Experience:
@@ -174,10 +172,10 @@
                                                     <p class="mb-1">Consultation Fees</p>
                                                     <div class="price">{{ $doctor['consultationFee'] }}</div>
                                                 </div>
-                                                <a href="{{ url('booking', $doctor['uid']) }}"
+                                                <a href="{{ url('doctor-details', $doctor['uid']) }}"
                                                     class="btn btn-md btn-dark d-inline-flex align-items-center rounded-pill">
                                                     <i class="isax isax-calendar-1 me-2"></i>
-                                                    Book Now
+                                                    Book
                                                 </a>
                                             </div>
                                         </div>
@@ -186,10 +184,76 @@
                             </div>
                         @endforeach
                     </div>
+                    <div class="d-flex justify-content-end mt-4">
+                        @if ($nextCursor && $hasMore)
+                            <a id="load-more-btn" class="btn d-flex align-items-center gap-2"
+                                data-cursor='@json($nextCursor)'>
+
+                                <span class="btn-text">Load More</span>
+
+                                <span class="spinner-border spinner-border-sm d-none" id="btn-loader"
+                                    role="status"></span>
+                            </a>
+                        @endif
+                    </div>
                 </div>
+
             </div>
 
         </div>
     </div>
     <!-- /Page Content -->
+    <script>
+        document.getElementById('load-more-btn')?.addEventListener('click', function() {
+
+            let button = this;
+            let loader = button.querySelector('#btn-loader');
+            let text = button.querySelector('.btn-text');
+
+            // 🔒 disable button + show loader
+            button.disabled = true;
+            loader.classList.remove('d-none');
+            text.innerText = 'Loading...';
+
+            let cursor = JSON.parse(button.getAttribute('data-cursor'));
+
+            let url = new URL(window.location.href);
+            url.searchParams.set('cursor', JSON.stringify(cursor));
+
+            fetch(url)
+                .then(res => res.text())
+                .then(html => {
+                    let parser = new DOMParser();
+                    let doc = parser.parseFromString(html, 'text/html');
+
+                    let newDoctors = doc.querySelectorAll('#doctor-list .col-xxl-4');
+                    let container = document.querySelector('#doctor-list');
+
+                    newDoctors.forEach(el => container.appendChild(el));
+
+                    let newCursorBtn = doc.querySelector('#load-more-btn');
+
+                    if (newCursorBtn) {
+                        button.setAttribute('data-cursor', newCursorBtn.getAttribute('data-cursor'));
+
+                        // ✅ reset button
+                        button.disabled = false;
+                        loader.classList.add('d-none');
+                        text.innerText = 'Load More';
+
+                    } else {
+                        // ❌ no more data
+                        button.remove();
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+
+                    // ❗ reset on error
+                    button.disabled = false;
+                    loader.classList.add('d-none');
+                    text.innerText = 'Load More';
+                });
+        });
+    </script>
 @endsection

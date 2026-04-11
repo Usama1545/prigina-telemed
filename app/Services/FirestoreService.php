@@ -209,8 +209,14 @@ class FirestoreService
     /**
      * Run a structured query with filters
      */
-    public function query($collection, $filters = [], $limit = null, $pageToken = null)
-    {
+    public function query(
+        $collection,
+        $filters = [],
+        $limit = null,
+        $startAfter = null,
+        $orderByField = 'createdAt',
+        $orderByDirection = 'DESCENDING'
+    ) {
         try {
             $structuredQuery = [
                 "structuredQuery" => [
@@ -220,28 +226,71 @@ class FirestoreService
                 ]
             ];
 
-            // Add filters if provided
+            // Filters
             if (!empty($filters)) {
                 $structuredQuery['structuredQuery']['where'] = $this->buildWhereClause($filters);
             }
 
-            // Add limit if provided
+            // Order By (IMPORTANT: composite ordering)
+            if ($orderByField) {
+                $structuredQuery['structuredQuery']['orderBy'] = [
+                    [
+                        "field" => ["fieldPath" => $orderByField],
+                        "direction" => $orderByDirection
+                    ],
+                    [
+                        "field" => ["fieldPath" => "__name__"],
+                        "direction" => $orderByDirection
+                    ]
+                ];
+            }
+
+            // Limit
             if ($limit) {
                 $structuredQuery['structuredQuery']['limit'] = min($limit, 1000);
             }
 
-            // Add order by if needed (optional)
-            // $structuredQuery['structuredQuery']['orderBy'] = [...]
+            // ✅ Cursor (FIXED)
+            if ($startAfter && is_array($startAfter) && count($startAfter) === 2) {
 
+                $createdAt = $startAfter[0];
+                $docId = $startAfter[1];
+
+                // 🔥 IMPORTANT: correct full reference path
+                $docPath = "projects/{$this->projectId}/databases/(default)/documents/{$collection}/{$docId}";
+
+                $structuredQuery['structuredQuery']['startAt'] = [
+                    "values" => [
+                        $this->encodeValue($createdAt), // MUST be timestampValue
+                        [
+                            "referenceValue" => $docPath
+                        ]
+                    ],
+                    "before" => false // start AFTER
+                ];
+            }
+
+            // Execute request
             $response = $this->request()
                 ->post($this->baseUrl() . ":runQuery", $structuredQuery);
 
             if ($response->failed()) {
-                $this->handleError($response);
+                $errorData = $response->json();
+                $message = $errorData['error']['message'] ?? '';
+
+                preg_match('/https:\/\/console\.firebase\.google\.com[^\"]+/i', $message, $matches);
+                $indexUrl = $matches[0] ?? null;
+
+                throw new \Exception(
+                    "Missing Firestore index.\n" .
+                    ($indexUrl ? "Create it here: {$indexUrl}\n\n" : "") .
+                    "Full error: {$message}"
+                );
             }
 
             $results = $response->json();
-           
+
+            // Parse documents
             $documents = collect($results)
                 ->pluck('document')
                 ->filter()
@@ -257,14 +306,91 @@ class FirestoreService
                 })
                 ->values()
                 ->all();
+           
+            // ✅ Safe cursor creation
+            $last = end($documents);
+
+            $cursor = null;
+
+            if ($last && isset($last[$orderByField]) && isset($last['id'])) {
+                $cursor = [
+                    $last[$orderByField], // timestamp string
+                    $last['id']           // doc id
+                ];
+            }
 
             return [
                 'documents' => $documents,
-                'nextPageToken' => $results['nextPageToken'] ?? null
+                'nextCursor' => $cursor,
+                'hasMore' => count($documents) === ($limit ?? 0)
             ];
+
+        } catch (\Illuminate\Http\Client\RequestException $e) {
+
+            $raw = $e->response?->json();
+
+            Log::error('FULL FIRESTORE ERROR', [
+                'raw' => $raw,
+                'body' => $e->response?->body(),
+            ]);
+
+            throw new Exception(
+                'Firestore request failed: ' . json_encode($raw)
+            );
+        }
+    }
+
+    public function count($collection, $filters = [])
+    {
+        try {
+            $structuredQuery = [
+                "structuredAggregationQuery" => [
+                    "structuredQuery" => [
+                        "from" => [
+                            ["collectionId" => $collection]
+                        ]
+                    ],
+                    "aggregations" => [
+                        [
+                            "count" => new \stdClass(),
+                            "alias" => "total"
+                        ]
+                    ]
+                ]
+            ];
+
+            // Filters (same as your query function)
+            if (!empty($filters)) {
+                $structuredQuery['structuredAggregationQuery']['structuredQuery']['where'] =
+                    $this->buildWhereClause($filters);
+            }
+
+            // 🔥 Call aggregation endpoint
+            $response = $this->request()
+                ->post($this->baseUrl() . ":runAggregationQuery", $structuredQuery);
+
+            if ($response->failed()) {
+                $errorData = $response->json();
+                $message = $errorData['error']['message'] ?? '';
+                throw new Exception("Firestore count failed: {$message}");
+            }
+
+            $results = $response->json();
+
+            // Extract count safely
+            $count = collect($results)
+                ->pluck('result.aggregateFields.total.integerValue')
+                ->filter()
+                ->first();
+
+            return (int) ($count ?? 0);
+
         } catch (Exception $e) {
-            Log::error('Firestore query error: ' . $e->getMessage());
-            throw $e;
+            Log::error('FIRESTORE COUNT ERROR', [
+                'message' => $e->getMessage()
+            ]);
+
+            return 0;
         }
     }
 
@@ -609,6 +735,11 @@ class FirestoreService
             return ["nullValue" => null];
         }
 
+        // ✅ CRITICAL: timestamp support
+        if (strtotime($value) !== false) {
+            return ["timestampValue" => gmdate('Y-m-d\TH:i:s\Z', strtotime($value))];
+        }
+
         return ["stringValue" => (string) $value];
     }
 
@@ -663,6 +794,10 @@ class FirestoreService
 
         if (isset($value['nullValue'])) {
             return null;
+        }
+
+        if (isset($value['timestampValue'])) {
+            return $value['timestampValue'];
         }
 
         if (isset($value['arrayValue'])) {
