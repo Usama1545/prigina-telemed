@@ -8,12 +8,37 @@ use App\Services\FirestoreService;
 use PhpParser\Comment\Doc;
 use Illuminate\Support\Facades\Broadcast;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\BookingController;
 
 Broadcast::routes();
 require base_path('routes/channels.php');
+
 Route::post('/auth/login', [AuthController::class, 'login']);
 
 Route::get('/', [IndexController::class,'index'])->name('index');
+Route::get('/index', [IndexController::class,'index'])->name('index');
+
+Route::middleware(['firebase.auth'])->group(function () {
+    Route::get('{id}/booking-slots', [BookingController::class,'bookingSlots'])->name('booking');
+    Route::post('/booking/process', [BookingController::class, 'processBooking'])->name('booking.process');
+    Route::get('/booking/success', [BookingController::class, 'paymentSuccess'])->name('booking.success');
+    Route::get('/booking/cancel', [BookingController::class, 'paymentCancel'])->name('booking.cancel');
+    Route::get('/flutterwave/callback', [BookingController::class, 'flutterwaveCallback'])->name('flutterwave.callback');
+    Route::get('/appointment-data-demo',[IndexController::class,'appointmentDataDemo']);
+    Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
+    Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::prefix('patient')->controller(PatientController::class)->group(function () {
+        Route::get('/appointments', 'appointments')->name('patient.appointments');
+        Route::get('/dashboard', 'dashboard')->name('patient.dashboard');
+        Route::get('/profile', 'profile')->name('patient.settings');
+        Route::put('/profile', 'update')->name('patient.settings.update');
+        Route::put('/profile/change-password', 'changePassword')->name('patient.settings.changepassword');
+       
+    });
+
+});
 Route::prefix('doctors')->controller(DoctorController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('/{id}', 'show');
@@ -22,18 +47,7 @@ Route::prefix('doctors')->controller(DoctorController::class)->group(function ()
     Route::delete('/{id}', 'delete');
 });
 
-Route::middleware(['firebase.auth'])->prefix('patient')->controller(PatientController::class)->group(function () {
-    Route::get('/dashboard', 'profile');
-    Route::get('/', 'profile');
-    Route::put('/', 'update');
-});
-
 Route::get('/doctor-details/{id}', [DoctorController::class, 'show']);
-
-Route::get('/index', function () {
-    return view('index');
-})->name('index');
-
 
 Route::get('/about-us', function () {
     return view('about-us');

@@ -114,7 +114,7 @@
                         <div class="bottom-book-btn">
                             <p><span>Price : {{ $doctor['consultationFee'] }} </span> for a Session</p>
                             <div class="clinic-booking">
-                                <a class="apt-btn" href="{{ url('booking') }}">Book Appointment</a>
+                                <a class="apt-btn" href="{{ url($doctor['uid'] . '/booking-slots') }}">Book Appointment</a>                            
                             </div>
                         </div>
                     </div>

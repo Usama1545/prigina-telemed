@@ -2519,6 +2519,18 @@ Version      : 1.3
         });
     }
 
+    if ($(".toggle-password-cur").length > 0) {
+        $(document).on("click", ".toggle-password-cur", function () {
+            $(this).toggleClass("feather-eye");
+            var input = $(".pass-input-cur");
+            if (input.attr("type") == "password") {
+                input.attr("type", "text");
+            } else {
+                input.attr("type", "password");
+            }
+        });
+    }
+
     // Custom Country Code Selector
 
     if ($("#phone").length > 0) {

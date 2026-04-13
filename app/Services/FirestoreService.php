@@ -63,18 +63,27 @@ class FirestoreService
     public function find($collection, $documentId)
     {
         try {
-            $snapshot = $this->db->collection($collection)
-                ->document($documentId)
-                ->snapshot();
-
+            $docRef = $this->db->collection($collection)->document($documentId);
+            
+            $snapshot = $docRef->snapshot();
+            
             if (!$snapshot->exists()) {
                 return null;
             }
-
-            return $snapshot->data();
+            
+            $data = $snapshot->data();
+            
+            foreach ($data as $key => $value) {
+                if ($value instanceof \Google\Cloud\Firestore\Timestamp) {
+                    $data[$key] = $value->get()->format('Y-m-d H:i:s');
+                }
+            }
+            
+            return $data;
+            
         } catch (Exception $e) {
             Log::error('Firestore find error: ' . $e->getMessage());
-            throw $e;
+            return null; // IMPORTANT
         }
     }
 
@@ -192,6 +201,112 @@ class FirestoreService
 
         } catch (Exception $e) {
             Log::error('Firestore query error: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function paginatedQuery(
+        $collection,
+        $filters = [],
+        $limit = null,
+        $startAfter = null,
+        $orderByField = 'createdAt',
+        $orderByDirection = 'DESC'
+    ) {
+        try {
+            $query = $this->db->collection($collection);
+
+            // Apply filters
+            foreach ($filters as $filter) {
+                $query = $query->where(
+                    $filter['field'],
+                    $filter['op'],
+                    $filter['value']
+                );
+            }
+
+            // Order by createdAt AND id for uniqueness
+            if ($orderByField) {
+                $query = $query->orderBy($orderByField, strtolower($orderByDirection) === 'desc' ? 'DESC' : 'ASC')
+                            ->orderBy('id', strtolower($orderByDirection) === 'desc' ? 'DESC' : 'ASC');
+            }
+
+            // Pagination with composite cursor
+            if ($startAfter && isset($startAfter[$orderByField]) && isset($startAfter['id'])) {
+                $query = $query->startAfter([$startAfter[$orderByField], $startAfter['id']]);
+            }
+
+            // Limit
+            if ($limit) {
+                $query = $query->limit($limit);
+            }
+
+            $documents = $query->documents();
+
+            $results = [];
+            foreach ($documents as $doc) {
+                $results[] = array_merge(['id' => $doc->id()], $doc->data());
+            }
+
+            $last = end($results);
+            
+            // Return composite cursor
+            return [
+                'documents' => $results,
+                'nextCursor' => $last ? [
+                    $orderByField => $last[$orderByField] ?? null,
+                    'id' => $last['id'] ?? null
+                ] : null,
+                'hasMore' => count($results) === ($limit ?? 0),
+            ];
+
+        } catch (Exception $e) {
+            Log::error('Firestore query error: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function first(
+        $collection,
+        $filters = [],
+        $orderByField = null,
+        $orderByDirection = 'DESC'
+    ) {
+        try {
+            $query = $this->db->collection($collection);
+
+            // Apply filters
+            foreach ($filters as $filter) {
+                $query = $query->where(
+                    $filter['field'],
+                    $filter['op'],
+                    $filter['value']
+                );
+            }
+
+            // Optional ordering
+            if ($orderByField) {
+                $query = $query->orderBy(
+                    $orderByField,
+                    strtolower($orderByDirection) === 'desc' ? 'DESC' : 'ASC'
+                );
+            }
+
+            // Only 1 document
+            $documents = $query->limit(1)->documents();
+
+            foreach ($documents as $doc) {
+                if (!$doc->exists()) {
+                    return null;
+                }
+
+                return array_merge(['id' => $doc->id()], $doc->data());
+            }
+
+            return null;
+
+        } catch (Exception $e) {
+            Log::error('Firestore first error: ' . $e->getMessage());
             throw $e;
         }
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Firestore\Appointment;
 use App\Models\Firestore\Category;
 use App\Models\Firestore\Doctor;
 use App\Models\Firestore\Faq;
@@ -13,11 +14,10 @@ class IndexController extends Controller
     protected $categories;
     protected $doctors;
     protected $faqs;
-
     public function __construct(
         Category $categories,
         Doctor $doctors,
-        Faq $faqs
+        Faq $faqs,
     ) {
         $this->categories = $categories;
         $this->doctors = $doctors;

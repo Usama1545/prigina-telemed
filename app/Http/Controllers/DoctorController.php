@@ -66,7 +66,7 @@ class DoctorController extends Controller
             })->values();
         }
         
-        $categories = Cache::remember('home.doctors', 6000, function () {
+        $categories = Cache::remember('home.doctors.categories', 6000, function () {
             return $this->categories->all()
                 ->where('isActive', true)
                 ->values();

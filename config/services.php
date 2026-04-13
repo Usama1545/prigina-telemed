@@ -38,6 +38,18 @@ return [
     'firebase' => [
         'project_id' => env('FIREBASE_PROJECT_ID', 'doctorapp-f33bf'),
         'storage_bucket' => env('FIREBASE_STORAGE_BUCKET'),
+        'api_key' => env('FIREBASE_API_KEY'),
+    ],
+
+    'stripe' => [
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET'),
+    ],
+
+    'flutterwave' => [
+        'publicKey' => env('FLW_PUBLIC_KEY'),
+        'secretKey' => env('FLW_SECRET_KEY'),
+        'secretHash' => env('FLW_SECRET_HASH'),
     ],
 
 ];

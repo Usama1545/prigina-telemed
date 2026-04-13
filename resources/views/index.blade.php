@@ -212,7 +212,7 @@
                                         alt="" class="dr-card-img"></a>
                                 <div class="grid-overlay-item">
                                     <span class="badge bg-orange"><i
-                                            class="fa-solid fa-star me-1"></i>{{ $doctor['rating'] }}</span>
+                                            class="fa-solid fa-star me-1"></i>{{ $doctor['rating'] ?? 0 }}</span>
                                     <a href="javascript:void(0)" class="fav-icon">
                                         <i class="fa fa-heart"></i>
                                     </a>
@@ -221,7 +221,7 @@
                             <div class="card-body p-0">
                                 <div class="d-flex active-bar">
                                     <a href="#"
-                                        class="text-indigo fw-medium fs-14">{{ $doctor['specializations'][0] }}</a>
+                                        class="text-indigo fw-medium fs-14">{{ $doctor['specializations'][0] ?? '' }}</a>
                                     @if ($doctor['available'] == true)
                                         <span class="badge bg-success-light d-inline-flex align-items-center">
                                             <i class="fa-solid fa-circle fs-5 me-1"></i>

@@ -18,6 +18,13 @@ return [
      */
 
     'projects' => [
+        env('FIREBASE_PROJECT_ID') => [
+            'credentials' => env('FIREBASE_CREDENTIALS'),
+
+            'storage' => [
+                'default_bucket' => env('FIREBASE_STORAGE_BUCKET'),
+            ],
+        ],
         'app' => [
 
             /*
@@ -134,7 +141,7 @@ return [
                  * override it here.
                  */
 
-                'default_bucket' => env('FIREBASE_STORAGE_DEFAULT_BUCKET'),
+                'default_bucket' => env('FIREBASE_STORAGE_BUCKET'),
 
             ],
 

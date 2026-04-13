@@ -47,12 +47,59 @@ class AuthController extends Controller
             $authService->setCustomClaims($uid, ['role' => 'patient']);
         }
 
-        session(['firebase_token' => $idToken]);
+        session([
+            'firebase_token' => $idToken,
+            'auth_uid' => $uid,
+            'auth_role' => 'patient',
+            'auth_user' => [
+                'name' => $verified->claims()->get('name'),
+                'email' => $verified->claims()->get('email'),
+            ]
+        ]);
         $request->session()->save(); // ✅ ADD THIS
 
         return response()->json([
             'message' => 'Login successful',
             'role' => 'patient'
         ]);
+    }
+
+    public function dashboard(){
+        $user = current_user();
+
+        if(!$user){
+            return redirect('/login');
+        }
+
+        if($user['role'] === 'patient'){
+            return redirect('/patient/dashboard');
+        }elseif($user['role'] === 'doctor'){
+            return redirect('/doctors/dashboard');
+        }else{
+            return redirect('/login');
+        }
+    }
+
+    public function profile(Request $request)
+    {
+        $user = current_user();
+
+        if(!$user){
+            return redirect('/login');
+        }
+
+        if($user['role'] === 'patient'){
+            return redirect('/patient/profile');
+        }elseif($user['role'] === 'doctor'){
+            return redirect('/doctors/profile');
+        }else{
+            return redirect('/login');
+        }
+    }
+
+    public function logout(Request $request)
+    {
+        session()->flush();
+        return view('login');
     }
 }

@@ -43,17 +43,13 @@
                                                     Remember Me
                                                 </label>
                                             </div>
-                                            <div class="form-check mb-0">
-                                                <input class="form-check-input" type="checkbox" id="remember1">
-                                                <label class="form-check-label" for="remember1">
-                                                    Login with OTP
-                                                </label>
-                                            </div>
+                                            
                                         </div>
                                     </div>
-                                    <div class="mb-3">
-                                        <button class="btn btn-primary-gradient w-100" type="submit">Sign in</button>
-                                    </div>
+                                    <button id="loginBtn" class="btn btn-primary-gradient w-100" type="submit">
+                                        <span id="btnText">Sign in</span>
+                                        <span id="btnSpinner" class="spinner-border spinner-border-sm ms-2 d-none"></span>
+                                    </button>
                                     <div class="login-or">
                                         <span class="or-line"></span>
                                         <span class="span-or">or</span>
@@ -84,9 +80,16 @@
 @push('scripts')
 <script>
 async function handleLogin(e) {
-        e.preventDefault();
+    e.preventDefault();
 
-    console.log('handleLogin');
+    const btn = document.getElementById('loginBtn');
+    const spinner = document.getElementById('btnSpinner');
+    const text = document.getElementById('btnText');
+
+    // start loading
+    btn.disabled = true;
+    spinner.classList.remove('d-none');
+    text.innerText = 'Signing in...';
 
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
@@ -99,6 +102,11 @@ async function handleLogin(e) {
 
     } catch (error) {
         alert(error.message);
+
+        // stop loading on error
+        btn.disabled = false;
+        spinner.classList.add('d-none');
+        text.innerText = 'Sign in';
     }
 }
 </script>
@@ -117,6 +125,10 @@ async function googleLogin() {
     }
 }
 async function sendTokenToBackend(token) {
+    const btn = document.getElementById('loginBtn');
+    const spinner = document.getElementById('btnSpinner');
+    const text = document.getElementById('btnText');
+
     const response = await fetch('/auth/login', {
         method: 'POST',
         headers: {
@@ -124,16 +136,20 @@ async function sendTokenToBackend(token) {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             'Accept': 'application/json',
         },
-        credentials: 'same-origin', // ✅ VERY IMPORTANT
+        credentials: 'same-origin',
         body: JSON.stringify({ token })
     });
 
     const data = await response.json();
 
     if (response.ok) {
-        window.location.href = '/patient/dashboard';
+        window.location.href = '/dashboard';
     } else {
         alert(data.error || 'Login failed');
+
+        btn.disabled = false;
+        spinner.classList.add('d-none');
+        text.innerText = 'Sign in';
     }
 }
 </script>

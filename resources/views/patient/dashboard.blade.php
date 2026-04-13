@@ -14,61 +14,7 @@
                 <div class="col-lg-4 col-xl-3 theiaStickySidebar">
 
                     <!-- Profile Sidebar -->
-                    <div class="profile-sidebar patient-sidebar profile-sidebar-new">
-                        <div class="widget-profile pro-widget-content">
-                            <div class="profile-info-widget">
-                                <a href="{{url('profile-settings')}}" class="booking-doc-img">
-                                    <img src="{{URL::asset('build/img/doctors-dashboard/profile-06.jpg')}}"
-                                        alt="User Image">
-                                </a>
-                                <div class="profile-det-info">
-                                    <h3><a href="{{url('profile-settings')}}">{{ $patient['name'] }}</a></h3>
-                                    <span>{{ $patient['gender'] }} <i class="fa-solid fa-circle"></i> {{ $patient['email'] }}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="dashboard-widget">
-                            <nav class="dashboard-menu">
-                                <ul>
-                                    <li class="active">
-                                        <a href="{{url('patient-dashboard')}}">
-                                            <i class="isax isax-category-2"></i>
-                                            <span>Dashboard</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{url('patient-appointments')}}">
-                                            <i class="isax isax-calendar-1"></i>
-                                            <span>My Appointments</span>
-                                        </a>
-                                    </li>
-                            
-                                    
-                                    
-                                    <li>
-                                        <a href="{{url('chat')}}">
-                                            <i class="isax isax-messages-1"></i>
-                                            <span>Message</span>
-                                            <small class="unread-msg">7</small>
-                                        </a>
-                                    </li>
-                                    
-                                    <li>
-                                        <a href="{{url('profile-settings')}}">
-                                            <i class="isax isax-setting-2"></i>
-                                            <span>Settings</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{url('login')}}">
-                                            <i class="isax isax-logout"></i>
-                                            <span>Logout</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-                    </div>
+                   @include('partials.patient-sidebar')
                     <!-- /Profile Sidebar -->
 
                 </div>
@@ -80,7 +26,7 @@
                         <div class="favourites-dashboard w-100">
                             <div class="book-appointment-head">
                                 <h3><span>Book a new</span>Appointment</h3>
-                                <span class="add-icon"><a href="{{url('search')}}"><i
+                                <span class="add-icon"><a href="{{url('doctors')}}"><i
                                             class="fa-solid fa-circle-plus"></i></a></span>
                             </div>
                             
@@ -99,93 +45,60 @@
                                 </div>
                                 <div class="dashboard-card-body">
                                     <div class="apponiment-dates">
-                                        <ul class="appointment-calender-slider owl-carousel">
-                                            <li>
-                                                <a href="#">
-                                                    <h5>19 <span>Mon</span></h5>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <h5>20 <span>Mon</span></h5>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="available-date">
-                                                    <h5>21 <span>Tue</span></h5>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="available-date">
-                                                    <h5>22 <span>Wed</span></h5>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <h5>23 <span>Thu</span></h5>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <h5>24 <span>Fri</span></h5>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <h5>25 <span>Sat</span></h5>
-                                                </a>
-                                            </li>
+                                        @php
+                                            use Carbon\Carbon;
+
+                                            $startDate = Carbon::today();
+                                            $days = 7;
+                                        @endphp
+
+                                        <ul class="appointment-calender-slider">
+                                            @for ($i = 0; $i < $days; $i++)
+                                                @php
+                                                    $date = $startDate->copy()->addDays($i);
+                                                @endphp
+                                                <li>
+                                                    <a href="#" 
+                                                    class="date-item {{ $i == 0 ? 'active-date' : '' }}" 
+                                                    data-date="{{ $date->format('Y-m-d') }}">
+                                                        <h5>
+                                                            {{ $date->format('d') }} 
+                                                            <span>{{ $date->format('D') }}</span>
+                                                        </h5>
+                                                    </a>
+                                                </li>
+                                            @endfor
                                         </ul>
-                                        <div class="appointment-dash-card">
-                                            <div class="doctor-fav-list">
-                                                <div class="doctor-info-profile">
-                                                    <a href="#" class="table-avatar">
-                                                        <img src="{{URL::asset('build/img/doctors-dashboard/doctor-profile-img.jpg')}}"
-                                                            alt="Img">
-                                                    </a>
-                                                    <div class="doctor-name-info">
-                                                        <h5><a href="#">Dr.Edalin Hendry</a></h5>
-                                                        <span class="fs-12 fw-medium">Dentist</span>
+                                        @foreach($futureAppointments as $appointment)
+                                            @php
+                                                $appointmentDate = \Carbon\Carbon::parse($appointment['date'])->format('Y-m-d');
+                                            @endphp
+
+                                            <div class="appointment-dash-card appointment-dash-card-active" data-date="{{ $appointmentDate }}">
+                                                <div class="doctor-fav-list">
+                                                    <div class="doctor-info-profile">
+                                                        <a href="#" class="table-avatar">
+                                                            <img src="{{URL::asset('build/img/doctors-dashboard/doctor-profile-img.jpg')}}"
+                                                                alt="Img">
+                                                        </a>
+                                                        <div class="doctor-name-info">
+                                                            <h5><a href="#">Dr. {{ $appointment['doctorName'] }}</a></h5>
+                                                        </div>
                                                     </div>
+                                                    <a href="#" class="cal-plus-icon"><i class="isax isax-hospital5"></i></a>
                                                 </div>
-                                                <a href="#" class="cal-plus-icon"><i class="isax isax-hospital5"></i></a>
-                                            </div>
-                                            <div class="date-time">
-                                                <p><i class="isax isax-clock5"></i>21 Mar 2024 - 10:30 PM </p>
-                                            </div>
-                                            <div class="card-btns gap-3">
-                                                <a href="{{url('chat')}}" class="btn btn-md btn-light rounded-pill"><i
-                                                        class="isax isax-messages-25"></i>Chat Now</a>
-                                                <a href="{{url('patient-appointments')}}"
-                                                    class="btn  btn-md btn-primary-gradient rounded-pill"><i
-                                                        class="isax isax-calendar-tick5"></i>Attend</a>
-                                            </div>
-                                        </div>
-                                        <div class="appointment-dash-card">
-                                            <div class="doctor-fav-list">
-                                                <div class="doctor-info-profile">
-                                                    <a href="#" class="table-avatar">
-                                                        <img src="{{URL::asset('build/img/doctors/doctor-17.jpg')}}"
-                                                            alt="Img">
-                                                    </a>
-                                                    <div class="doctor-name-info">
-                                                        <h5><a href="#">Dr.Juliet Gabriel</a></h5>
-                                                        <span class="fs-12 fw-medium">Cardiologist</span>
-                                                    </div>
+                                                <div class="date-time">
+                                                    <p><i class="isax isax-clock5"></i>Time : {{ $appointment['patientLocalTime'] ?? $appointment['startTime'] . ' - ' . $appointment['endTime'] ??  '' }} </p>
                                                 </div>
-                                                <a href="#" class="cal-plus-icon"><i class="isax isax-video5"></i></a>
+                                                <div class="card-btns gap-3">
+                                                    <a href="{{url('chat')}}" class="btn btn-md btn-light rounded-pill"><i
+                                                            class="isax isax-messages-25"></i>Chat Now</a>
+                                                    <a href="{{url('patient-appointments')}}"
+                                                        class="btn  btn-md btn-primary-gradient rounded-pill"><i
+                                                            class="isax isax-calendar-tick5"></i>Attended</a>
+                                                </div>
                                             </div>
-                                            <div class="date-time">
-                                                <p><i class="isax isax-clock5"></i>22 Mar 2024 - 10:30 PM </p>
-                                            </div>
-                                            <div class="card-btns gap-3">
-                                                <a href="{{url('chat')}}" class="btn btn-md btn-light rounded-pill"><i
-                                                        class="isax isax-messages-25"></i>Chat Now</a>
-                                                <a href="{{url('patient-appointments')}}"
-                                                    class="btn  btn-md btn-primary-gradient rounded-pill"><i
-                                                        class="isax isax-calendar-tick5"></i>Attend</a>
-                                            </div>
-                                        </div>
+                                        @endforeach
                                     </div>
                                 </div>
 
@@ -204,8 +117,9 @@
                                     </div>
                                 </div>
                                 <div class="dashboard-card-body">
-                                    <div class="past-appointments-slider owl-carousel">
-                                        <div class="appointment-dash-card past-appointment mt-0">
+                                    <div class="past-appointments-slider">
+                                        @foreach($pastAppointments as $pastAppointment)
+                                        <div class="appointment-dash-card past-appointment mt-0 mb-3">
                                             <div class="doctor-fav-list">
                                                 <div class="doctor-info-profile">
                                                     <a href="#" class="table-avatar">
@@ -213,68 +127,26 @@
                                                             alt="Img">
                                                     </a>
                                                     <div class="doctor-name-info">
-                                                        <h5><a href="#">Dr.Edalin Hendry</a></h5>
-                                                        <span>Dental Specialist</span>
+                                                        <h5><a href="#">{{ $pastAppointment['doctorName'] }}</a></h5>
                                                     </div>
                                                 </div>
-                                                <span class="bg-orange badge"><i class="isax isax-video5 me-1"></i>30
-                                                    Min</span>
+                                                <span class="bg-orange badge"><i class="isax isax-video5 me-1"></i>{{ $pastAppointment['status'] }}</span>
                                             </div>
                                             <div class="appointment-date-info">
-                                                <h6>Thursday, Mar 2024</h6>
+                                                <h6>{{ $pastAppointment['date'] }}</h6>
                                                 <ul>
                                                     <li>
-                                                        <span><i class="isax isax-clock5"></i></span>Time : 04:00 PM - 04:30
-                                                        PM (30 Min)
+                                                        <span><i class="isax isax-clock5"></i></span>Time : {{ $pastAppointment['patientLocalTime'] ?? $pastAppointment['startTime'] . ' - ' . $pastAppointment['endTime'] ??  '' }}
                                                     </li>
-                                                    <li>
-                                                        <span><i class="isax isax-location5"></i></span>Newyork, United
-                                                        States
-                                                    </li>
+                                                    
                                                 </ul>
                                             </div>
                                             <div class="card-btns">
-                                                <a href="{{url('patient-appointments')}}"
-                                                    class="btn btn-md btn-outline-primary ms-0 me-3 rounded-pill">Reschedule</a>
                                                 <a href="{{url('patient-appointment-details')}}"
                                                     class="btn btn-md btn-primary-gradient rounded-pill">View Details</a>
                                             </div>
                                         </div>
-                                        <div class="appointment-dash-card past-appointment mt-0">
-                                            <div class="doctor-fav-list">
-                                                <div class="doctor-info-profile">
-                                                    <a href="#" class="table-avatar">
-                                                        <img src="{{URL::asset('build/img/doctors/doctor-17.jpg')}}"
-                                                            alt="Img">
-                                                    </a>
-                                                    <div class="doctor-name-info">
-                                                        <h5><a href="#">Dr.Juliet Gabriel</a></h5>
-                                                        <span>Cardiologist</span>
-                                                    </div>
-                                                </div>
-                                                <span class="bg-orange badge"><i class="isax isax-video5 me-1"></i>30
-                                                    Min</span>
-                                            </div>
-                                            <div class="appointment-date-info">
-                                                <h6>Friday, Mar 2024</h6>
-                                                <ul>
-                                                    <li>
-                                                        <span><i class="isax isax-clock5"></i></span>Time : 03:00 PM - 03:30
-                                                        PM (30 Min)
-                                                    </li>
-                                                    <li>
-                                                        <span><i class="isax isax-location5"></i></span>Newyork, United
-                                                        States
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="card-btns">
-                                                <a href="{{url('patient-appointments')}}"
-                                                    class="btn btn-md btn-outline-primary ms-0 me-3 rounded-pill">Reschedule</a>
-                                                <a href="{{url('medical-details')}}"
-                                                    class="btn btn-md btn-primary-gradient rounded-pill">View Details</a>
-                                            </div>
-                                        </div>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -287,5 +159,78 @@
 
         </div>
     </div>
+    <style>
+        .appointment-calender-slider {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;   /* important */
+            padding-bottom: 5px;
+        }
+
+        .appointment-calender-slider::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .appointment-calender-slider li {
+            list-style: none;
+            flex: 0 0 auto;   /* prevents stretching */
+        }
+
+        .date-item {
+            display: block;
+            padding: 10px 14px;
+            border-radius: 10px;
+            background: #fff6f6;
+            text-align: center;
+            min-width: 70px;
+        }
+
+        .date-item.active-date {
+            background: linear-gradient(45deg, #4e73df, #224abe);
+            color: #fff;
+        }
+    </style>
     <!-- /Page Content -->
 @endsection
+@push('scripts')
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const dateItems = document.querySelectorAll(".date-item");
+    const cards = document.querySelectorAll(".appointment-dash-card-active");
+
+    function filterAppointments(selectedDate) {
+        cards.forEach(card => {
+            if (card.dataset.date === selectedDate) {
+                card.style.display = "block";
+            } else {
+                card.style.display = "none";
+            }
+        });
+    }
+
+    dateItems.forEach(item => {
+        item.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            // remove active class
+            dateItems.forEach(i => i.classList.remove("active-date"));
+
+            // add active class
+            this.classList.add("active-date");
+
+            const selectedDate = this.dataset.date;
+
+            filterAppointments(selectedDate);
+        });
+    });
+
+    // default load (first date)
+    const firstDate = document.querySelector(".date-item.active-date");
+    if (firstDate) {
+        filterAppointments(firstDate.dataset.date);
+    }
+
+});
+</script>
+@endpush

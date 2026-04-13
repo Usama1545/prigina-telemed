@@ -23,7 +23,11 @@ abstract class BaseModel
     {
         $this->authorize('create', $data);
 
-        $response = $this->firestore->create($this->collection, $data);
+        $id = $data['id'] ?? uniqid();
+
+        $data['id'] = $id;
+
+        $response = $this->firestore->createWithId($this->collection, $id, $data);
 
         return $this->mapDocument($response);
     }
@@ -31,6 +35,15 @@ abstract class BaseModel
     public function find(string $id)
     {
         $doc = $this->firestore->find($this->collection, $id);
+
+        $this->authorize('view', $doc);
+
+        return $this->mapDocument($doc);
+    }
+
+    public function first(array $filters = [])
+    {
+        $doc = $this->firestore->first($this->collection, $filters);
 
         $this->authorize('view', $doc);
 
@@ -85,8 +98,10 @@ abstract class BaseModel
 
     protected function authorize(string $action, array $data = null, bool $throw = true)
     {
-        $user = Auth::user();
-
+        $user = (object) [
+            'id' => session('auth_uid'),
+            'role' => session('auth_role'),
+        ];
         if (!$user && $action === 'view') {
             return true;
         }
