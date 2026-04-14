@@ -16,13 +16,7 @@ class FirebaseAuthMiddleware
      */
     public function handle($request, Closure $next)
     {
-        // Try from header (API)
-        $token = $request->bearerToken();
-
-        // ✅ fallback for Blade (session)
-        if (!$token) {
-            $token = session('firebase_token');
-        }
+        $token = session('firebase_token');
 
         if (!$token) {
             return redirect('/login');
@@ -32,8 +26,30 @@ class FirebaseAuthMiddleware
 
         try {
             $verified = $authService->verifyToken($token);
+
         } catch (\Exception $e) {
-            return redirect('/login');
+
+            $refreshToken = session('firebase_refresh_token');
+
+            if (!$refreshToken) {
+                return redirect('/login');
+            }
+
+            $newToken = $authService->refreshIdToken($refreshToken);
+
+            if (!$newToken) {
+                return redirect('/login');
+            }
+
+            // ✅ save new token
+            session(['firebase_token' => $newToken]);
+
+            // ✅ verify AGAIN
+            try {
+                $verified = $authService->verifyToken($newToken);
+            } catch (\Exception $e) {
+                return redirect('/login');
+            }
         }
 
         $uid = $verified->claims()->get('sub');

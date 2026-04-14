@@ -30,19 +30,14 @@
                             </a>
                         </div>
                         <ul class="main-nav">
-                            <li class="has-submenu megamenu active">
+                            <li class="megamenu active">
                                 <a href="{{ url('/') }}" class="main-menu">Home</a>
-
                             </li>
-                            <li class="has-submenu megamenu {{ request()->is('doctors*') ? 'active' : '' }}">
+                            <li class="megamenu {{ request()->is('doctors*') ? 'active' : '' }}">
                                 <a href="{{ url('doctors') }}" class="main-menu">Doctors</a>
                             </li>
-                        
-
-
                         </ul>
                         <div class="header-items">
-                            <!-- Item 1 -->
                             <div class="about-popup-item border-0 pb-0">
                                 <h3 class="title">Contact Information</h3>
                                 <div class="support-item mb-3">
@@ -85,31 +80,18 @@
 
                             <div class="header-items-button">
                                 @if(session('firebase_token'))
-                                    <li class="dropdown has-arrow logged-item">
-                                        <a href="#" data-bs-toggle="dropdown">
-                                            <span class="user-img">
-                                                <i class="isax isax-user rounded-circle" style="
-                                                    width: 35px;
-                                                    height: 35px;
-                                                    border-radius: 50%;
-                                                    background: #9c9c9c;
-                                                    color: #ffffff;
-                                                    display: flex;
-                                                    align-items: center;
-                                                    justify-content: center;
-                                                    font-weight: bold;
-                                                "></i>
-                                                
-                                            </span>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            
+                                    <ul class="main-nav">
+                                        <li class="megamenu ">
                                             <a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a>
-                                            <a class="dropdown-item" href="{{ route('profile') }}">Profile
-                                                Settings</a>
-                                            <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
-                                        </div>
-                                    </li>
+                                        </li>
+                                        <li class="megamenu ">
+                                            <a class="dropdown-item" href="{{ route('profile') }}">Profile Settings</a>                                    </li>
+                                        <li class="megamenu ">
+                                                <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
+                                        </li>
+                                        
+                                    </ul>
+                                   
                                     
                                 @else
                                     {{-- ❌ Guest --}}

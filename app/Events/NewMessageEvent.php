@@ -21,11 +21,10 @@ class NewMessageEvent implements ShouldBroadcastNow
     }
 
     // 🔥 Channel (important)
-//todo need to revert this
     public function broadcastOn(): Channel
     {
-        \Log::info('🔥 Broadcasting to chat.22');
-        return new Channel('chat.22'); // ✅ public channel
+        $id = current_user()['uid'];
+        return new channel('chat.' . $id); // ✅ public channel
     }
 
     // 🔥 Event name (frontend listens to this)

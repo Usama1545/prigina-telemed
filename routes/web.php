@@ -10,9 +10,6 @@ use Illuminate\Support\Facades\Broadcast;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\BookingController;
 
-Broadcast::routes();
-require base_path('routes/channels.php');
-
 Route::post('/auth/login', [AuthController::class, 'login']);
 
 Route::get('/', [IndexController::class,'index'])->name('index');
@@ -28,13 +25,19 @@ Route::middleware(['firebase.auth'])->group(function () {
     Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
     Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('conversation/{id}/messages', [PatientController::class, 'messages'])->name('conversation.messages');
+    Route::post('conversation/{id}/send', [PatientController::class, 'sendMessage']);
+
 
     Route::prefix('patient')->controller(PatientController::class)->group(function () {
+        Route::get('/appointment/{id}/cancel', 'cancelAppointment')->name('patient.cancel-appointment');
+        Route::get('/appointment-details/{id}', 'appointmentDetails')->name('patient.appointment-details');
         Route::get('/appointments', 'appointments')->name('patient.appointments');
         Route::get('/dashboard', 'dashboard')->name('patient.dashboard');
         Route::get('/profile', 'profile')->name('patient.settings');
         Route::put('/profile', 'update')->name('patient.settings.update');
         Route::put('/profile/change-password', 'changePassword')->name('patient.settings.changepassword');
+        Route::get('/conversations', 'conversations')->name('patient.conversations');
        
     });
 

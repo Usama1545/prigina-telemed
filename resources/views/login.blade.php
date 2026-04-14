@@ -117,14 +117,15 @@ async function googleLogin() {
     try {
         const result = await auth.signInWithPopup(provider);
         const token = await result.user.getIdToken();
+        const refreshToken = result.user.refreshToken; // ✅ important
 
-        await sendTokenToBackend(token);
+        await sendTokenToBackend(token, refreshToken);
 
     } catch (error) {
         alert(error.message);
     }
 }
-async function sendTokenToBackend(token) {
+async function sendTokenToBackend(token, refreshToken) {
     const btn = document.getElementById('loginBtn');
     const spinner = document.getElementById('btnSpinner');
     const text = document.getElementById('btnText');
@@ -137,7 +138,10 @@ async function sendTokenToBackend(token) {
             'Accept': 'application/json',
         },
         credentials: 'same-origin',
-        body: JSON.stringify({ token })
+        body: JSON.stringify({ 
+            token: token,
+            refreshToken: refreshToken
+        })
     });
 
     const data = await response.json();

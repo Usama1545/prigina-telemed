@@ -3180,6 +3180,7 @@ Version      : 1.3
     });
     $(".left_sides").on("click", function () {
         if ($(window).width() <= 991) {
+            $(".chat").removeClass("hide-sm-chatbar");
             $(".chat-messages").removeClass("show-chatbar");
         }
     });
@@ -3187,6 +3188,7 @@ Version      : 1.3
         if ($(window).width() <= 991) {
             $(".left-sidebar").addClass("hide-left-sidebar");
             $(".sidebar-menu").addClass("d-none");
+            $(".chat").removeClass("hide-sm-chatbar");
             $(".chat").addClass("show-chatbar");
         }
     });

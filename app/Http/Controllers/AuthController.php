@@ -20,6 +20,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $idToken = $request->token;
+        $refreshToken = $request->refresh_token;
 
         $authService = app(FirebaseAuthService::class);
         $firestore = app(FirestoreService::class);
@@ -49,6 +50,7 @@ class AuthController extends Controller
 
         session([
             'firebase_token' => $idToken,
+            'firebase_refresh_token' => $refreshToken, // ✅ ADD THIS
             'auth_uid' => $uid,
             'auth_role' => 'patient',
             'auth_user' => [

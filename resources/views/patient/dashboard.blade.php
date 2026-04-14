@@ -141,10 +141,10 @@
                                                     
                                                 </ul>
                                             </div>
-                                            <div class="card-btns">
+                                            {{-- <div class="card-btns">
                                                 <a href="{{url('patient-appointment-details')}}"
                                                     class="btn btn-md btn-primary-gradient rounded-pill">View Details</a>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                         @endforeach
                                     </div>

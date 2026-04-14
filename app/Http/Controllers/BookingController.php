@@ -172,14 +172,14 @@ class BookingController extends Controller
             'endTime' => $endTimeFormatted,
             'startTimeUTC' => $startTimeUTC,
             'endTimeUTC' => $endTimeUTC,
-            'amount' => $validated['amount'],
+            'amount' => (double) $validated['amount'],
             'paymentMethod' => $validated['payment_gateway'] === 'stripe' ? 'Debit Card' : 'Flutterwave',
             'symptoms' => $validated['symptoms'],
             'notes' => $validated['problem'],
             'status' => 'pending',
             'patientLocalTime' => $startTimeFormatted . ' - ' . $endTimeFormatted,
             'doctorLocalTime' => $startDateTime->format('h:i A') . ' - ' . $endDateTime->format('h:i A'),
-            'createdAt' => Carbon::now('UTC'),
+            'createdAt' => Carbon::now()->format('F j, Y \a\t h:i:s A') . ' UTC' . now()->format('P'),
         ];
 
         $appointment = $this->appointments->create($appointmentData);

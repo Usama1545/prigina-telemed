@@ -26,8 +26,8 @@
                                             <span>My Appointments</span>
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="{{url('chat')}}">
+                                    <li class="{{ route('patient.conversations') === url()->current() ? 'active' : ''  }}">
+                                        <a href="{{ route('patient.conversations') }}">
                                             <i class="isax isax-messages-1"></i>
                                             <span>Message</span>
                                             <small class="unread-msg">7</small>

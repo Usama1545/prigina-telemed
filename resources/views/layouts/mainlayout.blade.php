@@ -43,7 +43,7 @@
                                         @elseif(Route::is(['index-13']))
 
                                                 <body class="theme-12">
-                                            @elseif(Route::is(['chat-doctor', 'chat']))
+                                            @elseif(Route::is(['chat-doctor', 'chat', 'patient.conversations']))
 
                                                     <body class="main-chat-blk">
                                                 @elseif(Route::is(['doctor-register-step1', 'doctor-register-step2', 'doctor-regsiter-step3', 'doctor-register', 'forgot-password', 'login', 'patient-register-step1', 'patient-register-step2', 'patient-register-step3', 'patient-register-step4', 'patient-register-step5', 'pharmacy-register-step1', 'pharmacy-register-step2', 'pharmacy-register-step3', 'pharmacy-register', 'register']))
@@ -116,17 +116,26 @@
                                                                             cluster: "{{ config('broadcasting.connections.pusher.options.cluster') }}",
                                                                             forceTLS: true,
                                                                             authEndpoint: '/broadcasting/auth',
+
+                                                                            withCredentials: true, // ✅ REQUIRED
+
+                                                                            auth: {
+                                                                                headers: {
+                                                                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                                                                }
+                                                                            }
                                                                         });
 
-                                                                        const userId = "22";
+                                                                        const userId = "{{ current_user()['uid'] }}";
                                                                         Pusher.logToConsole = true;
-//todo need to change
-                                                                        Echo.channel('chat.22')
-                                                                            .listen('.new.message', (e) => {
+                                                                            Echo.channel(`chat.${userId}`).listen('.new.message', (e) => {
                                                                                 showNotification(e);
-                                                                                // if (typeof window.fetchMessages === 'function') {
-                                                                                //     window.fetchMessages();
-                                                                                // }
+                                                                                console.log('new message', e);
+                                                                                if (typeof loadMessages === 'function') {
+                                                                                    if (currentConversationId === e.conversationId) {
+                                                                                        loadMessages(e.conversationId, true);
+                                                                                    }
+                                                                                }
                                                                             });
                                                                             function showNotification(data) {
                                                                                 const popup = document.createElement('div');

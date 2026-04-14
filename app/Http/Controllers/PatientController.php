@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Services\FirestoreService;
 use Illuminate\Support\Facades\Http;
 use Kreait\Firebase\Contract\Auth;
+use Carbon\Carbon;
 
 class PatientController extends Controller
 {
@@ -87,6 +88,8 @@ class PatientController extends Controller
             $data['photoUrl'] = $imageUrl;
         }
 
+        $this->firestore->update('patients', $uid, $data);
+
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }
 
@@ -132,7 +135,7 @@ class PatientController extends Controller
         // Query Firestore
         $result = $this->firestore->paginatedQuery('appointments', [
             ['field' => 'patientId', 'op' => '=', 'value' => $uid],
-        ], 10, $cursor, 'createdAt', 'DESC');
+        ], 50, $cursor, 'createdAt', 'DESC');
         
         $appointments = $result['documents'] ?? [];
         $nextCursor = $result['nextCursor'] ?? null;
@@ -141,9 +144,30 @@ class PatientController extends Controller
         // For previous navigation
         $cursors = session()->get('appointment_cursors', []);
         $hasPrev = ($direction === 'prev') ? !empty($cursors) : count($cursors) > 1;
+
+        $grouped = [
+            'upcoming' => [],
+            'pending' => [],
+            'cancelled' => [],
+            'completed' => [],
+        ];
+
+        foreach ($appointments as $appointment) {
+            $status = $appointment['status'] ?? null;
+
+            if ($status === 'confirmed') {
+                $grouped['upcoming'][] = $appointment;
+            } elseif ($status === 'pending') {
+                $grouped['pending'][] = $appointment;
+            } elseif ($status === 'cancelled') {
+                $grouped['cancelled'][] = $appointment;
+            } elseif ($status === 'completed') {
+                $grouped['completed'][] = $appointment;
+            }
+        }
         
         return view('patient.appointments', [
-            'appointments' => $appointments,
+            'appointments' => $grouped,
             'nextCursor' => $nextCursor,
             'hasMore' => $hasMore,
             'hasPrev' => $hasPrev,
@@ -197,5 +221,111 @@ class PatientController extends Controller
 
         return redirect()->back()->with('success', 'Password updated successfully.');
 
+    }
+
+    public function conversations()
+    {
+        $uid = current_user()['uid'];
+
+        $filteredConversations = $this->firestore->query('conversations', [
+            ['field' => 'patientId', 'op' => '=', 'value' => $uid],
+        ],null, null, 'createdAt', 'DESC');
+
+        $conversations = $filteredConversations['documents'] ?? [];
+
+        return view('patient.chat', compact('conversations'));
+        
+    }
+
+    public function messages($id)
+    {
+        $messages = $this->firestore->query('messages', [
+            ['field' => 'conversationId', 'op' => '=', 'value' => $id],
+        ], null, null, 'timestamp', 'ASC');
+
+        return response()->json([
+            'messages' => $messages['documents'] ?? [],
+        ]);
+    }
+
+    public function sendMessage(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'text' => 'required_without:file|string',
+            'type' => 'nullable|string',
+            'file' => 'nullable|file|mimes:jpg,jpeg,png,webp,pdf,doc,docx,txt|max:5048',
+        ]);
+        $conversation = $this->firestore->find('conversations', $id);
+
+        $uid = current_user()['uid'];
+
+        $data = [
+            'conversationId' => $id,
+            'senderId' => $uid,
+            'receiverId' => $conversation['doctorId'],
+            'timestamp' => Carbon::now()->format('F j, Y \a\t h:i:s A') . ' UTC' . now()->format('P'),
+            'type' => 'text',
+            'text' => $request->text ?? '',
+            'imageUrl' => null,
+            'documentUrl' => null,
+            'isRead' => false,
+        ];
+
+        // HANDLE FILE
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+
+            $filePath = "/chat_images/{$id}/{$fileName}";
+
+            /** @var \Kreait\Firebase\Contract\Storage $storage */
+            $storage = app('firebase.storage');
+            $bucket = $storage->getBucket();
+
+            $bucket->upload(
+                fopen($file->getRealPath(), 'r'),
+                [
+                    'name' => $filePath,
+                    'predefinedAcl' => 'publicRead',
+                ]
+            );
+
+            $imageUrl = "https://storage.googleapis.com/" . $bucket->name() . "/" . $filePath;
+
+
+            if (str_contains($file->getMimeType(), 'image')) {
+                $data['imageUrl'] = $imageUrl;
+                $data['type'] = 'image';
+                $data['text'] = '📷 Photo';
+            } else {
+                $data['documentUrl'] = $imageUrl;
+                $data['type'] = 'document';
+                $data['text'] = '📄 Document';
+            }
+        }
+
+        // SAVE TO FIRESTORE
+        $this->firestore->create('messages', $data);
+
+        return response()->json([
+            'success' => true,
+            'message' => $data
+        ]);
+    }
+
+    public function cancelAppointment($id)
+    {
+        $this->firestore->update('appointments', $id, [
+            'status' => 'cancelled',
+        ]);
+
+        return redirect()->back()->with('success', 'Appointment cancelled successfully.');
+    }
+
+    public function appointmentDetails($id)
+    {
+        $appointment = $this->firestore->find('appointments', $id);
+
+        return response()->json($appointment);
     }
 }
