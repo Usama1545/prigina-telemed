@@ -96,9 +96,11 @@ async function handleLogin(e) {
 
     try {
         const userCredential = await auth.signInWithEmailAndPassword(email, password);
+        console.log(userCredential);
         const token = await userCredential.user.getIdToken();
+        const refreshToken = userCredential.user.refreshToken;
 
-        await sendTokenToBackend(token);
+        await sendTokenToBackend(token, refreshToken);
 
     } catch (error) {
         alert(error.message);
@@ -129,6 +131,7 @@ async function sendTokenToBackend(token, refreshToken) {
     const btn = document.getElementById('loginBtn');
     const spinner = document.getElementById('btnSpinner');
     const text = document.getElementById('btnText');
+    console.log(token, refreshToken);
 
     const response = await fetch('/auth/login', {
         method: 'POST',

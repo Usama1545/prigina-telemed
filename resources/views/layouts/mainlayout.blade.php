@@ -105,6 +105,10 @@
                                                                         firebase.initializeApp(firebaseConfig);
                                                                         const auth = firebase.auth();
                                                                     </script>
+
+                                                                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                                                                    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
                                                                     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
                                                                     <script src="https://cdnjs.cloudflare.com/ajax/libs/laravel-echo/1.15.0/echo.iife.js"></script>
                                                                     <script>
@@ -126,7 +130,7 @@
                                                                             }
                                                                         });
 
-                                                                        const userId = "{{ current_user()['uid'] }}";
+                                                                        const userId = "{{ optional(current_user())['uid'] ?? '' }}";
                                                                         Pusher.logToConsole = true;
                                                                             Echo.channel(`chat.${userId}`).listen('.new.message', (e) => {
                                                                                 showNotification(e);

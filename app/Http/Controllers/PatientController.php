@@ -328,4 +328,53 @@ class PatientController extends Controller
 
         return response()->json($appointment);
     }
+
+    public function audioCall($id)
+    {
+        $conversation = $this->firestore->find('conversations', $id);
+        if (!$conversation) {
+            abort(404);
+        }
+
+        $doctorId = $conversation['doctorId'];
+        $doctor = $this->firestore->find('doctors', $doctorId);
+
+        $user = current_user();
+
+        $token = generateZegoToken($user['uid']);
+
+        return view('patient.voice-call', [
+            'id' => $id,
+            'doctor' => $doctor,
+            'user' => $user,
+            'token' => $token
+        ]);
+    }
+
+    public function videoCall($id)
+    {
+        $conversation = $this->firestore->find('conversations', $id);
+
+        if (!$conversation) {
+            abort(404);
+        }
+
+        $doctorId = $conversation['doctorId'];
+        $doctor = $this->firestore->find('doctors', $doctorId);
+
+        $user = current_user();
+
+        if (!$user) {
+            abort(403);
+        }
+
+        $token = generateZegoToken($user['uid']);
+
+        return view('patient.video-call', [
+            'id'     => $id,
+            'doctor' => $doctor,
+            'user'   => $user,
+            'token'  => $token,
+        ]);
+    }
 }

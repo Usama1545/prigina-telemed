@@ -41,10 +41,8 @@ class FirebaseAuthMiddleware
                 return redirect('/login');
             }
 
-            // ✅ save new token
             session(['firebase_token' => $newToken]);
 
-            // ✅ verify AGAIN
             try {
                 $verified = $authService->verifyToken($newToken);
             } catch (\Exception $e) {

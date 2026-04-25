@@ -99,13 +99,13 @@
                                 <div class="chat-options ">
                                     <ul class="list-inline">
                                         <li class="list-inline-item">
-                                            <a href="{{ route('patient.audio-call', $conversation['id']) }}" class="btn btn-outline-light "
+                                            <a href="javascript:void(0)" class="btn btn-outline-light "
                                                  title="Audio Call">
                                                 <i class="fa-solid fa-phone"></i>
                                             </a>
                                         </li>
                                         <li class="list-inline-item">
-                                            <a href="{{ route('patient.video-call', $conversation['id']) }}" class="btn btn-outline-light "
+                                            <a href="javascript:void(0)" class="btn btn-outline-light "
                                                  title="Video Call">
                                                 <i class="fa-solid fa-video"></i>
                                             </a>

@@ -46,6 +46,11 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'zego' => [
+        'app_id' => env('ZEGO_APP_ID'),
+        'server_secret' => env('ZEGO_SERVER_SECRET'),
+    ],
+
     'flutterwave' => [
         'publicKey' => env('FLW_PUBLIC_KEY'),
         'secretKey' => env('FLW_SECRET_KEY'),

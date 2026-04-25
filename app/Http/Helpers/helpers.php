@@ -83,4 +83,21 @@ if (!function_exists('topSpeacilalization')) {
         return $categories;
     }
 }
+if (!function_exists('generateZegoToken')) {
+    function generateZegoToken($userId)
+    {
+        $appId = config('services.zego.app_id');
+        $serverSecret = config('services.zego.server_secret');
 
+        $payload = [
+            "user_id" => $userId,
+            "timestamp" => time(),
+            "expire" => 3600
+        ];
+
+        // Use official token generation logic (HMAC SHA256)
+        $token = base64_encode(hash_hmac('sha256', json_encode($payload), $serverSecret, true));
+
+        return $token;
+    }
+}
