@@ -1,8 +1,8 @@
 @use "sass:color";
 
 :root {
-    --primary: #316dff;
-    --secondary: #02bfff;
+    --primary: #003a8b;
+    --secondary: #1c9486;
     --light: #f4f6f8;
     --dark: #000103;
     --dark-hover: #252a30;
@@ -35,7 +35,7 @@
     --gray-600: #475569;
     --gray-700: #334155;
     --gray-800: #1E293B;
-    --gray-900: #0F172A;    
+    --gray-900: #0F172A;
     --primary-100: #EAF3FF;
     --primary-200: #D4E8FF;
     --primary-300: #BFDCFF;
@@ -53,7 +53,7 @@
     --danger-hover: #E10000;
     --light-hover: #D8D8D8;
     --purple-hover: #5C30D3;
-    --teal-hover:#2A1406;
+    --teal-hover: #2A1406;
     --primary-transparent: #E7EEFF;
     --secondary-transparent: #EFFAFF;
     --success-transparent: #F1FAF3;
@@ -68,9 +68,10 @@
     --cyan-transparent: #E9F8FB;
     --indigo-transparent: #EDEDFB;
     --orange-transparent: #FCEFEA;
-    --primary-gradient:  linear-gradient(90.08deg, #316DFF 0.09%, #02BFFF 70.28%);
+    --primary-gradient: linear-gradient(90.08deg, #316DFF 0.09%, #02BFFF 70.28%);
     --white-rgb: 255, 255, 255;
 }
+
 :root.dark-mode {
     --white: #151515;
     --dark: #EFEFEF;
@@ -110,16 +111,19 @@
     --indigo-transparent: #030332;
     --orange-transparent: #2B0D02;
     --white-rgb: 21, 21, 21;
+
     .theme-9 {
         --primary-transparent: #000C28;
     }
 }
+
 .theme-1 {
     --secondary: #1FB257;
     --secondary-hover: #1A9C4C;
     --primary-gradient: linear-gradient(90deg, #316DFF 0%, #1FB257 100%);
     --secondary-gradient: radial-gradient(84.63% 354.2% at 71.21% 68.89%, #4EDEC1 0%, #316DFF 41.35%, #316DFF 80.92%, #31436D 99.99%, #FFFFFF 100%);
 }
+
 .theme-2 {
     --primary: #1D1EE3;
     --secondary: #BFBE18;
@@ -132,6 +136,7 @@
     $box-shadow: 0px 4px 34px 0px rgba(206, 206, 206, 0.25);
     $box-shadow-md: 0px 4px 34px 0px #65656540;
 }
+
 .theme-3 {
     --primary: #025056;
     --primary-hover: #02454B;
@@ -140,6 +145,7 @@
     --secondary-hover: #CCCC22;
     --primary-gradient: linear-gradient(90deg, #03727B 0%, #E8E828 100%);
 }
+
 .theme-4 {
     --primary: #192273;
     --primary-hover: #151D65;
@@ -155,6 +161,7 @@
     --white-rgb: rgba(255, 255, 255, 0.7);
     --linear-gradient: linear-gradient(180deg, #4052FF 0%, #1F2CB1 100%);
 }
+
 .theme-5 {
     --primary: #FFC269;
     --secondary: #A96E46;
@@ -166,6 +173,7 @@
     --light-200: #3B3B3B26;
     --primary-gradient: linear-gradient(180deg, #FDA608 0%, #A96E46 100%);
 }
+
 .theme-6 {
     --primary: #C71F37;
     --primary-100: #FBDAD9;
@@ -176,6 +184,7 @@
     --primary-transparent: #FDEDEC;
     --dark-gradient: linear-gradient(180.99deg, rgba(0, 0, 0, 0) -1.04%, rgba(0, 0, 0, 0.9) 86.12%);
 }
+
 .theme-7 {
     --primary: #17A2B8;
     --primary-100: #17A2B81A;
@@ -188,6 +197,7 @@
     --linear-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #17A2B8 100%);
     $box-shadow: 0px 4px 34px 0px #CECECE40;
 }
+
 .theme-8 {
     --primary: #CF1415;
     --primary-200: #CF141533;
@@ -207,6 +217,7 @@
     --linear-gradient: linear-gradient(90.64deg, rgba(0, 0, 0, 0.7) 0.66%, rgba(0, 0, 0, 0) 99.55%);
     $box-shadow: 0px 4px 34px 0px #CECECE40;
 }
+
 .theme-9 {
     --primary: #E7A6A1;
     --primary-hover: #CB928D;
@@ -224,6 +235,7 @@
     --primary-rgb: 231, 166, 161;
     --secondary-rgb: 110, 61, 104;
 }
+
 .theme-10 {
     --primary: #1F6F5F;
     --primary-100: #F9DDED9E;
@@ -239,6 +251,7 @@
     --linear-gradient: linear-gradient(180deg, #FFFFFF 0%, #E9F3F1 100%);
     --secondary-gradient: linear-gradient(180deg, #F7FFFD 0%, #DBFFF4 100%);
 }
+
 .theme-11 {
     --primary: #2B4CD3;
     --primary-100: #1F6F5F40;
@@ -256,13 +269,14 @@
     --linear-gradient: linear-gradient(180deg, #FFFFFF 0%, #E5EAFF 100%);
     --pink-gradient: linear-gradient(110deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 50%, rgba(255, 255, 255, 0) 100%);
 }
+
 .theme-12 {
     --primary: #256AFF;
     --secondary: #04BD6C;
     --primary-hover: #1F5DE1;
     --secondary-hover: #03A65E;
     --dark: #010403;
-    --light: #EBF0FE;  
+    --light: #EBF0FE;
     --light-100: #F3FBFA;
     --light-200: #F4F6F8;
     --light-300: #C7ECD266;
@@ -512,7 +526,7 @@ $theme-colors: (
     "dark": #000103,
     "light": #F4F6F8,
     "purple": #6938EF,
-    "white":  #fff,
+    "white": #fff,
     "orange": #e04f16,
 );
 
@@ -560,7 +574,7 @@ $box-shadow-lg: 0px 4px 44px 0px rgba(187, 187, 187, 0.25);
 // Dark Mode
 $darkmode-gray-900: #D8DFEE;
 $darkmode-text: #FAFCFF;
-$darkmode-text-light:#738399;
+$darkmode-text-light: #738399;
 $darkmode-light: #1B1B1B;
 $darkmode-light-200: #121212;
 $darkmode-light-300: #141414;
@@ -621,46 +635,45 @@ $font-size-60: 60px;
 $font-size-76: 76px;
 
 /*** default values ***/
-$full__width:100%;
-$full__height:100%;
-$left:left;
-$right:right;
-$center:center;
-$block:block;
-$inline__block:inline-block;
-$table:table;
-$flex:flex;
-$none:none;
-$absolute:absolute;
-$relative:relative;
-$static:static;
-$fixed:fixed;
-$unset:unset;
-$uppercase:uppercase;
-$lowercase:lowercase;
-$capitalize:capitalize;
-$inherit:inherit;
-$auto:auto;
-$normal:normal;
-$bottom:bottom;
-$middle:middle;
-$top:top;
-$transparent:transparent;
-$no_repeat:no-repeat;
-$cover:cover;
-$pointer:pointer;
-$hidden:hidden;
-$visible:visible;
-$both:both;
-$nowrap:nowrap;
-$inline__flex:inline-flex;
+$full__width: 100%;
+$full__height: 100%;
+$left: left;
+$right: right;
+$center: center;
+$block: block;
+$inline__block: inline-block;
+$table: table;
+$flex: flex;
+$none: none;
+$absolute: absolute;
+$relative: relative;
+$static: static;
+$fixed: fixed;
+$unset: unset;
+$uppercase: uppercase;
+$lowercase: lowercase;
+$capitalize: capitalize;
+$inherit: inherit;
+$auto: auto;
+$normal: normal;
+$bottom: bottom;
+$middle: middle;
+$top: top;
+$transparent: transparent;
+$no_repeat: no-repeat;
+$cover: cover;
+$pointer: pointer;
+$hidden: hidden;
+$visible: visible;
+$both: both;
+$nowrap: nowrap;
+$inline__flex: inline-flex;
 $__column: column;
 $__collapse: collapse;
-$table__cell:table-cell;
-$space_between:space-between;
-$__wrap:wrap;
+$table__cell: table-cell;
+$space_between: space-between;
+$__wrap: wrap;
 $__flex__start: flex-start;
 $start: start;
 $end: end;
 $__collapse: collapse;
-
