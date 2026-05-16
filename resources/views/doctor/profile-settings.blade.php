@@ -4,7 +4,7 @@
 
     <!-- Page Content -->
     <div class="content doctor-content">
-        <div class="container">
+        <div class="container doc-container">
 
             <div class="row">
                 <div class="col-lg-4 col-xl-3 theiaStickySidebar">
@@ -606,6 +606,9 @@
                 gap: 8px;
             }
         }
+        .mb-6 {
+            margin-bottom: 25px !important;
+        }
     </style>
     <!-- /Page Content -->
 @endsection
@@ -696,3 +699,6 @@ document.querySelector('form').addEventListener('submit', function () {
 });
 </script>
 @endpush
+<style>
+    
+</style>

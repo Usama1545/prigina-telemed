@@ -298,6 +298,12 @@ $(document).ready(function() {
     let userScrolledUp = false;
     let isSendingMessage = false;
     let lastRenderedMessages = '';
+    let currentMessages = [];
+    let messagePage = 1;
+    let hasMoreMessages = false;
+    let isLoadingMessages = false;
+    let isLoadingOlderMessages = false;
+    const messagePageSize = 30;
 
     const chatContainer = $('#chatMessagesContainer');
     const sendBtn = $('.send-btn');
@@ -390,6 +396,12 @@ $(document).ready(function() {
         showSidebarOnMobile();
 
         currentConversationId = null;
+        window.currentConversationId = null;
+        currentMessages = [];
+        messagePage = 1;
+        hasMoreMessages = false;
+        previousMessageCount = 0;
+        lastRenderedMessages = '';
 
         $('#conversationId').val('');
 
@@ -422,6 +434,16 @@ $(document).ready(function() {
         userScrolledUp =
             (scrollTop + clientHeight)
             < (scrollHeight - 50);
+
+        if (
+            scrollTop <= 80 &&
+            currentConversationId &&
+            hasMoreMessages &&
+            !isLoadingOlderMessages &&
+            !isLoadingMessages
+        ) {
+            loadMessages(currentConversationId, false, false, messagePage, true);
+        }
     });
 
     // =========================
@@ -492,6 +514,11 @@ $(document).ready(function() {
 
         currentConversationId = conversationId;
         window.currentConversationId = conversationId;
+        currentMessages = [];
+        messagePage = 1;
+        hasMoreMessages = false;
+        previousMessageCount = 0;
+        lastRenderedMessages = '';
 
         $('#conversationId').val(conversationId);
 
@@ -547,11 +574,13 @@ $(document).ready(function() {
         const urlConvId =
             urlParts[urlParts.length - 1];
 
-        if (
+        const hasUrlConversation = (
             urlConvId &&
             urlConvId !== 'conversations' &&
             urlConvId !== 'doctor'
-        ) {
+        );
+
+        if (hasUrlConversation) {
 
             targetConversation =
                 $(`.user-list-item[data-conversation-id="${urlConvId}"]`);
@@ -562,8 +591,9 @@ $(document).ready(function() {
             !targetConversation.length
         ) {
 
-            targetConversation =
-                $('.user-list-item').first();
+            targetConversation = isMobile()
+                ? $()
+                : $('.user-list-item').first();
         }
 
         if (targetConversation.length) {
@@ -578,6 +608,17 @@ $(document).ready(function() {
                 conversationId,
                 doctorName
             );
+
+        } else if ($('.user-list-item').length) {
+
+            $('#selectedDoctorName')
+                .text('Select a conversation');
+
+            $('#messagesList').html(`
+                <div class="text-center text-muted p-5">
+                    Select a conversation to start messaging
+                </div>
+            `);
 
         } else {
 
@@ -617,6 +658,9 @@ $(document).ready(function() {
         previousMessageCount = 0;
 
         lastRenderedMessages = '';
+        currentMessages = [];
+        messagePage = 1;
+        hasMoreMessages = false;
 
         openConversation(
             conversationId,
@@ -631,22 +675,51 @@ $(document).ready(function() {
     function loadMessages(
         conversationId,
         isPolling = false,
-        forceRender = false
+        forceRender = false,
+        page = 1,
+        prependOlder = false
     ) {
 
-        if (!isPolling) {
+        if (isLoadingMessages || isLoadingOlderMessages) {
+            return;
+        }
+
+        if (!isPolling && !forceRender && !prependOlder) {
             setLoadingState();
         }
+
+        if (prependOlder) {
+            isLoadingOlderMessages = true;
+            $('#messagesList').prepend(`
+                <div class="older-messages-loader text-center py-2">
+                    <div class="spinner-border spinner-border-sm text-primary"></div>
+                </div>
+            `);
+        } else {
+            isLoadingMessages = true;
+        }
+
+        const oldScrollHeight = chatContainer[0].scrollHeight;
+        const oldScrollTop = chatContainer.scrollTop();
 
         $.ajax({
 
             url: '/conversation/' + conversationId + '/messages',
 
             type: 'GET',
+            data: {
+                limit: messagePageSize,
+                page: page,
+                latest: isPolling ? 1 : 0
+            },
 
             success: function(response) {
 
                 if (!response.messages) return;
+
+                if (conversationId !== currentConversationId) {
+                    return;
+                }
 
                 const messagesString =
                     JSON.stringify(response.messages);
@@ -661,14 +734,32 @@ $(document).ready(function() {
                 lastRenderedMessages = messagesString;
 
                 const oldMessageCount =
-                    previousMessageCount;
+                    currentMessages.length;
+
+                if (prependOlder) {
+                    currentMessages = mergeMessages(response.messages, currentMessages);
+                    messagePage = response.nextPage || page;
+                } else if (isPolling) {
+                    currentMessages = mergeMessages(currentMessages, response.messages);
+                    messagePage = Math.max(messagePage, response.nextPage || 1);
+                } else {
+                    currentMessages = response.messages;
+                    messagePage = response.nextPage || 1;
+                }
+
+                hasMoreMessages = !!response.hasMore;
 
                 const newMessageCount =
-                    response.messages.length;
+                    currentMessages.length;
 
-                renderMessages(response.messages);
+                renderMessages(currentMessages);
 
-                if (!isPolling) {
+                if (prependOlder) {
+
+                    const newScrollHeight = chatContainer[0].scrollHeight;
+                    chatContainer.scrollTop(newScrollHeight - oldScrollHeight + oldScrollTop);
+
+                } else if (!isPolling) {
 
                     scrollToBottom();
 
@@ -690,11 +781,17 @@ $(document).ready(function() {
                 markMessagesAsRead(conversationId);
             },
 
+            complete: function() {
+                isLoadingMessages = false;
+                isLoadingOlderMessages = false;
+                $('.older-messages-loader').remove();
+            },
+
             error: function(xhr) {
 
                 console.error(xhr);
 
-                if (!isPolling) {
+                if (!isPolling && !prependOlder) {
 
                     $('#messagesList').html(`
                         <div class="text-center text-danger p-4">
@@ -743,6 +840,19 @@ $(document).ready(function() {
     // =========================
     // RENDER
     // =========================
+
+    function mergeMessages(existingMessages, incomingMessages) {
+
+        const byId = new Map();
+
+        existingMessages.concat(incomingMessages).forEach(function(message) {
+            byId.set(message.id || `${message.senderId}-${message.timestamp}-${message.text}`, message);
+        });
+
+        return Array.from(byId.values()).sort(function(a, b) {
+            return new Date(a.timestamp) - new Date(b.timestamp);
+        });
+    }
 
     function renderMessages(messages) {
 

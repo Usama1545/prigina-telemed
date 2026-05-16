@@ -297,9 +297,11 @@
     .mobile-bottom-nav a.active {
         color: #2563eb;
     }
-     .container {
-            padding-bottom: 20px !important;
+
+    .doc-container {
+            padding-bottom: 25px !important;
         }
+     
 
     @media (max-width: 991px) {
 

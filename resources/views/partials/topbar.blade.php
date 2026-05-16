@@ -15,6 +15,17 @@
                     <a id="mobile_btn" href="#">
                         <i class="fa-solid fa-bars"></i>
                     </a>
+                    @if(check())
+                        <div class="mobile-header-actions d-lg-none">
+                            <a href="{{ route('dashboard') }}" aria-label="Dashboard">
+                                <i class="isax isax-category-2"></i>
+                            </a>
+                            <a href="{{ route('logout') }}" aria-label="Logout" class="logout">
+                                <i class="isax isax-logout"></i>
+                            </a>
+                        </div>
+                    @endif
+                    
                     <a href="{{ url('index') }}" class="navbar-brand logo">
                         <img src="{{ asset('build/img/logo.webp') }}" class="img-fluid" alt="Logo">
                     </a>
@@ -58,6 +69,16 @@
                             <li class="megamenu {{ request()->is('contact-us') ? 'active' : '' }}">
                                 <a href="{{ url('contact-us') }}" class="main-menu">Contact Us</a>
                             </li>
+                            @if(!check())
+                                {{-- ❌ Guest --}}
+                                <li class="megamenu d-block d-lg-none">
+                                    <a href="{{ url('login') }}" class="btn btn-md btn-primary">
+                                       <span>Get a Second Opinion</span>
+                                    </a>
+                                </li>
+                                
+                            @endif
+
 
                         </ul>
                     </div>
@@ -154,6 +175,33 @@
     white-space: nowrap;
 }
 
+.mobile-header-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 10px;
+}
+
+.mobile-header-actions a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    color: #0b5ed7;
+    border: 1px solid #e1e8f5;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(15, 43, 92, .08);
+}
+.logout {
+    color: #ff0202 !important;
+}
+
+.mobile-header-actions a i {
+    font-size: 18px;
+}
+
 @media (max-width: 1199px) {
 
     .main-nav > li > a {
@@ -161,6 +209,14 @@
         padding: 10px 8px !important;
     }
 
+}
+
+@media (max-width: 991px) {
+    .navbar-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
 }
 
 .header.header-default {
@@ -172,4 +228,3 @@
 }
 </style>
     <!-- /Header -->
-

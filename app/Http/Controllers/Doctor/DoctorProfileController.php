@@ -272,7 +272,7 @@ class DoctorProfileController extends Controller
 
         $filteredConversations = $this->firestore->query('conversations', [
             ['field' => 'doctorId', 'op' => '=', 'value' => $uid],
-        ],null, null, 'createdAt', 'DESC');
+        ],null, null, 'lastMessageTime', 'DESC');
 
         $conversations = $filteredConversations['documents'] ?? [];
 
@@ -280,14 +280,24 @@ class DoctorProfileController extends Controller
         
     }
 
-    public function messages($id)
+    public function messages(Request $request, $id)
     {
-        $messages = $this->firestore->query('messages', [
+        $limit = min(max((int) $request->query('limit', 30), 1), 50);
+        $page = max((int) $request->query('page', 1), 1);
+        $offset = ($page - 1) * $limit;
+
+        $messages = $this->firestore->queryOffset('messages', [
             ['field' => 'conversationId', 'op' => '=', 'value' => $id],
-        ], null, null, 'timestamp', 'ASC');
+        ], $limit + 1, $offset, 'timestamp', 'DESC');
+
+        $hasMore = count($messages) > $limit;
+        $messages = array_slice($messages, 0, $limit);
+        $messages = array_reverse($messages);
 
         return response()->json([
-            'messages' => $messages['documents'] ?? [],
+            'messages' => $messages,
+            'nextPage' => $hasMore ? $page + 1 : null,
+            'hasMore' => $hasMore,
         ]);
     }
 

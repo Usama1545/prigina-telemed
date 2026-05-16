@@ -100,19 +100,19 @@
 
     </a>
 
-    <a href="{{ route('patient.appointments') }}"
-       class="{{ route('patient.appointments') === url()->current() ? 'active' : '' }}">
-
-        <i class="isax isax-calendar-1"></i>
-        <span>Appointments</span>
-
-    </a>
-
     <a href="{{ route('patient.conversations') }}"
        class="{{ route('patient.conversations') === url()->current() ? 'active' : '' }}">
 
         <i class="isax isax-messages-1"></i>
         <span>Chat</span>
+
+    </a>
+
+    <a href="{{ route('patient.appointments') }}"
+       class="{{ route('patient.appointments') === url()->current() ? 'active' : '' }}">
+
+        <i class="isax isax-calendar-1"></i>
+        <span>Appointments</span>
 
     </a>
 

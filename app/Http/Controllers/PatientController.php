@@ -8,6 +8,7 @@ use App\Services\FirestoreService;
 use Illuminate\Support\Facades\Http;
 use Kreait\Firebase\Contract\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class PatientController extends Controller
@@ -21,26 +22,63 @@ class PatientController extends Controller
 
     public function dashboard(Request $request)
     {
+        $firestore = $this->firestore;
         $uid = current_user()['uid'];
         $cursor = $request->query('cursor');
 
         if ($cursor) {
             $cursor = json_decode($cursor, true);
         }
-        $pastAppointments = app(FirestoreService::class)
+
+        $futureAppointments = $this->firestore
+            ->query('appointments', [
+                ['field' => 'patientId', 'op' => '=', 'value' => $uid],
+                ['field' => 'status', 'op' => '=', 'value' => 'confirmed'],
+            ])['documents'] ?? [];
+
+        $pastAppointments = $this->firestore
             ->query('appointments', [
                 ['field' => 'patientId', 'op' => '=', 'value' => $uid],
                 ['field' => 'status', 'op' => '=', 'value' => 'completed'],
             ])['documents'] ?? [];
 
-        $futureAppointments = app(FirestoreService::class)
-            ->query('appointments', [
-                ['field' => 'patientId', 'op' => '=', 'value' => $uid],
-                ['field' => 'status', 'op' => '=', 'value' => 'confirmed'],
-            ])['documents'] ?? [];
+        $tips = Cache::remember('patient.dashboard.tips', 6000, function () use ($firestore) {
+            $result = $firestore->query('tips', [], null, null, 'createdAt', 'DESC');
+            
+            return collect($result['documents'] ?? [])->values();
+        });
+
+        $categories = Cache::remember('patient.dashboard.categories', 6000, function () use ($firestore) {
+            $result = $firestore->query('categories', [
+                [
+                    'field' => 'isActive',
+                    'op' => '=',
+                    'value' => true
+                ]
+            ]);
+
+            return collect($result['documents'] ?? [])->values();
+        });
+
+        $doctors = Cache::remember('home.doctors', 3000, function () use ($firestore) {
+            $result = $firestore->query('doctors', [
+                [
+                    'field' => 'isActive',
+                    'op' => '=',
+                    'value' => true
+                ],
+                [
+                    'field' => 'isTopDoctor',
+                    'op' => '=',
+                    'value' => true
+                ]
+            ], 10);
+
+            return collect($result['documents'] ?? [])->values();
+        });
     
 
-        return view('patient.dashboard', compact('pastAppointments', 'futureAppointments'));
+        return view('patient.dashboard', compact('pastAppointments', 'futureAppointments', 'categories', 'doctors', 'tips'));
     }
 
     public function update(Request $request)
@@ -230,7 +268,7 @@ class PatientController extends Controller
 
         $filteredConversations = $this->firestore->query('conversations', [
             ['field' => 'patientId', 'op' => '=', 'value' => $uid],
-        ],null, null, 'createdAt', 'DESC');
+        ],null, null, 'lastMessageTime', 'DESC');
 
         $conversations = $filteredConversations['documents'] ?? [];
 
@@ -238,14 +276,24 @@ class PatientController extends Controller
         
     }
 
-    public function messages($id)
+    public function messages(Request $request, $id)
     {
-        $messages = $this->firestore->query('messages', [
+        $limit = min(max((int) $request->query('limit', 30), 1), 50);
+        $page = max((int) $request->query('page', 1), 1);
+        $offset = ($page - 1) * $limit;
+
+        $messages = $this->firestore->queryOffset('messages', [
             ['field' => 'conversationId', 'op' => '=', 'value' => $id],
-        ], null, null, 'timestamp', 'ASC');
+        ], $limit + 1, $offset, 'timestamp', 'DESC');
+
+        $hasMore = count($messages) > $limit;
+        $messages = array_slice($messages, 0, $limit);
+        $messages = array_reverse($messages);
 
         return response()->json([
-            'messages' => $messages['documents'] ?? [],
+            'messages' => $messages,
+            'nextPage' => $hasMore ? $page + 1 : null,
+            'hasMore' => $hasMore,
         ]);
     }
 
