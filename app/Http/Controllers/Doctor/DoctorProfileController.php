@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Doctor;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -9,8 +9,11 @@ use Illuminate\Support\Facades\Http;
 use Kreait\Firebase\Contract\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use Stripe\Stripe;
+use Stripe\Account;
+use Stripe\AccountLink;
 
-class PatientController extends Controller
+class DoctorProfileController extends Controller
 {
     protected $firestore;
 
@@ -18,41 +21,90 @@ class PatientController extends Controller
     {
         $this->firestore = $firestore;
     }
-
     public function dashboard(Request $request)
     {
         $uid = current_user()['uid'];
-        $cursor = $request->query('cursor');
 
-        if ($cursor) {
-            $cursor = json_decode($cursor, true);
-        }
-        $pastAppointments = app(FirestoreService::class)
+        $appointments = app(FirestoreService::class)
             ->query('appointments', [
-                ['field' => 'patientId', 'op' => '=', 'value' => $uid],
-                ['field' => 'status', 'op' => '=', 'value' => 'completed'],
+                ['field' => 'doctorId', 'op' => '=', 'value' => $uid],
             ])['documents'] ?? [];
 
-        $futureAppointments = app(FirestoreService::class)
-            ->query('appointments', [
-                ['field' => 'patientId', 'op' => '=', 'value' => $uid],
-                ['field' => 'status', 'op' => '=', 'value' => 'confirmed'],
-            ])['documents'] ?? [];
-    
+        $appointments = collect($appointments)->map(function ($appointment) {
 
-        return view('patient.dashboard', compact('pastAppointments', 'futureAppointments'));
+            try {
+
+                $date = preg_replace('/\s+/', ' ', $appointment['date']);
+
+                $appointment['parsed_date'] = Carbon::parse($date);
+
+            } catch (\Exception $e) {
+
+                $appointment['parsed_date'] = null;
+            }
+
+            return $appointment;
+        });
+
+        $pastAppointments = $appointments->filter(function ($appointment) {
+            return ($appointment['status'] ?? null) === 'completed';
+        });
+
+        $futureAppointments = $appointments->filter(function ($appointment) {
+            return ($appointment['status'] ?? null) === 'confirmed';
+        });
+
+        $waitingAppointments = $appointments->filter(function ($appointment) {
+
+            return in_array(
+                $appointment['status'] ?? null,
+                ['pending', 'confirmed']
+            );
+        });
+
+        $todayAppointments = $futureAppointments->filter(function ($appointment) {
+
+            return $appointment['parsed_date']
+                ? $appointment['parsed_date']->isToday()
+                : false;
+        });
+
+        $totalEarnings = $pastAppointments->sum(function ($appointment) {
+            return $appointment['amount'] ?? 0;
+        });
+
+        $notifications = app(FirestoreService::class)
+            ->query('notifications', [
+                ['field' => 'userId', 'op' => '=', 'value' => $uid],
+            ], null, null, 'createdAt', 'DESC')['documents'] ?? [];
+
+        return view('doctor.dashboard', [
+            'appointments' => $appointments,
+            'pastAppointments' => $pastAppointments,
+            'futureAppointments' => $futureAppointments,
+            'waitingAppointments' => $waitingAppointments->count(),
+            'todayAppointments' => $todayAppointments,
+            'totalEarnings' => $totalEarnings,
+            'notifications' => $notifications,
+        ]);
     }
 
     public function update(Request $request)
     {
+
         // ✅ Validation
         $validated = $request->validate([
             'name'   => 'required|string|max:255',
             'phone'  => 'required|string|max:20',
-            'email'  => 'required|email|max:255',
-            'gender' => 'nullable|in:male,female,other',
-            'dob'    => 'nullable|date',
+            'license_number' => 'required',
+            'qualification' => 'required',
+            'experience' => 'required|string',
+            'specializations' => 'required|array|min:1',
             'image'  => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'consultationFee' => 'required|numeric',
+            'workingDays' => 'required|array',
+            'workingHours' => 'required|array',
+            'breaks' => 'nullable|string',
         ]);
 
         $uid = current_user()['uid'];
@@ -70,7 +122,7 @@ class PatientController extends Controller
             $image = $request->file('image');
             $fileName = time() . '_' . $image->getClientOriginalName();
 
-            $filePath = "profile_pictures/patients/{$uid}/{$fileName}";
+            $filePath = "profile_pictures/doctor_profiles/{$uid}/{$fileName}";
 
             /** @var \Kreait\Firebase\Contract\Storage $storage */
             $storage = app('firebase.storage');
@@ -86,10 +138,20 @@ class PatientController extends Controller
 
             $imageUrl = "https://storage.googleapis.com/" . $bucket->name() . "/" . $filePath;
 
-            $data['photoUrl'] = $imageUrl;
+            $data['profilePicture'] = $imageUrl;
         }
 
-        $this->firestore->update('patients', $uid, $data);
+        $breaks = [];
+
+        if (!empty($validated['breaks'])) {
+            $breaks = explode(',', $validated['breaks']);
+        }
+
+        $this->firestore->update('doctors', $uid, [
+            ...$data,
+            'breaks' => $breaks,
+            'consultationFee' => intval($validated['consultationFee']),
+        ]);
 
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }
@@ -97,54 +159,29 @@ class PatientController extends Controller
     public function appointments(Request $request)
     {
         $uid = current_user()['uid'];
-        $direction = $request->query('direction', 'next');
+
         $cursor = $request->query('cursor');
-        
+
         if ($cursor) {
             $cursor = json_decode($cursor, true);
         }
-        
-        // Reset session on fresh load
-        if (!$request->has('cursor') && $direction !== 'prev') {
-            session()->forget('appointment_cursors');
-            session()->put('appointment_direction', 'next');
-        }
-        
-        // Store current cursor before query
-        if ($direction === 'next' && $cursor) {
-            $cursors = session()->get('appointment_cursors', []);
-            $cursors[] = $cursor;
-            session()->put('appointment_cursors', $cursors);
-            session()->put('appointment_direction', 'next');
-        }
-        
-        // Handle previous navigation
-        if ($direction === 'prev') {
-            $cursors = session()->get('appointment_cursors', []);
-            
-            // Remove last cursor (current page)
-            array_pop($cursors);
-            
-            // Get previous cursor
-            $cursor = !empty($cursors) ? end($cursors) : null;
-            
-            // Update session
-            session()->put('appointment_cursors', $cursors);
-            session()->put('appointment_direction', 'prev');
-        }
-        
-        // Query Firestore
-        $result = $this->firestore->paginatedQuery('appointments', [
-            ['field' => 'patientId', 'op' => '=', 'value' => $uid],
-        ], 50, $cursor, 'createdAt', 'DESC');
-        
+
+        $result = $this->firestore->paginatedQuery(
+            'appointments',
+            [
+                [
+                    'field' => 'doctorId',
+                    'op' => '=',
+                    'value' => $uid
+                ],
+            ],
+            20,
+            $cursor,
+            'createdAt',
+            'DESC'
+        );
+
         $appointments = $result['documents'] ?? [];
-        $nextCursor = $result['nextCursor'] ?? null;
-        $hasMore = $result['hasMore'] ?? false;
-        
-        // For previous navigation
-        $cursors = session()->get('appointment_cursors', []);
-        $hasPrev = ($direction === 'prev') ? !empty($cursors) : count($cursors) > 1;
 
         $grouped = [
             'upcoming' => [],
@@ -154,6 +191,7 @@ class PatientController extends Controller
         ];
 
         foreach ($appointments as $appointment) {
+
             $status = $appointment['status'] ?? null;
 
             if ($status === 'confirmed') {
@@ -166,20 +204,24 @@ class PatientController extends Controller
                 $grouped['completed'][] = $appointment;
             }
         }
-        
-        return view('patient.appointments', [
+
+        return view('doctor.appointments', [
             'appointments' => $grouped,
-            'nextCursor' => $nextCursor,
-            'hasMore' => $hasMore,
-            'hasPrev' => $hasPrev,
+            'nextCursor' => $result['nextCursor'] ?? null,
+            'hasMore' => $result['hasMore'] ?? false,
         ]);
     }
 
     public function profile(Request $request)
     {
         $uid = current_user()['uid'];
-        $patient = $this->firestore->find('patients', $uid);
-        return view('patient.profile-settings', compact('patient'));
+        $doctor = $this->firestore->find('doctors', $uid);
+        $specializations = $this->firestore->get('categories');
+        $workingDays = current_user()['workingDays'] ?? [];
+        $workingHours = current_user()['workingHours'] ?? [];
+        $breaks = current_user()['breaks'] ?? [];
+        
+        return view('doctor.profile-settings', compact('doctor', 'specializations', 'workingDays', 'workingHours', 'breaks'));
     }
 
     public function changePassword(Request $request, Auth $auth)
@@ -229,12 +271,12 @@ class PatientController extends Controller
         $uid = current_user()['uid'];
 
         $filteredConversations = $this->firestore->query('conversations', [
-            ['field' => 'patientId', 'op' => '=', 'value' => $uid],
+            ['field' => 'doctorId', 'op' => '=', 'value' => $uid],
         ],null, null, 'createdAt', 'DESC');
 
         $conversations = $filteredConversations['documents'] ?? [];
 
-        return view('patient.chat', compact('conversations'));
+        return view('doctor.chat', compact('conversations'));
         
     }
 
@@ -252,7 +294,7 @@ class PatientController extends Controller
     public function sendMessage(Request $request, $id)
     {
         $validated = $request->validate([
-            'text' => 'required_without:file|string',
+            'text' => 'nullable|string',
             'type' => 'nullable|string',
             'file' => 'nullable|file|mimes:jpg,jpeg,png,webp,pdf,doc,docx,txt|max:5048',
         ]);
@@ -263,7 +305,7 @@ class PatientController extends Controller
         $data = [
             'conversationId' => $id,
             'senderId' => $uid,
-            'receiverId' => $conversation['doctorId'],
+            'receiverId' => $conversation['patientId'],
             'timestamp' => now(),
             'type' => 'text',
             'text' => $request->text ?? '',
@@ -279,7 +321,6 @@ class PatientController extends Controller
 
             $filePath = "/chat_images/{$id}/{$fileName}";
 
-            /** @var \Kreait\Firebase\Contract\Storage $storage */
             $storage = app('firebase.storage');
             $bucket = $storage->getBucket();
 
@@ -304,6 +345,12 @@ class PatientController extends Controller
                 $data['text'] = '📄 Document';
             }
         }
+        $this->firestore->update('conversations', $id, [
+            'lastMessage' => $data['text'] ,
+            'lastMessageSender' => current_user()['uid'] ?? '',
+            'lastMessageTime' => now(),
+            'updatedAt' => now(),
+        ]);
 
         // SAVE TO FIRESTORE
         $this->firestore->create('messages', $data);
@@ -381,27 +428,43 @@ class PatientController extends Controller
 
     public function createConversation($id)
     {
-        $doctor = $this->firestore->find('doctors', $id);
-        $patient = current_user();
+        $patient = $this->firestore->find('patients', $id);
+        $doctor = current_user();
 
         if (!$doctor) {
-            abort(404);
-        }
-
-        if (!$patient) {
             abort(403);
         }
 
-        $converastion = $this->firestore->query('conversations', [
-            ['field' => 'patientId', 'op' => '=', 'value' => $patient['uid']],
-            ['field' => 'doctorId', 'op' => '=', 'value' => $doctor['uid']],
-        ], null, null, 'createdAt', 'DESC');
-        if($converastion['documents'][0]['data'])
-        {
-            return redirect()->route('patient.conversations');
+        if (!$patient) {
+            abort(404);
+        }
+
+        $conversation = $this->firestore->query(
+            'conversations',
+            [
+                [
+                    'field' => 'patientId',
+                    'op' => '=',
+                    'value' => $patient['uid']
+                ],
+                [
+                    'field' => 'doctorId',
+                    'op' => '=',
+                    'value' => $doctor['uid']
+                ],
+            ],
+            null,
+            null,
+            'createdAt',
+            'DESC'
+        );
+
+        if (!empty($conversation['documents'])) {
+
+            return redirect()
+                ->route('doctor.conversations');
         }
         $docID = Str::random(60);
-
         $this->firestore->createWithId('conversations', $docID, [
             'doctorId' => $doctor['uid'],
             'doctorName' => $doctor['name'] ?? '',
@@ -423,14 +486,57 @@ class PatientController extends Controller
             'updatedAt' => now(),
         ]);
 
-        return redirect()->route('patient.conversations');
+        return redirect()
+            ->route('doctor.conversations');
     }
 
+    public function availableTimings()
+    {
+        $workingDays = current_user()['workingDays'] ?? [];
+        $workingHours = current_user()['workingHours'] ?? [];
+        $breaks = current_user()['breaks'] ?? [];
+
+        return view('doctor.available-timings', [
+            'workingDays' => $workingDays,
+            'workingHours' => $workingHours,
+            'breaks' => $breaks,
+        ]);
+    }
+
+    public function updateAvailableTimings(Request $request)
+    {
+        $uid = current_user()['uid'];
+
+        $validated = $request->validate([
+            'consultationFee' => 'required|numeric',
+            'workingDays' => 'required|array',
+            'workingHours' => 'required|array',
+            'breaks' => 'nullable|string',
+        ]);
+
+        $breaks = [];
+
+        if (!empty($validated['breaks'])) {
+            $breaks = explode(',', $validated['breaks']);
+        }
+
+        $this->firestore->update('doctors', $uid, [
+            'workingDays' => $validated['workingDays'],
+            'workingHours' => $validated['workingHours'],
+            'breaks' => $breaks,
+            'consultationFee' => intval($validated['consultationFee']),
+        ]);
+
+        return redirect()
+            ->back()
+            ->with('success', 'Available timings updated successfully.');
+    }
 
     public function markRead($id)
     {
         $this->firestore->update('conversations', $id, [
             'doctorUnreadCount' => 0,
+            'lastReadByDoctor' => now(),
         ]);
 
         $messages = $this->firestore->query('messages', [
@@ -439,12 +545,106 @@ class PatientController extends Controller
         ], null, null, 'timestamp', 'ASC');
 
         foreach ($messages['documents'] as $message) {
-
             $this->firestore->update('messages', $message['id'], [
                 'isRead' => true,
             ]);
         }
 
         return true;
+    }
+    
+    public function payout()
+    {
+        $user = current_user();
+
+        $stripeSetupComplete = false;
+
+        if (
+            isset($user['stripeAccountId']) &&
+            isset($user['stripeAccountStatus']) &&
+            isset($user['stripeDetailsSubmitted']) &&
+            isset($user['stripeOnboardingComplete']) &&
+            !empty($user['stripeAccountId']) &&
+            $user['stripeAccountStatus'] === 'active' &&
+            $user['stripeDetailsSubmitted'] === true &&
+            $user['stripeOnboardingComplete'] === true
+        ) {
+            $stripeSetupComplete = true;
+        }
+
+        return view('doctor.payout', [
+            'stripeSetupComplete' => $stripeSetupComplete,
+        ]);
+    }
+
+    public function setupPayout()
+    {
+        $user = current_user();
+
+        Stripe::setApiKey(config('services.stripe.secret'));
+
+        try {
+
+            if (!isset($user['stripeAccountId']) || !$user['stripeAccountId']) {
+
+                $account = Account::create([
+                    'type' => 'express',
+                    'country' => 'US', // change dynamically if needed
+                    'email' => $user['email'],
+                    'capabilities' => [
+                        'transfers' => ['requested' => true],
+                    ],
+                ]);
+
+                $this->firestore->update('doctors', $user['uid'], [
+                    'stripeAccountId' => $account->id,
+                    'stripeAccountStatus' => $account->charges_enabled ? 'active' : 'pending',
+                    'stripeDetailsSubmitted' => $account->details_submitted,
+                    'stripeOnboardingComplete' => false,
+                    'stripeAccountCreatedAt' => now()
+                ]);
+
+                $stripeAccountId = $account->id;
+
+            } else {
+
+                $stripeAccountId = $user['stripeAccountId'];
+            }
+            // Create onboarding link
+            $accountLink = AccountLink::create([
+                'account' => $stripeAccountId,
+                'refresh_url' => route('doctor.payout'),
+                'return_url' => route('doctor.payout.complete'),
+                'type' => 'account_onboarding',
+            ]);
+
+            return redirect($accountLink->url);
+
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function payoutComplete()
+    {
+        $user = current_user();
+
+        Stripe::setApiKey(config('services.stripe.secret'));
+
+        $account = Account::retrieve($user['stripeAccountId']);
+
+        $this->firestore->update('doctors', $user['uid'], [
+            'stripeAccountStatus' => $account->charges_enabled ? 'active' : 'pending',
+            'stripeDetailsSubmitted' => $account->details_submitted,
+            'stripeOnboardingComplete' => (
+                $account->details_submitted &&
+                $account->charges_enabled &&
+                $account->payouts_enabled
+            ),
+        ]);
+
+        return redirect()
+            ->route('doctor.payout')
+            ->with('success', 'Payout account setup completed.');
     }
 }

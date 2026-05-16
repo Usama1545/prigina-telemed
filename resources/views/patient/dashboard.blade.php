@@ -1,11 +1,9 @@
 <?php $page = 'patient-dashboard'; ?>
 @extends('layouts.mainlayout')
 @section('content')
-    @component('components.breadcrumb', ['title' => 'Patient', 'li_1' => 'Dashboard', 'li_2' => 'Patient Dashboard'])
-    @endcomponent
 
     <!-- Page Content -->
-    <div class="content">
+    <div class="content patient-content pt-3">
         <div class="container">
 
             <div class="row">
@@ -33,7 +31,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xl-6 d-flex">
+                        <div class="col-xl-12 d-flex">
                             <div class="dashboard-card w-100">
                                 <div class="dashboard-card-head">
                                     <div class="header-title">
@@ -105,7 +103,7 @@
                             </div>
                         </div>
                       
-                        <div class="col-xl-6 d-flex flex-column">
+                        <div class="col-xl-12 d-flex flex-column">
                             
                             <div class="dashboard-card flex-fill">
                                 <div class="dashboard-card-head">
@@ -160,6 +158,9 @@
         </div>
     </div>
     <style>
+        body {
+            background-color: #f5f7fb !important
+        }
         .appointment-calender-slider {
             display: flex;
             gap: 10px;
@@ -178,16 +179,54 @@
 
         .date-item {
             display: block;
-            padding: 10px 14px;
-            border-radius: 10px;
-            background: #fff6f6;
+            padding: 12px 14px;
+            border-radius: 16px;
+            background: #ffffff;
             text-align: center;
-            min-width: 70px;
+            min-width: 75px;
+            position: relative;
+            transition: all .3s ease;
+            border: 1px solid #edf2f7;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        .date-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .date-item h5 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .date-item h5 span {
+            display: block;
+            margin-top: 4px;
+            font-size: 12px;
+            font-weight: 500;
         }
 
         .date-item.active-date {
-            background: linear-gradient(45deg, #4e73df, #224abe);
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
             color: #fff;
+            box-shadow: 0 10px 25px rgba(37,99,235,.25);
+        }
+
+        .date-item.has-appointment::after {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #22c55e;
+        }
+
+        .date-item.active-date.has-appointment::after {
+            background: #fff;
         }
     </style>
     <!-- /Page Content -->
@@ -199,36 +238,158 @@ document.addEventListener("DOMContentLoaded", function () {
     const dateItems = document.querySelectorAll(".date-item");
     const cards = document.querySelectorAll(".appointment-dash-card-active");
 
+    // collect appointment dates
+    const appointmentDates = [];
+
+    cards.forEach(card => {
+
+        const cardDate = card.dataset.date;
+
+        if (!appointmentDates.includes(cardDate)) {
+            appointmentDates.push(cardDate);
+        }
+
+    });
+
+    // add dot on dates with appointments
+    dateItems.forEach(item => {
+
+        const itemDate = item.dataset.date;
+
+        if (appointmentDates.includes(itemDate)) {
+            item.classList.add("has-appointment");
+        }
+
+    });
+
+    // filter function
     function filterAppointments(selectedDate) {
+
+        let found = false;
+
         cards.forEach(card => {
+
             if (card.dataset.date === selectedDate) {
+
                 card.style.display = "block";
+                found = true;
+
             } else {
+
                 card.style.display = "none";
+
             }
+
         });
+
+        // empty state
+        let emptyState = document.querySelector(".empty-appointment-state");
+
+        if (!found) {
+
+            if (!emptyState) {
+
+                emptyState = document.createElement("div");
+
+                emptyState.classList.add("empty-appointment-state");
+
+                emptyState.innerHTML = `
+                    <div class="text-center py-5">
+                        <i class="fa-regular fa-calendar-xmark mb-3"
+                           style="font-size:40px;color:#94a3b8;"></i>
+
+                        <h5 class="mb-2">No Appointments</h5>
+
+                        <p class="text-muted mb-0">
+                            No appointments scheduled for this day
+                        </p>
+                    </div>
+                `;
+
+                document
+                    .querySelector(".apponiment-dates")
+                    .appendChild(emptyState);
+
+            }
+
+        } else {
+
+            if (emptyState) {
+                emptyState.remove();
+            }
+
+        }
+
     }
 
+    // click handling
     dateItems.forEach(item => {
+
         item.addEventListener("click", function (e) {
+
             e.preventDefault();
 
-            // remove active class
-            dateItems.forEach(i => i.classList.remove("active-date"));
+            dateItems.forEach(i => {
+                i.classList.remove("active-date");
+            });
 
-            // add active class
             this.classList.add("active-date");
 
             const selectedDate = this.dataset.date;
 
             filterAppointments(selectedDate);
+
         });
+
     });
 
-    // default load (first date)
-    const firstDate = document.querySelector(".date-item.active-date");
-    if (firstDate) {
-        filterAppointments(firstDate.dataset.date);
+    // auto select FIRST date with appointment
+    let firstAppointmentDate = null;
+
+    dateItems.forEach(item => {
+
+        const itemDate = item.dataset.date;
+
+        if (appointmentDates.includes(itemDate) && !firstAppointmentDate) {
+
+            firstAppointmentDate = item;
+
+        }
+
+    });
+
+    // remove default active
+    dateItems.forEach(i => {
+        i.classList.remove("active-date");
+    });
+
+    // if appointment exists select it
+    if (firstAppointmentDate) {
+
+        firstAppointmentDate.classList.add("active-date");
+
+        filterAppointments(firstAppointmentDate.dataset.date);
+
+        // auto scroll into view on mobile
+        firstAppointmentDate.scrollIntoView({
+            behavior: "smooth",
+            inline: "center",
+            block: "nearest"
+        });
+
+    } else {
+
+        // fallback to first date
+        const firstDate = document.querySelector(".date-item");
+
+        if (firstDate) {
+
+            firstDate.classList.add("active-date");
+
+            filterAppointments(firstDate.dataset.date);
+
+        }
+
     }
 
 });

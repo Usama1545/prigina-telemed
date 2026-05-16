@@ -87,6 +87,9 @@ class BookingController extends Controller
                 }
 
                 if (!empty($breaks)) {
+                    if(count($breaks) === 1) {
+                        $breaks = explode('-', $breaks[0]);
+                    }
                     $breakStart = strtotime($breaks[0]);
                     $breakEnd = strtotime($breaks[1]);
 
@@ -154,11 +157,13 @@ class BookingController extends Controller
         // Create DateTime objects for start and end times with the selected date
         $startDateTime = Carbon::parse($validated['selected_date'] . ' ' . date('H:i:s', $startTime), $doctor['timezone'] ?? 'UTC');
         $endDateTime = Carbon::parse($validated['selected_date'] . ' ' . date('H:i:s', $endTime), $doctor['timezone'] ?? 'UTC');
-        
+        $documentId = uniqid();
+
         // Convert to UTC for storage
         $startTimeUTC = $startDateTime->copy()->setTimezone('UTC');
         $endTimeUTC = $endDateTime->copy()->setTimezone('UTC');
         $appointmentData = [
+            'id' => $documentId,
             'doctorId' => $validated['doctor_id'],
             'doctorName' => $validated['doctor_name'],
             'doctorTimezone' => $doctor['timezone'] ?? 'UTC',
@@ -167,7 +172,7 @@ class BookingController extends Controller
             'patientTimezone' => $user['timezone'] ?? 'UTC', // Assuming user has timezone field
             'phone' => $validated['phone'],
             'email' => $validated['email'],
-            'date' => $startDateTime->format('F j, Y \a\t g:i:s A') . ' UTC' . $startDateTime->format('P'),
+            'date' => $startDateTime,
             'startTime' => $startTimeFormatted,
             'endTime' => $endTimeFormatted,
             'startTimeUTC' => $startTimeUTC,
@@ -179,24 +184,12 @@ class BookingController extends Controller
             'status' => 'pending',
             'patientLocalTime' => $startTimeFormatted . ' - ' . $endTimeFormatted,
             'doctorLocalTime' => $startDateTime->format('h:i A') . ' - ' . $endDateTime->format('h:i A'),
-            'createdAt' => Carbon::now()->format('F j, Y \a\t h:i:s A') . ' UTC' . now()->format('P'),
+            'createdAt' => now(),
+            'updatedAt' => now(),
         ];
+        $firestore = app(\App\Services\FirestoreService::class);
 
-        $appointment = $this->appointments->create($appointmentData);
-    
-        if (!isset($appointment['id']) && isset($appointment['_id'])) {
-            $appointment['id'] = $appointment['_id'];
-        }
-        
-        if (!isset($appointment['id'])) {
-          
-            $documentId = uniqid();
-            $appointment['id'] = $documentId;
-            
-            $this->appointments->update($appointment['id'], ['id' => $documentId]);
-        }
-
-        log::info($appointment);
+        $appointment = $firestore->createWithId('appointments', $documentId, $appointmentData);
 
         // Redirect based on selected gateway
         if ($validated['payment_gateway'] === 'stripe') {

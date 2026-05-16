@@ -44,4 +44,38 @@ class FirebaseAuthService
 
         return $response->json()['id_token'] ?? null;
     }
+
+    public function createUser(array $data)
+    {
+        try {
+
+            $user = $this->auth->createUser([
+                'email' => $data['email'],
+                'password' => $data['password'],
+                'displayName' => $data['name'] ?? null,
+                'emailVerified' => $data['emailVerified'] ?? false,
+                'disabled' => false,
+            ]);
+
+            if (!empty($data['claims'])) {
+                $this->auth->setCustomUserClaims(
+                    $user->uid,
+                    $data['claims']
+                );
+            }
+
+            return [
+                'success' => true,
+                'uid' => $user->uid,
+                'user' => $user,
+            ];
+
+        } catch (\Throwable $e) {
+
+            return [
+                'success' => false,
+                'message' => $e->getMessage(),
+            ];
+        }
+    }
 }

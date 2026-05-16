@@ -13947,12 +13947,12 @@ select:focus {
 }
 
 .footer.inner-footer.footer-info .footer-top {
-    padding-top: 100px;
+    padding-top: 40px;
 }
 
 @media (max-width: 991.98px) {
     .footer.inner-footer.footer-info .footer-top {
-        padding-top: 80px;
+        padding-top: 40px;
     }
 }
 

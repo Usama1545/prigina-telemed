@@ -19,7 +19,7 @@
                                 <h3>Appointment booked Successfully!</h3>
                                 <p>Appointment booked with <strong>{{ $appointment['doctorName'] }}</strong><br> on <strong>{{ $appointment['date'] }}</strong> at <strong>
                                     {{ $appointment['patientLocalTime'] }}</strong></p>
-                                <a href="{{url('index')}}" class="btn btn-primary view-inv-btn">Back to Home</a>
+                                <a href="{{route('patient.appointments')}}" class="btn btn-primary view-inv-btn">View Appointments</a>
                             </div>
                         </div>
                     </div>

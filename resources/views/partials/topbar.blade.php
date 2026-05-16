@@ -1,11 +1,11 @@
-    <div class="header-theme header-theme-two">
+    {{-- <div class="header-theme header-theme-two">
         <button type="button" id="dark-mode-toggle" class="theme-toggle moon">
             <i class="isax isax-moon5"></i>
         </button>
         <button type="button" id="light-mode-toggle" class="theme-toggle sun">
             <i class="isax isax-sun-15"></i>
         </button>
-    </div>
+    </div> --}}
 
     <!-- Header -->
     <header class="header header-default ">
@@ -16,103 +16,55 @@
                         <i class="fa-solid fa-bars"></i>
                     </a>
                     <a href="{{ url('index') }}" class="navbar-brand logo">
-                        <img src="{{ URL::asset('build/img/logo.svg') }}" class="img-fluid" alt="Logo">
+                        <img src="{{ asset('build/img/logo.webp') }}" class="img-fluid" alt="Logo">
                     </a>
                 </div>
                 <div class="header-menu">
                     <div class="main-menu-wrapper">
                         <div class="menu-header">
                             <a href="{{ url('index') }}" class="menu-logo">
-                                <img src="{{ URL::asset('build/img/logo.svg') }}" class="img-fluid" alt="Logo">
+                                <img src="{{ asset('build/img/logo.webp') }}" class="img-fluid" alt="Logo">
                             </a>
                             <a id="menu_close" class="menu-close" href="#">
                                 <i class="fas fa-times"></i>
                             </a>
                         </div>
                         <ul class="main-nav">
-                            <li class="megamenu active">
+
+                            <li class="megamenu {{ request()->is('/') ? 'active' : '' }}">
                                 <a href="{{ url('/') }}" class="main-menu">Home</a>
                             </li>
-                            <li class="megamenu {{ request()->is('doctors*') ? 'active' : '' }}">
-                                <a href="{{ url('doctors') }}" class="main-menu">Doctors</a>
-                            </li>
-                        </ul>
-                        <div class="header-items">
-                            <div class="about-popup-item border-0 pb-0">
-                                <h3 class="title">Contact Information</h3>
-                                <div class="support-item mb-3">
-                                    <div class="avatar avatar-lg bg-primary rounded-circle">
-                                        <i class="isax isax-messages-3"></i>
-                                    </div>
-                                    <div>
-                                        <p class="title">General Inquiries</p>
-                                        <h5 class="link">info@example.com</h5>
-                                    </div>
-                                </div>
-                                <div class="support-item">
-                                    <div class="avatar avatar-lg bg-primary rounded-circle">
-                                        <i class="isax isax-call-calling"></i>
-                                    </div>
-                                    <div>
-                                        <p class="title">Emergency Cases</p>
-                                        <h5 class="link">+1 24565 89856</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Item 2 -->
-                            <div class="about-popup-item border-0 pb-0">
-                                <h3 class="title">Follow Us</h3>
-                                <ul class="d-flex align-items-center gap-2 social-iyem">
-                                    <li>
-                                        <a href="#" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="social-icon"><i class="fa-brands fa-x-twitter"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
 
-                            <div class="header-items-button">
-                                @if(session('firebase_token'))
-                                    <ul class="main-nav">
-                                        <li class="megamenu ">
-                                            <a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a>
-                                        </li>
-                                        <li class="megamenu ">
-                                            <a class="dropdown-item" href="{{ route('profile') }}">Profile Settings</a>                                    </li>
-                                        <li class="megamenu ">
-                                                <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
-                                        </li>
-                                        
-                                    </ul>
-                                   
-                                    
-                                @else
-                                    {{-- ❌ Guest --}}
-                                    <li>
-                                        <a href="{{ url('login') }}" class="btn btn-md btn-primary">
-                                            <i class="isax isax-lock-1 me-2"></i><span>Sign In</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ url('register') }}" class="btn btn-md btn-secondary">
-                                            <i class="isax isax-user-tick me-2"></i><span>Register</span>
-                                        </a>
-                                    </li>
-                                @endif
-                            </div>
-                        </div>
+                            <li class="megamenu {{ request()->is('how-it-works') ? 'active' : '' }}">
+                                <a href="{{ url('how-it-works') }}" class="main-menu">How It Works</a>
+                            </li>
+
+                            <li class="megamenu {{ request()->is('doctors') ? 'active' : '' }}">
+                                <a href="{{ url('doctors') }}" class="main-menu">Specialists</a>
+                            </li>
+
+                            <li class="megamenu {{ request()->is('for-patients') ? 'active' : '' }}">
+                                <a href="{{ url('for-patients') }}" class="main-menu">For Patients</a>
+                            </li>
+
+                            <li class="megamenu {{ request()->is('for-doctors') ? 'active' : '' }}">
+                                <a href="{{ url('for-doctors') }}" class="main-menu">For Doctors</a>
+                            </li>
+
+                            <li class="megamenu {{ request()->is('about-us') ? 'active' : '' }}">
+                                <a href="{{ url('about-us') }}" class="main-menu">About Us</a>
+                            </li>
+
+                            <li class="megamenu {{ request()->is('contact-us') ? 'active' : '' }}">
+                                <a href="{{ url('contact-us') }}" class="main-menu">Contact Us</a>
+                            </li>
+
+                        </ul>
                     </div>
                 </div>
 
                 <ul class="nav header-navbar-rht">
-                    @if(session('firebase_token'))
+                    @if(check())
                         <li class="dropdown has-arrow logged-item">
                             <a href="#" data-bs-toggle="dropdown">
                                 <span class="user-img">
@@ -133,8 +85,7 @@
                             <div class="dropdown-menu dropdown-menu-end">
                                 
                                 <a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a>
-                                <a class="dropdown-item" href="{{ route('profile') }}">Profile
-                                    Settings</a>
+
                                 <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
                             </div>
                         </li>
@@ -143,21 +94,13 @@
                         {{-- ❌ Guest --}}
                         <li>
                             <a href="{{ url('login') }}" class="btn btn-md btn-primary">
-                                <i class="isax isax-lock-1 me-2"></i><span>Sign In</span>
+                                <i class="isax isax-lock-1 me-2"></i><span>Get a Second Opinion</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ url('register') }}" class="btn btn-md btn-secondary">
-                                <i class="isax isax-user-tick me-2"></i><span>Register</span>
-                            </a>
-                        </li>
+                        
                     @endif
 
-                    <li>
-                        <a href="#" class="details-btn" data-bs-toggle="offcanvas" data-bs-target="#support_item">
-                            <i class="isax isax-menu5"></i>
-                        </a>
-                    </li>
+                    
 
                 </ul>
             </nav>
@@ -184,5 +127,49 @@
         @endif
 
     </div>
+    <div id="js-alert-container"
+     style="position: fixed; top: 20px; right: 20px; z-index: 9999; min-width: 300px;">
+</div>
+<style>
+    .header-nav {
+    min-height: 80px;
+}
+
+.main-nav {
+    gap: 6px;
+}
+
+.main-nav > li > a {
+    white-space: nowrap;
+    font-size: 15px;
+    padding: 10px 12px !important;
+}
+
+.header-navbar-rht {
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.header-navbar-rht .btn {
+    white-space: nowrap;
+}
+
+@media (max-width: 1199px) {
+
+    .main-nav > li > a {
+        font-size: 14px;
+        padding: 10px 8px !important;
+    }
+
+}
+
+.header.header-default {
+    position: sticky !important;
+    top: 0;
+    z-index: 999;
+    background: #fff;
+    box-shadow: 0 2px 20px rgba(0,0,0,.04);
+}
+</style>
     <!-- /Header -->
 

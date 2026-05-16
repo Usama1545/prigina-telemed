@@ -1,11 +1,9 @@
 <?php $page = 'profile-settings'; ?>
 @extends('layouts.mainlayout')
 @section('content')
-    @component('components.breadcrumb', ['title' => 'Patient', 'li_1' => 'Settings', 'li_2' => 'Settings'])
-    @endcomponent
 
     <!-- Page Content -->
-    <div class="content">
+    <div class="content patient-content">
         <div class="container">
             <div class="row">
 

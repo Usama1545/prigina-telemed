@@ -2,53 +2,52 @@
 @extends('layouts.mainlayout')
 @section('content')
     <!-- Page Content -->
-    <div class="page-wrapper chat-page-wrapper ">
+    <div class="page-wrapper chat-page-wrapper mt-3">
         <div class="container">
-            <div class="content patient-content">
+            <div class="content doctor-content">
+                @include('partials.doctor-sidebar')
                 <div class="chat-sec">
-                    @include('partials.patient-sidebar')
-
 
                     <!-- sidebar group -->
                     <div class="sidebar-group left-sidebar chat_sidebar" id="chatSidebar">
                         <div id="chats" class="left-sidebar-wrap sidebar active slimscroll">
-                            <div class="slimscroll-active-sidebar">
-                                <!-- Left Chat Title -->
-                                <div class="left-chat-title all-chats">
-                                    <div class="left-chat-title all-chats d-flex align-items-center justify-content-between">
+                            
+                            <!-- Left Chat Title -->
+                            <div class="left-chat-title all-chats">
+                                <div class="left-chat-title all-chats d-flex align-items-center justify-content-between">
 
-                                        <div class="setting-title-head">
-                                            <h4 class="mb-0">All Chats</h4>
-                                        </div>
-
-                                        <div>
-                                            <a href="{{ route('patient.dashboard') }}"
-                                            class="btn btn-sm btn-primary text-white">
-
-                                                <i class="fa-solid fa-arrow-left me-1"></i>
-                                                Dashboard
-
-                                            </a>
-                                        </div>
-
+                                    <div class="setting-title-head">
+                                        <h4 class="mb-0">All Chats</h4>
                                     </div>
-                                    <div class="add-section">
-                                        <form>
-                                            <div class="user-chat-search">
-                                                <span class="form-control-feedback"><i class="fa-solid fa-magnifying-glass"></i></span>
-                                                <input type="text" name="chat-search" placeholder="Search" class="form-control">
-                                            </div>
-                                        </form>
+
+                                    <div>
+                                        <a href="{{ route('doctor.dashboard') }}"
+                                        class="btn btn-sm btn-primary text-white">
+
+                                            <i class="fa-solid fa-arrow-left me-1"></i>
+                                            Dashboard
+
+                                        </a>
                                     </div>
+
                                 </div>
-
+                                <div class="add-section">
+                                    <form>
+                                        <div class="user-chat-search">
+                                            <span class="form-control-feedback"><i class="fa-solid fa-magnifying-glass"></i></span>
+                                            <input type="text" name="chat-search" placeholder="Search" class="form-control">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="slimscroll-active-sidebar">
                                 <div class="sidebar-body chat-body" id="chatsidebar">
                                     <ul class="user-list">
                                         @foreach ($conversations as $index => $conversation)
                                             <li class="user-list-item" data-conversation-id="{{ $conversation['id'] }}">
                                                 <a href="javascript:void(0);" class="conversation-item">
                                                     @php
-                                                        $nameParts = explode(' ', trim($conversation['doctorName']));
+                                                        $nameParts = explode(' ', trim($conversation['patientName']));
                                                         
                                                         $initials = collect($nameParts)
                                                             ->map(fn($part) => strtoupper(substr($part, 0, 1)))
@@ -56,22 +55,34 @@
                                                             ->implode('');
                                                     @endphp
 
-                                                    <div class="avatar">
+                                                    <div class="avatar ">
                                                         <div class="avatar-initials">
                                                             {{ $initials }}
                                                         </div>
                                                     </div>
                                                     <div class="users-list-body">
                                                         <div>
-                                                            <h5>{{ $conversation['doctorName'] }}</h5>
+                                                            <h5>{{ $conversation['patientName'] }}</h5>
                                                             <p>{{ $conversation['lastMessage'] ?? "" }}</p>
                                                         </div>
+                                                        @if($conversation['lastMessageTime'])
                                                         <div class="last-chat-time">
                                                             <small class="text-muted">{{ Carbon\Carbon::parse($conversation['lastMessageTime'])->diffForHumans() ?? $conversation['lastMessageTime'] }}</small>
-                                                            <div class="chat-pin">
-                                                                <i class="fa-solid fa-check-double green-check"></i>
-                                                            </div>
+                                                            @if($conversation['doctorUnreadCount'] > 0)
+                                                                <div class="chat-pin">
+                                                                    <span class="unread badge badge-primary">{{ $conversation['doctorUnreadCount'] }}</span>
+                                                                </div>
+                                                            @elseif($conversation['patientUnreadCount'] == 0)
+                                                                <div class="chat-pin">
+                                                                    <i class="fa-solid fa-check-double text-primary"></i>
+                                                                </div>
+                                                            @else
+                                                                <div class="chat-pin">
+                                                                    <i class="fi fi-rr-check text-muted"></i>
+                                                                </div>
+                                                            @endif
                                                         </div>
+                                                        @endif
                                                     </div>
                                                 </a>
                                             </li>
@@ -97,7 +108,7 @@
                                         </ul>
                                     </div>
                                     <div class="avatar-placeholder">
-                                        <i class="fa-solid fa-user-doctor" style="font-size: 40px; color: #007bff;"></i>
+                                        <i class="fa-solid fa-user" style="font-size: 40px; color: #007bff;"></i>
                                     </div>
                                     <div class="mt-1">
                                         <h5 id="selectedDoctorName">Select a conversation</h5>
@@ -184,12 +195,10 @@
     </div>
     
     <style>
-         body {
-            background-color: #f5f7fb !important
-        }
-        .patient-sidebar {
+        .doctor-sidebar {
             display: none;
         }
+        
         /* Desktop Styles */
         .chat-sec {
             display: flex;
@@ -223,7 +232,6 @@
         }
         /* Mobile Styles */
         @media (max-width: 991px) {
-           
             .chat-sec {
                 height: calc(100vh - 170px);
             }
@@ -251,11 +259,15 @@
         .user-list-item {
             cursor: pointer;
             transition: all 0.2s ease;
+            margin-bottom: 0px;
         }
 
         .user-list-item.active {
             background: #f0f7ff;
+            /* border-left: 4px solid #0d6efd; */
+            border-radius: 0px;
         }
+
         .avatar-initials {
             width: 45px;
             height: 45px;
@@ -268,6 +280,10 @@
             font-weight: 600;
             font-size: 15px;
             text-transform: uppercase;
+        }
+
+        .doctor-content.content {
+            padding: 0px !important;
         }
 
         /* ... rest of your existing CSS ... */
@@ -385,7 +401,7 @@ $(document).ready(function() {
         window.history.pushState(
             {},
             '',
-            '/patient/conversations'
+            '/doctor/conversations'
         );
     });
 
@@ -457,7 +473,7 @@ $(document).ready(function() {
     function markMessagesAsRead(conversationId) {
 
         $.ajax({
-            url: '/patient/conversation/' + conversationId + '/mark-read',
+            url: '/doctor/conversation/' + conversationId + '/mark-read',
             type: 'POST',
             data: {
                 _token: '{{ csrf_token() }}'
@@ -498,14 +514,14 @@ $(document).ready(function() {
         }
 
         const newUrl =
-            '/patient/conversations/' + conversationId;
+            '/doctor/conversations/' + conversationId;
 
         window.history.pushState(
             { conversationId: conversationId },
             '',
             newUrl
         );
-
+        setLoadingState();
         loadMessages(conversationId, false, true);
 
         markMessagesAsRead(conversationId);
@@ -618,7 +634,7 @@ $(document).ready(function() {
         forceRender = false
     ) {
 
-        if (!isPolling && !forceRender) {
+        if (!isPolling) {
             setLoadingState();
         }
 
@@ -768,7 +784,7 @@ $(document).ready(function() {
                 <div class="chats ${isOwnMessage ? 'chats-right' : ''}">
                     
                     <div class="chat-avatar">
-                        <i class="fa-solid ${isOwnMessage ? 'fa-user' :  'fa-user-doctor' }"
+                        <i class="fa-solid ${isOwnMessage ? 'fa-user-doctor' :  'fa-user' }"
                             style="font-size: 32px; color: ${isOwnMessage ? '#28a745' : '#0d6efd'};">
                         </i>
                     </div>
@@ -894,7 +910,7 @@ $(document).ready(function() {
         $.ajax({
 
             url:
-                '/patient/conversation/' +
+                '/doctor/conversation/' +
                 conversationId +
                 '/send',
 
@@ -966,7 +982,7 @@ $(document).ready(function() {
         $.ajax({
 
             url:
-                '/patient/conversation/' +
+                '/doctor/conversation/' +
                 conversationId +
                 '/send',
 

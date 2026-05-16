@@ -103,7 +103,7 @@ async function handleLogin(e) {
         await sendTokenToBackend(token, refreshToken);
 
     } catch (error) {
-        alert(error.message);
+        showAlert(error.message);
 
         // stop loading on error
         btn.disabled = false;
@@ -124,7 +124,7 @@ async function googleLogin() {
         await sendTokenToBackend(token, refreshToken);
 
     } catch (error) {
-        alert(error.message);
+        showAlert(error.message);
     }
 }
 async function sendTokenToBackend(token, refreshToken) {
@@ -152,7 +152,7 @@ async function sendTokenToBackend(token, refreshToken) {
     if (response.ok) {
         window.location.href = '/dashboard';
     } else {
-        alert(data.error || 'Login failed');
+        showAlert(data.error || 'Login failed');
 
         btn.disabled = false;
         spinner.classList.add('d-none');

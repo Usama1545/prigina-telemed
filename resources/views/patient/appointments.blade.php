@@ -1,11 +1,9 @@
 <?php $page = 'patient-appoitnments'; ?>
 @extends('layouts.mainlayout')
 @section('content')
-    @component('components.breadcrumb', ['title' => 'Patient', 'li_1' => 'Appointments', 'li_2' => 'Appointments'])
-    @endcomponent
 
     <!-- Page Content -->
-    <div class="content doctor-content">
+    <div class="content patient-content ">
         <div class="container">
 
             <div class="row">
@@ -481,6 +479,9 @@
         </div>
     </div>
     <style>
+         body {
+            background-color: #f5f7fb !important
+        }
         .badge {
             padding: 0.75rem 0.45rem;
             font-weight: 800;
