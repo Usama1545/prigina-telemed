@@ -130,7 +130,7 @@
                             <div class="col-xxl-4 col-md-6">
                                 <div class="card">
                                     <div class="card-img card-img-hover">
-                                        <a href="{{ url('doctor-profile', $doctor['uid']) }}"><img
+                                        <a href="{{ route('doctor-details', $doctor['uid']) }}"><img
                                                 src="{{ $doctor['profilePicture'] ?? URL::asset('build/img/doctor-grid/doctor-grid-01.jpg') }}"
                                                 alt="" class="dr-card-img"></a>
                                         <div class="grid-overlay-item">
@@ -143,7 +143,7 @@
                                         <div class="d-flex active-bar">
                                             <a href="#"
                                                 class="text-indigo fw-medium fs-14">{{ $doctor['specializations'][0] }}</a>
-                                            @if ($doctor['available'] == true)
+                                            @if(($doctor['available'] ?? false) === true)
                                                 <span class="badge bg-success-light d-inline-flex align-items-center">
                                                     <i class="fa-solid fa-circle fs-5 me-1"></i>
                                                     Available
@@ -158,7 +158,7 @@
                                         <div class="p-3 pt-0">
                                             <div class="doctor-info-detail">
                                                 <h3 class="mb-1 custom-title"><a
-                                                        href="{{ url('doctor-details', $doctor['uid']) }}">{{ $doctor['name'] }}</a>
+                                                        href="{{ route('doctor-details', $doctor['uid']) }}">{{ $doctor['name'] }}</a>
                                                 </h3>
                                                 <div class="doctor-location">
                                                     <p class="location-title"></i><span class="fw-medium">Experience:
@@ -167,11 +167,14 @@
 
                                                 </div>
                                             </div>
+                                            
                                             <div class="d-flex align-items-center justify-content-between">
+                                                @if(session('firebase_token'))
                                                 <div>
                                                     <p class="mb-1">Consultation Fees</p>
                                                     <div class="price">{{ $doctor['consultationFee'] }}</div>
                                                 </div>
+                                                @endif
                                                 <a href="{{ url('doctor-details', $doctor['uid']) }}"
                                                     class="btn btn-md btn-dark d-inline-flex align-items-center rounded-pill">
                                                     <i class="isax isax-calendar-1 me-2"></i>

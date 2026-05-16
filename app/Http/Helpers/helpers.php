@@ -1,5 +1,6 @@
 <?php
 use App\Services\FirestoreService;
+use App\Services\FirebaseAuthService;
 
 if (!function_exists('current_user')) {
     function current_user()
@@ -99,5 +100,79 @@ if (!function_exists('generateZegoToken')) {
         $token = base64_encode(hash_hmac('sha256', json_encode($payload), $serverSecret, true));
 
         return $token;
+    }
+}
+
+if (!function_exists('user')) {
+
+    function user()
+    {
+        $token = session('firebase_token');
+
+        if (!$token) {
+            return null;
+        }
+
+        $authService = app(FirebaseAuthService::class);
+
+        try {
+
+            $verified = $authService->verifyToken($token);
+
+        } catch (\Exception $e) {
+
+            $refreshToken = session('firebase_refresh_token');
+
+            if (!$refreshToken) {
+                session()->forget([
+                    'firebase_token',
+                    'firebase_refresh_token',
+                ]);
+
+                return null;
+            }
+
+            $newToken = $authService->refreshIdToken($refreshToken);
+
+            if (!$newToken) {
+
+                session()->forget([
+                    'firebase_token',
+                    'firebase_refresh_token',
+                ]);
+
+                return null;
+            }
+
+            session([
+                'firebase_token' => $newToken
+            ]);
+
+            try {
+
+                $verified = $authService->verifyToken($newToken);
+
+            } catch (\Exception $e) {
+
+                session()->forget([
+                    'firebase_token',
+                    'firebase_refresh_token',
+                ]);
+
+                return null;
+            }
+        }
+
+        return [
+            'uid' => $verified->claims()->get('sub'),
+            'role' => $verified->claims()->get('role'),
+            'email' => $verified->claims()->get('email'),
+        ];
+    }
+}
+if (!function_exists('check')) {
+    function check()
+    {
+        return user() !== null;
     }
 }

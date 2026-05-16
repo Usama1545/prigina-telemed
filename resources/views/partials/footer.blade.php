@@ -3,43 +3,9 @@
         <div class="footer-top bg-primary" style="background: var(--primary);">
             <div class="container">
                 <div class="row">
-                    <div class="col-xl-8">
-                        <div class="row">
-                            <div class="col-lg-6 col-md-3 col-sm-6">
-                                <div class="footer-widget footer-menu text-white">
-                                    <h6 class="footer-title text-white">Company</h6>
-                                    <ul>
-                                        <li><a class="text-white" href="{{ url('about-us') }}">About</a></li>
-                                        <li><a class="text-white" href="{{ url('contact-us') }}">Contact</a></li>
-                                        <li><a class="text-white" href="{{ url('doctors') }}">Doctors</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-3 col-sm-6">
-                                <div class="footer-widget footer-menu">
-                                    <h6 class="footer-title text-white">Specialities</h6>
-                                    <ul>
-                                        @foreach(topSpeacilalization() as $specialization)
-                                            <li><a class="text-white" href="{{ url('/doctors?category='.$specialization['name'].'') }}">{{ $specialization['name'] }}</a></li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            </div>
-                           
-                        </div>
-                    </div>
                     <div class="col-xl-4 col-md-7">
                         <div class="footer-widget">
-                            <h6 class="footer-title text-white">Newsletter</h6>
-                            <p class="mb-2 text-dark text-white">Subscribe & Stay Updated from the PriGina Global Telemed</p>
-                            <div class="subscribe-input">
-                                <form action="#">
-                                    <input type="email" class="form-control" placeholder="Enter Email Address">
-                                    <button type="submit"
-                                        class="btn btn-md btn-primary-gradient d-inline-flex align-items-center"><i
-                                            class="isax isax-send-25 me-1 "></i>Send</button>
-                                </form>
-                            </div>
+                            <img src="{{ asset('build/img/logo.webp') }}" alt="logo" class="img-fluid" style="max-width: 300px;">
                             <div class="social-icon">
                                 <h6 class="mb-3 footer-title text-white">Connect With Us</h6>
                                 <ul>
@@ -62,6 +28,53 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-xl-8">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6">
+                                <div class="footer-widget footer-menu text-white">
+                                    <h6 class="footer-title text-white">For Patients</h6>
+                                    <ul>
+                                        <li><a class="text-white" href="{{ route('for-patients') }}">How It Works</a></li>
+                                        <li><a class="text-white" href="{{ route('patient-faqs') }}">Faqs</a></li>
+                                        <li><a class="text-white" href="{{ route('patient-reviews') }}">Patient Stories</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6">
+                                <div class="footer-widget footer-menu text-white">
+                                    <h6 class="footer-title text-white">For Doctors</h6>
+                                    <ul>
+                                        <li><a class="text-white" href="{{ route('for-doctors') }}">Join Our Network</a></li>
+                                        <li><a class="text-white" href="{{ route('doctor-faqs') }}">FAQs</a></li>
+                                        <li><a class="text-white" href="{{ route('doctor-reviews') }}">Doctor Stories</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6">
+                                <div class="footer-widget footer-menu text-white">
+                                    <h6 class="footer-title text-white">Company</h6>
+                                    <ul>
+                                        <li><a class="text-white" href="{{ route('about-us') }}">About Us</a></li>
+                                        <li><a class="text-white" href="{{ url('our-mission') }}">Our Mission</a></li>
+                                        <li><a class="text-white" href="{{ route('contact-us') }}">Contact Us</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6">
+                                <div class="footer-widget footer-menu text-white">
+                                    <h6 class="footer-title text-white">Legal</h6>
+                                    <ul>
+                                        <li><a class="text-white" href="{{ route('privacy-policy') }}">Privacy Policy</a></li>
+                                        <li><a class="text-white" href="{{ route('terms-conditions') }}">Terms & Conditions</a></li>
+                                        <li><a class="text-white" href="{{ route('risk-disclaimer') }}">Risk Disclaimer</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                           
+                        </div>
+                    </div>
+                   
                 </div>
             </div>
         </div>
@@ -77,7 +90,6 @@
                         <ul class="policy-menu mb-0">
                             <li><a href="#">Legal Notice</a></li>
                             <li><a href="{{ url('privacy-policy') }}">Privacy Policy</a></li>
-                            <li><a href="#">Refund Policy</a></li>
                         </ul>
                     </div>
       

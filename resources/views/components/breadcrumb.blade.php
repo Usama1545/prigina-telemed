@@ -1,5 +1,5 @@
 <!-- Breadcrumb -->
-<div class="breadcrumb-bar">
+<div class="breadcrumb-bar ">
     <div class="container">
         <div class="row align-items-center inner-banner">
             <div class="col-md-12 col-12 text-center">

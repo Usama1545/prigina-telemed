@@ -20,6 +20,7 @@
 <!-- Fontawesome CSS -->
 <link rel="stylesheet" href="{{URL::asset('build/plugins/fontawesome/css/fontawesome.min.css')}}">
 <link rel="stylesheet" href="{{URL::asset('build/plugins/fontawesome/css/all.min.css')}}">
+<link rel='stylesheet' href='https://cdn-uicons.flaticon.com/4.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
 
 <!-- Iconsax CSS-->
 <link rel="stylesheet" href="{{URL::asset('build/css/iconsax.css')}}">

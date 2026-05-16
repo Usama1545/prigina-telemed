@@ -7,7 +7,8 @@
 :root {
     --primary: #003a8b;
     --secondary: #1c9486;
-    --light: #f4f6f8;
+    --light-secondary: #A9DFD9;
+    --light: #f3f8fe;
     --dark: #000103;
     --dark-hover: #252a30;
     --white: #fff;
@@ -1215,6 +1216,7 @@ button:focus {
 @media (max-width: 991.98px) {
     .container {
         max-width: 100%;
+        padding-bottom: 12px
     }
 }
 
@@ -1357,6 +1359,14 @@ p:last-child {
 
 .bg-secondary {
     background-color: var(--secondary) !important;
+}
+
+.icon-soft-secondary {
+    background: color-mix(in srgb, var(--secondary) 15%, white);
+}
+
+.icon-soft-primary {
+    background: color-mix(in srgb, var(--primary) 15%, white);
 }
 
 .bg-info {
@@ -7944,7 +7954,7 @@ button.bg-danger:hover {
     .header .header-nav .main-nav li a {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
     }
 }
 
@@ -8055,11 +8065,11 @@ button.bg-danger:hover {
     margin: unset !important;
 }
 
-@media (max-width: 991.98px) {
+/* @media (max-width: 991.98px) {
     .header .header-nav .header-navbar-rht {
         display: none;
     }
-}
+} */
 
 .header .header-nav .header-navbar-rht li {
     padding-right: 20px;
@@ -12714,7 +12724,7 @@ header .header-nav .main-nav>li>a {
     header .header-nav .main-nav>li>a span {
         width: 32px;
         height: 32px;
-        border: 1px solid var(--gray-100);
+        /* border: 1px solid var(--gray-100); */
         border-radius: 6px;
         display: flex;
         align-items: center;
@@ -12761,25 +12771,45 @@ header .header-nav .header-navbar-rht li .btn {
 }
 
 @media (max-width: 1399.98px) {
-    header .header-nav .header-navbar-rht li .btn {
-        display: none;
-    }
-}
 
-@media (max-width: 1199.98px) {
     header .header-nav .header-navbar-rht li .btn {
-        display: none;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 46px;
+        min-width: 46px;
         height: 46px;
+        padding: 0 16px;
+        border-radius: 50px;
+        white-space: nowrap;
     }
+
 }
 
 @media (max-width: 1199.98px) {
+
+    header .header-nav .header-navbar-rht li .btn {
+        width: 46px;
+        min-width: 46px;
+        padding: 0;
+        border-radius: 50%;
+    }
+
     header .header-nav .header-navbar-rht li .btn span {
         display: none;
     }
+
+    header .header-nav .header-navbar-rht li .btn i {
+        margin-right: 0 !important;
+    }
+
+}
+
+@media (max-width: 991.98px) {
+
+    .header-navbar-rht {
+        display: none !important;
+    }
+
 }
 
 header .header-nav .header-navbar-rht li .details-btn {
@@ -13947,13 +13977,7 @@ select:focus {
 }
 
 .footer.inner-footer.footer-info .footer-top {
-    padding-top: 100px;
-}
-
-@media (max-width: 991.98px) {
-    .footer.inner-footer.footer-info .footer-top {
-        padding-top: 80px;
-    }
+    padding-top: 40px;
 }
 
 .footer.inner-footer .social-icon ul {
@@ -25909,11 +25933,10 @@ select:focus {
 
 /****** UTILS ******/
 .profile-sidebar {
-    background-color: var(--white);
-    border: 1px solid var(--white);
+    background-color: #fefefe00 !important;
+    border: 0cm solid var(--white) !important;
     margin-bottom: 24px;
     overflow: hidden;
-    box-shadow: 0px 4px 34px 0px rgba(206, 206, 206, 0.25);
     border-radius: 10px;
 }
 
@@ -26292,7 +26315,7 @@ select:focus {
 
 .profile-sidebar.profile-sidebar-new .widget-profile .profile-info-widget::after {
     content: "";
-    background-image: url(../img/doctors-dashboard/doctor-sidebar-bg.jpg);
+    background-image: url(../img/back.jpeg);
     width: 100%;
     height: 148px;
     border-radius: 10px 10px 0 0;
@@ -26344,6 +26367,7 @@ select:focus {
 
 .dashboard-widget-box {
     border: 1px solid var(--gray-transparent);
+    background: var(--white);
     border-radius: 10px;
     padding: 24px;
     display: flex;
@@ -26398,6 +26422,7 @@ select:focus {
 
 .dashboard-card {
     border: 1px solid var(--gray-200);
+    background: var(--white);
     padding: 0;
     border-radius: 10px;
     margin-bottom: 24px;
@@ -27300,9 +27325,8 @@ select:focus {
 
 /****** UTILS ******/
 .profile-sidebar {
-    background-color: var(--white);
-    border: 1px solid var(--gray-200);
-    box-shadow: 0px 4px 34px 0px rgba(206, 206, 206, 0.25);
+    background-color: var(--light-transparent);
+    border: 0px solid var(--gray-200);
     margin-bottom: 24px;
     overflow: hidden;
 }
@@ -28265,7 +28289,7 @@ select:focus {
 .main-chat-blk .chat-page-wrapper .left-chat-title {
     padding: 12px;
     border-bottom: 1px solid var(--gray-200);
-    min-height: 72px;
+    /* min-height: 72px; */
 }
 
 .main-chat-blk .chat-page-wrapper .setting-title-head h4 {
@@ -28403,14 +28427,15 @@ select:focus {
     -ms-transition: all 0.5s ease;
     background: var(--white);
     border: 1px solid var(--gray-transparent);
-    border-radius: 10px;
-    height: calc(100vh - 100px);
+    border-radius: 0px;
+    height: calc(100vh - 150px);
     flex-direction: column;
 }
 
 @media (max-width: 991.98px) {
     .main-chat-blk .chat {
         display: none !important;
+        height: calc(100vh - 170px) !important;
     }
 }
 
@@ -28498,7 +28523,7 @@ select:focus {
 .main-chat-blk .chat .chat-body {
     flex: 1;
     padding: 24px;
-    padding-bottom: 40px;
+    padding-bottom: 60px;
 }
 
 .main-chat-blk .chat .chat-body:not(.no-message) {
@@ -28569,8 +28594,8 @@ select:focus {
 
 .main-chat-blk .chat .chat-body .messages .chats .message-content {
     border-radius: 0px 15px 15px 15px;
-    background: var(--light-transparent);
-    padding: 14px 20px;
+    background: var(--gray-200);
+    padding: 8px 10px;
     color: var(--gray-900);
     font-size: 14px;
     font-weight: 400;
@@ -28632,7 +28657,7 @@ select:focus {
 
 .main-chat-blk .chat .chat-body .messages .chats.chats-right .message-content {
     border-radius: 15px 0px 15px 15px;
-    background: var(--light-transparent);
+    background: var(--);
     color: var(--gray-900);
     padding: 15px;
 }
@@ -31676,7 +31701,7 @@ select:focus {
     position: relative;
     z-index: 99;
     width: 400px;
-    margin-right: 24px;
+    /* margin-right: 24px; */
 }
 
 @media (max-width: 991.98px) {
@@ -31700,7 +31725,7 @@ select:focus {
     flex-direction: column;
     flex: 1;
     border: 1px solid var(--gray-transparent);
-    border-radius: 10px;
+    border-radius: 0px;
     margin-right: 24px;
 }
 
@@ -31757,7 +31782,7 @@ select:focus {
 .main-chat-blk .sidebar-body {
     flex: 1;
     overflow: auto;
-    padding: 24px 24px 10px;
+    /* padding: 24px 24px 10px; */
     width: 100%;
 }
 
@@ -31804,10 +31829,10 @@ select:focus {
     display: flex;
     display: -webkit-flex;
     cursor: pointer;
-    margin-bottom: 15px;
+    margin-bottom: 0;
     border: 1px solid var(--gray-200);
     box-shadow: none;
-    border-radius: 5px;
+    border-radius: 0px;
     position: relative;
     transition: ease all 0.5s;
     -webkit-transition: ease all 0.5s;
@@ -33437,7 +33462,7 @@ select:focus {
 
 @media (max-width: 767.98px) {
     .account-page .content {
-        padding: 96px 0 40px;
+        padding: 36px 10px 30px;
     }
 }
 
@@ -40755,9 +40780,42 @@ ul.benifits-col li i {
     color: var(--primary);
 }
 
+.patient-content {
+    background: #f5f7fb !important;
+    margin: 0;
+    padding: 140px 0 60px;
+}
+
+@media (max-width: 991.98px) {
+    .patient-content {
+        margin: 0;
+        padding: 100px 0 40px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .patient-content {
+        margin: 0;
+        padding: 100px 0 20px;
+    }
+}
+
+.patient-content.content {
+    margin: 0;
+    padding: 0 !important;
+    padding-top: 20px !important;
+}
+
+@media (max-width: 991.98px) {
+    .patient-content.content {
+        margin: 0;
+        padding-bottom: 40px !important;
+    }
+}
+
 /****** UTILS ******/
 .doctor-content {
-    background-color: var(--white);
+    background: #f5f7fb !important;
     margin: 0;
     padding: 140px 0 60px;
 }
@@ -40779,6 +40837,7 @@ ul.benifits-col li i {
 .doctor-content.content {
     margin: 0;
     padding: 0 !important;
+    padding-top: 20px !important;
 }
 
 @media (max-width: 991.98px) {
@@ -48256,6 +48315,7 @@ input:checked+.tog-slider:before {
     margin-bottom: 24px;
     border: 1px solid var(--gray-200);
     border-radius: 10px;
+    background: var(--white)
 }
 
 .appointment-wrap>ul {
@@ -49014,12 +49074,13 @@ input:checked+.tog-slider:before {
 @media (max-width: 575.98px) {
     .appointment-tabs ul li {
         margin-right: 0;
+        margin-bottom: 0;
     }
 }
 
 @media (max-width: 575.98px) {
     .appointment-tabs ul {
-        display: block;
+        gap: 8px
     }
 }
 
@@ -49219,6 +49280,7 @@ input:checked+.tog-slider:before {
     margin-bottom: 24px;
     border: 0;
     box-shadow: 0px 4px 44px 0px rgba(187, 187, 187, 0.25);
+    background: var(--white);
 }
 
 .appointment-wrap.appointment-grid-wrap>ul>li {
@@ -51266,14 +51328,14 @@ input:checked+.tog-slider:before {
 }
 
 .payout-wrap {
-    background: var(--dark);
+    background: var(--primary);
     margin: 0 0 24px;
     padding: 24px 24px 14px;
     border-radius: 10px;
 }
 
 .payout-wrap .payout-title {
-    border-bottom: 1px solid #334155;
+    border-bottom: 1px solid #8c8d8e;
     margin-bottom: 24px;
 }
 
@@ -55255,7 +55317,7 @@ ul li {
 
 .info-section {
     position: relative;
-    bottom: -40px;
+
     z-index: 9;
     margin-top: -40px;
     overflow: hidden;

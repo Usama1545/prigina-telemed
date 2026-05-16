@@ -19,7 +19,7 @@
                             </div>
                             <div class="doc-info-cont">
                                 <span class="badge doc-avail-badge">
-                                    @if ($doctor['available'] == true)
+                                    @if(($doctor['available'] ?? false) === true)
                                         <i class="fa-solid fa-circle fs-5 me-1"></i>
                                         Available
                                     @else
@@ -85,13 +85,9 @@
                                 <li>
 
                                     <ul class="contact-doctors">
-                                        <li><a href="{{ url('chat-doctor') }}"><span><img
+                                        <li><a href="{{ route('conversation.create', $doctor['uid']) }}"><span><img
                                                         src="{{ URL::asset('build/img/icons/device-message2.svg') }}"
-                                                        alt="Img"></span>Chat</a></li>
-                                        <li><a href="{{ url('voice-call') }}"><span class="bg-violet"><i
-                                                        class="feather-phone-forwarded"></i></span>Audio Call</a></li>
-                                        <li><a href="{{ url('video-call') }}"><span class="bg-indigo"><i
-                                                        class="fa-solid fa-video"></i></span>Video Call</a></li>
+                                                        alt="Img"></span>Contact Doctor</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -112,8 +108,12 @@
 
                         </ul>
                         <div class="bottom-book-btn">
+                            @if(session('firebase_token'))
                             <p><span>Price : {{ $doctor['consultationFee'] }} </span> for a Session</p>
-                            <div class="clinic-booking">
+                           
+                            
+                            @endif
+                             <div class="clinic-booking">
                                 <a class="apt-btn" href="{{ url($doctor['uid'] . '/booking-slots') }}">Book Appointment</a>                            
                             </div>
                         </div>
