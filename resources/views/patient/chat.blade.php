@@ -44,16 +44,16 @@
 
                                 <div class="sidebar-body chat-body" id="chatsidebar">
                                     <ul class="user-list">
-                                        @foreach ($conversations as $index => $conversation)
-                                            <li class="user-list-item" data-conversation-id="{{ $conversation['id'] }}">
+                                        @forelse (($conversations ?? []) as $index => $conversation)
+                                            <li class="user-list-item" data-conversation-id="{{ $conversation['id'] ?? '' }}">
                                                 <a href="javascript:void(0);" class="conversation-item">
                                                     @php
-                                                        $nameParts = explode(' ', trim($conversation['doctorName']));
+                                                        $nameParts = explode(' ', trim($conversation['doctorName'] ?? ''));
                                                         
                                                         $initials = collect($nameParts)
                                                             ->map(fn($part) => strtoupper(substr($part, 0, 1)))
                                                             ->take(2)
-                                                            ->implode('');
+                                                            ->implode('') ?: 'D';
                                                     @endphp
 
                                                     <div class="avatar">
@@ -63,19 +63,31 @@
                                                     </div>
                                                     <div class="users-list-body">
                                                         <div>
-                                                            <h5>{{ $conversation['doctorName'] }}</h5>
+                                                            <h5>{{ ($conversation['doctorName'] ?? '') ?: 'Doctor' }}</h5>
                                                             <p>{{ $conversation['lastMessage'] ?? "" }}</p>
                                                         </div>
+                                                        @if($conversation['lastMessageTime'] ?? null)
                                                         <div class="last-chat-time">
                                                             <small class="text-muted">{{ Carbon\Carbon::parse($conversation['lastMessageTime'])->diffForHumans() ?? $conversation['lastMessageTime'] }}</small>
                                                             <div class="chat-pin">
-                                                                <i class="fa-solid fa-check-double green-check"></i>
+                                                                @if(($conversation['patientUnreadCount'] ?? 0) > 0)
+                                                                    <span class="unread badge badge-primary">{{ $conversation['patientUnreadCount'] ?? 0 }}</span>
+                                                                @elseif(($conversation['doctorUnreadCount'] ?? 0) == 0)
+                                                                    <i class="fa-solid fa-check-double green-check"></i>
+                                                                @else
+                                                                    <i class="fi fi-rr-check text-muted"></i>
+                                                                @endif
                                                             </div>
                                                         </div>
+                                                        @endif
                                                     </div>
                                                 </a>
                                             </li>
-                                        @endforeach
+                                        @empty
+                                            <li class="px-3 py-4 text-center text-muted">
+                                                No conversations yet
+                                            </li>
+                                        @endforelse
                                     </ul>
                                 </div>
                             </div>

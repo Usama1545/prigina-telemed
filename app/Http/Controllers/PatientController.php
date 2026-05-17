@@ -270,7 +270,9 @@ class PatientController extends Controller
             ['field' => 'patientId', 'op' => '=', 'value' => $uid],
         ],null, null, 'lastMessageTime', 'DESC');
 
-        $conversations = $filteredConversations['documents'] ?? [];
+        $conversations = collect($filteredConversations['documents'] ?? [])
+            ->map(fn ($conversation) => $this->normalizeConversation($conversation))
+            ->all();
 
         return view('patient.chat', compact('conversations'));
         
@@ -354,6 +356,14 @@ class PatientController extends Controller
         }
 
         // SAVE TO FIRESTORE
+        $this->firestore->update('conversations', $id, [
+            'lastMessage' => $data['text'],
+            'lastMessageSender' => $uid,
+            'lastMessageTime' => now(),
+            'doctorUnreadCount' => ((int) ($conversation['doctorUnreadCount'] ?? 0)) + 1,
+            'updatedAt' => now(),
+        ]);
+
         $this->firestore->create('messages', $data);
 
         return response()->json([
@@ -444,7 +454,7 @@ class PatientController extends Controller
             ['field' => 'patientId', 'op' => '=', 'value' => $patient['uid']],
             ['field' => 'doctorId', 'op' => '=', 'value' => $doctor['uid']],
         ], null, null, 'createdAt', 'DESC');
-        if($converastion['documents'][0]['data'])
+        if (!empty($converastion['documents']))
         {
             return redirect()->route('patient.conversations');
         }
@@ -478,7 +488,8 @@ class PatientController extends Controller
     public function markRead($id)
     {
         $this->firestore->update('conversations', $id, [
-            'doctorUnreadCount' => 0,
+            'patientUnreadCount' => 0,
+            'lastReadByPatient' => now(),
         ]);
 
         $messages = $this->firestore->query('messages', [
@@ -494,5 +505,24 @@ class PatientController extends Controller
         }
 
         return true;
+    }
+
+    private function normalizeConversation(array $conversation): array
+    {
+        return array_merge([
+            'doctorName' => '',
+            'doctorSpecialty' => '',
+            'patientName' => '',
+            'patientAge' => '',
+            'patientGender' => '',
+            'doctorUnreadCount' => 0,
+            'patientUnreadCount' => 0,
+            'unreadCount' => 0,
+            'lastMessage' => '',
+            'lastMessageSender' => '',
+            'lastMessageTime' => null,
+            'lastReadByDoctor' => null,
+            'lastReadByPatient' => null,
+        ], $conversation);
     }
 }

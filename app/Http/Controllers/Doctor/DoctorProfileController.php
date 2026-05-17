@@ -274,7 +274,9 @@ class DoctorProfileController extends Controller
             ['field' => 'doctorId', 'op' => '=', 'value' => $uid],
         ],null, null, 'lastMessageTime', 'DESC');
 
-        $conversations = $filteredConversations['documents'] ?? [];
+        $conversations = collect($filteredConversations['documents'] ?? [])
+            ->map(fn ($conversation) => $this->normalizeConversation($conversation))
+            ->all();
 
         return view('doctor.chat', compact('conversations'));
         
@@ -359,6 +361,7 @@ class DoctorProfileController extends Controller
             'lastMessage' => $data['text'] ,
             'lastMessageSender' => current_user()['uid'] ?? '',
             'lastMessageTime' => now(),
+            'patientUnreadCount' => ((int) ($conversation['patientUnreadCount'] ?? 0)) + 1,
             'updatedAt' => now(),
         ]);
 
@@ -561,6 +564,25 @@ class DoctorProfileController extends Controller
         }
 
         return true;
+    }
+
+    private function normalizeConversation(array $conversation): array
+    {
+        return array_merge([
+            'doctorName' => '',
+            'doctorSpecialty' => '',
+            'patientName' => '',
+            'patientAge' => '',
+            'patientGender' => '',
+            'doctorUnreadCount' => 0,
+            'patientUnreadCount' => 0,
+            'unreadCount' => 0,
+            'lastMessage' => '',
+            'lastMessageSender' => '',
+            'lastMessageTime' => null,
+            'lastReadByDoctor' => null,
+            'lastReadByPatient' => null,
+        ], $conversation);
     }
     
     public function payout()

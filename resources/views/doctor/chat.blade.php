@@ -47,12 +47,12 @@
                                             <li class="user-list-item" data-conversation-id="{{ $conversation['id'] }}">
                                                 <a href="javascript:void(0);" class="conversation-item">
                                                     @php
-                                                        $nameParts = explode(' ', trim($conversation['patientName']));
+                                                        $nameParts = explode(' ', trim($conversation['patientName'] ?? ''));
                                                         
                                                         $initials = collect($nameParts)
                                                             ->map(fn($part) => strtoupper(substr($part, 0, 1)))
                                                             ->take(2)
-                                                            ->implode('');
+                                                            ->implode('') ?: 'P';
                                                     @endphp
 
                                                     <div class="avatar ">
@@ -62,17 +62,17 @@
                                                     </div>
                                                     <div class="users-list-body">
                                                         <div>
-                                                            <h5>{{ $conversation['patientName'] }}</h5>
+                                                            <h5>{{ $conversation['patientName'] ?: 'Patient' }}</h5>
                                                             <p>{{ $conversation['lastMessage'] ?? "" }}</p>
                                                         </div>
-                                                        @if($conversation['lastMessageTime'])
+                                                        @if($conversation['lastMessageTime'] ?? null)
                                                         <div class="last-chat-time">
                                                             <small class="text-muted">{{ Carbon\Carbon::parse($conversation['lastMessageTime'])->diffForHumans() ?? $conversation['lastMessageTime'] }}</small>
-                                                            @if($conversation['doctorUnreadCount'] > 0)
+                                                            @if(($conversation['doctorUnreadCount'] ?? 0) > 0)
                                                                 <div class="chat-pin">
-                                                                    <span class="unread badge badge-primary">{{ $conversation['doctorUnreadCount'] }}</span>
+                                                                    <span class="unread badge badge-primary">{{ $conversation['doctorUnreadCount'] ?? 0 }}</span>
                                                                 </div>
-                                                            @elseif($conversation['patientUnreadCount'] == 0)
+                                                            @elseif(($conversation['patientUnreadCount'] ?? 0) == 0)
                                                                 <div class="chat-pin">
                                                                     <i class="fa-solid fa-check-double text-primary"></i>
                                                                 </div>

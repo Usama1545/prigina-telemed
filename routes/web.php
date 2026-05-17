@@ -122,6 +122,14 @@ Route::get('/risk-disclaimer', function () {
     return view('refund-policy');
 })->name('risk-disclaimer');
 
+Route::get('/legal-notice', function () {
+    return view('legal-notice');
+})->name('legal-notice');
+
+Route::get('/our-mission', function () {
+    return view('our-mission');
+})->name('our-mission');
+
 Route::get('/terms-conditions', function () {
     return view('terms-conditions');
 })->name('terms-conditions');
@@ -143,4 +151,3 @@ Route::post(
 Route::get('/terms-condition', function () {
     return view('terms-condition');
 })->name('terms-condition');
-

@@ -55,7 +55,7 @@
                                     <h6 class="footer-title text-white">Company</h6>
                                     <ul>
                                         <li><a class="text-white" href="{{ route('about-us') }}">About Us</a></li>
-                                        <li><a class="text-white" href="{{ url('our-mission') }}">Our Mission</a></li>
+                                        <li><a class="text-white" href="{{ route('our-mission') }}">Our Mission</a></li>
                                         <li><a class="text-white" href="{{ route('contact-us') }}">Contact Us</a></li>
                                     </ul>
                                 </div>
@@ -88,7 +88,7 @@
                     <!-- Copyright Menu -->
                     <div class="copyright-menu">
                         <ul class="policy-menu mb-0">
-                            <li><a href="#">Legal Notice</a></li>
+                            <li><a href="{{ route('legal-notice') }}">Legal Notice</a></li>
                             <li><a href="{{ url('privacy-policy') }}">Privacy Policy</a></li>
                         </ul>
                     </div>
