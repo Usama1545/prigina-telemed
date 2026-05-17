@@ -71934,4 +71934,38 @@ ul li {
     bottom: -60px;
 }
 
+/* Wider desktop containers */
+@media (min-width: 1400px) {
+    .container,
+    .container-lg,
+    .container-md,
+    .container-sm,
+    .container-xl,
+    .container-xxl {
+        max-width: calc(100% - 48px);
+    }
+}
+
+@media (min-width: 1600px) {
+    .container,
+    .container-lg,
+    .container-md,
+    .container-sm,
+    .container-xl,
+    .container-xxl {
+        max-width: calc(100% - 64px);
+    }
+}
+
+@media (min-width: 1800px) {
+    .container,
+    .container-lg,
+    .container-md,
+    .container-sm,
+    .container-xl,
+    .container-xxl {
+        max-width: calc(100% - 80px);
+    }
+}
+
 /*# sourceMappingURL=style.css.map */

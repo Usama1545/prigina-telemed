@@ -1,3 +1,8 @@
+@php
+    $currentUser = current_user() ?? [];
+    $profileImage = ($currentUser['photoUrl'] ?? null) ?: URL::asset('build/img/doctors-dashboard/profile-06.jpg');
+@endphp
+
 <div class="profile-sidebar patient-sidebar profile-sidebar-new">
 
     {{-- Patient Profile Card --}}
@@ -8,7 +13,7 @@
             <div class="profile-info-widget">
 
                 <a href="{{ route('patient.settings') }}" class="booking-doc-img">
-                    <img src="{{ current_user()['photoUrl'] ? current_user()['photoUrl'] : URL::asset('build/img/doctors-dashboard/profile-06.jpg') }}"
+                    <img src="{{ $profileImage }}"
                          alt="User Image">
                 </a>
 
@@ -16,7 +21,7 @@
 
                     <h3>
                         <a href="{{ route('patient.settings') }}">
-                            {{ current_user()['name'] }}
+                            {{ $currentUser['name'] ?? 'Patient' }}
                         </a>
                     </h3>
 
@@ -25,11 +30,11 @@
             </div>
 
             <p class="patient-sub-info">
-                {{ current_user()['gender'] }}
+                {{ $currentUser['gender'] ?? '' }}
             </p>
 
             <div class="patient-email-box">
-                {{ current_user()['email'] }}
+                {{ $currentUser['email'] ?? '' }}
             </div>
 
         </div>
