@@ -1,5 +1,5 @@
 @php
-    $filename = Route::currentRouteName(); // get current route name
+    $filename = Route::currentRouteName();
 
     if (
         $filename == 'index' ||
@@ -16,7 +16,7 @@
         $filename === 'index-12' ||
         $filename === 'index-13'
     ) {
-        $title = 'General Home PriGina Global Telemed | Doctors Appointment HTML Website Templates';
+        $title = 'PriGina Global Telemed | Trusted Second Medical Opinions Online';
     } else {
         $title = 'PriGina Global Telemed';
     }
@@ -25,22 +25,43 @@
 <!-- Meta tags -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <meta name="description"
-    content="The responsive professional PriGina Global Telemed template offers many features, like scheduling appointments with  top doctors, clinics, and hospitals via voice, video call & chat.">
+    content="PriGina Global Telemed helps patients connect with experienced doctors worldwide to receive trusted second medical opinions online through secure telemedicine consultations.">
+
 <meta name="keywords"
-    content="practo clone, doccure, doctor appointment, Practo clone html template, doctor booking template">
-<meta name="author" content="Practo Clone HTML Template - Doctor Booking Template">
-<meta property="og:url" content="https://doccure.dreamstechnologies.com/html/">
+    content="second medical opinion, telemedicine, online doctor consultation, global healthcare, specialist consultation, virtual doctor, medical second opinion, healthcare platform">
+
+<meta name="author"
+    content="PriGina Global Telemed">
+
+<meta property="og:url" content="{{ url()->current() }}">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Doctors Appointment HTML Website Templates | PriGina Global Telemed">
+
+<meta property="og:title"
+    content="PriGina Global Telemed | Trusted Second Medical Opinions Online">
+
 <meta property="og:description"
-    content="The responsive professional PriGina Global Telemed template offers many features, like scheduling appointments with  top doctors, clinics, and hospitals via voice, video call & chat.">
-<meta property="og:image" content="{{ URL::asset('build/img/preview-banner.jpg') }}">
+    content="Connect with experienced doctors worldwide and receive trusted second medical opinions online through secure telemedicine consultations.">
+
+<meta property="og:image"
+    content="{{ URL::asset('build/img/logo.webp') }}">
+
 <meta name="twitter:card" content="summary_large_image">
-<meta property="twitter:domain" content="https://doccure.dreamstechnologies.com/html/">
-<meta property="twitter:url" content="https://doccure.dreamstechnologies.com/html/">
-<meta name="twitter:title" content="Doctors Appointment HTML Website Templates | PriGina Global Telemed">
+
+<meta property="twitter:domain"
+    content="{{ request()->getHost() }}">
+
+<meta property="twitter:url"
+    content="{{ url()->current() }}">
+
+<meta name="twitter:title"
+    content="PriGina Global Telemed | Trusted Second Medical Opinions Online">
+
 <meta name="twitter:description"
-    content="The responsive professional PriGina Global Telemed template offers many features, like scheduling appointments with  top doctors, clinics, and hospitals via voice, video call & chat.">
-<meta name="twitter:image" content="{{ URL::asset('build/img/preview-banner.jpg') }}">
+    content="Get expert second medical opinions online from qualified doctors through secure and reliable telemedicine services.">
+
+<meta name="twitter:image"
+    content="{{ URL::asset('build/img/logo.webp') }}">
+
 <title>{{ $title }}</title>

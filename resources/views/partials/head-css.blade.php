@@ -1,8 +1,8 @@
 <!-- Favicon -->
-<link rel="shortcut icon" href="{{URL::asset('build/img/favicon.png')}}" type="image/x-icon">
+<link rel="shortcut icon" href="{{URL::asset('build/img/prigina-gav.png')}}" type="image/x-icon">
 
 <!-- Apple Touch Icon -->
-<link rel="apple-touch-icon" sizes="180x180" href="{{URL::asset('build/img/apple-touch-icon.png')}}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{URL::asset('build/img/prigina-gav.png')}}">
 
 @if(!Route::is(['booking-popup', 'booking-success-one', 'booking', 'coming-soon', 'consultation', 'doctor-register-step1', 'doctor-register-step2', 'doctor-register-step3', 'doctor-signup', 'email-otp', 'error-404', 'error-500', 'forgot-password', 'forgot-password2', 'login-email-otp', 'login-email', 'login-phone-otp', 'login-phone', 'maintenance', 'mobile-otp', 'patient-details', 'patient-register-step1', 'patient-register-step2', 'patient-register-step3', 'patient-register-step4', 'patient-register-step5', 'patient-signup', 'payment', 'pharmacy-register-step1', 'pharmacy-register-step2', 'pharmacy-register-step3', 'reset-password', 'signup-success', 'signup', 'onboarding-availability', 'onboarding-consultation', 'onboarding-cost', 'onboarding-email-otp', 'onboarding-email-step-2-verify', 'onboarding-email', 'onboarding-identity', 'onboarding-lock', 'onboarding-password', 'onboarding-payments', 'onboarding-personalize', 'onboarding-phone-otp', 'onboarding-phone', 'onboarding-preferences', 'onboarding-verification', 'onboarding-verify-account', 'patient-dependant-details', 'patient-details', 'patient-email', 'patient-family-details', 'patient-other-details', 'patient-personalize']))
     <!-- Theme Settings Js -->
