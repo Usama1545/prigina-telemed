@@ -280,6 +280,23 @@
 document.getElementById('timezone').value =
     Intl.DateTimeFormat().resolvedOptions().timeZone;
 
+async function parseJsonResponse(response)
+{
+    const contentType = response.headers.get('content-type') || '';
+
+    if (contentType.includes('application/json')) {
+        return await response.json();
+    }
+
+    const text = await response.text();
+
+    throw new Error(
+        text
+            ? 'Server returned an unexpected response. Check the Laravel logs for details.'
+            : 'Server returned an empty response.'
+    );
+}
+
 async function firebasePatientRegister(formData)
 {
     const btn = document.getElementById('registerBtn');
@@ -316,7 +333,7 @@ async function firebasePatientRegister(formData)
             }
         );
 
-        const data = await response.json();
+        const data = await parseJsonResponse(response);
 
         if (!response.ok) {
 
@@ -417,6 +434,7 @@ document
 
                     headers: {
                         'Content-Type': 'application/json',
+                        'Accept': 'application/json',
 
                         'X-CSRF-TOKEN':
                             document.querySelector(
@@ -430,7 +448,7 @@ document
                 }
             );
 
-            const data = await response.json();
+            const data = await parseJsonResponse(response);
 
             if (!response.ok) {
 

@@ -85,7 +85,10 @@ Route::get('/for-patients', function () {
     return view('for-patients');
 })->name('for-patients');
 
-
+Route::get('/forgot-password', function () {
+    return view('forgot-password');
+})->name('forgot-password');
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('forgot-password.email');
 
 Route::get('/for-doctors', function () {
     return view('for-doctors');
@@ -94,75 +97,6 @@ Route::get('/for-doctors', function () {
 Route::get('/contact-us', function () {
     return view('contact-us');
 })->name('contact-us');
-
-
-Route::get('/edit-blog', function () {
-    return view('edit-blog');
-})->name('edit-blog');
-
-Route::get('/onboarding-availability', function () {
-    return view('onboarding-availability');
-})->name('onboarding-availability');
-
-Route::get('/onboarding-consultation', function () {
-    return view('onboarding-consultation');
-})->name('onboarding-consultation');
-
-Route::get('/onboarding-cost', function () {
-    return view('onboarding-cost');
-})->name('onboarding-cost');
-
-Route::get('/onboarding-email-otp', function () {
-    return view('onboarding-email-otp');
-})->name('onboarding-email-otp');
-
-Route::get('/onboarding-email-step-2-verify', function () {
-    return view('onboarding-email-step-2-verify');
-})->name('onboarding-email-step-2-verify');
-
-Route::get('/onboarding-email', function () {
-    return view('onboarding-email');
-})->name('onboarding-email');
-
-Route::get('/onboarding-identity', function () {
-    return view('onboarding-identity');
-})->name('onboarding-identity');
-
-Route::get('/onboarding-lock', function () {
-    return view('onboarding-lock');
-})->name('onboarding-lock');
-
-Route::get('/onboarding-password', function () {
-    return view('onboarding-password');
-})->name('onboarding-password');
-
-Route::get('/onboarding-payments', function () {
-    return view('onboarding-payments');
-})->name('onboarding-payments');
-
-Route::get('/onboarding-personalize', function () {
-    return view('onboarding-personalize');
-})->name('onboarding-personalize');
-
-Route::get('/onboarding-phone-otp', function () {
-    return view('onboarding-phone-otp');
-})->name('onboarding-phone-otp');
-
-Route::get('/onboarding-phone', function () {
-    return view('onboarding-phone');
-})->name('onboarding-phone');
-
-Route::get('/onboarding-preferences', function () {
-    return view('onboarding-preferences');
-})->name('onboarding-preferences');
-
-Route::get('/onboarding-verification', function () {
-    return view('onboarding-verification');
-})->name('onboarding-verification');
-
-Route::get('/onboarding-verify-account', function () {
-    return view('onboarding-verify-account');
-})->name('onboarding-verify-account');
 
 Route::get('/patient-faqs', function () {
     return view('patient-faq');
@@ -177,7 +111,7 @@ Route::get('/doctor-reviews', function () {
 })->name('doctor-reviews');
 
 Route::get('/doctor-faqs', function () {
-    return view('doctor-faq');
+    return view('doctor-faqs');
 })->name('doctor-faqs');
 
 Route::get('/privacy-policy', function () {
@@ -209,5 +143,4 @@ Route::post(
 Route::get('/terms-condition', function () {
     return view('terms-condition');
 })->name('terms-condition');
-
 

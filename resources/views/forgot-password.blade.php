@@ -20,10 +20,25 @@
                                     <h3>Forgot Password</h3>
                                     <p>Enter your email and we will send you a link to reset your password.</p>
                                 </div>
-                                <form action="{{ url('login') }}">
+
+                                @if (session('status'))
+                                    <div class="alert alert-success">
+                                        {{ session('status') }}
+                                    </div>
+                                @endif
+
+                                @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        {{ $errors->first() }}
+                                    </div>
+                                @endif
+
+                                <form action="{{ route('forgot-password.email') }}" method="POST">
+                                    @csrf
                                     <div class="mb-3">
                                         <label class="form-label">Email</label>
-                                        <input class="form-control" type="email">
+                                        <input class="form-control" type="email" name="email" value="{{ old('email') }}"
+                                            required>
                                     </div>
                                     <div class="mb-3">
                                         <button class="btn btn-primary-gradient w-100" type="submit">Submit</button>

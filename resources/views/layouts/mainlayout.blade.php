@@ -184,7 +184,18 @@
                                                                     <script>
                                                                         function showAlert(message, type = 'danger') {
 
-                                                                            const container = document.getElementById('js-alert-container');
+                                                                            let container = document.getElementById('js-alert-container');
+
+                                                                            if (!container) {
+                                                                                container = document.createElement('div');
+                                                                                container.id = 'js-alert-container';
+                                                                                container.style.position = 'fixed';
+                                                                                container.style.top = '20px';
+                                                                                container.style.right = '20px';
+                                                                                container.style.zIndex = '9999';
+                                                                                container.style.maxWidth = '420px';
+                                                                                document.body.appendChild(container);
+                                                                            }
 
                                                                             const alert = document.createElement('div');
 

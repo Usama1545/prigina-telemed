@@ -32,7 +32,7 @@
                                                     alt="User Image">
                                             </a>
                                             <div class="patient-info">
-                                                <h6><a href="javascript:void(0);">Adrian</a></h6>
+                                                <h6><a href="javascript:void(0);">Dr. Adrian Miles</a></h6>
                                                 <span>15 Mar 2024</span>
                                             </div>
                                         </div>
@@ -45,12 +45,10 @@
                                         </div>
                                     </div>
                                     <div class="review-info">
-                                        <p> Dr. Edalin Hendry has been my family's trusted doctor for years.
-                                            Their genuine care and thorough approach to our health concerns make every visit
-                                            reassuring.
-                                            Dr. Edalin Hendry's ability to listen and explain complex health issues in
-                                            understandable terms
-                                            is exceptional. We are grateful to have such a dedicated physician by our side
+                                        <p>PriGina Global Telemed has made it easier for me to provide structured second
+                                            opinions to patients who need specialist guidance quickly. The case details and
+                                            uploaded records are organized clearly, so I can focus on clinical review
+                                            instead of chasing missing information.
                                         </p>
                                         
                                     </div>
@@ -66,7 +64,7 @@
                                                     alt="User Image">
                                             </a>
                                             <div class="patient-info">
-                                                <h6><a href="javascript:void(0);">Kelly</a></h6>
+                                                <h6><a href="javascript:void(0);">Dr. Kelly Rahman</a></h6>
                                                 <span>11 Mar 2024</span>
                                             </div>
                                         </div>
@@ -80,14 +78,10 @@
                                     </div>
                                     <div class="review-info">
                                         <p>
-                                            I recently completed a series of dental treatments with Dr.Edalin Hendry,
-                                            and I couldn't be more pleased with the results. From my very first appointment,
-                                            Dr.
-                                            Edalin Hendry and their team made me feel completely at ease, addressing all of
-                                            my concerns
-                                            with patience and understanding.
-                                            Their state-of-the-art office and the staff's attention to comfort and
-                                            cleanliness were beyond impressive.
+                                            Working with patients through PriGina has been smooth and professional. I can
+                                            manage my profile, review patient submissions, and respond with clear guidance
+                                            in one place. It is a practical way to extend specialist access beyond the
+                                            limits of a traditional clinic schedule.
                                         </p>
                                         
                                     </div>
@@ -103,7 +97,7 @@
                                                     alt="User Image">
                                             </a>
                                             <div class="patient-info">
-                                                <h6><a href="javascript:void(0);">Samuel</a></h6>
+                                                <h6><a href="javascript:void(0);">Dr. Samuel Ortiz</a></h6>
                                                 <span>05 Mar 2024</span>
                                             </div>
                                         </div>
@@ -117,12 +111,10 @@
                                     </div>
                                     <div class="review-info">
                                         <p>
-                                            From my first consultation through to the completion of my treatment,
-                                            Dr. Edalin Hendry, my dentist, has been nothing short of extraordinary.
-                                            Dental visits have always been a source of anxiety for me, but Dr. Edalin
-                                            Hendry's office provided an
-                                            atmosphere of calm and reassurance that I had not experienced elsewhere. Highly
-                                            Recommended!
+                                            The platform helps me give patients thoughtful recommendations without losing
+                                            the context of their medical history. Having records, notes, and consultation
+                                            details available before I respond makes the second-opinion process more
+                                            efficient and clinically useful.
                                         </p>
                                         
                                     </div>

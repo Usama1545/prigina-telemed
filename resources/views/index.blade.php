@@ -19,10 +19,10 @@
                 </p>
 
                 <div class="mt-4 d-flex gap-3">
-                    <a href="#" class="btn btn-primary px-4 py-2">
+                    <a href="{{ check() ? route('doctors') : route('login') }}" class="btn btn-primary px-4 py-2">
                         Get a Second Opinion
                     </a>
-                    <a href="#" class="btn btn-outline-secondary px-4 py-2">
+                    <a href="{{ route('how-it-works') }}" class="btn btn-outline-secondary px-4 py-2">
                         How It Works
                     </a>
                 </div>
@@ -83,7 +83,7 @@
                     <span class="step-number">1</span>
 
                     <div class="step-icon">
-                        <i class="fi fi-rr-upload"></i>
+                        <img src="{{ asset('build/img/home-icon-1.png') }}" alt="Submit your case">
                     </div>
 
                     <h5>Submit Your Case</h5>
@@ -105,7 +105,7 @@
                     <span class="step-number">2</span>
 
                     <div class="step-icon">
-                        <i class="fi fi-rr-user-md"></i>
+                        <img src="{{ asset('build/img/home-icon-2.png') }}" alt="Get matched with an expert">
                     </div>
 
                     <h5>Get Matched with an Expert</h5>
@@ -127,7 +127,7 @@
                     <span class="step-number">3</span>
 
                     <div class="step-icon">
-                        <i class="fi fi-rr-file-medical"></i>
+                        <img src="{{ asset('build/img/icon-3.webp') }}" alt="Receive your second opinion">
                     </div>
 
                     <h5>Receive Your Second Opinion</h5>
@@ -139,7 +139,7 @@
 
         </div>
 
-        <a href="#" class="btn btn-secondary mt-5 px-4">Start Your Review</a>
+        <a href="{{ route('patient.dashboard') }}" class="btn btn-secondary mt-5 px-4">Start Your Review</a>
     </div>
 </section>
 
@@ -211,8 +211,15 @@
 <!-- DOCTORS -->
 <section class="py-5">
     <div class="container">
-        <h6 class="text-secondary text-center">FEATURED SPECIALISTS</h6>
-        <h2 class="fw-bold text-center mb-5">Experienced Physicians. Trusted Insights.</h2>
+        <div class="position-relative mb-5">
+            <div class="text-center">
+                <h6 class="text-secondary">FEATURED SPECIALISTS</h6>
+                <h2 class="fw-bold mb-0">Experienced Physicians. Trusted Insights.</h2>
+            </div>
+            <a href="{{ route('doctors') }}" class="view-specialists-link text-primary fw-semibold text-decoration-none d-inline-flex align-items-center mt-3 mt-md-0">
+                View All Specialists <i class="fa-solid fa-arrow-right ms-2"></i>
+            </a>
+        </div>
 
         <div class="doctors-slider">
 
@@ -364,7 +371,7 @@
                          <p class="mb-0 text-white">Make informed medical decisions with confidence.</p>
                     </div>
                     <div class="support-info wow fadeInUp" data-wow-duration="1s">
-                        <a href="#" class="btn btn-light px-4 mt-3 mt-md-0">
+                        <a href="{{ check() ? route('doctors') : route('login') }}" class="btn btn-light px-4 mt-3 mt-md-0">
             Request Your Second Opinion →
         </a>
                     </div>
@@ -396,7 +403,7 @@
                     </div>
                     <div class="col-lg-6 col-md-12 wow fadeInUp" data-wow-duration="1s">
                         <div class="mobile-img">
-                            <img src="{{ URL::asset('build/img/mobile-img.png') }}" class="img-fluid" alt="img">
+                            <img src="{{ asset('build/img/mobiles-Photoroom.png') }}" class="img-fluid" alt="img">
                         </div>
                     </div>
                 </div>
@@ -461,6 +468,13 @@
     line-height: 1;
 }
 
+.step-icon img {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    display: block;
+}
+
 /* ARROW BETWEEN CARDS */
 .step-arrow {
     position: absolute;
@@ -470,6 +484,21 @@
     font-size: 22px;
     color: var(--secondary);
 }
+
+.view-specialists-link {
+    justify-content: center;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .view-specialists-link {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        width: auto;
+    }
+}
+
 .list-check {
     list-style: none;
     padding: 0;

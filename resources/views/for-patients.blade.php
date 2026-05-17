@@ -203,7 +203,7 @@
                          <p class="mb-0 text-white">We're here to help you maek informed decisions about your health.</p>
                     </div>
                     <div class="support-info wow fadeInUp" data-wow-duration="1s">
-                    <a href="{{ route('doctors') }}" class="btn btn-light px-4 mt-3 mt-md-0">
+                    <a href="{{ check() ? route('doctors') : route('login') }}" class="btn btn-light px-4 mt-3 mt-md-0">
             Get a Second Opinion →
         </a>
                     </div>

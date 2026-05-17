@@ -28,7 +28,7 @@
                                     <div class="mb-3">
                                         <div class="form-group-flex">
                                             <label class="form-label">Password</label>
-                                            <a href="{{ url('forgot-password') }}" class="forgot-link">Forgot password?</a>
+                                            <a href="{{ route('forgot-password') }}" class="forgot-link">Forgot password?</a>
                                         </div>
                                         <div class="pass-group">
                                             <input type="password" id="password" class="form-control pass-input">

@@ -205,7 +205,7 @@
                         <p class="mb-0 text-white">
                             Join Prigina Global Telemed and be part of a mission to make expert opinions accessible worldwide.
                         </p>
-                        <a href="{{ route('register') }}" class="btn btn-light px-4 mt-3">
+                        <a href="{{ route('doctor-register') }}" class="btn btn-light px-4 mt-3">
                             Apply Now
                         </a>
                     </div>

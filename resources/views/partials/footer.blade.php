@@ -10,13 +10,13 @@
                                 <h6 class="mb-3 footer-title text-white">Connect With Us</h6>
                                 <ul>
                                     <li>
-                                        <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                                        <a href="https://www.facebook.com/profile.php?id=61588898595327&mibextid=wwXIfr&mibextid=wwXIfr"><i class="fa-brands fa-facebook"></i></a>
                                     </li>
                                     <li>
                                         <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
                                     </li>
                                     <li>
-                                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                                        <a href="https://www.instagram.com/prigina_global_telemed?igsh=MTh3YjVjejQ1cnJvcA=="><i class="fa-brands fa-instagram"></i></a>
                                     </li>
                                     <li>
                                         <a href="#"><i class="fa-brands fa-linkedin"></i></a>

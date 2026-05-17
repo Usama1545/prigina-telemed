@@ -341,6 +341,25 @@
 </script>
 <script>
 
+async function parseJsonResponse(response)
+{
+    const contentType = response.headers.get('content-type') || '';
+
+    if (contentType.includes('application/json')) {
+        return await response.json();
+    }
+
+    const text = await response.text();
+    const match = text.match(/<title>(.*?)<\/title>/i);
+    const title = match ? match[1].trim() : '';
+
+    throw new Error(
+        title
+            ? `Server error: ${title}`
+            : 'Server returned an unexpected response. Check the Laravel logs for details.'
+    );
+}
+
 async function firebaseDoctorRegister(formData) {
 
     const btn = document.getElementById('registerBtn');
@@ -362,7 +381,7 @@ async function firebaseDoctorRegister(formData) {
             body: formData
         });
 
-        const data = await response.json();
+        const data = await parseJsonResponse(response);
 
         if (!response.ok) {
 

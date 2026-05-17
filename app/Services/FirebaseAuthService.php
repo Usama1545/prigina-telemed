@@ -28,6 +28,16 @@ class FirebaseAuthService
         return $this->auth->setCustomUserClaims($uid, $claims);
     }
 
+    public function deleteUser(string $uid): void
+    {
+        $this->auth->deleteUser($uid);
+    }
+
+    public function sendPasswordResetLink(string $email): void
+    {
+        $this->auth->sendPasswordResetLink($email);
+    }
+
     public function refreshIdToken($refreshToken)
     {
         $response = Http::post(

@@ -145,6 +145,26 @@ class AuthController extends Controller
         return view('login');
     }
 
+    public function forgotPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        try {
+            app(FirebaseAuthService::class)->sendPasswordResetLink($request->email);
+        } catch (\Kreait\Firebase\Exception\Auth\UserNotFound $e) {
+            // Keep the response generic so the form does not reveal registered emails.
+        } catch (\Throwable $e) {
+            report($e);
+        }
+
+        return back()->with(
+            'status',
+            'a password reset link has been sent. Please check your email.'
+        );
+    }
+
     public function doctorRegister()
     {
         $firestore = app(FirestoreService::class);
@@ -185,141 +205,139 @@ class AuthController extends Controller
 
         if (!$firebaseUser['success']) {
 
-            return back()
-                ->withErrors([
-                    'email' => $firebaseUser['message']
-                ])
-                ->withInput();
+            return response()->json([
+                'message' => $firebaseUser['message'],
+                'errors' => [
+                    'email' => [$firebaseUser['message']],
+                ],
+            ], 422);
         }
 
         $uid = $firebaseUser['uid'];
 
-        $data = $request->except([
-            'medical_license',
-            'degree_certificate',
-            'id_proof',
-            'clinic_registration'
-        ]);
+        try {
+            $data = $request->except([
+                'medical_license',
+                'degree_certificate',
+                'id_proof',
+                'clinic_registration'
+            ]);
 
-        if ($request->hasFile('medical_license')) {
-            $medical_license = $request->file('medical_license');
-            $fileName = time() . '_' . $medical_license->getClientOriginalName();
+            if ($request->hasFile('medical_license')) {
+                $medical_license = $request->file('medical_license');
+                $filePath = "doctor_documents/{$uid}/medical_license.{$medical_license->getClientOriginalExtension()}";
 
-            $filePath = "doctor_documents/{$uid}/medical_license.{$medical_license->getClientOriginalExtension()}";
+                /** @var \Kreait\Firebase\Contract\Storage $storage */
+                $storage = app('firebase.storage');
+                $bucket = $storage->getBucket();
 
-            /** @var \Kreait\Firebase\Contract\Storage $storage */
-            $storage = app('firebase.storage');
-            $bucket = $storage->getBucket();
+                $bucket->upload(
+                    fopen($medical_license->getRealPath(), 'r'),
+                    [
+                        'name' => $filePath,
+                        'predefinedAcl' => 'publicRead',
+                    ]
+                );
 
-            $bucket->upload(
-                fopen($medical_license->getRealPath(), 'r'),
-                [
-                    'name' => $filePath,
-                    'predefinedAcl' => 'publicRead',
-                ]
-            );
+                $data['documentUrls']['medical_license'] = "https://storage.googleapis.com/" . $bucket->name() . "/" . $filePath;
+            }
 
-            $imageUrl = "https://storage.googleapis.com/" . $bucket->name() . "/" . $filePath;
+            if ($request->hasFile('degree_certificate')) {
+                $degree_certificate = $request->file('degree_certificate');
+                $filePath = "doctor_documents/{$uid}/degree_certificate.{$degree_certificate->getClientOriginalExtension()}";
 
-            $data['documentUrls']['medical_license'] = $imageUrl;
+                /** @var \Kreait\Firebase\Contract\Storage $storage */
+                $storage = app('firebase.storage');
+                $bucket = $storage->getBucket();
+
+                $bucket->upload(
+                    fopen($degree_certificate->getRealPath(), 'r'),
+                    [
+                        'name' => $filePath,
+                        'predefinedAcl' => 'publicRead',
+                    ]
+                );
+
+                $data['documentUrls']['degree_certificate'] = "https://storage.googleapis.com/" . $bucket->name() . "/" . $filePath;
+            }
+
+            if ($request->hasFile('id_proof')) {
+                $id_proof = $request->file('id_proof');
+                $filePath = "doctor_documents/{$uid}/id_proof.{$id_proof->getClientOriginalExtension()}";
+
+                /** @var \Kreait\Firebase\Contract\Storage $storage */
+                $storage = app('firebase.storage');
+                $bucket = $storage->getBucket();
+
+                $bucket->upload(
+                    fopen($id_proof->getRealPath(), 'r'),
+                    [
+                        'name' => $filePath,
+                        'predefinedAcl' => 'publicRead',
+                    ]
+                );
+
+                $data['documentUrls']['id_proof'] = "https://storage.googleapis.com/" . $bucket->name() . "/" . $filePath;
+            }
+
+            if ($request->hasFile('clinic_registration')) {
+                $clinic_registration = $request->file('clinic_registration');
+                $filePath = "doctor_documents/{$uid}/clinic_registration.{$clinic_registration->getClientOriginalExtension()}";
+
+                /** @var \Kreait\Firebase\Contract\Storage $storage */
+                $storage = app('firebase.storage');
+                $bucket = $storage->getBucket();
+
+                $bucket->upload(
+                    fopen($clinic_registration->getRealPath(), 'r'),
+                    [
+                        'name' => $filePath,
+                        'predefinedAcl' => 'publicRead',
+                    ]
+                );
+
+                $data['documentUrls']['clinic_registration'] = "https://storage.googleapis.com/" . $bucket->name() . "/" . $filePath;
+            }
+
+            $data['password'] = bcrypt($request->password);
+
+            $data['uid'] = $uid;
+            $data['role'] = 'doctor';
+            $data['breaks'] = [];
+            $data['createdAt'] = now();
+            $data['documentsStatus'] = 'uploaded'; // Default status, can be updated by doctor later
+            $data['consultationFee'] = 0; // Default fee, can be updated by doctor later
+            $data['documentsUploadedAt'] = now(); // Default fee, can be updated by doctor later
+            $data['isActive'] = true; // Default fee, can be updated by doctor later
+            $data['isEmailVerified'] = false; // Default fee, can be updated by doctor later
+            $data['isTopDoctor'] = false; // Default fee, can be updated by doctor later
+            $data['isVerified'] = false; // Default fee, can be updated by doctor later
+            $data['rating'] = 0; // Default fee, can be updated by doctor later
+            $data['rejectionReason'] = ""; // Default fee, can be updated by doctor later
+            $data['slotDuration'] = 30; // Default fee, can be updated by doctor later
+            $data['status'] = 'pending'; // Default fee, can be updated by doctor later
+            $data['timezone'] = $request->timezone ?? 'UTC'; // Default fee, can be updated by doctor later
+            $data['totalReviews'] = 0; // Default fee, can be updated by doctor later
+            $data['workingDays'] = []; // Default fee, can be updated by doctor later
+            $data['workingHours'] = []; // Default fee, can be updated by doctor later
+            $data['updatedAt'] = now(); // Default fee, can be updated by doctor later
+            $data['available'] = false; // Default fee, can be updated by doctor later
+            $data['specializations'] = $request->specializations; // Default fee, can be updated by doctor later
+
+            $firestore->createWithId('doctors', $uid, $data);
+        } catch (\Throwable $e) {
+            report($e);
+
+            try {
+                $authService->deleteUser($uid);
+            } catch (\Throwable $deleteException) {
+                report($deleteException);
+            }
+
+            return response()->json([
+                'message' => 'We could not complete your registration. Please check your documents and try again.',
+            ], 500);
         }
-
-        if ($request->hasFile('degree_certificate')) {
-            $degree_certificate = $request->file('degree_certificate');
-            $fileName = time() . '_' . $degree_certificate->getClientOriginalName();
-
-            $filePath = "doctor_documents/{$uid}/degree_certificate.{$degree_certificate->getClientOriginalExtension()}";
-
-            /** @var \Kreait\Firebase\Contract\Storage $storage */
-            $storage = app('firebase.storage');
-            $bucket = $storage->getBucket();
-
-            $bucket->upload(
-                fopen($degree_certificate->getRealPath(), 'r'),
-                [
-                    'name' => $filePath,
-                    'predefinedAcl' => 'publicRead',
-                ]
-            );
-
-            $imageUrl = "https://storage.googleapis.com/" . $bucket->name() . "/" . $filePath;
-
-            $data['documentUrls']['degree_certificate'] = $imageUrl;
-        }
-
-        if ($request->hasFile('id_proof')) {
-            $id_proof = $request->file('id_proof');
-            $fileName = time() . '_' . $id_proof->getClientOriginalName();
-
-            $filePath = "doctor_documents/{$uid}/id_proof.{$id_proof->getClientOriginalExtension()}";
-
-            /** @var \Kreait\Firebase\Contract\Storage $storage */
-            $storage = app('firebase.storage');
-            $bucket = $storage->getBucket();
-
-            $bucket->upload(
-                fopen($id_proof->getRealPath(), 'r'),
-                [
-                    'name' => $filePath,
-                    'predefinedAcl' => 'publicRead',
-                ]
-            );
-
-            $imageUrl = "https://storage.googleapis.com/" . $bucket->name() . "/" . $filePath;
-
-            $data['documentUrls']['id_proof'] = $imageUrl;
-        }
-
-        if ($request->hasFile('clinic_registration')) {
-            $clinic_registration = $request->file('clinic_registration');
-            $fileName = time() . '_' . $clinic_registration->getClientOriginalName();
-
-            $filePath = "doctor_documents/{$uid}/clinic_registration.{$clinic_registration->getClientOriginalExtension()}";
-
-            /** @var \Kreait\Firebase\Contract\Storage $storage */
-            $storage = app('firebase.storage');
-            $bucket = $storage->getBucket();
-
-            $bucket->upload(
-                fopen($clinic_registration->getRealPath(), 'r'),
-                [
-                    'name' => $filePath,
-                    'predefinedAcl' => 'publicRead',
-                ]
-            );
-
-            $imageUrl = "https://storage.googleapis.com/" . $bucket->name() . "/" . $filePath;
-
-            $data['documentUrls']['clinic_registration'] = $imageUrl;
-        }
-
-        $data['password'] = bcrypt($request->password);
-
-        $data['uid'] = $uid;
-        $data['role'] = 'doctor';
-        $data['breaks'] = [];
-        $data['createdAt'] = now();
-        $data['documentsStatus'] = 'uploaded'; // Default status, can be updated by doctor later
-        $data['consultationFee'] = 0; // Default fee, can be updated by doctor later
-        $data['documentsUploadedAt'] = now(); // Default fee, can be updated by doctor later
-        $data['isActive'] = true; // Default fee, can be updated by doctor later
-        $data['isEmailVerified'] = false; // Default fee, can be updated by doctor later
-        $data['isTopDoctor'] = false; // Default fee, can be updated by doctor later
-        $data['isVerified'] = false; // Default fee, can be updated by doctor later
-        $data['rating'] = 0; // Default fee, can be updated by doctor later
-        $data['rejectionReason'] = ""; // Default fee, can be updated by doctor later
-        $data['slotDuration'] = 30; // Default fee, can be updated by doctor later
-        $data['status'] = 'pending'; // Default fee, can be updated by doctor later
-        $data['timezone'] = $request->timezone ?? 'UTC'; // Default fee, can be updated by doctor later
-        $data['totalReviews'] = 0; // Default fee, can be updated by doctor later
-        $data['workingDays'] = []; // Default fee, can be updated by doctor later
-        $data['workingHours'] = []; // Default fee, can be updated by doctor later
-        $data['updatedAt'] = now(); // Default fee, can be updated by doctor later
-        $data['available'] = false; // Default fee, can be updated by doctor later
-        $data['specializations'] = $request->specializations; // Default fee, can be updated by doctor later
-
-
-        $firestore->createWithId('doctors', $uid, $data);
 
         return response()->json([
             'success' => true,
@@ -354,11 +372,12 @@ class AuthController extends Controller
 
         if (!$firebaseUser['success']) {
 
-            return back()
-                ->withErrors([
-                    'email' => $firebaseUser['message']
-                ])
-                ->withInput();
+            return response()->json([
+                'message' => $firebaseUser['message'],
+                'errors' => [
+                    'email' => [$firebaseUser['message']],
+                ],
+            ], 422);
         }
 
         $uid = $firebaseUser['uid'];
