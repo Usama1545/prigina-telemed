@@ -1216,7 +1216,7 @@ button:focus {
 @media (max-width: 991.98px) {
     .container {
         max-width: 100%;
-        padding-bottom: 12px
+        padding-bottom: 50px
     }
 }
 
@@ -40809,7 +40809,7 @@ ul.benifits-col li i {
 @media (max-width: 991.98px) {
     .patient-content.content {
         margin: 0;
-        padding-bottom: 40px !important;
+        /* padding-bottom: 40px !important; */
     }
 }
 
@@ -54887,6 +54887,7 @@ ul li {
 }
 
 .app-section.app-sec-one .app-bg {
+    height: 420px;
     border-radius: 30px;
     padding: 70px 50px 0 50px;
     z-index: 1;
@@ -54910,6 +54911,7 @@ ul li {
     .app-section.app-sec-one .app-bg {
         padding: 20px;
         border-radius: 12px;
+        height: 201px;
         background: var(--primary);
     }
 }
@@ -72000,6 +72002,7 @@ ul li {
 
 /* Wider desktop containers */
 @media (min-width: 1400px) {
+
     .container,
     .container-lg,
     .container-md,
@@ -72011,6 +72014,7 @@ ul li {
 }
 
 @media (min-width: 1600px) {
+
     .container,
     .container-lg,
     .container-md,
@@ -72022,6 +72026,7 @@ ul li {
 }
 
 @media (min-width: 1800px) {
+
     .container,
     .container-lg,
     .container-md,

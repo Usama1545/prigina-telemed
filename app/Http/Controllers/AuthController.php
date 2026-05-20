@@ -16,6 +16,7 @@ class AuthController extends Controller
     {
         $this->firestore = new FirestoreClient([
             'projectId' => config('services.firebase.project_id'),
+            'keyFilePath' => storage_path('app/firebase/firebase_credentials.json'),
         ]);
     }
     public function login(Request $request)
