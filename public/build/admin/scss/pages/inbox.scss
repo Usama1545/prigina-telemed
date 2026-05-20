@@ -1,0 +1,222 @@
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.dropdown-action {
+	margin-bottom: 5px;
+	.dropdown-toggle {
+		&:after {
+			display: variables.$none;
+		}
+	}
+}
+.table-inbox {
+	font-size: typography.$font__size__15;
+	margin-bottom: 0;
+	input[type="radio"], input[type="checkbox"] {
+		cursor: variables.$pointer;
+	}
+	.starred.fa-star, .fa-star {
+		color: colors.$yellow;
+	}
+	tr {
+		cursor: variables.$pointer;
+	}
+}
+.mail-list {
+	list-style: variables.$none;
+	@include mixins.margin-padding(null, 0);
+	& > li {
+		& > a {
+			color: colors.$gray;
+			display: variables.$block;
+			@include mixins.margin-padding(null, 10px);
+		}
+		&.active {
+			& > a {
+				color: colors.$primarycolor;
+				font-weight: typography.$bold;
+			}
+		}
+	}
+}
+.unread {
+	.name, .subject, .mail-date {
+		color: colors.$black;
+		font-weight: typography.$semibold;
+	}
+}
+.table {
+	&.table-inbox {
+		& > tbody, & > thead, & > tfoot {
+			& > tr {
+				& > th, & > td {
+					border-bottom: 1px solid colors.$light__sage;
+    				border-top: 0;
+				}
+			}
+		}
+		thead {
+			background-color: colors.$white;
+		}
+	}
+}
+.note-editor {
+	&.note-frame {
+		border: 1px solid colors.$light__goose;
+		box-shadow: variables.$inherit;
+		.note-statusbar {
+			background-color: colors.$white;
+		}
+		&.fullscreen {
+			top: 60px;
+		}
+		.btn-light {
+		    background-color: colors.$platinum;
+		    box-shadow: variables.$unset;
+		    color: colors.$gray;
+		}
+	}
+}
+.mail-title {
+	font-weight: typography.$bold;
+	text-transform: variables.$uppercase;
+}
+.form-control {
+	&.search-message {
+	    border-color: colors.$goose-gray;
+	    height: 38px;
+	    width: 180px;
+	    @include mixins.rounded(4px);
+	}
+}
+table {
+	&.table-inbox {
+		tbody {
+			tr {
+				&.checked {
+					background-color: colors.$cream;
+				}
+			}
+		}
+	}
+}
+.mail-label {
+    font-size: typography.$font__size__16 !important;
+    margin-right: 5px;
+}
+.attachments {
+	list-style: variables.$none;
+	@include mixins.margin-padding(0, 0);
+	li {
+		border: 1px solid colors.$cloud__gray;
+		float: variables.$left;
+		margin-bottom: 10px;
+		margin-right: 10px;
+		width: 180px;
+	}
+}
+.attach-info {
+	background-color: colors.$alicegray;
+	@include mixins.margin-padding(null, 10px);
+}
+.attach-file {
+    color: colors.$dark__battle__gary;
+    font-size: typography.$font__size__70;
+    min-height: 138px;
+    @extend %flex-align-center;
+    @include mixins.margin-padding(null, 10px);
+    img {
+		height: variables.$auto;
+		max-width: variables.$full__width;
+	}
+}
+.mailview-header, .mailview-footer  {
+	border-bottom: 1px solid colors.$light__goose;
+	margin-bottom: 20px;
+	padding-bottom: 15px;
+}
+.mailview-footer {
+	.btn-white {
+	    margin-top: 10px;
+	    min-width: 102px;
+	}
+}
+.sender-img {
+	float: variables.$left;
+	margin-right: 10px;
+	width: 40px;
+}
+.sender-name {
+	display: variables.$block;
+}
+.receiver-name {
+	color: colors.$dark__battle__gary;
+}
+.right-action, .mail-view-action, .mail-sent-time {
+	text-align: variables.$right;
+}
+.mail-sent-time {
+	@include mixins.respond-below(custom767) {
+		float: variables.$left;
+		margin-top: 10px;
+		width: variables.$full__width;
+	}
+}
+.right-action {
+	@include mixins.respond-below(custom767) {
+		text-align: variables.$center;
+	}
+}
+.left-action {
+	@include mixins.respond-below(custom767) {
+		text-align: variables.$center;
+		margin-bottom: 15px;
+	}
+}
+.mail-view-title {
+	font-weight: typography.$medium;
+	font-size: typography.$font__size__24;
+	@include mixins.margin-padding(0, null);
+}
+.inbox-menu {
+	display: variables.$inline__block;
+	width: variables.$full__width;
+	@include mixins.margin-padding(0 0 1.875rem, 0);
+	li {
+		display: variables.$inline__block;
+		width: variables.$full__width;
+		& + li {
+			margin-top: 2px;
+		}
+		a {
+			color: colors.$gray;
+			display: variables.$inline__block;
+			width: variables.$full__width;
+			text-transform: variables.$capitalize;
+			@include mixins.transition(0.3s ease);
+			@include mixins.margin-padding(null, 10px 15px);
+			i {
+				font-size: typography.$font__size__16;
+				padding-right: 10px;
+				color: colors.$plum__gray;
+			}
+			&:hover, &:focus {
+				background: rgba(33, 33, 33, 0.05);
+			}
+		}
+		&.active {
+			a {
+				background: rgba(33, 33, 33, 0.05);
+			}
+		}	
+	}
+}
+.compose-btn {
+	margin-bottom: 1.875rem;
+	a {
+	    font-weight: typography.$semibold;
+	    @include mixins.margin-padding(null, 8px 15px);
+	}
+}

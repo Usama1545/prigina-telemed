@@ -1,0 +1,80 @@
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.add-btn {
+    border: 1px solid variables.$transparent;
+    color: colors.$light__smokey-gray;
+    display: variables.$inline__block;
+    @include mixins.margin-padding(null, .375rem .75rem);
+    @include mixins.rounded(20px);
+    @include mixins.respond-below(custom479) {
+    	font-size: typography.$font__size__14;
+		@include mixins.margin-padding(null, 6px 7px);
+    }
+    &:focus, &:active, &:hover {
+    	background-color: colors.$white;
+		border-color: colors.$light__goose;
+		color: colors.$light__smokey-gray;
+    }
+    span {
+	    align-items: variables.$center;
+	    background-color: colors.$saffron;
+	    color: colors.$white;
+	    display: variables.$inline__flex;
+	    font-size: typography.$font__size__14;
+	    height: 22px;
+	    justify-content: variables.$center;
+	    margin-right: 3px;
+	    width: 22px;
+	    @include mixins.rounded(50%);
+	}
+}
+.invoice-details {
+	float: right;
+	text-align: right;
+	@include mixins.respond-below(sm) {
+		float: left;
+		text-align: left;
+	}
+	h4 {
+		color: colors.$light__smokey-gray;
+		font-size: typography.$font__size__16;
+		font-weight: typography.$regular;
+		margin-bottom: 1.875rem;
+		text-transform: variables.$uppercase;
+	}
+}
+.inv-badge {
+	color: colors.$white;
+	font-size: typography.$font__size__11;
+	min-width: 80px;
+	line-height: normal;
+}
+.inv-logo {
+    max-height: 80px;
+    height: variables.$auto;
+	max-height: 100px;
+	width: variables.$auto;
+}
+.invoice-container {
+    background-color: colors.$white;
+	border: 1px solid colors.$light-silver;
+    max-width: 900px;
+    @include mixins.margin-padding(0 auto 1.875rem, null);
+    @include mixins.margin-padding(null, 1.5rem);
+    @include mixins.respond-below(custom767) {
+    	@include mixins.margin-padding(null, 20px);
+    }
+}
+.invoice-payment-details {
+	& > li span {
+		float: variables.$right;
+		text-align: variables.$right;
+		@include mixins.respond-below(custom575) {
+			float: variables.$left;
+			text-align: variables.$left;
+		}
+	}
+}

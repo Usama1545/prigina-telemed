@@ -1,0 +1,162 @@
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+#calendar-events {
+    background-color: colors.$water__white;
+}
+.calendar-events {
+    border: 1px solid variables.$transparent;
+    cursor: move;
+    @include mixins.margin-padding(null, 10px 15px);
+    &:hover {
+		border-color: colors.$light__metalic;
+	    background-color: colors.$white;
+	}
+	i {
+	    margin-right: 8px;
+	}
+}
+.calendar {
+	float: variables.$left;
+	margin-bottom: 0;
+}
+.fc-toolbar {
+	&.fc-header-toolbar {
+	    margin-bottom: 1.5rem;
+	}
+	.fc-center {
+		@include mixins.respond-below(custom575) {
+			display: variables.$inline__block;
+			width: variables.$full__width;
+			text-align: variables.$center;
+		}
+		h2 {
+			@include mixins.respond-below(custom575) {
+				width: variables.$full__width;
+			}
+		}
+	}
+	.fc-left {
+		@include mixins.respond-below(custom575) {
+			float: variables.$none;
+			width: 200px;
+			@include mixins.margin-padding(0 auto, null);
+		}
+	}
+	.fc-right {
+		@include mixins.respond-below(custom575) {
+			display: variables.$inline__block;
+			float: variables.$none;
+			width: 200px;
+			clear: variables.$both;
+			@include mixins.margin-padding(10px auto 0, null);
+		}
+	}
+	h2 {
+		font-size: typography.$font__size__18;
+		font-weight: typography.$semibold;
+		font-family: 'Roboto', sans-serif;
+		line-height: 30px;
+		text-transform: variables.$uppercase;
+	}
+	.fc-state-active, .ui-state-active, .ui-state-hover, button:hover, button:focus {
+		z-index: 0;
+	}
+}
+.none-border {
+	.modal-footer {
+		border-top: variables.$none;
+	}
+}
+.fc-day-grid-event {
+	.fc-time {
+		font-family: 'Roboto', sans-serif;
+	}
+}
+.fc-day {
+	background: colors.$white;
+}
+.fc {
+	th {
+		&.fc-widget-header {
+			background: colors.$cloud__gray;
+			font-size: typography.$font__size__14;
+			line-height: 20px;
+			text-transform: variables.$uppercase;
+			@include mixins.margin-padding(null, 10px 0);
+		}
+	}
+}
+.fc-unthemed {
+	th, td, thead, tbody, .fc-divider, .fc-row, .fc-popover {
+		border-color: colors.$light__water__white;
+	}
+	.fc-today {
+		background: colors.$white;
+	}
+}
+.fc-basic-view {
+	.fc-day-number, .fc-week-number {
+		@include mixins.margin-padding(null, 2px 5px);
+	}
+	td {
+		&.fc-week-number {
+			span {
+				padding-right: 8px;
+				font-weight: typography.$bold;
+				font-family: 'Roboto', sans-serif;
+			}
+		}
+		&.fc-day-number {
+			padding-right: 8px;
+			font-weight: typography.$bold;
+			font-family: 'Roboto', sans-serif;
+		}
+	}
+}
+.fc-button {
+	background: colors.$light__vampire;
+	border: variables.$none;
+	color: colors.$granite__gary;
+	text-transform: variables.$capitalize;
+	box-shadow: variables.$none !important;
+	border-radius: 3px !important;
+	height: variables.$auto !important;
+	@include mixins.margin-padding(0 3px !important, 6px 12px !important);
+}
+.fc-text-arrow {
+	font-family: variables.$inherit;
+	font-size: typography.$font__size__16;
+}
+.fc-state-hover {
+	background: colors.$light__water__white;
+}
+.fc-state-highlight {
+	background: colors.$light-silver;
+}
+.fc-state-down, .fc-state-active, .fc-state-disabled {
+	background-color: colors.$sky__blue !important;
+	color: colors.$white !important;
+	text-shadow: variables.$none !important;
+}
+.fc-cell-overlay {
+	background: colors.$light-silver;
+}
+.fc-event {
+	border: variables.$none;
+	color: colors.$white !important;
+	cursor: move;
+	font-size: typography.$font__size__13;
+	text-align: variables.$center;
+	@include mixins.rounded(2px);
+	@include mixins.margin-padding(1px 7px, 5px 5px);
+}
+.event-form {
+	.input-group {
+		.form-control {
+			height: 40px;
+		}
+	}
+}

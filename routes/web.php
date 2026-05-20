@@ -141,6 +141,12 @@ Route::get('/login', function () {
     return view('login');
 })->name('login');
 
+Route::get('/csrf-token', function () {
+    return response()->json([
+        'token' => csrf_token(),
+    ]);
+})->name('csrf-token');
+
 Route::get('/doctor-register', [AuthController::class, 'doctorRegister'])->name('doctor-register');
 Route::post('/doctor-register', [AuthController::class, 'registerDoctor'])->name('doctor-register');
 Route::post('/patient-register', [AuthController::class, 'registerPatient'])->name('patient-register');

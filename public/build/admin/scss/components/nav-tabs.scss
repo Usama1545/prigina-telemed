@@ -1,0 +1,171 @@
+@use "../base/colors";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.card-header-tabs {
+    border-bottom: 0;
+}
+.nav-tabs {
+	border-bottom: 1px solid colors.$light__candy;
+	& > li {
+		& > a {
+			margin-right: 0;
+			color: colors.$dark__gray;
+			@include mixins.rounded(0);
+			&:hover, &:focus {
+				border-color: variables.$transparent;
+				color: colors.$gray;
+			}
+		}
+	}
+	.nav-tabs-solid {
+		& > li {
+			& > a {
+				color: colors.$gray;
+			}
+		}
+		& > .active {
+			& > a, & > a:hover, & > a:focus {
+				background-color: colors.$primarycolor;
+				border-color: colors.$primarycolor;
+				color: colors.$white;
+			}
+		}
+	}
+	.nav-link {
+		@include mixins.rounded(0);
+		&:hover, &:focus {
+			background-color: colors.$cloud__gray;
+		    border-color: variables.$transparent;
+			color: colors.$gray;
+		}
+	}
+	&.nav-justified {
+		& > li {
+			& > a {
+				margin-bottom: 0;
+				@include mixins.rounded(0);
+				&:hover, &:focus {
+					border-bottom-color: colors.$light__goose;
+				}
+			}
+		}
+		&.nav-tabs-solid {
+			& > li {
+				& > a {
+					border-color: variables.$transparent;
+				}
+			}
+		}
+		&.nav-tabs-top {
+			border-bottom: 1px solid colors.$light__goose;
+			& > li {
+				& > a, & > a:hover, & > a:focus {
+					border-width: 2px 0 0 0;
+				}
+			}
+		}
+	}
+	&.nav-tabs-solid {
+		background-color: colors.$light__white;
+		border: 0;
+		& > li {
+			margin-bottom: 0;
+			& > a {
+				color: colors.$gray;
+				border-color: variables.$transparent;
+				&:hover, &:focus {
+					background-color: colors.$dark__light;
+				}
+				&.active, &.active:hover, &.active:focus {
+					background-color: colors.$primarycolor;
+					border-color: colors.$primarycolor;
+					color: colors.$white;
+				}
+			}
+		}
+		&.nav-tabs-rounded {
+			@include mixins.rounded(50px);
+			& > li {
+				& > a {
+					@include mixins.rounded(50px);
+					&.active, &.active:hover, &.active:focus {
+						@include mixins.rounded(50px);
+					}
+				}
+			}
+		}
+		& > .open:not(.active) {
+			& > a {
+				background-color: colors.$dark__light;
+				border-color: variables.$transparent;
+			}
+		}
+	}
+	&.nav-tabs-top {
+		& > li {
+			& > a, & > a:hover, & > a:focus {
+				border-width: 2px 0 0 0;
+			}
+			& > a.active, & > a.active:hover, & > a.active:focus {
+				border-top-color: colors.$primarycolor;
+			}
+			&.open {
+				& > a, & > a:hover, & > a:focus {
+					border-top-color: colors.$light__goose;
+				}
+			}
+			&+ li {
+				& > a {
+					margin-left: 1px;
+				}
+			}
+		}
+	}
+	&.nav-tabs-bottom {
+		& > li {
+			margin-bottom: -1px;
+			& > a {
+				&.active, &.active:hover, &.active:focus {
+					border-bottom-width: 2px;
+					border-color: variables.$transparent;
+					border-bottom-color: colors.$primarycolor;
+					background-color: variables.$transparent;
+					@include mixins.transition(none 0s ease 0s); 
+				} 
+			}
+		}
+	}
+}
+.card-header-tabs {
+    border-bottom: 0;
+}
+.tab-content {
+	padding-top: 20px;
+}
+.nav-tabs-justified {
+	& > li {
+		& > a {
+			margin-bottom: 0;
+			@include mixins.rounded(0);
+			&:hover, &:focus {
+				border-bottom-color: colors.$light__goose;
+			}
+		}
+	}
+	&.nav-tabs-solid {
+		& > li {
+			& > a {
+				border-color: variables.$transparent;
+			}
+		}
+	}
+	&.nav-tabs-top {
+		border-bottom: 1px solid colors.$light__goose;
+		& > li {
+			& > a, & > a:hover, & > a:focus {
+				border-width: 2px 0 0 0;
+			}
+		}
+	}
+}

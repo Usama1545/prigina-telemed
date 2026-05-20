@@ -1,0 +1,51 @@
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.main-wrapper {
+	width: variables.$full__width;
+	height: variables.$full_height_window;
+	min-height: 100vh;
+}
+.page-wrapper {
+	margin-left: 240px;
+	padding-top: 60px;
+	position: variables.$relative;
+	@include mixins.transition(all 0.4s ease);
+    @include mixins.respond-below(custom991) {
+        margin-left: 0;
+		padding-left: 0;
+		padding-right: 0;
+        @include mixins.transition(all 0.4s ease);
+    }
+	& > .content {
+		@include mixins.margin-padding(null, 1.875rem 1.875rem 0);
+		@include mixins.respond-below(custom575) {
+			@include mixins.margin-padding(null, 0.9375rem 0.9375rem 0);
+		}
+	}
+}
+.page-header {
+	margin-bottom: 1.875rem;
+	@include mixins.respond-below(custom575) {
+		margin-bottom: 0.9375rem;
+	}
+	.breadcrumb {
+	    background-color: variables.$transparent;
+	    color: colors.$wolf;
+	    font-size: typography.$font__size__16;
+	    font-weight: typography.$medium;
+	    @include mixins.margin-padding( auto auto 0, 0);
+	    @include mixins.respond-below(custom479) {
+	    	display: variables.$none;
+	    }
+	    a {
+			color: colors.$gray;
+		}
+	}
+}
+.page-title {
+    color: colors.$gray;
+    margin-bottom: 5px;
+}

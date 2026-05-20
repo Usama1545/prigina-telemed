@@ -1,0 +1,160 @@
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.login-body {
+    display: variables.$table;
+    height: variables.$full_height_window;
+    min-height: 100vh;
+}
+.login-wrapper {
+	width: variables.$full__width;
+	height: variables.$full__height;
+	display: table-cell;
+	vertical-align: variables.$middle;
+	.loginbox {
+	    background-color: colors.$white;
+		display: variables.$flex;
+	    max-width: 800px;
+	    min-height: 500px;
+	    width: variables.$full__width;
+	    @include mixins.margin-padding(1.875rem auto, null);
+	    @include mixins.rounded(6px);
+	    @include mixins.box-shadow(null, 0, 0, 10px, null, rgba(0, 0, 0, 0.1));
+	    @include mixins.respond-below(custom767) {
+	    	max-width: 450px;
+    		min-height: variables.$unset;
+	    }
+	    .login-left {
+		    align-items: variables.$center;
+		    flex-direction: column;
+		    width: 400px;
+		    display: variables.$flex;
+		    @extend %justify-content-center;
+		    background: linear-gradient(180deg, #1b5a90, #00d0f1);
+		    @include mixins.rounded(6px 0 0 6px);
+		    @include mixins.margin-padding(null, 80px);
+		    @include mixins.respond-below(custom991) {
+    			width: variables.$half__width;
+    			@include mixins.margin-padding(null, 80px 50px);
+		    }
+		    @include mixins.respond-below(custom767) {
+    			display: variables.$none;
+		    }
+		}
+		.login-right {
+		    padding: 40px;
+		    width: 400px;
+		    @extend %flex-align-center;
+		    @include mixins.respond-below(custom991) {
+    			width: variables.$half__width;
+    			@include mixins.margin-padding(null, 50px);
+		    }
+		    @include mixins.respond-below(custom767) {
+    			float: variables.$none;
+    			width: variables.$full__width;
+				@include mixins.margin-padding(null, 1.875rem);
+		    }
+		    .login-right-wrap {
+			    max-width: 100%;
+			    flex: 0 0 100%;
+			}
+			h1 {
+			    font-size: typography.$font__size__26;
+			    font-weight: typography.$medium;
+			    margin-bottom: 5px;
+			    text-align: variables.$center;
+			    @include mixins.respond-below(custom767) {
+			    	font-size: typography.$font__size__22;
+			    }
+			}
+			.forgotpass {
+				a {
+					color: colors.$ash__gray;
+					&:hover {
+						color: colors.$gray;
+						text-decoration: variables.$underline;
+					}
+				}
+			}
+			.dont-have {
+				color: colors.$ash__gray;
+				margin-top: 1.875rem;
+				a {
+					color: colors.$gray;
+					&:hover {
+						text-decoration: variables.$underline;
+					}
+				}
+			}
+		}
+	}
+}
+.account-subtitle {
+    color: colors.$taupe__black;
+    font-size: typography.$font__size__17;
+    margin-bottom: 1.875rem;
+    text-align: variables.$center;
+}
+.social-login {
+	text-align: variables.$center;
+	& > span {
+		color: colors.$ash__gray;
+		margin-right: 8px;
+	}
+	& > a {
+		background-color: colors.$goose-gray;
+		color: colors.$white;
+		display: variables.$inline__block;
+		font-size: typography.$font__size__18;
+		height: 32px;
+		line-height: 32px;
+		margin-right: 6px;
+		text-align: variables.$center;
+		width: 32px;
+		@include mixins.rounded(4px);
+	}
+	& > a {
+		&:last-child {
+			margin-right: 0;
+		}
+		&.facebook {
+			background-color: colors.$windows__blue;
+		}
+		&.google {
+			background-color: colors.$tomred;
+		}
+	}
+}
+.login-or {
+	color: colors.$ash__gray;
+	position: variables.$relative;
+	margin-bottom: 20px;
+    margin-top: 20px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+.or-line {
+	background-color: colors.$light__cloud;
+	height: 1px;
+	display: variables.$block;
+	@include mixins.margin-padding(0 variables.$auto, null);
+}
+.span-or {
+	background-color: colors.$white;
+	display: variables.$block;
+	margin-left: -20px;
+	text-align: variables.$center;
+	text-transform: variables.$uppercase;
+	width: 42px;
+	@include mixins.position(variables.$absolute, 0, null, null, 50%);
+}
+.lock-user {
+    margin-bottom: 20px;
+    text-align: variables.$center;
+    img {
+	    margin-bottom: 15px;
+	    width: 100px;
+	}
+}

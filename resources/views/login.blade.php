@@ -127,13 +127,32 @@ async function googleLogin() {
         showAlert(error.message);
     }
 }
-async function sendTokenToBackend(token, refreshToken) {
-    const btn = document.getElementById('loginBtn');
-    const spinner = document.getElementById('btnSpinner');
-    const text = document.getElementById('btnText');
-    console.log(token, refreshToken);
+async function refreshCsrfToken() {
+    const response = await fetch('/csrf-token', {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+        },
+        credentials: 'same-origin',
+    });
 
-    const response = await fetch('/auth/login', {
+    const data = await response.json();
+    const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+    const csrfInput = document.querySelector('input[name="_token"]');
+
+    if (data.token && csrfMeta) {
+        csrfMeta.setAttribute('content', data.token);
+    }
+
+    if (data.token && csrfInput) {
+        csrfInput.value = data.token;
+    }
+
+    return data.token;
+}
+
+async function postLoginToken(token, refreshToken) {
+    return fetch('/auth/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -146,6 +165,20 @@ async function sendTokenToBackend(token, refreshToken) {
             refreshToken: refreshToken
         })
     });
+}
+
+async function sendTokenToBackend(token, refreshToken) {
+    const btn = document.getElementById('loginBtn');
+    const spinner = document.getElementById('btnSpinner');
+    const text = document.getElementById('btnText');
+    console.log(token, refreshToken);
+
+    let response = await postLoginToken(token, refreshToken);
+
+    if (response.status === 419) {
+        await refreshCsrfToken();
+        response = await postLoginToken(token, refreshToken);
+    }
 
     const data = await response.json();
 

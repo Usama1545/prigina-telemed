@@ -1,0 +1,62 @@
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.select2-results__option {
+	@include mixins.margin-padding(null, 6px 15px);
+}
+.select2-container {
+	.select2-selection--single {
+		border: 1px solid colors.$light__goose;
+		height: 40px;
+		.select2-selection__rendered {
+			padding-right: 30px;
+			padding-left: 15px;
+		}
+	}
+}
+.select2-container--default {
+	.select2-selection--single {
+		.select2-selection__arrow {
+			height: 38px;
+			right: 7px;
+			b {
+				border-color: colors.$light-gray variables.$transparent variables.$transparent;
+				border-style: solid;
+				border-width: 6px 6px 0;
+				height: 0;
+				margin-left: -10px;
+				margin-top: -2px;
+				width: 0;
+				@include mixins.position(variables.$absolute, 50%, null, null, 50%);
+			}
+		}
+		.select2-selection__rendered {
+			color: colors.$dark__blue;
+			font-size: typography.$font__size__15;
+			font-weight: variables.$normal;
+			line-height: 38px;
+		}
+	}
+	&.select2-container--open {
+		.select2-selection--single {
+			.select2-selection__arrow {
+				b {
+					border-color: variables.$transparent variables.$transparent colors.$light-gray;
+					border-width: 0 6px 6px;
+				}
+			}
+		}
+	}
+	.select2-results__option--highlighted[aria-selected] {
+		background-color: colors.$sky__blue;
+	}
+	.select2-selection--multiple {
+		border: 1px solid colors.$light-gray;
+		min-height: 46px;
+	}
+}
+.select2-dropdown {
+	border-color: colors.$light-gray;
+}

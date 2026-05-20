@@ -1,0 +1,86 @@
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.dash-widget-icon {
+    display: variables.$inline__flex;
+    font-size: typography.$font__size__30;
+    height: 50px;
+    line-height: 48px;
+    text-align: variables.$center;
+    width: 50px;
+	border: 3px solid;
+    @include mixins.rounded(50px);
+    @extend %justify-content-center;
+    @extend %align-items-center;
+    @include mixins.margin-padding(null, 28px);
+    h3 {
+        margin-bottom: 10px;
+    }
+}
+.dash-count {
+    font-size: typography.$font__size__18;
+    margin-left: variables.$auto;
+    @include mixins.respond-below(custom767) {
+        font-size: typography.$font__size__16;
+    }
+}
+.dash-widget-header {
+    align-items: variables.$center;
+    display: variables.$flex;
+    margin-bottom: 15px;
+}
+.card-chart {
+    .card-body {
+        @include mixins.margin-padding(null, 8px);
+        @include mixins.respond-below(custom575) {
+            @include mixins.margin-padding(null, 5px);
+        }
+    }
+}
+#morrisArea{
+    > svg, #morrisLine > svg  {
+        width: variables.$full__width;
+    }
+}
+.activity-feed {
+    list-style: variables.$none;
+    margin-bottom: 0;
+    margin-left: 5px;
+    @include mixins.margin-padding(null, 0);
+    .feed-item {
+        border-left: 2px solid colors.$gray__opaque;
+        padding-bottom: 19px;
+        padding-left: 20px;
+        position: variables.$relative;
+        &:last-child {
+            border-color: variables.$transparent;
+            padding-bottom: 0;
+        }
+        &:after {
+            content: "";
+            display: variables.$block;
+            width: 12px;
+            height: 12px;
+            background-color: colors.$dodger__blue;
+            @include mixins.rounded(50%);
+            @include mixins.position(variables.$absolute, 0, null, null, -7px);
+        }
+        .feed-date {
+            display: variables.$block;
+            position: variables.$relative;
+            color: colors.$dark__battle__gary;
+            text-transform: variables.$uppercase;
+            font-size: typography.$font__size__13;
+        }
+        .feed-text {
+            color: colors.$dark__battle__gary;
+            position: variables.$relative;
+            a {
+                color: colors.$gray;
+                font-weight: typography.$semibold;
+            }
+        }
+    }
+}

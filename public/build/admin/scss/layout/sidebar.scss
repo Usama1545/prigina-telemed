@@ -1,0 +1,300 @@
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.mini-sidebar {
+    &.expand-menu {
+        .sidebar {
+            @include mixins.respond-above(custom992) {
+                width: 240px;
+            }
+            .sidebar-menu {
+                ul {
+                    & > li {
+                        & > a {
+                            span {
+                                @include mixins.respond-above(custom992) {
+                                    display: variables.$inline;
+                                    opacity: 1;
+                                }
+                            }
+                            i {
+                                @include mixins.respond-above(custom992) {
+                                    font-size: typography.$font__size__24;
+                                    width: 20px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .menu-title {
+            @include mixins.respond-above(custom992) {
+                visibility: variables.$visible;
+            }
+            a {
+                @include mixins.respond-above(custom992) {
+                    visibility: variables.$hidden;
+                }
+            }
+        }
+    }
+    .sidebar {
+        @include mixins.respond-above(custom992) {
+            width: 78px;
+        }
+        .sidebar-menu {
+            ul {
+                & > li {
+                    & > a {
+                        span {
+                            @include mixins.respond-above(custom992) {
+                                display: variables.$none;
+                                opacity: 0;
+                                @include mixins.transition(all 0.2s ease-in-out);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .menu-title {
+        @include mixins.respond-above(custom992) {
+            visibility: variables.$hidden;
+            white-space: variables.$nowrap;
+        }
+        a {
+            @include mixins.respond-above(custom992) {
+                visibility: variables.$hidden;
+            }
+        }
+    }
+    .page-wrapper {
+        @include mixins.respond-above(custom992) {
+            margin-left: 78px;
+        }
+    }
+}
+.sidebar {
+    background-color: colors.$light__blue__jey;
+    margin-top: 0;
+    @include mixins.transition(all 0.2s ease-in-out 0s);
+    width: 240px;
+    z-index: 1001;
+    @include mixins.position(variables.$fixed, 60px, null, 0, 0);
+    @include mixins.respond-below(custom991) {
+        margin-left: -225px;
+        width: 225px;
+        @include mixins.transition(all 0.4s ease);
+        z-index: 1000;
+    }
+    &.opened {
+        @include mixins.transition(all 0.4s ease);
+    }
+    .sidebar-menu {
+        & > ul {
+            & > li {
+                margin-bottom: 3px;
+                position: variables.$relative;
+                &:last-child {
+                    margin-bottom: 0;
+                }
+                & > a {
+                    align-items: variables.$center;
+                    display: variables.$flex;
+                    justify-content: flex-start;
+                    position: variables.$relative;
+                    color: colors.$light__vampire;
+                    @include mixins.transition(all 0.2s ease-in-out 0s);
+                    @include mixins.rounded(3px);
+                    @include mixins.margin-padding(null, 8px 15px);
+                    span {
+                        display: variables.$inline__block;
+                        margin-left: 10px;
+                        white-space: variables.$nowrap;
+                        @include mixins.transition(all 0.2s ease-in-out 0s);
+                        &.chat-user {
+                            margin-left: 0;
+                            overflow: variables.$hidden;
+                            text-overflow: variables.$ellipsis;
+                        }
+                        &.badge {
+                            margin-left: variables.$auto;
+                        }
+                    }
+                }
+            }
+        }
+        .menu-arrow {
+            display: variables.$inline__block;
+            font-family: 'FontAwesome';
+            text-rendering: variables.$auto;
+            line-height: 40px;
+            font-size: typography.$font__size__16;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 18px;
+            @include mixins.transition(transform .15s);
+            @include mixins.transform(translate(0, 0));
+            @include mixins.position(variables.$absolute, 11px, 15px, null, null);
+            &:before {
+                content: "\f105";
+            }
+        }
+    }
+    ul {
+        ul {
+            display: variables.$none;
+            a {
+                display: variables.$block;
+                font-size: typography.$font__size__15 !important;
+                @include mixins.margin-padding(null, 7px 10px 7px 45px !important);
+                position: variables.$relative;
+                .menu-arrow {
+                    top: 10px !important;
+                }
+            }
+            ul {
+                a {
+                    padding-left: 65px !important;
+                }
+                ul {
+                    a {
+                        padding-left: 85px !important;
+                    }
+                }
+            }
+        }
+        li {
+            a {
+                &.subdrop {
+                    .menu-arrow {
+                        @include mixins.transform(rotate(90deg));
+                    }
+                }
+                i {
+                    display: variables.$inline__block;
+                    font-size: typography.$font__size__24;
+                    line-height: 24px;
+                    text-align: variables.$left;
+                    vertical-align: variables.$middle;
+                    width: 20px;
+                    @include mixins.transition(all 0.2s ease-in-out 0s);
+                }
+                & > .badge {
+                    color: colors.$white;
+                }
+            }
+            &.menu-title {
+                a {
+                    i {
+                        font-size: typography.$font__size__16 !important;
+                        margin-right: 0;
+                        text-align: variables.$right;
+                        width: variables.$auto;
+                    }
+                }
+            }
+        }
+    }
+}
+.sidebar-inner {
+    height: variables.$full__height;
+    min-height: variables.$full__height;
+    @include mixins.transition(all 0.2s ease-in-out 0s);
+}
+.sidebar-menu {
+    @include mixins.margin-padding(null, 15px);
+    ul {
+        font-size: typography.$font__size__15;
+        list-style-type: variables.$none;
+        position: variables.$relative;
+        @include mixins.margin-padding(0, 0);
+        li {
+            a {
+                color: colors.$white;
+                display: variables.$block;
+                font-size: typography.$font__size__16;
+                height: variables.$auto;
+                @include mixins.margin-padding(null, 0 20px);
+                &:hover {
+                    color: colors.$cyan;
+                }
+            }
+            &.active {
+                a {
+                    background-color: colors.$primarycolor;
+                    color: #fff;
+                }
+            }
+        }
+        ul {
+            a {
+                &.active {
+                    color: colors.$light__celeste;
+                    text-decoration: variables.$underline;
+                }
+            }
+        }
+    }
+    & > ul {
+        & > li {
+            & > a {
+                &:hover {
+                    background-color: colors.$primarycolor-hover;
+                    color: colors.$white;
+                }
+            }
+            &.active {
+                & > a {
+                    &:hover {
+                        background-color: colors.$primarycolor-hover;
+                        color: colors.$white;
+                    }
+                }
+            }
+        }
+    }
+}
+.menu-title {
+    color: colors.$gray__powder;
+    display: variables.$flex;
+    font-size: typography.$font__size__14;
+    font-weight: 600;
+    opacity: 1;
+    white-space: variables.$nowrap;
+    @include mixins.margin-padding(null, 5px 15px);
+    & > i {
+        float: variables.$right;
+        line-height: 40px;
+    }
+    li {
+        &.menu-title {
+            a {
+                color: colors.$cantaloupe;
+                display: variables.$inline__block;
+                margin-left: variables.$auto;
+                @include mixins.margin-padding(null, 0);
+                .btn {
+                    color: colors.$white;
+                    display: variables.$block;
+                    float: variables.$none;
+                    font-size: typography.$font__size__15;
+                    @include mixins.margin-padding(auto auto 15px, 10px 15px);
+                }
+            }
+        }
+    }
+}
+.modal-open {
+    &.mini-sidebar {
+        .sidebar {
+            @include mixins.respond-above(custom992) {
+                z-index: 1051;
+            }
+        }
+    }
+}

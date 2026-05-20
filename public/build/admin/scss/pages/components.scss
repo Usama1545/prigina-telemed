@@ -1,0 +1,82 @@
+@use "../base/colors";
+@use "../utils/mixins";
+
+.section-header {
+    margin-bottom: 1.875rem;
+    .section-title {
+	    color: colors.$gray;
+	}
+}
+.comp-header {
+    margin-bottom: 1.875rem;
+    .comp-title {
+	    color: colors.$dark__blue;
+	}
+}
+.line {
+    background-color: colors.$sky__blue;
+    height: 2px;
+    width: 60px;
+    @include mixins.margin-padding(0, null);
+}
+.comp-buttons {
+	.btn {
+		margin-bottom: 5px;
+	}
+}
+.pagination-box {
+	.pagination {
+		margin-top: 0;
+	}
+}
+.comp-dropdowns {
+	.btn-group {
+		margin-bottom: 5px;
+	}
+}
+.progress-example {
+	.progress {
+		margin-bottom: 1.5rem;
+	}
+}
+.progress-xs {
+	height: 4px;
+}
+.progress-sm {
+	height: 15px;
+}
+.progress {
+	&.progress-sm {
+		height: 6px;
+	}
+	&.progress-md {
+		height: 8px;
+	}
+	&.progress-lg {
+		height: 18px;
+	}
+}
+.row {
+	&.row-sm {
+	    margin-left: -3px;
+    	margin-right: -3px;
+		& > div {
+    		padding-left: 3px;
+    		padding-right: 3px;
+    	}
+    }
+}
+.nav-pills {
+	.nav-link.active, .show>.nav-link {
+	    color: colors.$white;
+	    background-color: colors.$primarycolor;
+	}
+}
+.pagination-lg {
+	.page-link {
+		@include mixins.respond-below(custom575) {
+			font-size: 1.2rem;
+			@include mixins.margin-padding(null, 0.5rem 0.625rem);
+		}
+	}
+}

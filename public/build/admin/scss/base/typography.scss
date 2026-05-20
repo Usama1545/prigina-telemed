@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css?family=Mada:400,500,600,700&display=swap');
+
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: url(../fonts/MaterialIcons-Regular.eot); /* For IE6-8 */
+    src: local('Material Icons'),
+    local('MaterialIcons-Regular'),
+    url(../fonts/MaterialIcons-Regular.woff2) format('woff2'),
+    url(../fonts/MaterialIcons-Regular.woff) format('woff'),
+    url(../fonts/MaterialIcons-Regular.ttf) format('truetype');
+}
+$body__font__family:'Mada', sans-serif;
+
+$bold:700;
+$semibold:600;
+$medium:500;
+$regular:400;
+$__light:300;
+
+$__body__font__size:17px;
+$__menu__font__size:16px;
+$__button__font__size:18px;
+$font__size__10:10px;
+$font__size__11:11px;
+$font__size__12:12px;
+$font__size__13:13px;
+$font__size__14:14px;
+$font__size__15:15px;
+$font__size__16:16px;
+$font__size__17:17px;
+$__font__size__19:19px;
+$font__size__18:18px;
+$font__size__20:20px;
+$font__size__22:22px;
+$font__size__24:24px;
+$font__size__26:26px;
+$font__size__28:28px;
+$font__size__30:30px;
+$font__size__32:32px;
+$__font__size__40:40px;
+$font__size__42:42px;
+$__font__size__50:50px;
+$font__size__70:70px;
+

@@ -1,0 +1,118 @@
+@use "../base/colors";
+@use "../base/typography";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+.check {
+	display: variables.$block;
+	width: 0;
+	height: 0;
+	visibility: variables.$hidden;
+	opacity: 0;
+	pointer-events: variables.$none;
+	position: variables.$absolute;
+	@include mixins.margin-padding(0, 0);
+	&:checked {
+		+ .checktoggle {
+			background-color: colors.$lime__green;
+			&:after {
+				left: 100%;
+				@include mixins.transform(translate(calc(-100% - 5px), -50%));
+			}
+		}
+	}
+}
+.checktoggle {
+    background-color: colors.$ferriari__red;
+    cursor: variables.$pointer;
+    display: variables.$block;
+    font-size: 0;
+    height: 24px;
+    margin-bottom: 0;
+    position: variables.$relative;
+    width: 48px;
+    @include mixins.rounded(12px);
+    &:after {
+		content: ' ';
+		display: variables.$block;
+		width: 16px;
+		height: 16px;
+		background-color: colors.$white;
+		transition: left 300ms ease, transform 300ms ease;
+		@include mixins.transform(translate(5px, -50%));
+		@include mixins.rounded(50%);
+		@include mixins.position(variables.$absolute, 50%, null, null, 0);
+	}
+}
+.onoffswitch {
+	margin-left: variables.$auto;
+    position: variables.$relative;
+	width: 73px;
+    @extend %user-none;
+}
+.onoffswitch-checkbox {
+    display: variables.$none;
+    &:checked {
+    	+ .onoffswitch-label {
+    		.onoffswitch-inner {
+    			margin-left: 0;
+    		}
+    		.onoffswitch-switch {
+    			right: 0px;
+    		}
+    	}
+    }
+}
+.onoffswitch-label {
+    display: variables.$block; 
+	overflow: variables.$hidden; 
+	cursor: variables.$pointer;
+	margin-bottom: 0;
+	@include mixins.rounded(20px);
+}
+.onoffswitch-inner {
+	display: variables.$block;
+    margin-left: -100%;
+    @include mixins.transition(margin 0.3s ease-in 0s);
+    width: 200%;
+    &:before, &:after {
+    	box-sizing: border-box;
+	    color: colors.$white;
+	    display: variables.$block;
+	    float: variables.$left;
+	    font-size: typography.$font__size__16;
+	    height: 30px;
+	    line-height: 32px;
+	    width: variables.$half__width;
+	    @include mixins.margin-padding(null, 0);
+    }
+    &:before {
+		background-color: colors.$lime__green;
+	    color: colors.$white;
+	    content: "ON";
+	    padding-left: 14px;
+	}
+	&:after {
+	    content: "OFF";
+	    padding-right: 14px;
+	    background-color: colors.$goose-gray;
+	    color: colors.$white;
+	    text-align: variables.$right;
+	}
+}
+.onoffswitch-switch {
+    background: colors.$white;
+    display: variables.$block;
+	height: 20px;
+    width: 20px;
+    @include mixins.rounded(20px);
+    @include mixins.transition(all 0.3s ease-in 0s);
+    @include mixins.margin-padding(5px, null);
+    @include mixins.position(variables.$absolute, 0, 43px, 0, null);
+}
+.btn {
+	border: 0;
+}
+.btn-check:checked+.btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check)+.btn:active {
+	border: 0;
+}

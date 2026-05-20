@@ -1,0 +1,157 @@
+@use "../utils/mixins";
+@use "../utils/variables";
+@use "colors";
+@use "typography";
+
+html {
+	height: variables.$full__height;
+}
+body {
+	background-color: colors.$light-pale-blue; 
+	color: colors.$gray;
+	font-family: typography.$body__font__family;
+	font-size: 1rem;
+	height: variables.$full__height;
+	line-height: 1.5;
+	overflow-x: variables.$hidden;
+	@include mixins.respond-below(custom767) {
+    	font-size: typography.$font__size__15;
+    }
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: typography.$body__font__family;
+	margin-top: 0;
+}
+a {
+	@include mixins.transition(all 0.4s ease);
+	text-decoration: none;
+	&:hover, &:focus, &:active {
+		outline: variables.$none;
+		text-decoration: variables.$none;
+		color: colors.$primarycolor;
+	}
+}
+input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus {
+	box-shadow: 0 0 0px 1000px white inset !important;
+	-webkit-box-shadow: 0 0 0px 1000px white inset !important;
+}
+.form-control {
+    border: 1px solid colors.$light__goose;
+    box-shadow: variables.$none;
+    color: colors.$gray;
+    font-size: typography.$font__size__15;
+    height: 40px;
+    &:focus {
+		border-color: colors.$primarycolor;
+		box-shadow: variables.$none;
+		outline: 0 variables.$none;
+	}
+	&.form-control-sm {
+		height: calc(1.5em + .5rem + 2px);
+	}
+	&.form-control-lg {
+		height: calc(1.5em + 1rem + 2px);
+	}
+}
+a {
+	color: colors.$cyan__blue;
+}
+input, button {
+	@include mixins.transition(all 0.4s ease);
+	&:focus, &:hover {
+		outline: variables.$none;
+	}
+}
+input {
+	&[type="file"] {
+		height: variables.$auto;
+    	min-height: calc(1.5em + .75rem + 2px);
+	}
+	&[type=text], &[type=password] {
+		@include mixins.appearance(variables.$none);
+	}
+}
+textarea {
+	&.form-control {
+		resize: vertical;
+	}
+}
+.navbar-nav {
+	& > li {
+		float: variables.$left;
+	}
+}
+.form-group {
+	margin-bottom: 1.25rem;
+}
+.input-group {
+	.form-control {
+		height: 40px;
+	}
+}
+.nav {
+	.open {
+		a, a:hover, a:focus {
+			background-color: rgba(0, 0, 0, 0.1);
+			border-color: rgba(0, 0, 0, 0.1);
+		}
+	}
+}
+.material-icons {
+	font-family: 'Material Icons';
+	font-weight: variables.$normal;
+	font-style: variables.$normal;
+	font-size: typography.$font__size__24;
+	display: variables.$inline__block;
+	line-height: 1;
+	text-transform: variables.$none;
+	letter-spacing: variables.$normal;
+	word-wrap: variables.$normal;
+	white-space: variables.$nowrap;
+	direction: ltr;
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+	-moz-osx-font-smoothing: grayscale;
+	font-feature-settings: 'liga';
+}
+.font-weight-600 {
+	font-weight: typography.$semibold;
+}
+h1, .h1 {
+	@include mixins.respond-below(custom767) {
+		font-size: typography.$font__size__32;
+	}
+}
+h2, .h2 {
+	@include mixins.respond-below(custom767) {
+		font-size: typography.$font__size__28;
+	}
+}
+h3, .h3 {
+	@include mixins.respond-below(custom767) {
+		font-size: typography.$font__size__24;
+	}
+}
+h4, .h4 {
+	@include mixins.respond-below(custom767) {
+		font-size: typography.$font__size__18;
+	}
+}
+h5, .h5 {
+	@include mixins.respond-below(custom767) {
+		font-size: typography.$font__size__16;
+	}
+}
+h6, .h6 {
+	@include mixins.respond-below(custom767) {
+		font-size: typography.$font__size__14;
+	}
+}
+p:last-child {
+    margin-bottom: 0;
+}
