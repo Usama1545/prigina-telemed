@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "flutterwavedev/flutterwave-v3": "^1.1",
+        "google/cloud-core": "^1.45",
         "google/cloud-firestore": "^1.45",
         "google/gax": "^1.38",
         "kreait/laravel-firebase": "^7.1",

@@ -254,6 +254,13 @@
            
         }
 
+        @media (max-width: 991.98px) {
+            .container {
+                max-width: 100%;
+                padding-bottom: 0px !important;
+            }
+        }
+
 
         /* Rest of your styles remain the same */
         .user-list-item {

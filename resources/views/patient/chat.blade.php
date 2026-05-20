@@ -233,6 +233,13 @@
             height: calc(100vh - 100px);
             flex-direction: column;
         }
+
+        @media (max-width: 991.98px) {
+            .container {
+                max-width: 100%;
+                padding-bottom: 0px !important;
+            }
+        }
         /* Mobile Styles */
         @media (max-width: 991px) {
            
