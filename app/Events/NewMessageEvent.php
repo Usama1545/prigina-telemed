@@ -23,10 +23,10 @@ class NewMessageEvent implements ShouldBroadcastNow
     // 🔥 Channel (important)
     public function broadcastOn(): Channel
     {
-        $id = current_user()['uid'];
-        return new channel('chat.' . $id); // ✅ public channel
+        return new Channel(
+            'chat.' . $this->data['receiverId']
+        );
     }
-
     // 🔥 Event name (frontend listens to this)
     public function broadcastAs(): string
     {

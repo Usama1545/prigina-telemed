@@ -9,4 +9,5 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 Route::post('/chat/webhook', [ChatWebhookController::class, 'handle']);
+Route::post('/chat/webhook/new_appointment', [ChatWebhookController::class, 'appointment']);
 

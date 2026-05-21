@@ -47,6 +47,8 @@ Route::middleware(['firebase.auth'])->group(function () {
 
     Route::prefix('doctor')->controller(DoctorProfileController::class)->group(function () {
         Route::get('/appointment/{id}/cancel', 'cancelAppointment')->name('doctor.cancel-appointment');
+        Route::get('/appointment/{id}/complete', 'completeAppointment')->name('doctor.complete-appointment');
+        Route::get('/appointment/{id}/accept', 'acceptAppointment')->name('doctor.accept-appointment');
         Route::get('/appointment-details/{id}', 'appointmentDetails')->name('doctor.appointment-details');
         Route::get('/appointments', 'appointments')->name('doctor.appointments');
         Route::get('/dashboard', 'dashboard')->name('doctor.dashboard');

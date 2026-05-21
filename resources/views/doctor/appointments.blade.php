@@ -142,7 +142,7 @@
 
                             @foreach($appointments['pending'] as $appointment)
 
-                                @include('doctor.partials.appointment-card', [
+                                @include('doctor.partials.appointment-card-pending', [
                                     'appointment' => $appointment
                                 ])
 

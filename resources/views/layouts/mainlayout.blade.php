@@ -130,6 +130,7 @@
                                                                         });
 
                                                                         const userId = "{{ optional(current_user())['uid'] ?? '' }}";
+                                                                        const userRole = "{{ optional(current_user())['role'] ?? '' }}";
                                                                         Pusher.logToConsole = true;
                                                                             Echo.channel(`chat.${userId}`)
                                                                             .listen('.new.message', (e) => {
@@ -154,7 +155,23 @@
                                                                                     markMessagesAsRead(e.conversationId);
                                                                                 }
                                                                             });
+                                                                            Echo.channel(`appointments.${userId}`)
+                                                                                .listen('.new.appointment', (e) => {
+
+                                                                                    console.log('new appointment', e);
+
+                                                                                    showAppointmentNotification(e);
+
+                                                                                    // optional refresh
+                                                                                    if (typeof loadAppointments === 'function') {
+                                                                                        loadAppointments();
+                                                                                    }
+                                                                                });
                                                                             function showNotification(data) {
+                                                                                const conversationUrl =
+                                                                                    userRole === 'doctor'
+                                                                                        ? `/doctor/conversations/${data.conversationId}`
+                                                                                        : `/patient/conversations/${data.conversationId}`;
                                                                                 const popup = document.createElement('div');
                                                                                 popup.innerHTML = `
                                                                                     <div style="
@@ -167,15 +184,58 @@
                                                                                         border-radius: 8px;
                                                                                         z-index: 9999;
                                                                                         box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                                                                                        cursor: pointer;
+                                                                                        min-width: 280px;
                                                                                     ">
-                                                                                        <strong>New Message</strong><br>
+                                                                                        <strong>
+                                                                                            ${data.senderName ?? 'New Message'}
+                                                                                        </strong>
+                                                                                        <br>
+
                                                                                         ${data.text ?? ''}
                                                                                     </div>
                                                                                 `;
-
+                                                                                popup.onclick = () => {
+                                                                                    window.location.href = conversationUrl;
+                                                                                };
                                                                                 document.body.appendChild(popup);
+                                                                                setTimeout(() => {
+                                                                                    popup.remove();
+                                                                                }, 10000);
+                                                                            }
+                                                                            function showAppointmentNotification(data) {
+                                                                                const appointmentUrl =
+                                                                                    userRole === 'doctor'
+                                                                                        ? `/doctor/appointments`
+                                                                                        : `/patient/appointments`;
+                                                                                const popup = document.createElement('div');
+                                                                                popup.innerHTML = `
+                                                                                    <div style="
+                                                                                        position: fixed;
+                                                                                        top: 20px;
+                                                                                        right: 20px;
+                                                                                        background: #198754;
+                                                                                        color: #fff;
+                                                                                        padding: 14px 18px;
+                                                                                        border-radius: 8px;
+                                                                                        z-index: 9999;
+                                                                                        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                                                                                        min-width: 280px;
+                                                                                        cursor: pointer;
+                                                                                    ">
+                                                                                        <strong>
+                                                                                            New Appointment Booking 📅
+                                                                                        </strong>
+                                                                                        <br>
 
-                                                                                // auto remove after 4 sec
+                                                                                        ${data.patientName ?? 'Patient'}
+                                                                                        booked an appointment
+                                                                                    </div>
+                                                                                `;
+                                                                                popup.onclick = () => {
+                                                                                    window.location.href = appointmentUrl;
+                                                                                };
+                                                                                document.body.appendChild(popup);
                                                                                 setTimeout(() => {
                                                                                     popup.remove();
                                                                                 }, 10000);

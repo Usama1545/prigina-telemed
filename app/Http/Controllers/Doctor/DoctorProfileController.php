@@ -679,4 +679,22 @@ class DoctorProfileController extends Controller
             ->route('doctor.payout')
             ->with('success', 'Payout account setup completed.');
     }
+    
+    public function completeAppointment($id)
+    {
+        $this->firestore->update('appointments', $id, [
+            'status' => 'completed',
+        ]);
+
+        return back()->with('success', 'Appointment completed successfully.');
+    }
+
+    public function acceptAppointment($id)
+    {
+        $this->firestore->update('appointments', $id, [
+            'status' => 'confirmed',
+        ]);
+
+        return back()->with('success', 'Appointment accepted successfully.');
+    }
 }

@@ -200,21 +200,31 @@
 
             </li>
 
-            @if(($appointment['status'] ?? '') !== 'completed')
+            <li class="appointment-action">
 
-                <li class="appointment-action">
+            <div class="d-flex gap-2">
 
-                    <a class="btn btn-primary w-100 confirm-appointment-btn" data-id="{{ $appointment['id'] }}" href="{{ route('doctor.complete-appointment', $appointment['id']) }}">
+                <a
+                    class="btn btn-sm btn-success accept-appointment-btn"
+                    data-id="{{ $appointment['id'] }}"
+                    href="{{ route('doctor.accept-appointment', $appointment['id']) }}"
+                >
+                    <i class="fa-solid fa-check me-1"></i>
+                    Accept
+                </a>
 
-                        <i class="fa-solid fa-check me-1"></i>
+                <a
+                    class="btn btn-sm btn-danger cancel-appointment-btn"
+                    data-id="{{ $appointment['id'] }}"
+                    href="{{ route('doctor.cancel-appointment', $appointment['id']) }}"
+                >
+                    <i class="fa-solid fa-xmark me-1"></i>
+                    Cancel
+                </a>
 
-                        Mark as Complete
+            </div>
 
-                    </a>
-
-                </li>
-
-            @endif
+        </li>
 
         </ul>
 
