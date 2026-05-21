@@ -92,12 +92,13 @@
 
                                     <input
                                         class="form-control form-control-lg group_formcontrol form-control-phone"
-                                        id="phone"
+                                        id="Userphone"
                                         name="phone"
                                         type="text"
                                         value="{{ old('phone') }}"
                                         required
                                     >
+                                    <input type="hidden" name="country_code" id="country_code">
 
                                 </div>
 
@@ -276,7 +277,12 @@
 @push('scripts')
 
 <script>
+const phoneInput = document.querySelector("#Userphone");
 
+const iti = window.intlTelInput(phoneInput, {
+    initialCountry: "auto",
+    separateDialCode: true,
+});
 document.getElementById('timezone').value =
     Intl.DateTimeFormat().resolvedOptions().timeZone;
 
@@ -406,6 +412,9 @@ document
         e.preventDefault();
 
         const formData = new FormData(this);
+        const countryData = iti.getSelectedCountryData();
+
+        formData.append('practiceCountry', countryData.iso2.toUpperCase());
 
         firebasePatientRegister(formData);
 });

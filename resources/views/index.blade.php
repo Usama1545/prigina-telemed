@@ -263,21 +263,40 @@
                                             <p class="location-title"></i><span class="fw-medium">Experience:
                                                     {{ $doctor['experience'] }}</span>
                                             </p>
+                                        </div>
+                                        @if(isset($doctor['practiceCountry']))
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <img
+                                                        src="https://flagcdn.com/24x18/{{ strtolower($doctor['practiceCountry']) }}.png"
+                                                        alt="{{ $doctor['practiceCountry'] }}"
+                                                        width="24"
+                                                        class="rounded-sm"
+                                                    />
 
-                                        </div>
+                                                    <span class="fw-medium">
+                                                        {{ Symfony\Component\Intl\Countries::getName($doctor['practiceCountry']) }}
+                                                    </span>
+                                                </div>
+                                            @endif
+                                        
                                     </div>
-                                    @if(session('firebase_token'))
-                                    <div class="doctor-footer">
-                                        <div>
-                                            <p class="mb-1">Consultation Fees</p>
-                                            <div class="price">{{ $doctor['consultationFee'] }}</div>
-                                        </div>
-                                        <a href="{{ url('doctor-details', $doctor['id']) }}" class="btn btn-md book-btn">
-                                            <i class="isax isax-calendar-1 icon-1"></i>
-                                            <i class="isax isax-export-3 icon-2"></i>
-                                        </a>
-                                    </div>
-                                    @endif
+                                  
+                                   
+                                        
+                                        @if(session('firebase_token'))
+                                         <div class="doctor-footer">
+                                            <div>
+                                                <p class="mb-1">Consultation Fees</p>
+                                                <div class="price">{{ $doctor['consultationFee'] }}</div>
+                                            </div>
+                                            <a href="{{ url('doctor-details', $doctor['id']) }}" class="btn btn-md book-btn">
+                                                <i class="isax isax-calendar-1 icon-1"></i>
+                                                <i class="isax isax-export-3 icon-2"></i>
+                                            </a>
+                                             </div>
+                                         @endif
+                                   
+                                   
                                 </div>
                             </div>
                         </div>
@@ -403,7 +422,7 @@
                     </div>
                     <div class="col-lg-6 col-md-12 wow fadeInUp" data-wow-duration="1s">
                         <div class="mobile-img">
-                            <img src="{{ asset('build/img/mobiles-Photoroom.png') }}" class="img-fluid" alt="img">
+                            <img src="{{ asset('build/img/mobiles-Photoroom.png') }}" class="img-fluid width-50" alt="img">
                         </div>
                     </div>
                 </div>
@@ -430,6 +449,29 @@
 .step-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.width-50 {
+    width: 50%;
+}
+
+@media (max-width: 1440.96px) {
+    .width-50 {
+        width: 100%;
+    }
+}
+
+.card-img-hover {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px 12px 0 0;
+}
+
+.dr-card-img {
+    width: 100%;
+    aspect-ratio: 612 / 391;
+    object-fit: cover;
+    display: block;
 }
 
 /* NUMBER (top-left badge) */

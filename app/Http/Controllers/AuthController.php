@@ -191,6 +191,7 @@ class AuthController extends Controller
             'degree_certificate' => 'required|file|mimes:jpg,jpeg,png,pdf',
             'id_proof' => 'required|file|mimes:jpg,jpeg,png,pdf',
             'clinic_registration' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+            'practiceCountry' => 'required',
         ]);
 
         $firestore = app(FirestoreService::class);
@@ -315,6 +316,7 @@ class AuthController extends Controller
             $data['isEmailVerified'] = false; // Default fee, can be updated by doctor later
             $data['isTopDoctor'] = false; // Default fee, can be updated by doctor later
             $data['isVerified'] = false; // Default fee, can be updated by doctor later
+            $data['practiceCountry'] = $request->practiceCountry; // Default fee, can be updated by doctor later
             $data['rating'] = 0; // Default fee, can be updated by doctor later
             $data['rejectionReason'] = ""; // Default fee, can be updated by doctor later
             $data['slotDuration'] = 30; // Default fee, can be updated by doctor later
@@ -349,7 +351,7 @@ class AuthController extends Controller
         ], 200);
     }
 
-     public function registerPatient(Request $request)
+    public function registerPatient(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',

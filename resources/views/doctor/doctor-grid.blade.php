@@ -156,18 +156,33 @@
                                             @endif
                                         </div>
                                         <div class="p-3 pt-0">
-                                            <div class="doctor-info-detail">
-                                                <h3 class="mb-1 custom-title"><a
-                                                        href="{{ route('doctor-details', $doctor['uid']) }}">{{ $doctor['name'] }}</a>
-                                                </h3>
-                                                <div class="doctor-location">
-                                                    <p class="location-title"></i><span class="fw-medium">Experience:
-                                                            {{ $doctor['experience'] }}</span>
-                                                    </p>
+                                            <div class="doctor-info">
+                                                <div class="doctor-info-detail">
+                                                    <h3 class="mb-1 custom-title"><a
+                                                            href="{{ route('doctor-details', $doctor['id']) }}">{{ $doctor['name'] }}</a>
+                                                    </h3>
+                                                    <div class="doctor-location">
+                                                        <p class="location-title"></i><span class="fw-medium">Experience:
+                                                                {{ $doctor['experience'] }}</span>
+                                                        </p>
+                                                    </div>
+                                                    @if(isset($doctor['practiceCountry']))
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <img
+                                                                    src="https://flagcdn.com/24x18/{{ strtolower($doctor['practiceCountry']) }}.png"
+                                                                    alt="{{ $doctor['practiceCountry'] }}"
+                                                                    width="24"
+                                                                    class="rounded-sm"
+                                                                />
 
+                                                                <span class="fw-medium">
+                                                                    {{ Symfony\Component\Intl\Countries::getName($doctor['practiceCountry']) }}
+                                                                </span>
+                                                            </div>
+                                                        @endif
+                                                    
                                                 </div>
                                             </div>
-                                            
                                             <div class="d-flex align-items-center justify-content-between">
                                                 @if(session('firebase_token'))
                                                 <div>
@@ -205,6 +220,20 @@
 
         </div>
     </div>
+    <style>
+        .card-img-hover {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .dr-card-img {
+            width: 100%;
+            aspect-ratio: 612 / 391;
+            object-fit: cover;
+            display: block;
+        }
+    </style>
     <!-- /Page Content -->
     <script>
         document.getElementById('load-more-btn')?.addEventListener('click', function() {

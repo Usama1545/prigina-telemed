@@ -65,7 +65,7 @@
 
                                         <input
                                             class="form-control group_formcontrol form-control-phone @error('phone') is-invalid @enderror"
-                                            id="phone"
+                                            id="Userphone"
                                             name="phone"
                                             type="text"
                                             value="{{ old('phone') }}"
@@ -340,7 +340,12 @@
     });
 </script>
 <script>
+const phoneInput = document.querySelector("#Userphone");
 
+const iti = window.intlTelInput(phoneInput, {
+    initialCountry: "auto",
+    separateDialCode: true,
+});
 async function parseJsonResponse(response)
 {
     const contentType = response.headers.get('content-type') || '';
@@ -443,6 +448,9 @@ document.getElementById('doctorRegisterForm')
         e.preventDefault();
 
         const formData = new FormData(this);
+        const countryData = iti.getSelectedCountryData();
+
+        formData.append('practiceCountry', countryData.iso2.toUpperCase());
 
         firebaseDoctorRegister(formData);
 });
