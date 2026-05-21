@@ -38,6 +38,11 @@ class FirebaseAuthService
         $this->auth->sendPasswordResetLink($email);
     }
 
+    public function sendEmailVerification(string $email): void
+    {
+        $this->auth->sendEmailVerificationLink($email);
+    }
+
     public function refreshIdToken($refreshToken)
     {
         $response = Http::post(

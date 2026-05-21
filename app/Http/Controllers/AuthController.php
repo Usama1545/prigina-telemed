@@ -50,15 +50,7 @@ class AuthController extends Controller
                 ], 403);
             }
 
-            if (($doctor['isEmailVerified'] ?? false) === false) {
-
-                return response()->json([
-                    'error' => 'Your email address is not verified yet.'
-                ], 403);
-            }
-
             if (($doctor['isVerified'] ?? false) === false) {
-
                 return response()->json([
                     'error' => !empty($doctor['rejectionReason']) ? $doctor['rejectionReason']
                         : 'Your account is currently pending verification.'
@@ -522,6 +514,23 @@ class AuthController extends Controller
                 'success' => false,
                 'message' => $e->getMessage(),
             ];
+        }
+    }
+
+    public function resendVerificationEmail(Request $request)
+    {
+        $authService = app(FirebaseAuthService::class);
+
+        try {
+            $authService->sendEmailVerification($request->email);
+            return response()->json([
+                'success' => true,
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ]);
         }
     }
 }
