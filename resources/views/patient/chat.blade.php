@@ -206,7 +206,7 @@
         .chat-sec {
             display: flex;
             width: 100%;
-            height: calc(100vh - 150px);
+            height: calc(100dvh - 150px);
             background: #fff;
             border-radius: 15px;
             overflow: hidden;
@@ -244,7 +244,7 @@
         @media (max-width: 991px) {
            
             .chat-sec {
-                height: calc(100vh - 170px);
+                height: calc(100dvh - 170px) !important;
             }
 
             .sidebar-group.left-sidebar {

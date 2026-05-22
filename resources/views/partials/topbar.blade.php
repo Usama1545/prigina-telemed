@@ -156,6 +156,15 @@
     min-height: 80px;
 }
 
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
 .main-nav {
     gap: 6px;
 }

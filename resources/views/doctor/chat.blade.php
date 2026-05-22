@@ -3,7 +3,7 @@
 @section('content')
     <!-- Page Content -->
     <div class="page-wrapper chat-page-wrapper mt-3">
-        <div class="container">
+        <div class="container chat-wrapper">
             <div class="content doctor-content">
                 @include('partials.doctor-sidebar')
                 <div class="chat-sec">
@@ -198,12 +198,25 @@
         .doctor-sidebar {
             display: none;
         }
+        .main-chat-blk {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+            height: 100dvh;
+        }
+
+    
+        .chat-wrapper {
+             height: calc(100dvh - 150px);
+        }
+
+        
         
         /* Desktop Styles */
         .chat-sec {
             display: flex;
             width: 100%;
-            height: calc(100vh - 150px);
+           
             background: #fff;
             border-radius: 15px;
             overflow: hidden;
@@ -227,13 +240,18 @@
             background: var(--white);
             border: 1px solid var(--gray-transparent);
             border-radius: 10px;
-            height: calc(100vh - 100px);
+            height: calc(100vh - 150px);
             flex-direction: column;
         }
         /* Mobile Styles */
         @media (max-width: 991px) {
-            .chat-sec {
-                height: calc(100vh - 170px);
+            .chat-wrapper {
+                height: calc(100dvh - 170px);
+                 flex: 1;
+                overflow-y: auto;
+                overflow-x: hidden;
+                min-width: 0;
+                padding-bottom: calc(90px + env(safe-area-inset-bottom));
             }
 
             .sidebar-group.left-sidebar {
