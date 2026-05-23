@@ -19,7 +19,7 @@
                             </div>
                             <div class="doc-info-cont">
                                 <span class="badge doc-avail-badge">
-                                    @if(($doctor['available'] ?? false) === true)
+                                    @if (($doctor['available'] ?? false) === true)
                                         <i class="fa-solid fa-circle fs-5 me-1"></i>
                                         Available
                                     @else
@@ -108,13 +108,13 @@
 
                         </ul>
                         <div class="bottom-book-btn">
-                            @if(session('firebase_token'))
-                            <p><span>Price : {{ $doctor['consultationFee'] }} </span> for a Session</p>
-                           
-                            
+                            @if (session('firebase_token'))
+                                <p><span>Price : {{ $doctor['consultationFee'] }} </span> for a Session</p>
                             @endif
-                             <div class="clinic-booking">
-                                <a class="apt-btn" href="{{ url($doctor['uid'] . '/booking-slots') }}">Book Appointment</a>                            
+                            <div class="clinic-booking">
+                                <a class="apt-btn" href="javascript:void(0)" onclick="handleBookingClick()">
+                                    Book Appointment
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -281,5 +281,197 @@
 
         </div>
     </div>
+    <div class="modal fade" id="consentModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="border-radius: 20px;">
+                <div class="modal-header border-0 pb-0">
+                    <h4 class="modal-title fw-bold">Medical Consent Agreement</h4>
+                </div>
+
+                <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+
+                    <h5 class="mb-3 text-warning">
+                        <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                        Before You Continue
+                    </h5>
+
+                    <p>
+                        PriGina Global TeleMed provides medical second opinions only.
+                    </p>
+
+                    <p>
+                        This service:<br>
+                        • Is advisory in nature<br>
+                        • Does NOT replace your primary physician<br>
+                        • Does NOT provide emergency care<br>
+                        • Does NOT establish ongoing treatment relationship
+                    </p>
+
+                    <hr>
+
+                    <h5 class="mb-3 text-danger">🚨 Not for Emergencies</h5>
+
+                    <p class="text-danger fw-semibold">
+                        If you are experiencing chest pain, difficulty breathing, stroke symptoms,
+                        severe bleeding, or any life-threatening condition:
+                    </p>
+
+                    <p class="text-danger fw-semibold">
+                        Call 911 (U.S.) or your local emergency number immediately.
+                    </p>
+
+                    <p class="text-danger fw-semibold">
+                        Do NOT use this platform for urgent or emergency medical care.
+                    </p>
+
+                    <hr>
+
+                    <h5 class="mb-3 text-primary">📋 Important Acknowledgements</h5>
+
+                    <p>
+                        By continuing, you confirm that:
+                    </p>
+
+                    <p>
+                        ✔ You are voluntarily requesting a second medical opinion<br>
+                        ✔ You understand this is not primary treatment<br>
+                        ✔ You will consult your treating physician before making medical decisions<br>
+                        ✔ You will provide complete and accurate medical records<br>
+                        ✔ You understand that outcomes are not guaranteed
+                    </p>
+
+                    <hr>
+
+                    <h5 class="mb-3 text-secondary">🔒 Telemedicine Notice</h5>
+
+                    <p>
+                        You understand that:<br>
+                        • Your consultation will occur electronically<br>
+                        • No physical examination will be performed<br>
+                        • Recommendations are based solely on information you provide
+                    </p>
+
+                    <hr>
+
+                    <h5 class="mb-3 text-info">🌍 Cross-Border Notice</h5>
+
+                    <p>
+                        Physicians may be licensed in specific jurisdictions.
+                        Regulatory rules may differ in your location.
+                        This service is consultative only.
+                    </p>
+
+                    <hr>
+
+                    <h5 class="mb-3 text-success">✅ Consent</h5>
+
+                    <p>
+                        By selecting “I Agree”, you confirm that:
+                    </p>
+
+                    <p>
+                        • You have read and understood this disclaimer<br>
+                        • You accept the risks and limitations<br>
+                        • You consent to receive a second opinion via telemedicine
+                    </p>
+
+                    <p class="fw-semibold">
+                        This consent is valid for 1 year from today.
+                    </p>
+
+                    <div class="form-check mt-4">
+                        <input class="form-check-input" type="checkbox" id="agreeConsent">
+                        <label class="form-check-label" for="agreeConsent">
+                            I agree to the conditions above
+                        </label>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-primary" id="agreeBtn" disabled>
+                        Agree & Continue
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const bookingUrl = "{{ url($doctor['uid'] . '/booking-slots') }}";
+
+        function handleBookingClick() {
+
+            const user = @json(current_user());
+
+            const consentAgreed = user?.consentAgreed;
+            const consentAgreedAt = user?.consentAgreedAt;
+
+            let shouldShowModal = false;
+
+            if (!consentAgreed || !consentAgreedAt) {
+                shouldShowModal = true;
+            } else {
+                const agreedDate = new Date(consentAgreedAt);
+                const now = new Date();
+
+                const diffInMs = now - agreedDate;
+                const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+
+                if (diffInDays > 365) {
+                    shouldShowModal = true;
+                }
+            }
+
+            if (!shouldShowModal) {
+                window.location.href = bookingUrl;
+                return;
+            }
+
+            const modal = new bootstrap.Modal(document.getElementById('consentModal'));
+            modal.show();
+        }
+
+        document.getElementById('agreeConsent').addEventListener('change', function() {
+            document.getElementById('agreeBtn').disabled = !this.checked;
+        });
+
+        document.getElementById('agreeBtn').addEventListener('click', async function() {
+
+            const btn = this;
+
+            btn.disabled = true;
+            btn.innerHTML = `
+        <span class="spinner-border spinner-border-sm me-2"></span>
+        Please wait...
+    `;
+
+            try {
+
+                const response = await fetch("{{ route('consent.agree') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({
+                        consentAgreed: true
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Request failed');
+                }
+
+                window.location.href = bookingUrl;
+
+            } catch (e) {
+
+                btn.disabled = false;
+                btn.innerHTML = 'Agree & Continue';
+
+                alert('Something went wrong. Please try again.');
+            }
+        });
+    </script>
     <!-- /Page Content -->
 @endsection
