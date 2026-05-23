@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Services\FirestoreService;
-use Illuminate\Support\Facades\Http;
-use Kreait\Firebase\Contract\Auth;
-use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
+use Kreait\Firebase\Contract\Auth;
+use Kreait\Firebase\Contract\Storage;
 
 class PatientController extends Controller
 {
@@ -44,7 +43,7 @@ class PatientController extends Controller
 
         $tips = Cache::remember('patient.dashboard.tips', 6000, function () use ($firestore) {
             $result = $firestore->query('tips', [], null, null, 'createdAt', 'DESC');
-            
+
             return collect($result['documents'] ?? [])->values();
         });
 
@@ -53,8 +52,8 @@ class PatientController extends Controller
                 [
                     'field' => 'isActive',
                     'op' => '=',
-                    'value' => true
-                ]
+                    'value' => true,
+                ],
             ]);
 
             return collect($result['documents'] ?? [])->values();
@@ -65,18 +64,17 @@ class PatientController extends Controller
                 [
                     'field' => 'isActive',
                     'op' => '=',
-                    'value' => true
+                    'value' => true,
                 ],
                 [
                     'field' => 'isTopDoctor',
                     'op' => '=',
-                    'value' => true
-                ]
+                    'value' => true,
+                ],
             ], 10);
 
             return collect($result['documents'] ?? [])->values();
         });
-    
 
         return view('patient.dashboard', compact('pastAppointments', 'futureAppointments', 'categories', 'doctors', 'tips'));
     }
@@ -85,12 +83,12 @@ class PatientController extends Controller
     {
         // ✅ Validation
         $validated = $request->validate([
-            'name'   => 'required|string|max:255',
-            'phone'  => 'required|string|max:20',
-            'email'  => 'required|email|max:255',
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'email' => 'required|email|max:255',
             'gender' => 'nullable|in:male,female,other',
-            'dob'    => 'nullable|date',
-            'image'  => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'dob' => 'nullable|date',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         $uid = current_user()['uid'];
@@ -106,11 +104,11 @@ class PatientController extends Controller
         // ✅ Handle Image Upload
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $fileName = time() . '_' . $image->getClientOriginalName();
+            $fileName = time().'_'.$image->getClientOriginalName();
 
             $filePath = "profile_pictures/patients/{$uid}/{$fileName}";
 
-            /** @var \Kreait\Firebase\Contract\Storage $storage */
+            /** @var Storage $storage */
             $storage = app('firebase.storage');
             $bucket = $storage->getBucket();
 
@@ -122,7 +120,7 @@ class PatientController extends Controller
                 ]
             );
 
-            $imageUrl = "https://storage.googleapis.com/" . $bucket->name() . "/" . $filePath;
+            $imageUrl = 'https://storage.googleapis.com/'.$bucket->name().'/'.$filePath;
 
             $data['photoUrl'] = $imageUrl;
         }
@@ -137,17 +135,17 @@ class PatientController extends Controller
         $uid = current_user()['uid'];
         $direction = $request->query('direction', 'next');
         $cursor = $request->query('cursor');
-        
+
         if ($cursor) {
             $cursor = json_decode($cursor, true);
         }
-        
+
         // Reset session on fresh load
-        if (!$request->has('cursor') && $direction !== 'prev') {
+        if (! $request->has('cursor') && $direction !== 'prev') {
             session()->forget('appointment_cursors');
             session()->put('appointment_direction', 'next');
         }
-        
+
         // Store current cursor before query
         if ($direction === 'next' && $cursor) {
             $cursors = session()->get('appointment_cursors', []);
@@ -155,34 +153,34 @@ class PatientController extends Controller
             session()->put('appointment_cursors', $cursors);
             session()->put('appointment_direction', 'next');
         }
-        
+
         // Handle previous navigation
         if ($direction === 'prev') {
             $cursors = session()->get('appointment_cursors', []);
-            
+
             // Remove last cursor (current page)
             array_pop($cursors);
-            
+
             // Get previous cursor
-            $cursor = !empty($cursors) ? end($cursors) : null;
-            
+            $cursor = ! empty($cursors) ? end($cursors) : null;
+
             // Update session
             session()->put('appointment_cursors', $cursors);
             session()->put('appointment_direction', 'prev');
         }
-        
+
         // Query Firestore
         $result = $this->firestore->paginatedQuery('appointments', [
             ['field' => 'patientId', 'op' => '=', 'value' => $uid],
         ], 50, $cursor, 'createdAt', 'DESC');
-        
+
         $appointments = $result['documents'] ?? [];
         $nextCursor = $result['nextCursor'] ?? null;
         $hasMore = $result['hasMore'] ?? false;
-        
+
         // For previous navigation
         $cursors = session()->get('appointment_cursors', []);
-        $hasPrev = ($direction === 'prev') ? !empty($cursors) : count($cursors) > 1;
+        $hasPrev = ($direction === 'prev') ? ! empty($cursors) : count($cursors) > 1;
 
         $grouped = [
             'upcoming' => [],
@@ -204,7 +202,7 @@ class PatientController extends Controller
                 $grouped['completed'][] = $appointment;
             }
         }
-        
+
         return view('patient.appointments', [
             'appointments' => $grouped,
             'nextCursor' => $nextCursor,
@@ -217,6 +215,7 @@ class PatientController extends Controller
     {
         $uid = current_user()['uid'];
         $patient = $this->firestore->find('patients', $uid);
+
         return view('patient.profile-settings', compact('patient'));
     }
 
@@ -224,17 +223,15 @@ class PatientController extends Controller
     {
 
         $email = current_user()['email'];
-        $uid   = current_user()['uid'];
+        $uid = current_user()['uid'];
 
         $request->validate([
             'current_password' => 'required|string',
             'password' => 'required|string|min:6|confirmed',
         ]);
-  
-
 
         $response = Http::post(
-            'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' . config('services.firebase.api_key'),
+            'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key='.config('services.firebase.api_key'),
             [
                 'email' => $email,
                 'password' => $request->current_password,
@@ -244,7 +241,7 @@ class PatientController extends Controller
 
         if ($response->failed()) {
             return back()->withErrors([
-                'current_password' => 'Current password is incorrect'
+                'current_password' => 'Current password is incorrect',
             ]);
         }
 
@@ -253,8 +250,9 @@ class PatientController extends Controller
         ]);
 
         // Debug (temporary)
-        if (!$updatedUser) {
+        if (! $updatedUser) {
             dd('Password update failed');
+
             return back()->withErrors(['password' => 'Password update failed']);
         }
 
@@ -268,14 +266,14 @@ class PatientController extends Controller
 
         $filteredConversations = $this->firestore->query('conversations', [
             ['field' => 'patientId', 'op' => '=', 'value' => $uid],
-        ],null, null, 'lastMessageTime', 'DESC');
+        ], null, null, 'lastMessageTime', 'DESC');
 
         $conversations = collect($filteredConversations['documents'] ?? [])
             ->map(fn ($conversation) => $this->normalizeConversation($conversation))
             ->all();
 
         return view('patient.chat', compact('conversations'));
-        
+
     }
 
     public function messages(Request $request, $id)
@@ -325,11 +323,11 @@ class PatientController extends Controller
         // HANDLE FILE
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $fileName = time() . '_' . $file->getClientOriginalName();
+            $fileName = time().'_'.$file->getClientOriginalName();
 
             $filePath = "/chat_images/{$id}/{$fileName}";
 
-            /** @var \Kreait\Firebase\Contract\Storage $storage */
+            /** @var Storage $storage */
             $storage = app('firebase.storage');
             $bucket = $storage->getBucket();
 
@@ -341,8 +339,7 @@ class PatientController extends Controller
                 ]
             );
 
-            $imageUrl = "https://storage.googleapis.com/" . $bucket->name() . "/" . $filePath;
-
+            $imageUrl = 'https://storage.googleapis.com/'.$bucket->name().'/'.$filePath;
 
             if (str_contains($file->getMimeType(), 'image')) {
                 $data['imageUrl'] = $imageUrl;
@@ -368,7 +365,7 @@ class PatientController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => $data
+            'message' => $data,
         ]);
     }
 
@@ -391,7 +388,7 @@ class PatientController extends Controller
     public function audioCall($id)
     {
         $conversation = $this->firestore->find('conversations', $id);
-        if (!$conversation) {
+        if (! $conversation) {
             abort(404);
         }
 
@@ -406,7 +403,7 @@ class PatientController extends Controller
             'id' => $id,
             'doctor' => $doctor,
             'user' => $user,
-            'token' => $token
+            'token' => $token,
         ]);
     }
 
@@ -414,7 +411,7 @@ class PatientController extends Controller
     {
         $conversation = $this->firestore->find('conversations', $id);
 
-        if (!$conversation) {
+        if (! $conversation) {
             abort(404);
         }
 
@@ -423,17 +420,17 @@ class PatientController extends Controller
 
         $user = current_user();
 
-        if (!$user) {
+        if (! $user) {
             abort(403);
         }
 
         $token = generateZegoToken($user['uid']);
 
         return view('patient.video-call', [
-            'id'     => $id,
+            'id' => $id,
             'doctor' => $doctor,
-            'user'   => $user,
-            'token'  => $token,
+            'user' => $user,
+            'token' => $token,
         ]);
     }
 
@@ -442,11 +439,11 @@ class PatientController extends Controller
         $doctor = $this->firestore->find('doctors', $id);
         $patient = current_user();
 
-        if (!$doctor) {
+        if (! $doctor) {
             abort(404);
         }
 
-        if (!$patient) {
+        if (! $patient) {
             abort(403);
         }
 
@@ -454,8 +451,7 @@ class PatientController extends Controller
             ['field' => 'patientId', 'op' => '=', 'value' => $patient['uid']],
             ['field' => 'doctorId', 'op' => '=', 'value' => $doctor['uid']],
         ], null, null, 'createdAt', 'DESC');
-        if (!empty($converastion['documents']))
-        {
+        if (! empty($converastion['documents'])) {
             return redirect()->route('patient.conversations');
         }
         $docID = Str::random(60);
@@ -463,8 +459,7 @@ class PatientController extends Controller
         $this->firestore->createWithId('conversations', $docID, [
             'doctorId' => $doctor['uid'],
             'doctorName' => $doctor['name'] ?? '',
-            'doctorSpecialty' =>
-                $doctor['specializations'][0] ?? '',
+            'doctorSpecialty' => $doctor['specializations'][0] ?? '',
             'patientId' => $patient['uid'],
             'patientName' => $patient['name'] ?? '',
             'patientAge' => $patient['dob'] ?? '',
@@ -483,7 +478,6 @@ class PatientController extends Controller
 
         return redirect()->route('patient.conversations');
     }
-
 
     public function markRead($id)
     {
@@ -524,5 +518,16 @@ class PatientController extends Controller
             'lastReadByDoctor' => null,
             'lastReadByPatient' => null,
         ], $conversation);
+    }
+
+    public function agreeToConsent()
+    {
+        $uid = current_user()['uid'];
+        $this->firestore->update('patients', $uid, [
+            'consentAgreed' => true,
+            'consentAgreedAt' => now(),
+        ]);
+
+        return redirect()->route('patient.conversations');
     }
 }

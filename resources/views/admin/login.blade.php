@@ -10,7 +10,7 @@
         <div class="container">
             <div class="loginbox">
                 <div class="login-left">
-                    <img class="img-fluid" src="{{URL::asset('build/admin/img/logo-white.png')}}" alt="Logo">
+                    <img class="img-fluid" src="{{ asset('build/img/logo.webp')}}" alt="Logo">
                 </div>
                 <div class="login-right">
                     <div class="login-right-wrap">
@@ -31,20 +31,9 @@
                         </form>
                         <!-- /Form -->
 
-                        <div class="text-center forgotpass"><a href="{{url('admin/forgot-password')}}">Forgot Password?</a></div>
-                        <div class="login-or">
-                            <span class="or-line"></span>
-                            <span class="span-or">or</span>
-                        </div>
-
-                        <!-- Social Login -->
-                        <div class="social-login">
-                            <span>Login with</span>
-                            <a href="#" class="facebook"><i class="fa-brands fa-facebook-f"></i></a><a href="#" class="google"><i class="fa-brands fa-google"></i></a>
-                        </div>
+                     
                         <!-- /Social Login -->
 
-                        <div class="text-center dont-have">Don’t have an account? <a href="{{url('admin/register')}}">Register</a></div>
                     </div>
                 </div>
             </div>

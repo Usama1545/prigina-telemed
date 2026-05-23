@@ -1,28 +1,25 @@
 <?php
 
-use App\Http\Controllers\IndexController;
-use App\Http\Controllers\DoctorController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Services\FirestoreService;
-use PhpParser\Comment\Doc;
-use Illuminate\Support\Facades\Broadcast;
-use App\Http\Controllers\PatientController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\Doctor\DoctorProfileController;
+use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\IndexController;
+use App\Http\Controllers\PatientController;
+use Illuminate\Support\Facades\Route;
 
 Route::post('/auth/login', [AuthController::class, 'login']);
 
-Route::get('/', [IndexController::class,'index'])->name('index');
-Route::get('/index', [IndexController::class,'index'])->name('index');
+Route::get('/', [IndexController::class, 'index'])->name('index');
+Route::get('/index', [IndexController::class, 'index'])->name('index');
 
 Route::middleware(['firebase.auth'])->group(function () {
-    Route::get('{id}/booking-slots', [BookingController::class,'bookingSlots'])->name('booking');
+    Route::get('{id}/booking-slots', [BookingController::class, 'bookingSlots'])->name('booking');
     Route::post('/booking/process', [BookingController::class, 'processBooking'])->name('booking.process');
     Route::get('/booking/success', [BookingController::class, 'paymentSuccess'])->name('booking.success');
     Route::get('/booking/cancel', [BookingController::class, 'paymentCancel'])->name('booking.cancel');
     Route::get('/flutterwave/callback', [BookingController::class, 'flutterwaveCallback'])->name('flutterwave.callback');
-    Route::get('/appointment-data-demo',[IndexController::class,'appointmentDataDemo']);
+    Route::get('/appointment-data-demo', [IndexController::class, 'appointmentDataDemo']);
     Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
     Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -40,9 +37,10 @@ Route::middleware(['firebase.auth'])->group(function () {
         Route::get('/conversations/{id}/audio-call', 'audioCall')->name('patient.audio-call');
         Route::get('/conversations/{id}/video-call', 'videoCall')->name('patient.video-call');
         Route::get('conversation/{doctor_id}/create', 'createConversation')->name('conversation.create');
-        Route::post('conversation/{id}/send','sendMessage');
-        Route::get('conversations/{id}','conversations')->name('patient.conversations.show');
-        Route::POST('conversation/{id}/mark-read','markRead')->name('patient.conversations.mark-read');
+        Route::post('conversation/{id}/send', 'sendMessage');
+        Route::get('conversations/{id}', 'conversations')->name('patient.conversations.show');
+        Route::POST('conversation/{id}/mark-read', 'markRead')->name('patient.conversations.mark-read');
+        Route::post('agree/consent', 'agreeToConsent')->name('consent.agree');
     });
 
     Route::prefix('doctor')->controller(DoctorProfileController::class)->group(function () {
@@ -63,11 +61,11 @@ Route::middleware(['firebase.auth'])->group(function () {
         Route::get('/conversations/{id}/video-call', 'videoCall')->name('doctor.video-call');
         Route::get('conversation/{patient_id}/create', 'createConversation')->name('doctor.conversation.create');
         Route::post('conversation/{id}/send', 'sendMessage');
-        Route::get('conversations/{id}','conversations')->name('doctor.conversations.show');
-        Route::POST('conversation/{id}/mark-read','markRead')->name('doctor.conversations.mark-read');
-        Route::get('/payout-setup','payout')->name('doctor.payout');
-        Route::get('/setup-payout','setupPayout')->name('doctor.payout-setup');
-        Route::get('/setup-complete','payoutComplete')->name('doctor.payout.complete');
+        Route::get('conversations/{id}', 'conversations')->name('doctor.conversations.show');
+        Route::POST('conversation/{id}/mark-read', 'markRead')->name('doctor.conversations.mark-read');
+        Route::get('/payout-setup', 'payout')->name('doctor.payout');
+        Route::get('/setup-payout', 'setupPayout')->name('doctor.payout-setup');
+        Route::get('/setup-complete', 'payoutComplete')->name('doctor.payout.complete');
     });
 
 });
@@ -156,7 +154,6 @@ Route::get('/login', function () {
 Route::get('/verify-email', function () {
     return view('verify-email');
 })->name('verify-email');
-
 
 Route::post('resend-verification-email', [AuthController::class, 'resendVerificationEmail'])->name('resend-verification-email');
 
