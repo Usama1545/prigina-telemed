@@ -9,7 +9,7 @@
 
     <!-- Header -->
     <header class="header header-default ">
-        <div class="container-fluid px-4 px-xxl-5 pb-0">
+        <div class="container-wide pb-0">
             <nav class="navbar navbar-expand-lg header-nav">
                 <div class="navbar-header">
                     <a id="mobile_btn" href="#">
@@ -207,6 +207,13 @@
 
         .mobile-header-actions a i {
             font-size: 18px;
+        }
+
+        .container-wide {
+            width: 100%;
+            max-width: 1680px;
+            margin: 0 auto;
+            padding: 0 32px;
         }
 
         @media (max-width: 1199px) {
