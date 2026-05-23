@@ -282,6 +282,21 @@ const phoneInput = document.querySelector("#Userphone");
 const iti = window.intlTelInput(phoneInput, {
     initialCountry: "auto",
     separateDialCode: true,
+    preferredCountries: ["us"],
+    geoIpLookup: function(callback) {
+
+        fetch("https://ipinfo.io/json?token=")
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data);
+                callback(data.country?.toLowerCase() || "us");
+            })
+            .catch(() => {
+                callback("us");
+            });
+    },
+    utilsScript:
+        "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
 });
 document.getElementById('timezone').value =
     Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -414,8 +429,12 @@ document
         const formData = new FormData(this);
         const countryData = iti.getSelectedCountryData();
 
-        formData.append('practiceCountry', countryData.iso2.toUpperCase());
-
+        formData.append(
+            'practiceCountry',
+            countryData?.iso2
+                ? countryData.iso2.toUpperCase()
+                : 'US'
+        );
         firebasePatientRegister(formData);
 });
 
