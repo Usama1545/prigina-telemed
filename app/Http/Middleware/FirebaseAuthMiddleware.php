@@ -2,10 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\FirebaseAuthService;
+use App\Services\FirestoreService;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Services\FirebaseAuthService;
 
 class FirebaseAuthMiddleware
 {
@@ -18,7 +19,7 @@ class FirebaseAuthMiddleware
     {
         $token = session('firebase_token');
 
-        if (!$token) {
+        if (! $token) {
             return redirect('/login');
         }
 
@@ -31,13 +32,13 @@ class FirebaseAuthMiddleware
 
             $refreshToken = session('firebase_refresh_token');
 
-            if (!$refreshToken) {
+            if (! $refreshToken) {
                 return redirect('/login');
             }
 
             $newToken = $authService->refreshIdToken($refreshToken);
 
-            if (!$newToken) {
+            if (! $newToken) {
                 return redirect('/login');
             }
 
@@ -52,6 +53,24 @@ class FirebaseAuthMiddleware
 
         $uid = $verified->claims()->get('sub');
         $role = $verified->claims()->get('role');
+        if (! $role) {
+            $firestore = app(FirestoreService::class);
+
+            $patient = $firestore->find('patients', $uid);
+            $role = 'patient';
+            if (! $patient) {
+                $doctor = $firestore->find('doctors', $uid);
+                $role = 'doctor';
+                if (! $doctor) {
+                    return redirect('/login');
+                }
+            }
+        }
+
+        session([
+            'auth_uid' => $uid,
+            'auth_role' => $role,
+        ]);
 
         $request->merge([
             'auth_uid' => $uid,

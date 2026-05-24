@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 class AdminAuthController extends Controller
 {
     protected $firebaseAuth;
+
     protected $firestore;
 
     public function __construct()
@@ -47,7 +48,7 @@ class AdminAuthController extends Controller
             $token = $request->input('firebase_token');
             $refreshToken = $request->input('firebase_refresh_token');
 
-            if (!$token) {
+            if (! $token) {
                 return back()
                     ->withErrors(['email' => 'Invalid credentials. Please try again.'])
                     ->withInput($request->except('password'));
@@ -61,18 +62,11 @@ class AdminAuthController extends Controller
             // Check if user exists in admins collection
             $admin = $this->firestore->find('admins', $uid);
 
-            if (!$admin) {
+            if (! $admin) {
                 Log::warning("Login attempt for non-admin user: {$email}");
+
                 return back()
                     ->withErrors(['email' => 'You do not have admin access.'])
-                    ->withInput($request->except('password'));
-            }
-
-            // Check if admin is active
-            if (($admin['isActive'] ?? false) === false) {
-                Log::warning("Login attempt for inactive admin: {$email}");
-                return back()
-                    ->withErrors(['email' => 'Your account has been deactivated.'])
                     ->withInput($request->except('password'));
             }
 
@@ -93,7 +87,8 @@ class AdminAuthController extends Controller
             return redirect('/admin/index')->with('success', 'Welcome back!');
 
         } catch (\Exception $e) {
-            Log::error("Admin authentication error: " . $e->getMessage());
+            Log::error('Admin authentication error: '.$e->getMessage());
+
             return back()
                 ->withErrors(['email' => 'Authentication failed. Please try again.'])
                 ->withInput($request->except('password'));
@@ -109,7 +104,7 @@ class AdminAuthController extends Controller
             $token = $request->input('token');
             $refreshToken = $request->input('refreshToken');
 
-            if (!$token) {
+            if (! $token) {
                 return response()->json(['error' => 'No token provided'], 401);
             }
 
@@ -120,7 +115,7 @@ class AdminAuthController extends Controller
             // Check if admin exists and is active
             $admin = $this->firestore->find('admins', $uid);
 
-            if (!$admin || ($admin['isActive'] ?? false) === false) {
+            if (! $admin || ($admin['isActive'] ?? false) === false) {
                 return response()->json(['error' => 'Admin account not found or inactive'], 403);
             }
 
@@ -142,11 +137,12 @@ class AdminAuthController extends Controller
                     'email' => $admin['email'] ?? '',
                     'name' => $admin['name'] ?? '',
                     'permissions' => $admin['permissions'] ?? [],
-                ]
+                ],
             ]);
 
         } catch (\Exception $e) {
-            Log::error("Token authentication error: " . $e->getMessage());
+            Log::error('Token authentication error: '.$e->getMessage());
+
             return response()->json(['error' => 'Invalid token'], 401);
         }
     }
@@ -157,7 +153,7 @@ class AdminAuthController extends Controller
     public function logout(Request $request)
     {
         $adminEmail = session('auth_email');
-        
+
         session()->flush();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -174,7 +170,7 @@ class AdminAuthController extends Controller
      */
     public function getCurrentAdmin()
     {
-        if (!session('auth_role') === 'admin') {
+        if (! session('auth_role') === 'admin') {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 

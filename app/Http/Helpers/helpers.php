@@ -1,8 +1,9 @@
 <?php
-use App\Services\FirestoreService;
-use App\Services\FirebaseAuthService;
 
-if (!function_exists('current_user')) {
+use App\Services\FirebaseAuthService;
+use App\Services\FirestoreService;
+
+if (! function_exists('current_user')) {
     function current_user()
     {
         static $user = null; // request-level cache
@@ -11,10 +12,9 @@ if (!function_exists('current_user')) {
             return $user;
         }
 
-        $uid  = session('auth_uid');
+        $uid = session('auth_uid');
         $role = session('auth_role');
-
-        if (!$uid || !$role) {
+        if (! $uid || ! $role) {
             return null;
         }
 
@@ -22,57 +22,57 @@ if (!function_exists('current_user')) {
 
         $collection = match ($role) {
             'patient' => 'patients',
-            'doctor'  => 'doctors',
-            default   => null,
+            'doctor' => 'doctors',
+            default => null,
         };
 
-        if (!$collection) {
+        if (! $collection) {
             return null;
         }
 
         $doc = $firestore->find($collection, $uid);
 
-        if (!$doc) {
+        if (! $doc) {
             return null;
         }
 
         // attach meta
-        $doc['id']   = $uid;
+        $doc['id'] = $uid;
         $doc['role'] = $role;
 
         return $user = $doc;
     }
 }
 
-if (!function_exists('current_patient')) {
+if (! function_exists('current_patient')) {
     function current_patient()
     {
         return session('auth_role') === 'patient' ? current_user() : null;
     }
 }
 
-if (!function_exists('current_doctor')) {
+if (! function_exists('current_doctor')) {
     function current_doctor()
     {
         return session('auth_role') === 'doctor' ? current_user() : null;
     }
 }
 
-if (!function_exists('is_patient')) {
+if (! function_exists('is_patient')) {
     function is_patient()
     {
         return session('auth_role') === 'patient';
     }
 }
 
-if (!function_exists('is_doctor')) {
+if (! function_exists('is_doctor')) {
     function is_doctor()
     {
         return session('auth_role') === 'doctor';
     }
 }
 
-if (!function_exists('topSpeacilalization')) {
+if (! function_exists('topSpeacilalization')) {
     function topSpeacilalization()
     {
         $firestore = app(FirestoreService::class);
@@ -84,16 +84,16 @@ if (!function_exists('topSpeacilalization')) {
         return $categories;
     }
 }
-if (!function_exists('generateZegoToken')) {
+if (! function_exists('generateZegoToken')) {
     function generateZegoToken($userId)
     {
         $appId = config('services.zego.app_id');
         $serverSecret = config('services.zego.server_secret');
 
         $payload = [
-            "user_id" => $userId,
-            "timestamp" => time(),
-            "expire" => 3600
+            'user_id' => $userId,
+            'timestamp' => time(),
+            'expire' => 3600,
         ];
 
         // Use official token generation logic (HMAC SHA256)
@@ -103,13 +103,13 @@ if (!function_exists('generateZegoToken')) {
     }
 }
 
-if (!function_exists('user')) {
+if (! function_exists('user')) {
 
     function user()
     {
         $token = session('firebase_token');
 
-        if (!$token) {
+        if (! $token) {
             return null;
         }
 
@@ -119,11 +119,11 @@ if (!function_exists('user')) {
 
             $verified = $authService->verifyToken($token);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
 
             $refreshToken = session('firebase_refresh_token');
 
-            if (!$refreshToken) {
+            if (! $refreshToken) {
                 session()->forget([
                     'firebase_token',
                     'firebase_refresh_token',
@@ -134,7 +134,7 @@ if (!function_exists('user')) {
 
             $newToken = $authService->refreshIdToken($refreshToken);
 
-            if (!$newToken) {
+            if (! $newToken) {
 
                 session()->forget([
                     'firebase_token',
@@ -145,14 +145,14 @@ if (!function_exists('user')) {
             }
 
             session([
-                'firebase_token' => $newToken
+                'firebase_token' => $newToken,
             ]);
 
             try {
 
                 $verified = $authService->verifyToken($newToken);
 
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
 
                 session()->forget([
                     'firebase_token',
@@ -170,7 +170,7 @@ if (!function_exists('user')) {
         ];
     }
 }
-if (!function_exists('check')) {
+if (! function_exists('check')) {
     function check()
     {
         return user() !== null;

@@ -4,19 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Firestore\Appointment;
 use App\Models\Firestore\AppSetting;
-use Illuminate\Http\Request;
-use App\Events\NewMessageEvent;
 use App\Models\Firestore\Doctor;
-use Stripe\Stripe;
-use Stripe\Checkout\Session as StripeSession;
-use Flutterwave\Flutterwave;
+use App\Services\FirestoreService;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
+use Flutterwave\Flutterwave;
+use Illuminate\Http\Request;
+use Stripe\Checkout\Session as StripeSession;
+use Stripe\Stripe;
 
 class BookingController extends Controller
 {
     protected $doctors;
+
     protected $appSetting;
+
     protected $appointments;
 
     public function __construct(Doctor $doctors, AppSetting $appSetting, Appointment $appointments)
@@ -25,6 +26,7 @@ class BookingController extends Controller
         $this->appSetting = $appSetting;
         $this->appointments = $appointments;
     }
+
     public function BookingSlots($id)
     {
         $doctor = $this->doctors->find($id);
@@ -34,11 +36,11 @@ class BookingController extends Controller
             [
                 'field' => 'doctorId',
                 'op' => '=',
-                'value' => $id
-            ]
+                'value' => $id,
+            ],
         ];
 
-        $firestore = app(\App\Services\FirestoreService::class);
+        $firestore = app(FirestoreService::class);
 
         $bookedSlots = $firestore->query('appointments', $baseFilter);
 
@@ -83,11 +85,12 @@ class BookingController extends Controller
 
                 if (isset($bookedMap[$date]) && in_array($slot, $bookedMap[$date])) {
                     $current += $slotDuration * 60;
+
                     continue;
                 }
 
-                if (!empty($breaks)) {
-                    if(count($breaks) === 1) {
+                if (! empty($breaks)) {
+                    if (count($breaks) === 1) {
                         $breaks = explode('-', $breaks[0]);
                     }
                     $breakStart = strtotime($breaks[0]);
@@ -95,6 +98,7 @@ class BookingController extends Controller
 
                     if ($current >= $breakStart && $current < $breakEnd) {
                         $current += $slotDuration * 60;
+
                         continue;
                     }
                 }
@@ -116,6 +120,7 @@ class BookingController extends Controller
         }
 
         $title = 'Select Available Slots';
+
         return view('booking', compact('doctor', 'slots', 'title', 'availability'));
 
     }
@@ -139,7 +144,7 @@ class BookingController extends Controller
 
         $user = current_user();
         $setting = $this->appSetting->first();
-        
+
         // Get doctor details for timezone
         $doctor = $this->doctors->find($validated['doctor_id']);
         $slotDuration = $setting['slotDuration'] ?? 30;
@@ -150,13 +155,13 @@ class BookingController extends Controller
         // Format times for display
         $startTimeFormatted = date('h:i A', $startTime); // 3:30 PM format
         $endTimeFormatted = date('h:i A', $endTime);
-        
+
         // Get current UTC time
         $now = Carbon::now('UTC');
-        
+
         // Create DateTime objects for start and end times with the selected date
-        $startDateTime = Carbon::parse($validated['selected_date'] . ' ' . date('H:i:s', $startTime), $doctor['timezone'] ?? 'UTC');
-        $endDateTime = Carbon::parse($validated['selected_date'] . ' ' . date('H:i:s', $endTime), $doctor['timezone'] ?? 'UTC');
+        $startDateTime = Carbon::parse($validated['selected_date'].' '.date('H:i:s', $startTime), $doctor['timezone'] ?? 'UTC');
+        $endDateTime = Carbon::parse($validated['selected_date'].' '.date('H:i:s', $endTime), $doctor['timezone'] ?? 'UTC');
         $documentId = uniqid();
 
         // Convert to UTC for storage
@@ -177,17 +182,17 @@ class BookingController extends Controller
             'endTime' => $endTimeFormatted,
             'startTimeUTC' => $startTimeUTC,
             'endTimeUTC' => $endTimeUTC,
-            'amount' => (double) $validated['amount'],
+            'amount' => (float) $validated['amount'],
             'paymentMethod' => $validated['payment_gateway'] === 'stripe' ? 'Debit Card' : 'Flutterwave',
             'symptoms' => $validated['symptoms'],
             'notes' => $validated['problem'],
             'status' => 'pending',
-            'patientLocalTime' => $startTimeFormatted . ' - ' . $endTimeFormatted,
-            'doctorLocalTime' => $startDateTime->format('h:i A') . ' - ' . $endDateTime->format('h:i A'),
+            'patientLocalTime' => $startTimeFormatted.' - '.$endTimeFormatted,
+            'doctorLocalTime' => $startDateTime->format('h:i A').' - '.$endDateTime->format('h:i A'),
             'createdAt' => now(),
             'updatedAt' => now(),
         ];
-        $firestore = app(\App\Services\FirestoreService::class);
+        $firestore = app(FirestoreService::class);
 
         $appointment = $firestore->createWithId('appointments', $documentId, $appointmentData);
 
@@ -210,17 +215,17 @@ class BookingController extends Controller
                     'currency' => 'usd',
                     'product_data' => [
                         'name' => 'Doctor Consultation',
-                        'description' => 'Appointment with Dr. ' . $bookingData['doctorName'],
+                        'description' => 'Appointment with Dr. '.$bookingData['doctorName'],
                     ],
                     'unit_amount' => $bookingData['amount'] * 100, // Stripe uses cents
                 ],
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => route('booking.success') . '?session_id={CHECKOUT_SESSION_ID}',
+            'success_url' => route('booking.success').'?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => route('booking.cancel'),
             'metadata' => [
-                'booking_id' => $bookingData['id']
+                'booking_id' => $bookingData['id'],
             ],
         ]);
 
@@ -232,13 +237,13 @@ class BookingController extends Controller
         $flutterwave = new Flutterwave(config('services.flutterwave.secretKey'));
 
         $payload = [
-            "tx_ref" => uniqid(),
-            "amount" => $bookingData['amount'],
-            "currency" => "USD",
-            "redirect_url" => route('flutterwave.callback'),
-            "customer" => [
-                "email" => $bookingData['email'],
-                "name" => $bookingData['name'],
+            'tx_ref' => uniqid(),
+            'amount' => $bookingData['amount'],
+            'currency' => 'USD',
+            'redirect_url' => route('flutterwave.callback'),
+            'customer' => [
+                'email' => $bookingData['email'],
+                'name' => $bookingData['name'],
             ],
         ];
 
@@ -253,7 +258,7 @@ class BookingController extends Controller
     {
         $sessionId = $request->get('session_id');
 
-        if (!$sessionId) {
+        if (! $sessionId) {
             return redirect()->route('booking.cancel');
         }
 
@@ -301,5 +306,4 @@ class BookingController extends Controller
 
         return redirect()->route('booking.cancel');
     }
-
 }

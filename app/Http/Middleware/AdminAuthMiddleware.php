@@ -2,10 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\FirebaseAuthService;
+use App\Services\FirestoreService;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Services\FirebaseAuthService;
 
 class AdminAuthMiddleware
 {
@@ -19,7 +20,7 @@ class AdminAuthMiddleware
         $token = session('firebase_token');
 
         // Redirect to login if no token
-        if (!$token) {
+        if (! $token) {
             return redirect('/admin/login');
         }
 
@@ -31,15 +32,17 @@ class AdminAuthMiddleware
             // Try to refresh token
             $refreshToken = session('firebase_refresh_token');
 
-            if (!$refreshToken) {
+            if (! $refreshToken) {
                 session()->flush();
+
                 return redirect('/admin/login');
             }
 
             $newToken = $authService->refreshIdToken($refreshToken);
 
-            if (!$newToken) {
+            if (! $newToken) {
                 session()->flush();
+
                 return redirect('/admin/login');
             }
 
@@ -49,6 +52,7 @@ class AdminAuthMiddleware
                 $verified = $authService->verifyToken($newToken);
             } catch (\Exception $e) {
                 session()->flush();
+
                 return redirect('/admin/login');
             }
         }
@@ -56,20 +60,18 @@ class AdminAuthMiddleware
         $uid = $verified->claims()->get('sub');
         $role = $verified->claims()->get('role');
 
-        // Check if user has admin role
-        if ($role !== 'admin') {
-            session()->flush();
-            return response()->view('errors.unauthorized', [], 403);
-        }
-
         // Check if admin is active in Firestore
         try {
-            $firestore = app(\App\Services\FirestoreService::class);
+            $firestore = app(FirestoreService::class);
             $admin = $firestore->find('admins', $uid);
 
-            if (!$admin || ($admin['isActive'] ?? false) === false) {
+            if (! $admin) {
                 session()->flush();
-                return response()->view('errors.unauthorized', [], 403);
+
+                return redirect('/admin/login')
+                    ->withErrors([
+                        'email' => 'Your session has expired. Please login again.',
+                    ]);
             }
 
             // Store admin data in request
@@ -81,7 +83,11 @@ class AdminAuthMiddleware
 
         } catch (\Exception $e) {
             session()->flush();
-            return response()->view('errors.unauthorized', [], 403);
+
+            return redirect('/admin/login')
+                ->withErrors([
+                    'email' => 'Your session has expired. Please login again.',
+                ]);
         }
 
         return $next($request);

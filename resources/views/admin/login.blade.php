@@ -3,14 +3,14 @@
 @section('content')
 
     <!-- ========================
-        Start Page Content
-    ========================= -->
+                    Start Page Content
+                ========================= -->
 
     <div class="login-wrapper">
         <div class="container">
             <div class="loginbox">
                 <div class="login-left">
-                    <img class="img-fluid" src="{{ asset('build/img/logo.webp')}}" alt="Logo">
+                    <img class="img-fluid" src="{{ asset('build/img/logo.webp') }}" alt="Logo">
                 </div>
                 <div class="login-right">
                     <div class="login-right-wrap">
@@ -24,7 +24,8 @@
                                 @foreach ($errors->all() as $error)
                                     <div>{{ $error }}</div>
                                 @endforeach
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
                             </div>
                         @endif
 
@@ -32,7 +33,8 @@
                         @if (session('success'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
                                 {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
                             </div>
                         @endif
 
@@ -40,43 +42,30 @@
                         <form id="adminLoginForm" method="POST" action="{{ route('admin.authenticate') }}">
                             @csrf
                             <div class="mb-3">
-                                <input 
-                                    type="email" 
-                                    class="form-control @error('email') is-invalid @enderror" 
-                                    id="email"
-                                    name="email"
-                                    placeholder="Enter your email" 
-                                    value="{{ old('email') }}"
+                                <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                    id="email" name="email" placeholder="Enter your email" value="{{ old('email') }}"
                                     required>
                                 @error('email')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="mb-3">
-                                <input 
-                                    type="password" 
-                                    class="form-control @error('password') is-invalid @enderror" 
-                                    id="password"
-                                    name="password"
-                                    placeholder="Enter your password" 
-                                    required>
+                                <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                    id="password" name="password" placeholder="Enter your password" required>
                                 @error('password')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
-                            
+
                             <!-- Hidden fields for Firebase tokens -->
                             <input type="hidden" id="firebase_token" name="firebase_token">
                             <input type="hidden" id="firebase_refresh_token" name="firebase_refresh_token">
 
                             <div class="mb-3">
-                                <button 
-                                    class="btn btn-primary w-100" 
-                                    type="submit" 
-                                    id="loginBtn"
-                                    disabled>
+                                <button class="btn btn-primary w-100" type="submit" id="loginBtn" disabled>
                                     <span id="loginBtnText">Login</span>
-                                    <span id="loginBtnSpinner" class="spinner-border spinner-border-sm ms-2" style="display:none;"></span>
+                                    <span id="loginBtnSpinner" class="spinner-border spinner-border-sm ms-2"
+                                        style="display:none;"></span>
                                 </button>
                             </div>
                         </form>
@@ -91,12 +80,12 @@
     </div>
 
     <!-- ========================
-        End Page Content
-    ========================= -->
+                    End Page Content
+                ========================= -->
 
     <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
     <script>
         // Initialize Firebase (Use your config)
@@ -149,14 +138,6 @@
                 firebaseTokenInput.value = idToken;
                 firebaseRefreshTokenInput.value = refreshToken;
 
-                // Get custom claims to verify admin role
-                const idTokenResult = await result.user.getIdTokenResult();
-                const role = idTokenResult.claims.role;
-
-                if (role !== 'admin') {
-                    throw new Error('You do not have admin access. Contact administrator.');
-                }
-
                 // Submit form with tokens
                 adminLoginForm.submit();
 
@@ -166,7 +147,7 @@
                 loginBtnText.textContent = 'Login';
 
                 let errorMessage = 'Login failed. Please try again.';
-                
+
                 if (error.code === 'auth/user-not-found') {
                     errorMessage = 'Email not found.';
                 } else if (error.code === 'auth/wrong-password') {
