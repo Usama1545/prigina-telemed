@@ -46,14 +46,19 @@
 <button id="dbgToggle">🐛</button>
 <div id="dbgLog"></div>
 
+<!-- ZIM SIGNALLING -->
+<script src="https://unpkg.com/zego-zim-web/index.js"></script>
+<!-- ZEGO PREBUILT -->
 <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
 <script>
 const appID       = {{ (int) config('services.zego.app_id') }};
 const serverToken = @json($token);
 const userID      = @json($user['uid']);
 const userName    = @json($user['name'] ?? 'User');
-const roomID      = "call_{{ $id }}";
-const backUrl     = @json($backUrl ?? url('/dashboard'));
+const roomID      = "call_{{ substr(md5($id), 0, 12) }}";
+const receiverID   = @json($doctor['uid'] ?? '');
+const receiverName = @json($doctor['name'] ?? 'User');
+const backUrl      = @json($backUrl ?? url('/dashboard'));
 
 // ── Logging ───────────────────────────────────────────────────────────────────
 const dbg = document.getElementById('dbgLog');
@@ -79,7 +84,10 @@ function showErr(msg) {
     document.getElementById('errBanner').style.display = 'block';
 }
 
-log(`appID=${appID} roomID=${roomID} userID=${userID}`);
+log(`appID=${appID}`);
+log(`roomID=${roomID}`);
+log(`userID=${userID}`);
+log(`receiverID=${receiverID}`);
 
 if (!appID)       { showErr('ZEGO_APP_ID is not configured.'); }
 if (!serverToken) { showErr('Token generation failed — check ZEGO_SERVER_SECRET.'); }
@@ -92,27 +100,104 @@ try {
     log('Kit token generated', 's');
 
     const zp = ZegoUIKitPrebuilt.create(kitToken);
-    log('ZegoUIKitPrebuilt instance created', 's');
+    log('ZEGO instance created', 's');
 
-    zp.joinRoom({
-        container:       document.getElementById('zego-container'),
-        sharedLinks:     [],
-        showPreJoinView: false,
-        showLeavingView: false,
-        scenario: {
-            mode: ZegoUIKitPrebuilt.OneONoneCall,
+    zp.addPlugins({ ZIM });
+    log('ZIM plugin attached', 's');
+
+    zp.setCallInvitationConfig({
+
+        enableNotifyWhenAppRunningInBackgroundOrQuit: true,
+
+        onIncomingCallReceived(callID, caller, callType, callees) {
+            log(`Incoming call from ${caller.userName}`, 's');
         },
-        onJoinRoom: () => {
-            log('Joined room successfully', 's');
+
+        onIncomingCallCanceled() {
+            log('Incoming call canceled');
         },
-        // onUserLeave intentionally omitted — never auto-redirect on empty room.
-        onLeaveRoom: () => {
-            log('User left room, redirecting…');
+
+        onIncomingCallRejected() {
+            log('Incoming call rejected');
+        },
+
+        onIncomingCallTimeout() {
+            log('Incoming call timeout');
+        },
+
+        onOutgoingCallAccepted() {
+            log('Call accepted', 's');
+        },
+
+        onOutgoingCallRejected() {
+            log('Call rejected');
+            window.location.href = backUrl;
+        },
+
+        onOutgoingCallTimeout() {
+            log('Outgoing call timeout');
+            window.location.href = backUrl;
+        },
+
+        onCallEnd() {
+            log('Call ended, redirecting…');
             window.location.href = backUrl;
         },
     });
 
-    log('joinRoom called');
+    // ── SEND INVITATION (with ZIM-ready retry) ────────────────────────────────
+    // ZIM login is async — error 6000121 means "not logged in yet".
+    // Retry up to 8 times with 1 s gaps before giving up.
+    async function startCall(maxAttempts = 8, retryDelay = 1000) {
+
+        for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+
+            try {
+
+                log(`Sending video call invitation (attempt ${attempt}/${maxAttempts})…`);
+
+                await zp.sendCallInvitation({
+
+                    callees: [{
+                        userID: receiverID,
+                        userName: receiverName,
+                    }],
+
+                    callType: ZegoUIKitPrebuilt.InvitationTypeVideoCall,
+
+                    timeout: 60,
+                });
+
+                log('Invitation sent', 's');
+                return;
+
+            } catch (err) {
+
+                // 6000121 = ZIM not logged in yet; wait and retry
+                if (err?.code === 6000121 && attempt < maxAttempts) {
+
+                    log(`ZIM not ready (${err.code}), retrying in ${retryDelay}ms…`);
+
+                    await new Promise(r => setTimeout(r, retryDelay));
+
+                } else {
+
+                    console.error(err);
+
+                    showErr(
+                        'Failed to send invitation: ' +
+                        JSON.stringify({ code: err?.code, message: err?.message })
+                    );
+
+                    return;
+                }
+            }
+        }
+    }
+
+    // Kick off after a short initial pause so ZIM can log in
+    setTimeout(() => startCall(), 1500);
+
 } catch (err) {
     showErr('Failed to initialise call: ' + (err.message || err));
 }

@@ -261,11 +261,19 @@
                 onOutgoingCallRejected() {
 
                     log('Call rejected');
+                    window.location.href = backUrl;
                 },
 
                 onOutgoingCallTimeout() {
 
                     log('Outgoing call timeout');
+                    window.location.href = backUrl;
+                },
+
+                onCallEnd() {
+
+                    log('Call ended, redirecting…');
+                    window.location.href = backUrl;
                 },
             });
 
