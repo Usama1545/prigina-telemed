@@ -71,11 +71,6 @@
                 zp.setCallInvitationConfig({
                     enableNotifyWhenAppRunningInBackgroundOrQuit: true,
 
-                    // Silence ZEGO's built-in ringtone so ours is the only one playing
-                    ringtoneConfig: {
-                        incomingCallUrl: 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
-                    },
-
                     onIncomingCallReceived(callID, caller, callType) {
                         console.log('[ZEGO] Incoming call from', caller.userName, 'type', callType);
                         _startRingtone();
