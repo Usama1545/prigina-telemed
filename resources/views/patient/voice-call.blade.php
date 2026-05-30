@@ -1,11 +1,15 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Audio Call — Prigina</title>
+
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('build/img/prigina-gav.png') }}">
+
     <style>
         *,
         *::before,
@@ -29,7 +33,6 @@
             height: 100vh;
         }
 
-        /* Error banner — hidden by default */
         #errBanner {
             display: none;
             position: fixed;
@@ -52,7 +55,6 @@
             text-decoration: underline;
         }
 
-        /* Debug log */
         #dbgLog {
             display: none;
             position: fixed;
@@ -60,9 +62,9 @@
             left: 0;
             right: 0;
             z-index: 9999;
-            max-height: 200px;
+            max-height: 220px;
             overflow-y: auto;
-            background: rgba(0, 0, 0, .88);
+            background: rgba(0, 0, 0, .92);
             font-family: monospace;
             font-size: 11px;
             color: #94a3b8;
@@ -82,7 +84,7 @@
             bottom: 8px;
             right: 8px;
             z-index: 10000;
-            background: rgba(255, 255, 255, .1);
+            background: rgba(255, 255, 255, .12);
             border: none;
             color: #94a3b8;
             font-size: 11px;
@@ -103,90 +105,255 @@
     <div id="zego-container"></div>
 
     <button id="dbgToggle">🐛</button>
+
     <div id="dbgLog"></div>
 
+    <!-- ZIM SIGNALLING -->
+    <script src="https://unpkg.com/zego-zim-web/index.js"></script>
+
+    <!-- ZEGO PREBUILT -->
     <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
+
     <script>
         const appID = {{ (int) config('services.zego.app_id') }};
+
         const serverToken = @json($token);
+
         const userID = @json($user['uid']);
+
         const userName = @json($user['name'] ?? 'User');
-        const roomID = "call_{{ $id }}";
+
+        const roomID = "call_{{ substr(md5($id), 0, 12) }}";
+
+        const receiverID = @json($doctor['uid'] ?? '');
+
+        const receiverName = @json($doctor['name'] ?? 'User');
+
         const backUrl = @json($backUrl ?? url('/dashboard'));
 
-        // ── Logging ───────────────────────────────────────────────────────────────────
+        // ─────────────────────────────────────────────────────────────
+        // Debug Logger
+        // ─────────────────────────────────────────────────────────────
+
         const dbg = document.getElementById('dbgLog');
 
-        function log(msg, cls) {
-            const ts = new Date().toTimeString().slice(0, 8);
-            const line = document.createElement('div');
-            if (cls) line.className = cls;
-            line.textContent = `[${ts}] ${msg}`;
-            dbg.appendChild(line);
-            dbg.scrollTop = dbg.scrollHeight;
-            console[cls === 'e' ? 'error' : 'log']('[ZegoCall]', msg);
-        }
-        document.getElementById('dbgToggle').onclick = () => {
-            dbg.style.display = dbg.style.display === 'block' ? 'none' : 'block';
-        };
-        document.addEventListener('keydown', e => {
-            if (e.key === 'd' || e.key === 'D') dbg.style.display = dbg.style.display === 'block' ? 'none' :
-            'block';
-        });
+        function log(msg, cls = '') {
 
-        // ── Error display ─────────────────────────────────────────────────────────────
+            const ts = new Date().toTimeString().slice(0, 8);
+
+            const line = document.createElement('div');
+
+            if (cls) line.className = cls;
+
+            line.textContent = `[${ts}] ${msg}`;
+
+            dbg.appendChild(line);
+
+            dbg.scrollTop = dbg.scrollHeight;
+
+            console[cls === 'e' ? 'error' : 'log']('[ZEGO]', msg);
+        }
+
+        document.getElementById('dbgToggle').onclick = () => {
+
+            dbg.style.display =
+                dbg.style.display === 'block' ?
+                'none' :
+                'block';
+        };
+
+        // ─────────────────────────────────────────────────────────────
+        // Error UI
+        // ─────────────────────────────────────────────────────────────
+
         function showErr(msg) {
+
             log(msg, 'e');
+
             document.getElementById('errText').textContent = msg;
+
             document.getElementById('errBanner').style.display = 'block';
         }
 
-        // ── Guards ────────────────────────────────────────────────────────────────────
-        log(`appID=${appID} roomID=${roomID} userID=${userID}`);
+        // ─────────────────────────────────────────────────────────────
+        // Validation
+        // ─────────────────────────────────────────────────────────────
+
+        log(`appID=${appID}`);
+        log(`roomID=${roomID}`);
+        log(`userID=${userID}`);
+        log(`receiverID=${receiverID}`);
 
         if (!appID) {
-            showErr('ZEGO_APP_ID is not configured.');
-        }
-        if (!serverToken) {
-            showErr('Token generation failed — check ZEGO_SERVER_SECRET.');
+            showErr('ZEGO_APP_ID missing');
+            throw new Error('ZEGO_APP_ID missing');
         }
 
-        // ── ZegoUIKit Prebuilt ────────────────────────────────────────────────────────
+        if (!serverToken) {
+            showErr('ZEGO token missing');
+            throw new Error('ZEGO token missing');
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        // ZEGO INIT
+        // ─────────────────────────────────────────────────────────────
+
         try {
-            const kitToken = ZegoUIKitPrebuilt.generateKitTokenForProduction(
-                appID, serverToken, roomID, userID, userName
-            );
+
+            const kitToken =
+                ZegoUIKitPrebuilt.generateKitTokenForProduction(
+                    appID,
+                    serverToken,
+                    roomID,
+                    userID,
+                    userName
+                );
+
             log('Kit token generated', 's');
 
             const zp = ZegoUIKitPrebuilt.create(kitToken);
-            log('ZegoUIKitPrebuilt instance created', 's');
+
+            log('ZEGO instance created', 's');
+
+            // IMPORTANT
+            zp.addPlugins({
+                ZIM,
+            });
+
+            log('ZIM plugin attached', 's');
+
+            // ─────────────────────────────────────────────────────────
+            // Incoming Call Listener
+            // ─────────────────────────────────────────────────────────
+
+            zp.setCallInvitationConfig({
+
+                enableNotifyWhenAppRunningInBackgroundOrQuit: true,
+
+                onIncomingCallReceived(callID, caller, callType, callees) {
+
+                    log(
+                        `Incoming call from ${caller.userName}`,
+                        's'
+                    );
+                },
+
+                onIncomingCallCanceled() {
+
+                    log('Incoming call canceled');
+                },
+
+                onIncomingCallRejected() {
+
+                    log('Incoming call rejected');
+                },
+
+                onIncomingCallTimeout() {
+
+                    log('Incoming call timeout');
+                },
+
+                onOutgoingCallAccepted() {
+
+                    log('Call accepted', 's');
+                },
+
+                onOutgoingCallRejected() {
+
+                    log('Call rejected');
+                },
+
+                onOutgoingCallTimeout() {
+
+                    log('Outgoing call timeout');
+                },
+            });
+
+            // ─────────────────────────────────────────────────────────
+            // Join Room
+            // ─────────────────────────────────────────────────────────
 
             zp.joinRoom({
+
                 container: document.getElementById('zego-container'),
+
                 sharedLinks: [],
+
                 showPreJoinView: false,
-                turnOffCameraOnJoin: true, // audio-only call
+
+                turnOffCameraOnJoin: true,
+
                 showLeavingView: false,
+
                 scenario: {
                     mode: ZegoUIKitPrebuilt.OneONoneCall,
                 },
+
                 onJoinRoom: () => {
-                    log('Joined room successfully', 's');
+
+                    log('Joined room', 's');
                 },
-                // onUserLeave is intentionally NOT set — we never auto-redirect when
-                // the other party hasn't joined yet or temporarily loses connection.
+
                 onLeaveRoom: () => {
-                    // Fires only when the current user clicks the "End Call" button.
-                    // log('User left room, redirecting…');
+
+                    log('Left room');
+
                     // window.location.href = backUrl;
                 },
             });
 
-            log('joinRoom called');
+            log('joinRoom called', 's');
+
+            // ─────────────────────────────────────────────────────────
+            // SEND INVITATION
+            // ─────────────────────────────────────────────────────────
+
+            async function startCall() {
+
+                try {
+
+                    log('Sending call invitation...');
+
+                    await zp.sendCallInvitation({
+
+                        callees: [{
+                            userID: receiverID,
+                            userName: receiverName,
+                        }],
+
+                        callType: ZegoUIKitPrebuilt.InvitationTypeVoiceCall,
+
+                        timeout: 60,
+                    });
+
+                    log('Invitation sent', 's');
+
+                } catch (err) {
+
+                    console.error(err);
+
+                    showErr(
+                        'Failed to send invitation: ' +
+                        (err.message || err)
+                    );
+                }
+            }
+
+            // Auto start
+            startCall();
+
         } catch (err) {
-            showErr('Failed to initialise call: ' + (err.message || err));
+
+            console.error(err);
+
+            showErr(
+                'Failed to initialise call: ' +
+                (err.message || err)
+            );
         }
     </script>
+
 </body>
 
 </html>
+```
