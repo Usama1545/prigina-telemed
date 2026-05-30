@@ -2,6 +2,8 @@
 
 use App\Services\FirebaseAuthService;
 use App\Services\FirestoreService;
+use App\Services\Zego\ZegoErrorCodes;
+use App\Services\Zego\ZegoServerAssistant;
 
 if (! function_exists('current_user')) {
     function current_user()
