@@ -179,10 +179,10 @@
         // Validation
         // ─────────────────────────────────────────────────────────────
 
-        log(`appID=${appID}`);
-        log(`roomID=${roomID}`);
-        log(`userID=${userID}`);
-        log(`receiverID=${receiverID}`);
+        console.log(`appID=${appID}`);
+        console.log(`roomID=${roomID}`);
+        console.log(`userID=${userID}`);
+        console.log(`receiverID=${receiverID}`);
 
         if (!appID) {
             showErr('ZEGO_APP_ID missing');
