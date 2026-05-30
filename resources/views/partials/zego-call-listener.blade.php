@@ -16,40 +16,42 @@
     <script>
         // ── Call ringtone (Web Audio) ────────────────────────────────────────────────
         // Uses the shared _getCtx / _tone helpers defined in mainlayout.
-        let _callRinger = null;
+        // let _callRinger = null;
 
-        function _startRingtone() {
-            _stopRingtone();
-            let active = true;
-            _callRinger = {
-                stop() {
-                    active = false;
-                }
-            };
+        // function _startRingtone() {
+        //     _stopRingtone();
+        //     let active = true;
+        //     _callRinger = {
+        //         stop() {
+        //             active = false;
+        //         }
+        //     };
 
-            (function ring() {
-                if (!active) return;
-                try {
-                    const ctx = _getCtx(),
-                        t = ctx.currentTime;
-                    // Two short pulses — classic phone ring feel
-                    _tone(ctx, 1200, t, 0.18, 0.65);
-                    _tone(ctx, 1200, t + 0.22, 0.18, 0.65);
-                } catch (_) {}
-                setTimeout(ring, 1100);
-            })();
-        }
+        //     (function ring() {
+        //         if (!active) return;
+        //         try {
+        //             const ctx = _getCtx(),
+        //                 t = ctx.currentTime;
+        //             // Two short pulses — classic phone ring feel
+        //             _tone(ctx, 1200, t, 0.18, 0.65);
+        //             _tone(ctx, 1200, t + 0.22, 0.18, 0.65);
+        //         } catch (_) {}
+        //         setTimeout(ring, 1100);
+        //     })();
+        // }
 
-        function _stopRingtone() {
-            if (_callRinger) {
-                _callRinger.stop();
-                _callRinger = null;
-            }
-        }
+        // function _stopRingtone() {
+        //     if (_callRinger) {
+        //         _callRinger.stop();
+        //         _callRinger = null;
+        //     }
+        // }
+
         // ────────────────────────────────────────────────────────────────────────────
 
         (async function() {
             try {
+
                 const res = await fetch('{{ $tokenRoute }}');
                 if (!res.ok) return;
                 const {
@@ -64,6 +66,7 @@
                 );
 
                 const zp = ZegoUIKitPrebuilt.create(kitToken);
+                window.zpCallListener = zp;
                 zp.addPlugins({
                     ZIM
                 });
@@ -73,26 +76,26 @@
 
                     onIncomingCallReceived(callID, caller, callType) {
                         console.log('[ZEGO] Incoming call from', caller.userName, 'type', callType);
-                        _startRingtone();
+                        // _startRingtone();
                     },
 
                     onIncomingCallCanceled() {
                         console.log('[ZEGO] Caller cancelled');
-                        _stopRingtone();
+                        // _stopRingtone();
                     },
 
                     onIncomingCallTimeout() {
                         console.log('[ZEGO] Incoming call timed out');
-                        _stopRingtone();
+                        // _stopRingtone();
                     },
 
                     onCallEnd() {
-                        _stopRingtone();
+                        // _stopRingtone();
                         window.location.href = '{{ $dashRoute }}';
                     },
 
                     onIncomingCallAccepted() {
-                        _stopRingtone();
+                        // _stopRingtone();
                     }
                 });
 
