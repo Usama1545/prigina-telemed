@@ -14,6 +14,32 @@
 <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
 
 <script>
+// ── Call ringtone (Web Audio) ────────────────────────────────────────────────
+// Uses the shared _getCtx / _tone helpers defined in mainlayout.
+let _callRinger = null;
+
+function _startRingtone() {
+    _stopRingtone();
+    let active = true;
+    _callRinger = { stop() { active = false; } };
+
+    (function ring() {
+        if (!active) return;
+        try {
+            const ctx = _getCtx(), t = ctx.currentTime;
+            // Two short pulses — classic phone ring feel
+            _tone(ctx, 1000, t,        0.28, 0.45);
+            _tone(ctx, 1000, t + 0.38, 0.28, 0.45);
+        } catch (_) {}
+        setTimeout(ring, 1900);
+    })();
+}
+
+function _stopRingtone() {
+    if (_callRinger) { _callRinger.stop(); _callRinger = null; }
+}
+// ────────────────────────────────────────────────────────────────────────────
+
 (async function () {
     try {
         const res = await fetch('{{ $tokenRoute }}');
@@ -30,19 +56,28 @@
         zp.setCallInvitationConfig({
             enableNotifyWhenAppRunningInBackgroundOrQuit: true,
 
+            // Silence ZEGO's built-in ringtone so ours is the only one playing
+            ringtoneConfig: {
+                incomingCallUrl: 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+            },
+
             onIncomingCallReceived(callID, caller, callType) {
                 console.log('[ZEGO] Incoming call from', caller.userName, 'type', callType);
+                _startRingtone();
             },
 
             onIncomingCallCanceled() {
                 console.log('[ZEGO] Caller cancelled');
+                _stopRingtone();
             },
 
             onIncomingCallTimeout() {
                 console.log('[ZEGO] Incoming call timed out');
+                _stopRingtone();
             },
 
             onCallEnd() {
+                _stopRingtone();
                 window.location.href = '{{ $dashRoute }}';
             },
         });

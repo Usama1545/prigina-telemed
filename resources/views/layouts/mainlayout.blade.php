@@ -167,7 +167,53 @@
                                                                                         loadAppointments();
                                                                                     }
                                                                                 });
+                                                                            // ── Audio Notifications ─────────────────────────────────────────────
+                                                                            let _audioCtx = null;
+
+                                                                            function _getCtx() {
+                                                                                if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                                                                                if (_audioCtx.state === 'suspended') _audioCtx.resume();
+                                                                                return _audioCtx;
+                                                                            }
+
+                                                                            // Unlock audio on first user gesture (browser autoplay policy)
+                                                                            ['click','keydown','touchstart'].forEach(e =>
+                                                                                document.addEventListener(e, () => _getCtx(), { once: true, passive: true })
+                                                                            );
+
+                                                                            function _tone(ctx, freq, start, dur, vol = 0.28) {
+                                                                                const osc = ctx.createOscillator(), g = ctx.createGain();
+                                                                                osc.connect(g); g.connect(ctx.destination);
+                                                                                osc.type = 'sine';
+                                                                                osc.frequency.setValueAtTime(freq, start);
+                                                                                g.gain.setValueAtTime(0, start);
+                                                                                g.gain.linearRampToValueAtTime(vol, start + 0.01);
+                                                                                g.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+                                                                                osc.start(start); osc.stop(start + dur + 0.02);
+                                                                            }
+
+                                                                            // Two-note chime  (C6 → E6)  — new message
+                                                                            function playMessageSound() {
+                                                                                try {
+                                                                                    const ctx = _getCtx(), t = ctx.currentTime;
+                                                                                    _tone(ctx, 1047, t,        0.38);
+                                                                                    _tone(ctx, 1319, t + 0.14, 0.48);
+                                                                                } catch (_) {}
+                                                                            }
+
+                                                                            // Three-note ascending chime  (G5 → C6 → E6)  — new appointment
+                                                                            function playAppointmentSound() {
+                                                                                try {
+                                                                                    const ctx = _getCtx(), t = ctx.currentTime;
+                                                                                    _tone(ctx, 784,  t,        0.25);
+                                                                                    _tone(ctx, 1047, t + 0.14, 0.25);
+                                                                                    _tone(ctx, 1319, t + 0.28, 0.48);
+                                                                                } catch (_) {}
+                                                                            }
+                                                                            // ────────────────────────────────────────────────────────────────────
+
                                                                             function showNotification(data) {
+                                                                                playMessageSound();
                                                                                 const conversationUrl =
                                                                                     userRole === 'doctor'
                                                                                         ? `/doctor/conversations/${data.conversationId}`
@@ -204,6 +250,7 @@
                                                                                 }, 10000);
                                                                             }
                                                                             function showAppointmentNotification(data) {
+                                                                                playAppointmentSound();
                                                                                 const appointmentUrl =
                                                                                     userRole === 'doctor'
                                                                                         ? `/doctor/appointments`
