@@ -1,13 +1,7 @@
 <?php
 
-require_once app_path('Services/ZEGO/ZegoAssistantToken.php');
-require_once app_path('Services/ZEGO/ZegoErrorCodes.php');
-require_once app_path('Services/ZEGO/ZegoServerAssistant.php');
-
 use App\Services\FirebaseAuthService;
 use App\Services\FirestoreService;
-use ZEGO\ZegoErrorCodes;
-use ZEGO\ZegoServerAssistant;
 
 if (! function_exists('current_user')) {
     function current_user()
