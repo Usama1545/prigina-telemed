@@ -1,166 +1,73 @@
-<?php $page = 'voice-call'; ?>
-@extends('layouts.mainlayout')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Call — Prigina</title>
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('build/img/prigina-gav.png') }}">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { width: 100%; height: 100%; overflow: hidden; background: #0f172a; font-family: 'Segoe UI', system-ui, sans-serif; }
 
-@section('content')
-@component('components.breadcrumb', ['li_1' => 'Voice Call', 'li_2' => 'Voice Call', 'title' => 'Voice Call'])
-@endcomponent
+        /* Top bar */
+        .call-topbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+            display: flex; align-items: center; gap: 14px;
+            padding: 12px 20px;
+            background: rgba(15, 23, 42, .85);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(255,255,255,.06);
+        }
+        .call-topbar .avatar {
+            width: 42px; height: 42px; border-radius: 50%; object-fit: cover;
+            border: 2px solid rgba(255,255,255,.2);
+        }
+        .call-topbar .info { flex: 1; }
+        .call-topbar .info .name { color: #f1f5f9; font-weight: 600; font-size: 15px; }
+        .call-topbar .info .status { color: #94a3b8; font-size: 12px; }
 
-<div class="content">
-    <div class="container">
+        /* ZegoUIKit container — full screen minus topbar */
+        #zego-call-container {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
 
-        <div class="call-wrapper">
-            <div class="call-main-row">
-                <div class="call-main-wrapper">
-                    <div class="call-view">
-                        <div class="call-window">
+<div id="zego-call-container"></div>
 
-                            <!-- Call Header -->
-                            <div class="fixed-header">
-                                <div class="navbar">
-                                    <div class="user-details me-auto">
-                                        <div class="float-start user-img">
-                                            <a class="avatar avatar-sm me-2" href="{{ url('patient-profile') }}">
-                                                <img src="{{ current_user()['image'] ?? URL::asset('build/img/patients/patient1.jpg')}}"
-                                                     class="rounded-circle">
-                                                <span class="status online"></span>
-                                            </a>
-                                        </div>
-                                        <div class="user-info float-start">
-                                            <span>{{ current_user()['name'] }}</span>
-                                            <span class="last-seen">Online</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Call Content -->
-                            <div class="call-contents">
-                                <div class="call-content-wrap text-center">
-
-                                    <div class="voice-call-avatar">
-                                        <img src="{{ $doctor['image'] ?? URL::asset('build/img/doctors/doctor-thumb-02.jpg') }}"
-                                             class="call-avatar">
-                                        <h5 class="mt-2">{{ $doctor['name'] }}</h5>
-                                        <span id="callTimer">00:00</span>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <!-- Call Footer -->
-                            <div class="call-footer">
-                                <div class="call-icons">
-                                    <ul class="call-items">
-
-                                        <li class="call-item">
-                                            <a href="javascript:void(0)" id="muteBtn">
-                                                <i class="isax isax-microphone-2"></i>
-                                            </a>
-                                        </li>
-
-                                        <li class="call-item">
-                                            <a href="javascript:void(0)" id="endCallBtn">
-                                                <i class="isax isax-call"></i>
-                                            </a>
-                                        </li>
-
-                                    </ul>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-@endsection
-
-
-@section('scripts')
-
-<!-- ZEGOCLOUD SDK -->
-<script src="https://unpkg.com/zego-express-engine-webrtc"></script>
-
+<script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
 <script>
-    const appID = {{ config('services.zego.app_id') }};
-    const userID = "{{ $user['uid'] }}";
-    const userName = "{{ $user['name'] }}";
-    const token = "{{ $token }}";
+    const appID      = {{ (int) config('services.zego.app_id') }};
+    const serverToken = @json($token);
+    const userID     = @json($user['uid']);
+    const userName   = @json($user['name'] ?? 'User');
+    const roomID     = "call_{{ $id }}";
+    const backUrl    = @json($backUrl ?? url('/dashboard'));
 
-    const roomID = "call_{{ $id }}";
+    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForProduction(
+        appID, serverToken, roomID, userID, userName
+    );
 
-    const zg = new ZegoExpressEngine(appID);
+    const zp = ZegoUIKitPrebuilt.create(kitToken);
 
-    let localStream = null;
-    let isMuted = false;
-
-    async function initCall() {
-        try {
-            await zg.loginRoom(roomID, token, { userID, userName });
-
-            localStream = await zg.createStream({
-                camera: { audio: true, video: false }
-            });
-
-            zg.startPublishingStream(userID, localStream);
-
-            // Listen for remote stream
-            zg.on('roomStreamUpdate', async (roomID, updateType, streamList) => {
-                if (updateType === 'ADD') {
-                    for (const stream of streamList) {
-                        const remoteStream = await zg.startPlayingStream(stream.streamID);
-
-                        const audio = document.createElement('audio');
-                        audio.srcObject = remoteStream;
-                        audio.autoplay = true;
-                        document.body.appendChild(audio);
-                    }
-                }
-            });
-
-            startTimer();
-
-        } catch (error) {
-            console.error("Call init failed:", error);
-        }
-    }
-
-    // Timer
-    let seconds = 0;
-    function startTimer() {
-        setInterval(() => {
-            seconds++;
-            let min = String(Math.floor(seconds / 60)).padStart(2, '0');
-            let sec = String(seconds % 60).padStart(2, '0');
-            document.getElementById('callTimer').innerText = `${min}:${sec}`;
-        }, 1000);
-    }
-
-    // Mute toggle
-    document.getElementById('muteBtn').onclick = () => {
-        isMuted = !isMuted;
-        zg.muteMicrophone(isMuted);
-    };
-
-    // End call
-    document.getElementById('endCallBtn').onclick = async () => {
-        if (localStream) {
-            zg.stopPublishingStream(userID);
-            zg.destroyStream(localStream);
-        }
-
-        await zg.logoutRoom(roomID);
-
-        window.location.href = "{{ $backUrl ?? url('/dashboard') }}";
-    };
-
-    // Start call
-    initCall();
-
+    zp.joinRoom({
+        container:          document.getElementById('zego-call-container'),
+        sharedLinks:        [],
+        showPreJoinView:    false,
+        turnOffCameraOnJoin: true,   // audio-only call
+        scenario: {
+            mode: ZegoUIKitPrebuilt.OneONoneCall,
+        },
+        onLeaveRoom: () => {
+            window.location.href = backUrl;
+        },
+        onUserLeave: () => {
+            window.location.href = backUrl;
+        },
+    });
 </script>
-
-@endsection
+</body>
+</html>

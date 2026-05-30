@@ -85,21 +85,38 @@ if (! function_exists('topSpeacilalization')) {
     }
 }
 if (! function_exists('generateZegoToken')) {
-    function generateZegoToken($userId)
+    /**
+     * Generate a ZegoCloud Token04 using AES-128-CBC — the only format ZegoCloud accepts.
+     * The server secret must be exactly 32 ASCII characters as shown in the ZegoCloud console.
+     */
+    function generateZegoToken(string $userId, int $effectiveSeconds = 3600): string
     {
-        $appId = config('services.zego.app_id');
-        $serverSecret = config('services.zego.server_secret');
+        $appId  = (int) config('services.zego.app_id');
+        $secret = config('services.zego.server_secret'); // must be exactly 32 chars
 
-        $payload = [
+        $createTime = time();
+        $expireAt   = $createTime + $effectiveSeconds;
+        $nonce      = mt_rand(-2147483648, 2147483647);
+
+        $plaintext = json_encode([
+            'app_id'  => $appId,
             'user_id' => $userId,
-            'timestamp' => time(),
-            'expire' => 3600,
-        ];
+            'nonce'   => $nonce,
+            'ctime'   => $createTime,
+            'expire'  => $expireAt,
+            'payload' => '',
+        ]);
 
-        // Use official token generation logic (HMAC SHA256)
-        $token = base64_encode(hash_hmac('sha256', json_encode($payload), $serverSecret, true));
+        $iv         = random_bytes(16);
+        $ciphertext = openssl_encrypt($plaintext, 'aes-128-cbc', $secret, OPENSSL_RAW_DATA, $iv);
 
-        return $token;
+        // Binary layout: [iv_len 2B big-endian][iv 16B][ciphertext_len 4B big-endian][ciphertext]
+        $buf = pack('n', strlen($iv))
+             . $iv
+             . pack('N', strlen($ciphertext))
+             . $ciphertext;
+
+        return '04' . base64_encode($buf);
     }
 }
 
