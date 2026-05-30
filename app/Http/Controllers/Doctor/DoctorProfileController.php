@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\Doctor;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Services\FirestoreService;
-use Illuminate\Support\Facades\Http;
-use Kreait\Firebase\Contract\Auth;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Stripe\Stripe;
+use Kreait\Firebase\Contract\Auth;
+use Kreait\Firebase\Contract\Storage;
 use Stripe\Account;
 use Stripe\AccountLink;
+use Stripe\Stripe;
 
 class DoctorProfileController extends Controller
 {
@@ -21,6 +22,7 @@ class DoctorProfileController extends Controller
     {
         $this->firestore = $firestore;
     }
+
     public function dashboard(Request $request)
     {
         $uid = current_user()['uid'];
@@ -94,13 +96,13 @@ class DoctorProfileController extends Controller
 
         // ✅ Validation
         $validated = $request->validate([
-            'name'   => 'required|string|max:255',
-            'phone'  => 'required|string|max:20',
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
             'license_number' => 'required',
             'qualification' => 'required',
             'experience' => 'required|string',
             'specializations' => 'required|array|min:1',
-            'image'  => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'consultationFee' => 'required|numeric',
             'workingDays' => 'required|array',
             'workingHours' => 'required|array',
@@ -120,11 +122,11 @@ class DoctorProfileController extends Controller
         // ✅ Handle Image Upload
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $fileName = time() . '_' . $image->getClientOriginalName();
+            $fileName = time().'_'.$image->getClientOriginalName();
 
             $filePath = "profile_pictures/doctor_profiles/{$uid}/{$fileName}";
 
-            /** @var \Kreait\Firebase\Contract\Storage $storage */
+            /** @var Storage $storage */
             $storage = app('firebase.storage');
             $bucket = $storage->getBucket();
 
@@ -136,14 +138,14 @@ class DoctorProfileController extends Controller
                 ]
             );
 
-            $imageUrl = "https://storage.googleapis.com/" . $bucket->name() . "/" . $filePath;
+            $imageUrl = 'https://storage.googleapis.com/'.$bucket->name().'/'.$filePath;
 
             $data['profilePicture'] = $imageUrl;
         }
 
         $breaks = [];
 
-        if (!empty($validated['breaks'])) {
+        if (! empty($validated['breaks'])) {
             $breaks = explode(',', $validated['breaks']);
         }
 
@@ -166,13 +168,13 @@ class DoctorProfileController extends Controller
             $cursor = json_decode($cursor, true);
         }
 
-        $result = $this->firestore->paginatedQuery(
+        $result = $this->firestore->query(
             'appointments',
             [
                 [
                     'field' => 'doctorId',
                     'op' => '=',
-                    'value' => $uid
+                    'value' => $uid,
                 ],
             ],
             20,
@@ -220,7 +222,7 @@ class DoctorProfileController extends Controller
         $workingDays = current_user()['workingDays'] ?? [];
         $workingHours = current_user()['workingHours'] ?? [];
         $breaks = current_user()['breaks'] ?? [];
-        
+
         return view('doctor.profile-settings', compact('doctor', 'specializations', 'workingDays', 'workingHours', 'breaks'));
     }
 
@@ -228,17 +230,15 @@ class DoctorProfileController extends Controller
     {
 
         $email = current_user()['email'];
-        $uid   = current_user()['uid'];
+        $uid = current_user()['uid'];
 
         $request->validate([
             'current_password' => 'required|string',
             'password' => 'required|string|min:6|confirmed',
         ]);
-  
-
 
         $response = Http::post(
-            'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' . config('services.firebase.api_key'),
+            'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key='.config('services.firebase.api_key'),
             [
                 'email' => $email,
                 'password' => $request->current_password,
@@ -248,7 +248,7 @@ class DoctorProfileController extends Controller
 
         if ($response->failed()) {
             return back()->withErrors([
-                'current_password' => 'Current password is incorrect'
+                'current_password' => 'Current password is incorrect',
             ]);
         }
 
@@ -257,8 +257,9 @@ class DoctorProfileController extends Controller
         ]);
 
         // Debug (temporary)
-        if (!$updatedUser) {
+        if (! $updatedUser) {
             dd('Password update failed');
+
             return back()->withErrors(['password' => 'Password update failed']);
         }
 
@@ -272,14 +273,14 @@ class DoctorProfileController extends Controller
 
         $filteredConversations = $this->firestore->query('conversations', [
             ['field' => 'doctorId', 'op' => '=', 'value' => $uid],
-        ],null, null, 'lastMessageTime', 'DESC');
+        ], null, null, 'lastMessageTime', 'DESC');
 
         $conversations = collect($filteredConversations['documents'] ?? [])
             ->map(fn ($conversation) => $this->normalizeConversation($conversation))
             ->all();
 
         return view('doctor.chat', compact('conversations'));
-        
+
     }
 
     public function messages(Request $request, $id)
@@ -329,7 +330,7 @@ class DoctorProfileController extends Controller
         // HANDLE FILE
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $fileName = time() . '_' . $file->getClientOriginalName();
+            $fileName = time().'_'.$file->getClientOriginalName();
 
             $filePath = "/chat_images/{$id}/{$fileName}";
 
@@ -344,8 +345,7 @@ class DoctorProfileController extends Controller
                 ]
             );
 
-            $imageUrl = "https://storage.googleapis.com/" . $bucket->name() . "/" . $filePath;
-
+            $imageUrl = 'https://storage.googleapis.com/'.$bucket->name().'/'.$filePath;
 
             if (str_contains($file->getMimeType(), 'image')) {
                 $data['imageUrl'] = $imageUrl;
@@ -358,7 +358,7 @@ class DoctorProfileController extends Controller
             }
         }
         $this->firestore->update('conversations', $id, [
-            'lastMessage' => $data['text'] ,
+            'lastMessage' => $data['text'],
             'lastMessageSender' => current_user()['uid'] ?? '',
             'lastMessageTime' => now(),
             'patientUnreadCount' => ((int) ($conversation['patientUnreadCount'] ?? 0)) + 1,
@@ -370,7 +370,7 @@ class DoctorProfileController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => $data
+            'message' => $data,
         ]);
     }
 
@@ -393,7 +393,7 @@ class DoctorProfileController extends Controller
     public function audioCall($id)
     {
         $conversation = $this->firestore->find('conversations', $id);
-        if (!$conversation) {
+        if (! $conversation) {
             abort(404);
         }
 
@@ -408,7 +408,7 @@ class DoctorProfileController extends Controller
             'id' => $id,
             'doctor' => $doctor,
             'user' => $user,
-            'token' => $token
+            'token' => $token,
         ]);
     }
 
@@ -416,7 +416,7 @@ class DoctorProfileController extends Controller
     {
         $conversation = $this->firestore->find('conversations', $id);
 
-        if (!$conversation) {
+        if (! $conversation) {
             abort(404);
         }
 
@@ -425,17 +425,17 @@ class DoctorProfileController extends Controller
 
         $user = current_user();
 
-        if (!$user) {
+        if (! $user) {
             abort(403);
         }
 
         $token = generateZegoToken($user['uid']);
 
         return view('patient.video-call', [
-            'id'     => $id,
+            'id' => $id,
             'doctor' => $doctor,
-            'user'   => $user,
-            'token'  => $token,
+            'user' => $user,
+            'token' => $token,
         ]);
     }
 
@@ -444,11 +444,11 @@ class DoctorProfileController extends Controller
         $patient = $this->firestore->find('patients', $id);
         $doctor = current_user();
 
-        if (!$doctor) {
+        if (! $doctor) {
             abort(403);
         }
 
-        if (!$patient) {
+        if (! $patient) {
             abort(404);
         }
 
@@ -458,12 +458,12 @@ class DoctorProfileController extends Controller
                 [
                     'field' => 'patientId',
                     'op' => '=',
-                    'value' => $patient['uid']
+                    'value' => $patient['uid'],
                 ],
                 [
                     'field' => 'doctorId',
                     'op' => '=',
-                    'value' => $doctor['uid']
+                    'value' => $doctor['uid'],
                 ],
             ],
             null,
@@ -472,7 +472,7 @@ class DoctorProfileController extends Controller
             'DESC'
         );
 
-        if (!empty($conversation['documents'])) {
+        if (! empty($conversation['documents'])) {
 
             return redirect()
                 ->route('doctor.conversations');
@@ -481,8 +481,7 @@ class DoctorProfileController extends Controller
         $this->firestore->createWithId('conversations', $docID, [
             'doctorId' => $doctor['uid'],
             'doctorName' => $doctor['name'] ?? '',
-            'doctorSpecialty' =>
-                $doctor['specializations'][0] ?? '',
+            'doctorSpecialty' => $doctor['specializations'][0] ?? '',
             'patientId' => $patient['uid'],
             'patientName' => $patient['name'] ?? '',
             'patientAge' => $patient['dob'] ?? '',
@@ -529,7 +528,7 @@ class DoctorProfileController extends Controller
 
         $breaks = [];
 
-        if (!empty($validated['breaks'])) {
+        if (! empty($validated['breaks'])) {
             $breaks = explode(',', $validated['breaks']);
         }
 
@@ -584,7 +583,7 @@ class DoctorProfileController extends Controller
             'lastReadByPatient' => null,
         ], $conversation);
     }
-    
+
     public function payout()
     {
         $user = current_user();
@@ -596,7 +595,7 @@ class DoctorProfileController extends Controller
             isset($user['stripeAccountStatus']) &&
             isset($user['stripeDetailsSubmitted']) &&
             isset($user['stripeOnboardingComplete']) &&
-            !empty($user['stripeAccountId']) &&
+            ! empty($user['stripeAccountId']) &&
             $user['stripeAccountStatus'] === 'active' &&
             $user['stripeDetailsSubmitted'] === true &&
             $user['stripeOnboardingComplete'] === true
@@ -617,7 +616,7 @@ class DoctorProfileController extends Controller
 
         try {
 
-            if (!isset($user['stripeAccountId']) || !$user['stripeAccountId']) {
+            if (! isset($user['stripeAccountId']) || ! $user['stripeAccountId']) {
 
                 $account = Account::create([
                     'type' => 'express',
@@ -633,7 +632,7 @@ class DoctorProfileController extends Controller
                     'stripeAccountStatus' => $account->charges_enabled ? 'active' : 'pending',
                     'stripeDetailsSubmitted' => $account->details_submitted,
                     'stripeOnboardingComplete' => false,
-                    'stripeAccountCreatedAt' => now()
+                    'stripeAccountCreatedAt' => now(),
                 ]);
 
                 $stripeAccountId = $account->id;
@@ -679,7 +678,7 @@ class DoctorProfileController extends Controller
             ->route('doctor.payout')
             ->with('success', 'Payout account setup completed.');
     }
-    
+
     public function completeAppointment($id)
     {
         $this->firestore->update('appointments', $id, [

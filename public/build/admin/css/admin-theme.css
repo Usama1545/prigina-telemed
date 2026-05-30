@@ -1,0 +1,304 @@
+/* ================================================================
+   PRIGINA ADMIN — Teal & Slate Theme
+   Override layer on top of custom.css — do not edit custom.css.
+   ================================================================ */
+
+/* ── 1. Design tokens ────────────────────────────────────────── */
+:root {
+    --pa-primary:        #0ea5e9;
+    --pa-primary-dark:   #0284c7;
+    --pa-primary-rgb:    14, 165, 233;
+    --pa-sidebar:        #1e293b;
+    --pa-sidebar-hover:  rgba(14, 165, 233, .13);
+    --pa-sidebar-text:   #94a3b8;
+    --pa-radius:         12px;
+    --pa-shadow:         0 2px 14px rgba(15, 23, 42, .07);
+    --pa-shadow-hover:   0 6px 28px rgba(15, 23, 42, .12);
+
+    /* Bootstrap 5 primary tokens */
+    --bs-primary:        #0ea5e9;
+    --bs-primary-rgb:    14, 165, 233;
+}
+
+/* ── 2. Body & page ──────────────────────────────────────────── */
+body { background-color: #f1f5f9 !important; }
+.page-wrapper { background: #f1f5f9; }
+
+/* ── 3. Topbar ───────────────────────────────────────────────── */
+.header {
+    background: #ffffff !important;
+    box-shadow: 0 2px 20px rgba(15, 23, 42, .08) !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+/* Logo zone matches sidebar */
+.header .header-left {
+    background-color: var(--pa-sidebar);
+    border-bottom: 1px solid rgba(255,255,255,.05);
+    border-right: none;
+}
+
+.header .user-menu .nav-link            { color: #475569; }
+.header .user-menu .nav-link:hover      { color: var(--pa-primary); }
+.noti-dropdown .nav-link i.fe-bell      { color: var(--pa-primary); }
+
+/* Notification count badge */
+.header #noti-badge {
+    background: #ef4444 !important;
+    min-width: 18px;
+    height: 18px;
+    line-height: 10px;
+    font-size: 0.6rem !important;
+    box-shadow: 0 0 0 2px #fff;
+}
+
+/* Header dropdown hover colour */
+.header .dropdown-menu > li > a:hover,
+.header .dropdown-menu > li > a:focus {
+    background-color: var(--pa-primary) !important;
+}
+.header .dropdown-menu > li > a i { color: var(--pa-primary) !important; }
+.header .dropdown-menu > li > a:hover i,
+.header .dropdown-menu > li > a:focus i { color: #fff !important; }
+
+/* User profile dropdown header */
+.header .user-header {
+    background: linear-gradient(135deg, var(--pa-primary), var(--pa-primary-dark)) !important;
+}
+.header .user-header .user-text h6,
+.header .user-header .user-text p { color: #fff !important; }
+
+/* ── 4. Sidebar ──────────────────────────────────────────────── */
+.sidebar,
+.sidebar-inner {
+    background-color: var(--pa-sidebar) !important;
+}
+.sidebar { box-shadow: 4px 0 28px rgba(0, 0, 0, .18) !important; }
+
+/* Menu items */
+.sidebar .sidebar-menu > ul > li > a {
+    color: var(--pa-sidebar-text) !important;
+    border-radius: 8px;
+    padding: 9px 14px !important;
+    margin: 1px 8px !important;
+}
+.sidebar ul li a i { color: #64748b; }
+
+/* Hover */
+.sidebar-menu > ul > li > a:hover {
+    background-color: var(--pa-sidebar-hover) !important;
+    color: #ffffff !important;
+}
+.sidebar-menu > ul > li > a:hover i { color: var(--pa-primary) !important; }
+
+/* Active */
+.sidebar-menu ul li.active a {
+    background-color: rgba(14, 165, 233, .18) !important;
+    color: var(--pa-primary) !important;
+}
+.sidebar-menu ul li.active a i         { color: var(--pa-primary) !important; }
+.sidebar-menu > ul > li.active > a:hover {
+    background-color: rgba(14, 165, 233, .22) !important;
+    color: var(--pa-primary) !important;
+}
+
+/* Section headings */
+.menu-title {
+    color: #475569 !important;
+    font-size: 0.65rem !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+}
+
+/* Sub-menu */
+.sidebar ul ul { background: rgba(0,0,0,.14) !important; border-radius: 6px; }
+.sidebar ul ul a { color: #94a3b8 !important; }
+.sidebar ul ul a:hover { color: var(--pa-primary) !important; }
+.sidebar-menu ul ul a.active {
+    color: var(--pa-primary) !important;
+    text-decoration: none !important;
+}
+
+/* Slim scrollbar */
+.sidebar-inner::-webkit-scrollbar             { width: 3px; }
+.sidebar-inner::-webkit-scrollbar-thumb       { background: #334155; border-radius: 4px; }
+.sidebar-inner::-webkit-scrollbar-track       { background: transparent; }
+
+/* ── 5. Cards ────────────────────────────────────────────────── */
+.card {
+    border: none !important;
+    border-radius: var(--pa-radius) !important;
+    box-shadow: var(--pa-shadow) !important;
+    transition: box-shadow .2s ease !important;
+}
+.card:hover { box-shadow: var(--pa-shadow-hover) !important; }
+
+.card-header {
+    background: #ffffff !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    border-radius: var(--pa-radius) var(--pa-radius) 0 0 !important;
+    padding: 1.1rem 1.4rem !important;
+}
+.card-title {
+    font-weight: 700 !important;
+    color: #0f172a !important;
+    font-size: 0.9rem !important;
+    margin: 0 !important;
+}
+
+/* ── 6. Dashboard stat cards — gradient fill ────────────────── */
+.card:has(.dash-widget-icon.text-primary)  {
+    background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%) !important;
+}
+.card:has(.dash-widget-icon.text-success)  {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+}
+.card:has(.dash-widget-icon.text-danger)   {
+    background: linear-gradient(135deg, #f43f5e 0%, #be123c 100%) !important;
+}
+.card:has(.dash-widget-icon.text-warning)  {
+    background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%) !important;
+}
+
+/* White text on gradient cards */
+.card:has(.dash-widget-header) .dash-count h3 {
+    color: #ffffff !important;
+    font-size: 2.1rem !important;
+    font-weight: 700 !important;
+}
+.card:has(.dash-widget-header) .dash-widget-info h6 {
+    color: rgba(255,255,255,.85) !important;
+    font-weight: 600 !important;
+}
+.card:has(.dash-widget-header) .dash-widget-icon {
+    background: rgba(255,255,255,.2) !important;
+    border-color: rgba(255,255,255,.25) !important;
+    color: #ffffff !important;
+    border-radius: 12px !important;
+    width: 58px !important;
+    height: 58px !important;
+    font-size: 1.4rem !important;
+}
+.card:has(.dash-widget-header) .progress {
+    background: rgba(255,255,255,.2) !important;
+    height: 4px !important;
+    border-radius: 4px !important;
+    margin-top: 10px;
+}
+.card:has(.dash-widget-header) .progress-bar {
+    background: rgba(255,255,255,.65) !important;
+}
+/* Decorative circle */
+.card:has(.dash-widget-header) .card-body { position: relative; overflow: hidden; }
+.card:has(.dash-widget-header) .card-body::before {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 120px; height: 120px;
+    background: rgba(255,255,255,.07);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+/* ── 7. Buttons ─────────────────────────────────────────────── */
+.btn { border-radius: 8px !important; font-weight: 500 !important; }
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--pa-primary) 0%, var(--pa-primary-dark) 100%) !important;
+    border-color: var(--pa-primary) !important;
+    box-shadow: 0 4px 14px rgba(14,165,233,.28) !important;
+    color: #fff !important;
+}
+.btn-primary:hover,
+.btn-primary:focus {
+    background: linear-gradient(135deg, var(--pa-primary-dark) 0%, #0369a1 100%) !important;
+    box-shadow: 0 6px 20px rgba(14,165,233,.4) !important;
+    color: #fff !important;
+}
+
+.btn-outline-primary {
+    color: var(--pa-primary) !important;
+    border-color: var(--pa-primary) !important;
+}
+.btn-outline-primary:hover {
+    background: var(--pa-primary) !important;
+    color: #fff !important;
+}
+
+.btn-outline-secondary { border-radius: 8px !important; }
+
+/* ── 8. Form controls ───────────────────────────────────────── */
+.form-control {
+    border-radius: 8px !important;
+    border-color: #e2e8f0 !important;
+}
+.form-control:focus {
+    border-color: var(--pa-primary) !important;
+    box-shadow: 0 0 0 3px rgba(14,165,233,.15) !important;
+}
+.input-group .btn { border-radius: 0 8px 8px 0 !important; }
+.input-group .form-control { border-radius: 8px 0 0 8px !important; }
+
+/* ── 9. Tables ──────────────────────────────────────────────── */
+.table thead th {
+    background: #f8fafc !important;
+    color: #475569 !important;
+    font-size: 0.71rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.06em !important;
+    font-weight: 700 !important;
+    border-bottom: 2px solid #e2e8f0 !important;
+    padding: 0.8rem 1rem !important;
+}
+.table td {
+    vertical-align: middle !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    color: #334155 !important;
+    padding: 0.8rem 1rem !important;
+}
+.table-hover tbody tr:hover td { background: #f8fafc !important; }
+
+/* ── 10. Primary colour utilities ───────────────────────────── */
+.text-primary  { color: var(--pa-primary) !important; }
+.bg-primary    { background-color: var(--pa-primary) !important; }
+.border-primary { border-color: var(--pa-primary) !important; }
+a:hover, a:focus { color: var(--pa-primary) !important; }
+
+/* ── 11. Page headers & breadcrumbs ─────────────────────────── */
+.page-title {
+    color: #0f172a !important;
+    font-weight: 700 !important;
+}
+.page-header {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 1.5rem;
+}
+.breadcrumb-item a { color: var(--pa-primary); }
+.breadcrumb-item.active { color: #64748b; }
+
+/* ── 12. Badges ─────────────────────────────────────────────── */
+.badge { border-radius: 6px !important; font-weight: 600 !important; }
+
+/* ── 13. Alerts ─────────────────────────────────────────────── */
+.alert { border-radius: 10px !important; border: none !important; }
+
+/* ── 14. Notification dropdown ──────────────────────────────── */
+.topnav-dropdown-header {
+    background: linear-gradient(135deg, var(--pa-primary), var(--pa-primary-dark)) !important;
+    border-radius: 10px 10px 0 0;
+}
+.topnav-dropdown-header .notification-title { color: #fff !important; font-weight: 600 !important; }
+.topnav-dropdown-header .clear-noti        { color: rgba(255,255,255,.8) !important; }
+.topnav-dropdown-header .clear-noti:hover  { color: #fff !important; }
+
+.notifications { border-radius: 12px !important; box-shadow: var(--pa-shadow-hover) !important; }
+.topnav-dropdown-footer a { color: var(--pa-primary) !important; font-weight: 600; }
+
+/* ── 15. Progress bars (non-stat) ───────────────────────────── */
+.progress-bar.bg-primary { background-color: var(--pa-primary) !important; }
+
+/* ── 16. Appointment stat cards ─────────────────────────────── */
+.appt-stat { transition: transform .15s ease, box-shadow .15s ease, border-top .15s ease !important; }
+.appt-stat:hover { transform: translateY(-2px); box-shadow: var(--pa-shadow-hover) !important; }
+.appt-stat.stat-active { box-shadow: 0 4px 20px rgba(0,0,0,.1) !important; }

@@ -62,7 +62,7 @@ class AdminAuthController extends Controller
             // Check if user exists in admins collection
             $admin = $this->firestore->find('admins', $uid);
 
-            if (! $admin) {
+            if (! $admin || ($admin['isActive'] ?? true) === false) {
                 Log::warning("Login attempt for non-admin user: {$email}");
 
                 return back()
@@ -165,12 +165,45 @@ class AdminAuthController extends Controller
         return redirect('/admin/login')->with('success', 'Logged out successfully.');
     }
 
+    public function profile()
+    {
+        return view('admin.profile');
+    }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required|string',
+            'password'         => 'required|string|min:8|confirmed',
+        ]);
+
+        $uid   = session('auth_uid');
+        $email = session('auth_email');
+
+        if (! $uid || ! $email) {
+            return back()->withErrors(['current_password' => 'Session expired. Please log in again.']);
+        }
+
+        if (! $this->firebaseAuth->verifyPassword($email, $request->current_password)) {
+            return back()->withErrors(['current_password' => 'Current password is incorrect.']);
+        }
+
+        try {
+            $this->firebaseAuth->updatePassword($uid, $request->password);
+        } catch (\Throwable $e) {
+            Log::error('Admin password change failed: ' . $e->getMessage());
+            return back()->withErrors(['password' => 'Failed to update password. Please try again.']);
+        }
+
+        return back()->with('success', 'Password updated successfully.');
+    }
+
     /**
      * Get current admin info
      */
     public function getCurrentAdmin()
     {
-        if (! session('auth_role') === 'admin') {
+        if (session('auth_role') !== 'admin') {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 

@@ -170,7 +170,7 @@ class PatientController extends Controller
         }
 
         // Query Firestore
-        $result = $this->firestore->paginatedQuery('appointments', [
+        $result = $this->firestore->query('appointments', [
             ['field' => 'patientId', 'op' => '=', 'value' => $uid],
         ], 50, $cursor, 'createdAt', 'DESC');
 

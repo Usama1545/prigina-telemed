@@ -19,7 +19,7 @@ Route::post('/chat/webhook/new_appointment', [ChatWebhookController::class, 'app
 // =============================
 
 // Public admin routes (no auth required)
-Route::post('/admin/authenticate', [AdminAuthController::class, 'authenticateToken'])->name('admin.authenticate-token');
+Route::post('/admin/authenticate', [AdminAuthController::class, 'authenticateToken'])->name('api.admin.authenticate-token');
 
 // Protected admin routes
 Route::middleware(['admin.auth'])->prefix('admin')->group(function () {
@@ -35,5 +35,4 @@ Route::middleware(['admin.auth'])->prefix('admin')->group(function () {
     Route::get('/settings', [AdminDashboardController::class, 'getSettings']);
     Route::post('/settings', [AdminDashboardController::class, 'updateSettings']);
 });
-
 

@@ -1,38 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     @include('admin.partials.head-css')
     @include('admin.partials.title-meta')
 </head>
 
-@if(Request::is('admin/error-404', 'admin/error-500'))
-<body class="error-page">
-@else
-<body>
+@if (Request::is('admin/error-404', 'admin/error-500'))
+
+    <body class="error-page">
+    @else
+
+        <body>
 @endif
 
-    @if(Request::is('admin/login', 'admin/register', 'admin/forgot-password', 'admin/lock-screen'))
+@if (Request::is('admin/login', 'admin/register', 'admin/forgot-password', 'admin/lock-screen'))
     <!-- Main Wrapper -->
     <div class="main-wrapper login-body">
     @else
-    <!-- Main Wrapper -->
-    <div class="main-wrapper">
-    @endif
+        <!-- Main Wrapper -->
+        <div class="main-wrapper">
+@endif
 
-        @if(!Request::is('admin/error-404', 'admin/error-500', 'admin/login', 'admin/register', 'admin/forgot-password', 'admin/lock-screen'))
-        @include('admin.partials.topbar')
-        @include('admin.partials.sidebar')
-        @endif
+@if (
+    !Request::is(
+        'admin/error-404',
+        'admin/error-500',
+        'admin/login',
+        'admin/register',
+        'admin/forgot-password',
+        'admin/lock-screen'))
+    @include('admin.partials.topbar')
+    @include('admin.partials.sidebar')
+@endif
 
-            @yield('content')
+@yield('content')
 
-    </div>
-    <!-- /Main Wrapper -->
+</div>
+<!-- /Main Wrapper -->
 
 @component('admin.components.modal-popup')
 @endcomponent
 
 @include('admin.partials.vendor-scripts')
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
+</script>
 </body>
+
 </html>

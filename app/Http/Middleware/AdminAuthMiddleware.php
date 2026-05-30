@@ -58,14 +58,12 @@ class AdminAuthMiddleware
         }
 
         $uid = $verified->claims()->get('sub');
-        $role = $verified->claims()->get('role');
-
         // Check if admin is active in Firestore
         try {
             $firestore = app(FirestoreService::class);
             $admin = $firestore->find('admins', $uid);
 
-            if (! $admin) {
+            if (! $admin || ($admin['isActive'] ?? true) === false) {
                 session()->flush();
 
                 return redirect('/admin/login')
@@ -75,9 +73,17 @@ class AdminAuthMiddleware
             }
 
             // Store admin data in request
+            session([
+                'auth_uid' => $uid,
+                'auth_email' => $verified->claims()->get('email'),
+                'auth_role' => 'admin',
+                'admin_name' => $admin['name'] ?? session('admin_name', 'Admin'),
+                'is_super_admin' => $admin['isSuperAdmin'] ?? false,
+            ]);
+
             $request->merge([
                 'auth_uid' => $uid,
-                'auth_role' => $role,
+                'auth_role' => 'admin',
                 'admin_data' => $admin,
             ]);
 

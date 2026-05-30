@@ -1,7 +1,13 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminAuthController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminDoctorController;
+use App\Http\Controllers\Admin\AdminNotificationController;
+use App\Http\Controllers\Admin\AdminPatientController;
+use App\Http\Controllers\Admin\AdminPaymentController;
+use App\Http\Controllers\Admin\AdminReportController;
+use Illuminate\Support\Facades\Route;
 
 // =============================
 // PUBLIC ADMIN ROUTES (No Auth)
@@ -19,17 +25,48 @@ Route::middleware(['admin.auth'])->group(function () {
     Route::get('/logout', [AdminAuthController::class, 'logout'])->name('logout');
     Route::get('/current-admin', [AdminAuthController::class, 'getCurrentAdmin'])->name('current-admin');
 
-    Route::get('/', function () {
-        return view('admin.index');
-    })->name('index');
+    Route::get('/', [AdminDashboardController::class, 'index'])->name('index');
+    Route::get('/index', [AdminDashboardController::class, 'index'])->name('index-page');
 
-    Route::get('/index', function () {
-        return view('admin.index');
-    })->name('index-page');
+    Route::get('/appointment-list', [AdminDashboardController::class, 'appointments'])->name('appointment-list');
+    Route::get('/appointments/data', [AdminDashboardController::class, 'appointmentData'])->name('appointments.data');
+    Route::patch('/appointments/{appointment}/status', [AdminDashboardController::class, 'updateAppointmentStatus'])->name('appointments.status');
+    Route::post('/appointments/{appointment}/payment/hold', [AdminPaymentController::class, 'holdPayment'])->name('appointments.payment.hold');
+    Route::post('/appointments/{appointment}/payment/release', [AdminPaymentController::class, 'releasePayment'])->name('appointments.payment.release');
+    Route::post('/appointments/{appointment}/payment/refund', [AdminPaymentController::class, 'refundPayment'])->name('appointments.payment.refund');
+    Route::get('/doctor-list', [AdminDoctorController::class, 'index'])->name('doctor-list');
+    Route::get('/doctors/data', [AdminDoctorController::class, 'data'])->name('doctors.data');
+    Route::get('/doctors/{doctor}', [AdminDoctorController::class, 'show'])->name('doctors.show');
+    Route::patch('/doctors/{doctor}/active', [AdminDoctorController::class, 'toggleActive'])->name('doctors.active');
+    Route::patch('/doctors/{doctor}/top', [AdminDoctorController::class, 'toggleTopDoctor'])->name('doctors.top');
+    Route::post('/doctors/{doctor}/approve', [AdminDoctorController::class, 'approve'])->name('doctors.approve');
+    Route::post('/doctors/{doctor}/decline', [AdminDoctorController::class, 'decline'])->name('doctors.decline');
+    Route::patch('/doctors/{doctor}/status', [AdminDashboardController::class, 'toggleDoctorStatus'])->name('doctors.status');
+    Route::get('/patient-list', [AdminPatientController::class, 'index'])->name('patient-list');
+    Route::get('/patients/data', [AdminPatientController::class, 'data'])->name('patients.data');
+    Route::patch('/patients/{patient}/active', [AdminPatientController::class, 'toggleActive'])->name('patients.active');
+    Route::get('/settings', [AdminDashboardController::class, 'settings'])->name('settings');
+    Route::put('/settings', [AdminDashboardController::class, 'updateSettings'])->name('settings.update');
+    Route::get('/specialities', [AdminDashboardController::class, 'specialities'])->name('specialities');
+    Route::get('/specialities/data', [AdminDashboardController::class, 'specialityData'])->name('specialities.data');
+    Route::post('/specialities', [AdminDashboardController::class, 'storeSpeciality'])->name('specialities.store');
+    Route::put('/specialities/{speciality}', [AdminDashboardController::class, 'updateSpeciality'])->name('specialities.update');
+    Route::PATCH('/specialities/{speciality}/status', [AdminDashboardController::class, 'updateSpecialityStatus'])->name('specialities.update.status');
+    Route::delete('/specialities/{speciality}', [AdminDashboardController::class, 'deleteSpeciality'])->name('specialities.delete');
+    Route::get('/notifications', [AdminNotificationController::class, 'index'])->name('notifications');
+    Route::get('/notifications/feed', [AdminNotificationController::class, 'feed'])->name('notifications.feed');
+    Route::patch('/notifications/{id}/read', [AdminNotificationController::class, 'markRead'])->name('notifications.read');
+    Route::post('/notifications/read-all', [AdminNotificationController::class, 'markAllRead'])->name('notifications.read-all');
 
-    Route::get('/appointment-list', function () {
-        return view('admin.appointment-list');
-    })->name('appointment-list');
+    Route::get('/reports', [AdminReportController::class, 'index'])->name('reports');
+    Route::get('/reviews', [AdminDashboardController::class, 'reviews'])->name('reviews');
+    Route::delete('/reviews/{review}', [AdminDashboardController::class, 'deleteReview'])->name('reviews.delete');
+
+    Route::get('/api/stats', [AdminDashboardController::class, 'getStats'])->name('api.stats');
+    Route::get('/api/doctors', [AdminDashboardController::class, 'getDoctorsList'])->name('api.doctors');
+    Route::get('/api/patients', [AdminDashboardController::class, 'getPatientsList'])->name('api.patients');
+    Route::get('/api/appointments', [AdminDashboardController::class, 'getAppointmentsList'])->name('api.appointments');
+    Route::get('/api/settings', [AdminDashboardController::class, 'getSettings'])->name('api.settings');
 
     Route::get('/blank-page', function () {
         return view('admin.blank-page');
@@ -42,10 +79,6 @@ Route::middleware(['admin.auth'])->group(function () {
     Route::get('/components', function () {
         return view('admin.components');
     })->name('components');
-
-    Route::get('/doctor-list', function () {
-        return view('admin.doctor-list');
-    })->name('doctor-list');
 
     Route::get('/data-tables', function () {
         return view('admin.data-tables');
@@ -99,29 +132,12 @@ Route::middleware(['admin.auth'])->group(function () {
         return view('admin.lock-screen');
     })->name('lock-screen');
 
-    Route::get('/patient-list', function () {
-        return view('admin.patient-list');
-    })->name('patient-list');
-
-    Route::get('/profile', function () {
-        return view('admin.profile');
-    })->name('profile');
+    Route::get('/profile', [AdminAuthController::class, 'profile'])->name('profile');
+    Route::post('/profile/password', [AdminAuthController::class, 'changePassword'])->name('profile.password');
 
     Route::get('/register', function () {
         return view('admin.register');
     })->name('register');
-
-    Route::get('/reviews', function () {
-        return view('admin.reviews');
-    })->name('reviews');
-
-    Route::get('/settings', function () {
-        return view('admin.settings');
-    })->name('settings');
-
-    Route::get('/specialities', function () {
-        return view('admin.specialities');
-    })->name('specialities');
 
     Route::get('/tables-basic', function () {
         return view('admin.tables-basic');

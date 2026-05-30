@@ -276,8 +276,11 @@ class BookingController extends Controller
 
             $this->appointments->update($bookingId, [
                 'status' => 'confirmed',
-                'paymentStatus' => 'paid',
-                'paymentId' => $session->payment_intent,
+                'paymentStatus' => 'completed',
+                'paymentMethod' => 'Stripe',
+                'paymentIntentId' => $session->payment_intent,
+                'stripeSessionId' => $session->id,
+                'paymentCompletedAt' => now(),
             ]);
 
             return view('booking-success', ['booking_id' => $bookingId, 'appointment' => $appointment]);

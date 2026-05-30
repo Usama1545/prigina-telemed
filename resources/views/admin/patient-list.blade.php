@@ -2,273 +2,342 @@
 @extends('admin.layout.mainlayout')
 @section('content')
 
-    <!-- ========================
-        Start Page Content
-    ========================= -->
+<div class="page-wrapper">
+    <div class="content container-fluid">
 
-    <div class="page-wrapper">
-
-        <!-- Start Content -->
-        <div class="content container-fluid">
-            <!-- Page Header -->
-            <div class="page-header">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <h3 class="page-title">List of Patient</h3>
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{url('admin/index')}}">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="javascript:(0);">Users</a></li>
-                            <li class="breadcrumb-item active">Patient</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <!-- /Page Header -->
-
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <div class="table-responsive">
-                                <table class="datatable table table-hover table-center mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th>Patient ID</th>
-                                            <th>Patient Name</th>
-                                            <th>Age</th>
-                                            <th>Address</th>
-                                            <th>Phone</th>
-                                            <th>Last Visit</th>
-                                            <th>Paid</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>#PT001</td>
-                                            <td>
-                                                <h2 class="table-avatar">
-                                                    <a href="{{url('admin/profile')}}" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="{{URL::asset('build/admin/img/patients/patient1.jpg')}}" alt="User Image"></a>
-                                                    <a href="{{url('admin/profile')}}">Charlene Reed </a>
-                                                </h2>
-                                            </td>
-                                            <td>29</td>
-                                            <td>4417  Goosetown Drive, Taylorsville, North Carolina, 28681</td>
-                                            <td>8286329170</td>
-                                            <td>20 Oct 2023</td>
-                                            <td>$100.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>#PT002</td>
-                                            <td>
-                                                <h2 class="table-avatar">
-                                                    <a href="{{url('admin/profile')}}" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="{{URL::asset('build/admin/img/patients/patient2.jpg')}}" alt="User Image"></a>
-                                                    <a href="{{url('admin/profile')}}">Travis Trimble </a>
-                                                </h2>
-                                            </td>
-                                            <td>23</td>
-                                            <td>4026  Fantages Way, Brunswick, Maine, 04011</td>
-                                            <td>2077299974</td>
-                                            <td>22 Oct 2023</td>
-                                            <td>$200.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>#PT003</td>
-                                            <td>
-                                                <h2 class="table-avatar">
-                                                    <a href="{{url('admin/profile')}}" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="{{URL::asset('build/admin/img/patients/patient3.jpg')}}" alt="User Image"></a>
-                                                    <a href="{{url('admin/profile')}}">Carl Kelly</a>
-                                                </h2>
-                                            </td>
-                                            <td>29</td>
-                                            <td>2037 Pearcy Avenue, Decatur, Indiana, 46733</td>
-                                            <td>2607247769</td>
-                                            <td>21 Oct 2023</td>
-                                            <td>$250.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>#PT004</td>
-                                            <td>
-                                                <h2 class="table-avatar">
-                                                    <a href="{{url('admin/profile')}}" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="{{URL::asset('build/admin/img/patients/patient4.jpg')}}" alt="User Image"></a>
-                                                    <a href="{{url('admin/profile')}}"> Michelle Fairfax</a>
-                                                </h2>
-                                            </td>
-                                            <td>25</td>
-                                            <td>2037 Pearcy Avenue, Decatur, Indiana, 46733</td>
-                                            <td>5043686874</td>
-                                            <td>21 Sep 2023</td>
-                                            <td>$150.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>#PT005</td>
-                                            <td>
-                                                <h2 class="table-avatar">
-                                                    <a href="{{url('admin/profile')}}" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="{{URL::asset('build/admin/img/patients/patient5.jpg')}}" alt="User Image"></a>
-                                                    <a href="{{url('admin/profile')}}">Gina Moore</a>
-                                                </h2>
-                                            </td>
-                                            <td>23</td>
-                                            <td>888  Everette Alley, Hialeah, Florida, 33012</td>
-                                            <td>9548207887</td>
-                                            <td>18 Sep 2023</td>
-                                            <td>$350.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>#PT006</td>
-                                            <td>
-                                                <h2 class="table-avatar">
-                                                    <a href="{{url('admin/profile')}}" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="{{URL::asset('build/admin/img/patients/patient6.jpg')}}" alt="User Image"></a>
-                                                    <a href="{{url('admin/profile')}}">Elsie Gilley</a>
-                                                </h2>
-                                            </td>
-                                            <td>16</td>
-                                            <td>644  Coffman Alley, Bowling Green, Kentucky, 42101</td>
-                                            <td>3153844562</td>
-                                            <td>18 Sep 2023</td>
-                                            <td>$300.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>#PT007</td>
-                                            <td>
-                                                <h2 class="table-avatar">
-                                                    <a href="{{url('admin/profile')}}" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="{{URL::asset('build/admin/img/patients/patient7.jpg')}}" alt="User Image"></a>
-                                                    <a href="{{url('admin/profile')}}"> Joan Gardner</a>
-                                                </h2>
-                                            </td>
-                                            <td>25</td>
-                                            <td>2399  Hillview Drive, San Francisco, California, 94103</td>
-                                            <td>7072202603</td>
-                                            <td>18 Sep 2023</td>
-                                            <td>$250.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>#PT008</td>
-                                            <td>
-                                                <h2 class="table-avatar">
-                                                    <a href="{{url('admin/profile')}}" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="{{URL::asset('build/admin/img/patients/patient8.jpg')}}" alt="User Image"></a>
-                                                    <a href="{{url('admin/profile')}}"> Daniel Griffing</a>
-                                                </h2>
-                                            </td>
-                                            <td>21</td>
-                                            <td>4914  Hilltop Haven Drive, Passaic, New Jersey, 07055</td>
-                                            <td>9737739497</td>
-                                            <td>7 Sep 2023</td>
-                                            <td>$150.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>#PT009</td>
-                                            <td>
-                                                <h2 class="table-avatar">
-                                                    <a href="{{url('admin/profile')}}" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="{{URL::asset('build/admin/img/patients/patient9.jpg')}}" alt="User Image"></a>
-                                                    <a href="{{url('admin/profile')}}">Walter Roberson</a>
-                                                </h2>
-                                            </td>
-                                            <td>18</td>
-                                            <td>1299  Star Trek Drive, Panama City, Florida, 32405</td>
-                                            <td>8503584445</td>
-                                            <td>11 Sep 2023</td>
-                                            <td>$100.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>#PT010</td>
-                                            <td>
-                                                <h2 class="table-avatar">
-                                                    <a href="{{url('admin/profile')}}" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="{{URL::asset('build/admin/img/patients/patient10.jpg')}}" alt="User Image"></a>
-                                                    <a href="{{url('admin/profile')}}">Robert Rhodes</a>
-                                                </h2>
-                                            </td>
-                                            <td>19</td>
-                                            <td>1214  Hamill Avenue, Del Mar, California, 92014</td>
-                                            <td>8582595285</td>
-                                            <td>12 Sep 2023</td>
-                                            <td>$120.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>#PT011</td>
-                                            <td>
-                                                <h2 class="table-avatar">
-                                                    <a href="{{url('admin/profile')}}" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="{{URL::asset('build/admin/img/patients/patient11.jpg')}}" alt="User Image"></a>
-                                                    <a href="{{url('admin/profile')}}">Harry Williams</a>
-                                                </h2>
-                                            </td>
-                                            <td>9</td>
-                                            <td>4566  Sampson Street, Denver, Colorado, 80202</td>
-                                            <td>3036077075</td>
-                                            <td>14 Sep 2023</td>
-                                            <td>$130.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>#PT012</td>
-                                            <td>
-                                                <h2 class="table-avatar">
-                                                    <a href="{{url('admin/profile')}}" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="{{URL::asset('build/admin/img/patients/patient12.jpg')}}" alt="User Image"></a>
-                                                    <a href="{{url('admin/profile')}}">Robert Johnston</a>
-                                                </h2>
-                                            </td>
-                                            <td>29</td>
-                                            <td>1996  Crummit Lane, Beatrice, Nebraska, 68310</td>
-                                            <td>4022231492</td>
-                                            <td>7 Nov 2023</td>
-                                            <td>$260.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>#PT013</td>
-                                            <td>
-                                                <h2 class="table-avatar">
-                                                    <a href="{{url('admin/profile')}}" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="{{URL::asset('build/admin/img/patients/patient13.jpg')}}" alt="User Image"></a>
-                                                    <a href="{{url('admin/profile')}}">Tracy Mason</a>
-                                                </h2>
-                                            </td>
-                                            <td>32</td>
-                                            <td>4211  Vesta Drive, TOLEDO, Washington, 98591</td>
-                                            <td>7737265795</td>
-                                            <td>9 Nov 2023</td>
-                                            <td>$290.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>#PT014</td>
-                                            <td>
-                                                <h2 class="table-avatar">
-                                                    <a href="{{url('admin/profile')}}" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="{{URL::asset('build/admin/img/patients/patient14.jpg')}}" alt="User Image"></a>
-                                                    <a href="{{url('admin/profile')}}"> Daniel Finch</a>
-                                                </h2>
-                                            </td>
-                                            <td>23</td>
-                                            <td>186  Bryan Street, Greensboro, North Carolina, 27409</td>
-                                            <td>3362314023</td>
-                                            <td>5 Nov 2023</td>
-                                            <td>$300.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>#PT015</td>
-                                            <td>
-                                                <h2 class="table-avatar">
-                                                    <a href="{{url('admin/profile')}}" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="{{URL::asset('build/admin/img/patients/patient15.jpg')}}" alt="User Image"></a>
-                                                    <a href="{{url('admin/profile')}}">Jessica Garza</a>
-                                                </h2>
-                                            </td>
-                                            <td>10</td>
-                                            <td>4672  Rose Street, Schaumburg, Illinois, 60173</td>
-                                            <td>7082788201</td>
-                                            <td>6 Nov 2023</td>
-                                            <td>$310.00</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            </div>
-                        </div>
-                    </div>
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="page-title">Patients</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url('admin/index') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Patients</li>
+                    </ul>
                 </div>
             </div>
         </div>
-        <!-- End Content -->
+
+        <div class="card">
+            <div class="card-body">
+
+                {{-- Toolbar --}}
+                <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                    <div class="flex-grow-1" style="max-width:280px;">
+                        <input type="text" id="patientSearch" class="form-control form-control-sm"
+                            placeholder="Search by name…">
+                    </div>
+                    <div class="ms-auto d-flex align-items-center gap-2">
+                        <span id="patientPageInfo" class="text-muted small me-1"></span>
+                        <button id="patientPrevBtn" class="btn btn-sm btn-outline-secondary" disabled>
+                            <i class="fe fe-chevron-left"></i> Previous
+                        </button>
+                        <button id="patientNextBtn" class="btn btn-sm btn-outline-secondary" disabled>
+                            Next <i class="fe fe-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover table-center mb-0">
+                        <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th>Phone</th>
+                                <th>Age</th>
+                                <th>Joined</th>
+                                <th>Active</th>
+                            </tr>
+                        </thead>
+                        <tbody id="patientTableBody">
+                            @forelse($patients as $p)
+                                @php
+                                    $pid      = $p['id'] ?? '';
+                                    $name     = $p['name'] ?? $p['displayName'] ?? 'Patient';
+                                    $photo    = $p['photoUrl'] ?? asset('build/admin/img/user-placeholder.png');
+                                    $email    = $p['email'] ?? '';
+                                    $phone    = $p['phone'] ?? $p['phoneNumber'] ?? '-';
+                                    $dob      = $p['dob'] ?? $p['dateOfBirth'] ?? null;
+                                    $age      = $dob ? \Carbon\Carbon::parse($dob)->age : ($p['age'] ?? '-');
+                                    $joined   = $p['createdAt'] ?? $p['registeredAt'] ?? null;
+                                    $isActive = (bool) ($p['isActive'] ?? false);
+                                @endphp
+                                <tr>
+                                    <td>
+                                        <h2 class="table-avatar">
+                                            <span class="avatar avatar-sm me-2">
+                                                <img class="avatar-img rounded-circle"
+                                                    src="{{ $photo }}" alt="{{ $name }}">
+                                            </span>
+                                            <span>
+                                                {{ $name }}
+                                                @if($email)
+                                                    <span class="d-block text-muted small">{{ $email }}</span>
+                                                @endif
+                                            </span>
+                                        </h2>
+                                    </td>
+                                    <td>{{ $phone }}</td>
+                                    <td>{{ $age }}</td>
+                                    <td>{{ $joined ? \Carbon\Carbon::parse($joined)->format('d M Y') : '-' }}</td>
+                                    <td>
+                                        <div class="form-check form-switch mb-0">
+                                            <input class="form-check-input patient-active-toggle" type="checkbox"
+                                                role="switch" data-id="{{ $pid }}"
+                                                {{ $isActive ? 'checked' : '' }}>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-4">No patients found.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
 
     </div>
+</div>
 
-    <!-- ========================
-        End Page Content
-    ========================= -->
+<script>
+const patientConfig = {
+    dataUrl: "{{ route('admin.patients.data') }}",
+    activeUrl: (id) => `{{ url('admin/patients') }}/${id}/active`,
+    csrf: "{{ csrf_token() }}",
+};
+
+const SPINNER_SM      = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+const PATIENT_LOADING = `<tr><td colspan="5" class="text-center py-4">${SPINNER_SM} <span class="ms-2 text-muted">Loading…</span></td></tr>`;
+const PAGE_SIZE       = 10;
+
+let cursorStack  = [null];   // stack[0] = first page (null cursor)
+let currentCursor = null;
+let currentCount  = 0;
+let pageIndex     = 0;
+let nextCursor    = {{ $nextCursor !== null ? $nextCursor : 'null' }};
+let hasMore       = {{ $hasMore ? 'true' : 'false' }};
+
+const tableBody    = document.getElementById('patientTableBody');
+const prevBtn      = document.getElementById('patientPrevBtn');
+const nextBtn      = document.getElementById('patientNextBtn');
+const pageInfo     = document.getElementById('patientPageInfo');
+const searchInput  = document.getElementById('patientSearch');
+
+// ---- helpers ----
+
+function getToastContainer() {
+    let c = document.getElementById('toastContainer');
+    if (!c) {
+        c = document.createElement('div');
+        c.id = 'toastContainer';
+        c.className = 'toast-container position-fixed top-0 end-0 p-3';
+        c.style.zIndex = '9999';
+        document.body.appendChild(c);
+    }
+    return c;
+}
+
+function showToast(message, type = 'success') {
+    const id = 'toast_' + Date.now();
+    getToastContainer().insertAdjacentHTML('beforeend', `
+        <div id="${id}" class="toast align-items-center text-bg-${type} border-0" role="alert" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body fw-semibold">${message}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>`);
+    const el = document.getElementById(id);
+    bootstrap.Toast.getOrCreateInstance(el, { delay: 3000 }).show();
+    el.addEventListener('hidden.bs.toast', () => el.remove());
+}
+
+function updatePageInfo() {
+    if (currentCount === 0) { pageInfo.textContent = ''; return; }
+    const from = pageIndex * PAGE_SIZE + 1;
+    const to   = from + currentCount - 1;
+    pageInfo.textContent = nextCursor !== null
+        ? `Showing ${from}–${to}`
+        : `Showing ${from}–${to} of ${to}`;
+}
+
+function spinBtn(btn) {
+    btn.dataset.origHtml = btn.innerHTML;
+    btn.innerHTML = SPINNER_SM;
+    btn.disabled  = true;
+}
+
+function restoreBtn(btn) {
+    if (btn.dataset.origHtml) btn.innerHTML = btn.dataset.origHtml;
+    btn.disabled = false;
+}
+
+// ---- row builder ----
+
+function age(dob) {
+    if (!dob) return '-';
+    try {
+        const birth = new Date(dob);
+        const diff  = Date.now() - birth.getTime();
+        return Math.floor(diff / (365.25 * 24 * 3600 * 1000));
+    } catch { return '-'; }
+}
+
+function fmtDate(d) {
+    if (!d) return '-';
+    try {
+        return new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    } catch { return d; }
+}
+
+function patientRow(p) {
+    const photo    = p.photoUrl || '{{ asset("build/admin/img/user-placeholder.png") }}';
+    const name     = p.name || p.displayName || 'Patient';
+    const email    = p.email || '';
+    const phone    = p.phone || p.phoneNumber || '-';
+    const patAge   = p.age || age(p.dob || p.dateOfBirth);
+    const joined   = fmtDate(p.createdAt || p.registeredAt);
+    const isActive = !!p.isActive;
+    const checked  = isActive ? 'checked' : '';
+
+    return `<tr>
+        <td>
+            <h2 class="table-avatar">
+                <span class="avatar avatar-sm me-2">
+                    <img class="avatar-img rounded-circle" src="${photo}" alt="${name}">
+                </span>
+                <span>
+                    ${name}
+                    ${email ? `<span class="d-block text-muted small">${email}</span>` : ''}
+                </span>
+            </h2>
+        </td>
+        <td>${phone}</td>
+        <td>${patAge}</td>
+        <td>${joined}</td>
+        <td>
+            <div class="form-check form-switch mb-0">
+                <input class="form-check-input patient-active-toggle" type="checkbox"
+                    role="switch" data-id="${p.id || ''}" ${checked}>
+            </div>
+        </td>
+    </tr>`;
+}
+
+// ---- fetch ----
+
+function fetchPatients(cursor, triggerBtn = null) {
+    if (triggerBtn) spinBtn(triggerBtn);
+    tableBody.innerHTML = PATIENT_LOADING;
+    prevBtn.disabled = true;
+    nextBtn.disabled = true;
+
+    const params = new URLSearchParams({ cursor: cursor ?? 0 });
+    const term   = searchInput.value.trim();
+    if (term) params.set('search', term);
+
+    fetch(`${patientConfig.dataUrl}?${params}`, {
+        headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': patientConfig.csrf },
+    })
+    .then(r => r.json())
+    .then(data => {
+        currentCount  = data.documents.length;
+        nextCursor    = data.nextCursor ?? null;
+        hasMore       = data.hasMore;
+        currentCursor = cursor;
+
+        if (currentCount === 0) {
+            tableBody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">No patients found.</td></tr>';
+        } else {
+            tableBody.innerHTML = data.documents.map(patientRow).join('');
+        }
+
+        prevBtn.disabled = pageIndex === 0;
+        nextBtn.disabled = !hasMore;
+        updatePageInfo();
+    })
+    .catch(() => {
+        tableBody.innerHTML = '<tr><td colspan="5" class="text-center text-danger py-4">Failed to load patients.</td></tr>';
+        showToast('Failed to load patients.', 'danger');
+    })
+    .finally(() => {
+        if (triggerBtn) restoreBtn(triggerBtn);
+    });
+}
+
+// ---- pagination ----
+
+nextBtn.addEventListener('click', () => {
+    if (!hasMore || nextCursor === null) return;
+    pageIndex++;
+    cursorStack.push(nextCursor);
+    fetchPatients(nextCursor, nextBtn);
+});
+
+prevBtn.addEventListener('click', () => {
+    if (pageIndex === 0) return;
+    pageIndex--;
+    cursorStack.pop();
+    const prev = cursorStack[cursorStack.length - 1];
+    fetchPatients(prev, prevBtn);
+});
+
+// ---- search ----
+
+let searchTimer;
+searchInput.addEventListener('input', () => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+        pageIndex   = 0;
+        cursorStack = [null];
+        fetchPatients(null);
+    }, 350);
+});
+
+// ---- active toggle (event delegation) ----
+
+tableBody.addEventListener('change', function (e) {
+    const toggle = e.target.closest('.patient-active-toggle');
+    if (!toggle) return;
+
+    const id      = toggle.dataset.id;
+    const checked = toggle.checked;
+
+    toggle.disabled = true;
+    const spinner = document.createElement('span');
+    spinner.className = 'spinner-border spinner-border-sm ms-1 align-middle text-secondary';
+    toggle.insertAdjacentElement('afterend', spinner);
+
+    fetch(patientConfig.activeUrl(id), {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': patientConfig.csrf,
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({ isActive: checked }),
+    })
+    .then(res => {
+        if (!res.ok) throw new Error();
+        showToast('Status updated.');
+    })
+    .catch(() => {
+        toggle.checked = !checked;
+        showToast('Failed to update status.', 'danger');
+    })
+    .finally(() => {
+        spinner.remove();
+        toggle.disabled = false;
+    });
+});
+
+// ---- init ----
+currentCount = {{ count($patients) }};
+updatePageInfo();
+prevBtn.disabled = true;
+nextBtn.disabled = {{ !$hasMore ? 'true' : 'false' }};
+</script>
 
 @endsection

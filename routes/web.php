@@ -6,12 +6,13 @@ use App\Http\Controllers\Doctor\DoctorProfileController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/auth/login', [AuthController::class, 'login']);
 
 Route::get('/', [IndexController::class, 'index'])->name('index');
-Route::get('/index', [IndexController::class, 'index'])->name('index');
+Route::get('/index', [IndexController::class, 'index'])->name('index-page');
 
 Route::middleware(['firebase.auth'])->group(function () {
     Route::get('{id}/booking-slots', [BookingController::class, 'bookingSlots'])->name('booking');
@@ -50,7 +51,7 @@ Route::middleware(['firebase.auth'])->group(function () {
         Route::get('/appointment-details/{id}', 'appointmentDetails')->name('doctor.appointment-details');
         Route::get('/appointments', 'appointments')->name('doctor.appointments');
         Route::get('/dashboard', 'dashboard')->name('doctor.dashboard');
-        Route::get('/', 'dashboard')->name('doctor.dashboard');
+        Route::get('/', 'dashboard')->name('doctor.index');
         Route::get('/profile', 'profile')->name('doctor.settings');
         Route::post('/profile', 'update')->name('doctor.settings.update');
         Route::put('/profile/change-password', 'changePassword')->name('doctor.settings.changepassword');
@@ -147,17 +148,13 @@ Route::get('/csrf-token', function () {
     ]);
 })->name('csrf-token');
 
-Route::get('/login', function () {
-    return view('login');
-})->name('login');
-
 Route::get('/verify-email', function () {
     return view('verify-email');
 })->name('verify-email');
 
 Route::post('resend-verification-email', [AuthController::class, 'resendVerificationEmail'])->name('resend-verification-email');
 
-Route::get('/doctor-register', [AuthController::class, 'doctorRegister'])->name('doctor-register');
+Route::get('/doctor-register', [AuthController::class, 'doctorRegister'])->name('doctor-register.form');
 Route::post('/doctor-register', [AuthController::class, 'registerDoctor'])->name('doctor-register');
 Route::post('/patient-register', [AuthController::class, 'registerPatient'])->name('patient-register');
 Route::post(
@@ -167,3 +164,7 @@ Route::post(
 Route::get('/terms-condition', function () {
     return view('terms-condition');
 })->name('terms-condition');
+
+// Public review page — no auth required
+Route::get('/{appointmentId}/review', [ReviewController::class, 'show'])->name('review.show');
+Route::post('/{appointmentId}/review', [ReviewController::class, 'store'])->name('review.store');

@@ -60,6 +60,25 @@ class FirebaseAuthService
         return $response->json()['id_token'] ?? null;
     }
 
+    public function verifyPassword(string $email, string $password): bool
+    {
+        $response = Http::post(
+            'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' . config('services.firebase.api_key'),
+            [
+                'email'             => $email,
+                'password'          => $password,
+                'returnSecureToken' => false,
+            ]
+        );
+
+        return $response->successful();
+    }
+
+    public function updatePassword(string $uid, string $newPassword): void
+    {
+        $this->auth->changeUserPassword($uid, $newPassword);
+    }
+
     public function createUser(array $data)
     {
         try {
