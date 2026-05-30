@@ -155,7 +155,7 @@
 
         await zg.logoutRoom(roomID);
 
-        window.location.href = "{{ url('/dashboard') }}";
+        window.location.href = "{{ $backUrl ?? url('/dashboard') }}";
     };
 
     // Start call

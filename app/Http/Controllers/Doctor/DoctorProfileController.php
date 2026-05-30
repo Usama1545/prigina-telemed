@@ -397,18 +397,22 @@ class DoctorProfileController extends Controller
             abort(404);
         }
 
-        $doctorId = $conversation['doctorId'];
-        $doctor = $this->firestore->find('doctors', $doctorId);
-
         $user = current_user();
+        if (! $user) {
+            abort(403);
+        }
+
+        // Remote party for the doctor is the patient
+        $patient = $this->firestore->find('patients', $conversation['patientId'] ?? '') ?? [];
 
         $token = generateZegoToken($user['uid']);
 
         return view('patient.voice-call', [
-            'id' => $id,
-            'doctor' => $doctor,
-            'user' => $user,
-            'token' => $token,
+            'id'      => $id,
+            'doctor'  => $patient,   // shown as the remote party on the call screen
+            'user'    => $user,
+            'token'   => $token,
+            'backUrl' => route('doctor.conversations'),
         ]);
     }
 
@@ -420,22 +424,23 @@ class DoctorProfileController extends Controller
             abort(404);
         }
 
-        $doctorId = $conversation['doctorId'];
-        $doctor = $this->firestore->find('doctors', $doctorId);
-
         $user = current_user();
 
         if (! $user) {
             abort(403);
         }
 
+        // Remote party for the doctor is the patient
+        $patient = $this->firestore->find('patients', $conversation['patientId'] ?? '') ?? [];
+
         $token = generateZegoToken($user['uid']);
 
         return view('patient.video-call', [
-            'id' => $id,
-            'doctor' => $doctor,
-            'user' => $user,
-            'token' => $token,
+            'id'      => $id,
+            'doctor'  => $patient,   // shown as the remote party on the call screen
+            'user'    => $user,
+            'token'   => $token,
+            'backUrl' => route('doctor.conversations'),
         ]);
     }
 

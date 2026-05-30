@@ -392,6 +392,24 @@ $(document).ready(function() {
         }
     }
 
+    // =========================
+    // CALL BUTTONS
+    // =========================
+
+    $('#audioCallBtn').on('click', function (e) {
+        e.preventDefault();
+        if (currentConversationId) {
+            window.location.href = '/patient/conversations/' + currentConversationId + '/audio-call';
+        }
+    });
+
+    $('#videoCallBtn').on('click', function (e) {
+        e.preventDefault();
+        if (currentConversationId) {
+            window.location.href = '/patient/conversations/' + currentConversationId + '/video-call';
+        }
+    });
+
     $('#backToChatsBtn').click(function(e) {
 
         e.preventDefault();
