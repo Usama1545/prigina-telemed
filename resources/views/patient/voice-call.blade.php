@@ -269,39 +269,6 @@
                 },
             });
 
-            // ─────────────────────────────────────────────────────────
-            // Join Room
-            // ─────────────────────────────────────────────────────────
-
-            zp.joinRoom({
-
-                container: document.getElementById('zego-container'),
-
-                sharedLinks: [],
-
-                showPreJoinView: false,
-
-                turnOffCameraOnJoin: true,
-
-                showLeavingView: false,
-
-                scenario: {
-                    mode: ZegoUIKitPrebuilt.OneONoneCall,
-                },
-
-                onJoinRoom: () => {
-
-                    log('Joined room', 's');
-                },
-
-                onLeaveRoom: () => {
-
-                    log('Left room');
-
-                    // window.location.href = backUrl;
-                },
-            });
-
             log('joinRoom called', 's');
 
             // ─────────────────────────────────────────────────────────
