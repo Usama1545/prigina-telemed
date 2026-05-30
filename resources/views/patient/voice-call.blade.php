@@ -269,45 +269,63 @@
                 },
             });
 
-            log('joinRoom called', 's');
-
             // ─────────────────────────────────────────────────────────
-            // SEND INVITATION
+            // SEND INVITATION (with ZIM-ready retry)
             // ─────────────────────────────────────────────────────────
 
-            async function startCall() {
+            // ZIM login is async — error 6000121 means "not logged in yet".
+            // Retry up to 8 times with 1 s gaps before giving up.
+            async function startCall(maxAttempts = 8, retryDelay = 1000) {
 
-                try {
+                for (let attempt = 1; attempt <= maxAttempts; attempt++) {
 
-                    log('Sending call invitation...');
+                    try {
 
-                    await zp.sendCallInvitation({
+                        log(`Sending call invitation (attempt ${attempt}/${maxAttempts})…`);
 
-                        callees: [{
-                            userID: receiverID,
-                            userName: receiverName,
-                        }],
+                        await zp.sendCallInvitation({
 
-                        callType: ZegoUIKitPrebuilt.InvitationTypeVoiceCall,
+                            callees: [{
+                                userID: receiverID,
+                                userName: receiverName,
+                            }],
 
-                        timeout: 60,
-                    });
+                            callType: ZegoUIKitPrebuilt.InvitationTypeVoiceCall,
 
-                    log('Invitation sent', 's');
+                            timeout: 60,
+                        });
 
-                } catch (err) {
+                        log('Invitation sent', 's');
+                        return;
 
-                    console.error(err);
+                    } catch (err) {
 
-                    showErr(
-                        'Failed to send invitation: ' +
-                        (err.message || err)
-                    );
+                        const code = err?.code ?? err?.message;
+
+                        // 6000121 = ZIM not logged in yet; wait and retry
+                        if (err?.code === 6000121 && attempt < maxAttempts) {
+
+                            log(`ZIM not ready (${err.code}), retrying in ${retryDelay}ms…`);
+
+                            await new Promise(r => setTimeout(r, retryDelay));
+
+                        } else {
+
+                            console.error(err);
+
+                            showErr(
+                                'Failed to send invitation: ' +
+                                JSON.stringify({code: err?.code, message: err?.message})
+                            );
+
+                            return;
+                        }
+                    }
                 }
             }
 
-            // Auto start
-            startCall();
+            // Kick off after a short initial pause so ZIM can log in
+            setTimeout(() => startCall(), 1500);
 
         } catch (err) {
 
