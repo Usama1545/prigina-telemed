@@ -4,6 +4,19 @@
 <!-- Apple Touch Icon -->
 <link rel="apple-touch-icon" sizes="180x180" href="{{ URL::asset('build/img/prigina-gav.png') }}">
 
+<!-- PWA -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0d6efd">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Prigina">
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+    }
+</script>
+
 @if (
     !Route::is([
         'booking-popup',

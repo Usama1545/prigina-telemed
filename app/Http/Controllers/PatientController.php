@@ -385,6 +385,22 @@ class PatientController extends Controller
         return response()->json($appointment);
     }
 
+    public function zegoToken()
+    {
+        $user = current_user();
+
+        if (! $user) {
+            return response()->json(['error' => 'Unauthenticated'], 401);
+        }
+
+        return response()->json([
+            'token'    => generateZegoToken($user['uid']),
+            'userID'   => $user['uid'],
+            'userName' => $user['name'] ?? 'User',
+            'appID'    => (int) config('services.zego.app_id'),
+        ]);
+    }
+
     public function audioCall($id)
     {
         $conversation = $this->firestore->find('conversations', $id);

@@ -35,6 +35,7 @@ Route::middleware(['firebase.auth'])->group(function () {
         Route::put('/profile', 'update')->name('patient.settings.update');
         Route::put('/profile/change-password', 'changePassword')->name('patient.settings.changepassword');
         Route::get('/conversations', 'conversations')->name('patient.conversations');
+        Route::get('/zego-token', 'zegoToken')->name('patient.zego-token');
         Route::get('/conversations/{id}/audio-call', 'audioCall')->name('patient.audio-call');
         Route::get('/conversations/{id}/video-call', 'videoCall')->name('patient.video-call');
         Route::get('conversation/{doctor_id}/create', 'createConversation')->name('conversation.create');
@@ -45,6 +46,7 @@ Route::middleware(['firebase.auth'])->group(function () {
     });
 
     Route::prefix('doctor')->controller(DoctorProfileController::class)->group(function () {
+        Route::get('/zego-token', 'zegoToken')->name('doctor.zego-token');
         Route::get('/appointment/{id}/cancel', 'cancelAppointment')->name('doctor.cancel-appointment');
         Route::get('/appointment/{id}/complete', 'completeAppointment')->name('doctor.complete-appointment');
         Route::get('/appointment/{id}/accept', 'acceptAppointment')->name('doctor.accept-appointment');

@@ -276,6 +276,7 @@
                                                                             }, 5000);
                                                                         }
                                                                     </script>
+                                                                    @include('partials.zego-call-listener')
                                                                     @stack('scripts')
                                                                 </body>
 
