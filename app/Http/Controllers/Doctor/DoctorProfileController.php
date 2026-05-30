@@ -7,6 +7,7 @@ use App\Services\FirestoreService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Contract\Storage;
@@ -406,12 +407,16 @@ class DoctorProfileController extends Controller
         $patient = $this->firestore->find('patients', $conversation['patientId'] ?? '') ?? [];
 
         $token = generateZegoToken($user['uid']);
+        Log::info('data', [
+            'token' => $token,
+            'patient' => $patient,   // shown as the remote party on the call screen
+        ]);
 
         return view('patient.voice-call', [
-            'id'      => $id,
-            'doctor'  => $patient,   // shown as the remote party on the call screen
-            'user'    => $user,
-            'token'   => $token,
+            'id' => $id,
+            'doctor' => $patient,   // shown as the remote party on the call screen
+            'user' => $user,
+            'token' => $token,
             'backUrl' => route('doctor.conversations'),
         ]);
     }
@@ -436,10 +441,10 @@ class DoctorProfileController extends Controller
         $token = generateZegoToken($user['uid']);
 
         return view('patient.video-call', [
-            'id'      => $id,
-            'doctor'  => $patient,   // shown as the remote party on the call screen
-            'user'    => $user,
-            'token'   => $token,
+            'id' => $id,
+            'doctor' => $patient,   // shown as the remote party on the call screen
+            'user' => $user,
+            'token' => $token,
             'backUrl' => route('doctor.conversations'),
         ]);
     }

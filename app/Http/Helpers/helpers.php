@@ -1,7 +1,13 @@
 <?php
 
+require_once app_path('Services/ZEGO/ZegoAssistantToken.php');
+require_once app_path('Services/ZEGO/ZegoErrorCodes.php');
+require_once app_path('Services/ZEGO/ZegoServerAssistant.php');
+
 use App\Services\FirebaseAuthService;
 use App\Services\FirestoreService;
+use ZEGO\ZegoErrorCodes;
+use ZEGO\ZegoServerAssistant;
 
 if (! function_exists('current_user')) {
     function current_user()
@@ -85,38 +91,22 @@ if (! function_exists('topSpeacilalization')) {
     }
 }
 if (! function_exists('generateZegoToken')) {
-    /**
-     * Generate a ZegoCloud Token04 using AES-128-CBC — the only format ZegoCloud accepts.
-     * The server secret must be exactly 32 ASCII characters as shown in the ZegoCloud console.
-     */
+
     function generateZegoToken(string $userId, int $effectiveSeconds = 3600): string
     {
-        $appId  = (int) config('services.zego.app_id');
-        $secret = config('services.zego.server_secret'); // must be exactly 32 chars
+        $token = ZegoServerAssistant::generateToken04(
+            (int) config('services.zego.app_id'),
+            $userId,
+            config('services.zego.server_secret'),
+            $effectiveSeconds,
+            ''
+        );
 
-        $createTime = time();
-        $expireAt   = $createTime + $effectiveSeconds;
-        $nonce      = mt_rand(-2147483648, 2147483647);
+        if ($token->code !== ZegoErrorCodes::success) {
+            throw new Exception('Failed to generate ZEGO token');
+        }
 
-        $plaintext = json_encode([
-            'app_id'  => $appId,
-            'user_id' => $userId,
-            'nonce'   => $nonce,
-            'ctime'   => $createTime,
-            'expire'  => $expireAt,
-            'payload' => '',
-        ]);
-
-        $iv         = random_bytes(16);
-        $ciphertext = openssl_encrypt($plaintext, 'aes-128-cbc', $secret, OPENSSL_RAW_DATA, $iv);
-
-        // Binary layout: [iv_len 2B big-endian][iv 16B][ciphertext_len 4B big-endian][ciphertext]
-        $buf = pack('n', strlen($iv))
-             . $iv
-             . pack('N', strlen($ciphertext))
-             . $ciphertext;
-
-        return '04' . base64_encode($buf);
+        return $token->token;
     }
 }
 
