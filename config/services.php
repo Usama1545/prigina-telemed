@@ -50,8 +50,9 @@ return [
     ],
 
     'zego' => [
-        'app_id' => env('ZEGO_APP_ID'),
+        'app_id'        => env('ZEGO_APP_ID'),
         'server_secret' => env('ZEGO_SERVER_SECRET'),
+        'server_url'    => env('ZEGO_SERVER_URL', ''),
     ],
 
     'flutterwave' => [
