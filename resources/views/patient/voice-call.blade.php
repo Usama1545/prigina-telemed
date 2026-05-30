@@ -209,18 +209,18 @@
                     userName
                 );
 
-            log('Kit token generated', 's');
+            console.log('Kit token generated', 's');
 
             const zp = ZegoUIKitPrebuilt.create(kitToken);
 
-            log('ZEGO instance created', 's');
+            console.log('ZEGO instance created', 's');
 
             // IMPORTANT
             zp.addPlugins({
                 ZIM,
             });
 
-            log('ZIM plugin attached', 's');
+            console.log('ZIM plugin attached', 's');
 
             // ─────────────────────────────────────────────────────────
             // Incoming Call Listener
@@ -232,7 +232,7 @@
 
                 onIncomingCallReceived(callID, caller, callType, callees) {
 
-                    log(
+                    console.log(
                         `Incoming call from ${caller.userName}`,
                         's'
                     );
@@ -240,39 +240,39 @@
 
                 onIncomingCallCanceled() {
 
-                    log('Incoming call canceled');
+                    console.log('Incoming call canceled');
                 },
 
                 onIncomingCallRejected() {
 
-                    log('Incoming call rejected');
+                    console.log('Incoming call rejected');
                 },
 
                 onIncomingCallTimeout() {
 
-                    log('Incoming call timeout');
+                    console.log('Incoming call timeout');
                 },
 
                 onOutgoingCallAccepted() {
 
-                    log('Call accepted', 's');
+                    console.log('Call accepted', 's');
                 },
 
                 onOutgoingCallRejected() {
 
-                    log('Call rejected');
+                    console.log('Call rejected');
                     window.location.href = backUrl;
                 },
 
                 onOutgoingCallTimeout() {
 
-                    log('Outgoing call timeout');
+                    console.log('Outgoing call timeout');
                     window.location.href = backUrl;
                 },
 
                 onCallEnd() {
 
-                    log('Call ended, redirecting…');
+                    console.log('Call ended, redirecting…');
                     window.location.href = backUrl;
                 },
             });
@@ -289,7 +289,7 @@
 
                     try {
 
-                        log(`Sending call invitation (attempt ${attempt}/${maxAttempts})…`);
+                        console.log(`Sending call invitation (attempt ${attempt}/${maxAttempts})…`);
 
                         await zp.sendCallInvitation({
 
@@ -303,7 +303,7 @@
                             timeout: 60,
                         });
 
-                        log('Invitation sent', 's');
+                        console.log('Invitation sent', 's');
                         return;
 
                     } catch (err) {
@@ -313,7 +313,7 @@
                         // 6000121 = ZIM not logged in yet; wait and retry
                         if (err?.code === 6000121 && attempt < maxAttempts) {
 
-                            log(`ZIM not ready (${err.code}), retrying in ${retryDelay}ms…`);
+                            console.log(`ZIM not ready (${err.code}), retrying in ${retryDelay}ms…`);
 
                             await new Promise(r => setTimeout(r, retryDelay));
 
@@ -323,7 +323,10 @@
 
                             showErr(
                                 'Failed to send invitation: ' +
-                                JSON.stringify({code: err?.code, message: err?.message})
+                                JSON.stringify({
+                                    code: err?.code,
+                                    message: err?.message
+                                })
                             );
 
                             return;
