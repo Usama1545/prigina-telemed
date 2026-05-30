@@ -337,12 +337,12 @@
             <td>
                 <div class="d-flex gap-1 flex-wrap">
                     ${hasDocs ? `<button type="button" class="btn btn-sm btn-outline-info doctor-docs-btn"
-                                data-id="${esc(id)}" data-docs="${docsJson}" title="View Documents">
-                                <i class="fe fe-eye"></i></button>` : ''}
+                                    data-id="${esc(id)}" data-docs="${docsJson}" title="View Documents">
+                                    <i class="fe fe-eye"></i></button>` : ''}
                     ${!isVerified ? `
-                            <button type="button" class="btn btn-sm btn-success doctor-approve-btn" data-id="${esc(id)}">Approve</button>
-                            <button type="button" class="btn btn-sm btn-danger doctor-decline-btn"
-                                data-id="${esc(id)}" data-name="${name}">Decline</button>` : ''}
+                                <button type="button" class="btn btn-sm btn-success doctor-approve-btn" data-id="${esc(id)}">Approve</button>
+                                <button type="button" class="btn btn-sm btn-danger doctor-decline-btn"
+                                    data-id="${esc(id)}" data-name="${name}">Decline</button>` : ''}
                 </div>
             </td>
         </tr>`;
@@ -575,6 +575,7 @@
 
             let docs = {};
             try {
+                console.log(btn.dataset.docs);
                 docs = JSON.parse(btn.dataset.docs || '{}');
                 console.log(docs);
             } catch {
