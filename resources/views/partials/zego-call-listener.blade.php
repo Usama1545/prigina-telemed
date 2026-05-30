@@ -14,36 +14,52 @@
     <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
 
     <script>
+        document.addEventListener('visibilitychange', () => {
+
+            if (document.hidden) {
+
+                _stopRingtone();
+            }
+        });
+        window.addEventListener('focus', () => {
+
+            _stopRingtone();
+        });
         // ── Call ringtone (Web Audio) ────────────────────────────────────────────────
         // Uses the shared _getCtx / _tone helpers defined in mainlayout.
-        let _callRinger = null;
+        let _ringInterval = null;
 
         function _startRingtone() {
-            _stopRingtone();
-            let active = true;
-            _callRinger = {
-                stop() {
-                    active = false;
-                }
-            };
 
-            (function ring() {
-                if (!active) return;
+            _stopRingtone();
+
+            function beep() {
+
                 try {
-                    const ctx = _getCtx(),
-                        t = ctx.currentTime;
-                    // Two short pulses — classic phone ring feel
-                    _tone(ctx, 1200, t, 0.18, 0.65);
-                    _tone(ctx, 1200, t + 0.22, 0.18, 0.65);
+
+                    const ctx = _getCtx();
+
+                    const t = ctx.currentTime;
+
+                    _tone(ctx, 1200, t, 0.15, 0.7);
+
+                    _tone(ctx, 1200, t + 0.18, 0.15, 0.7);
+
                 } catch (_) {}
-                setTimeout(ring, 1100);
-            })();
+            }
+
+            beep();
+
+            _ringInterval = setInterval(beep, 1200);
         }
 
         function _stopRingtone() {
-            if (_callRinger) {
-                _callRinger.stop();
-                _callRinger = null;
+
+            if (_ringInterval) {
+
+                clearInterval(_ringInterval);
+
+                _ringInterval = null;
             }
         }
         // ────────────────────────────────────────────────────────────────────────────
