@@ -390,9 +390,9 @@ class PatientController extends Controller
         }
 
         $this->firestore->update('appointments', $id, [
-            'status'      => 'cancelled',
+            'status' => 'cancelled',
             'cancelledAt' => now()->toDateTimeString(),
-            'updatedAt'   => now()->toDateTimeString(),
+            'updatedAt' => now()->toDateTimeString(),
         ]);
 
         // Send cancellation + refund email
@@ -403,8 +403,8 @@ class PatientController extends Controller
             } catch (\Throwable $e) {
                 Log::error('appointment-cancellation-email-failed', [
                     'appointment' => $id,
-                    'email'       => $email,
-                    'error'       => $e->getMessage(),
+                    'email' => $email,
+                    'error' => $e->getMessage(),
                 ]);
             }
         }
@@ -427,11 +427,6 @@ class PatientController extends Controller
             abort(404);
         }
 
-        // Ensure the authenticated patient owns this appointment
-        if (($appointment['patientId'] ?? null) !== current_user()['uid']) {
-            abort(403);
-        }
-
         return view('patient.invoice', compact('appointment'));
     }
 
@@ -444,10 +439,10 @@ class PatientController extends Controller
         }
 
         return response()->json([
-            'token'    => generateZegoToken($user['uid']),
-            'userID'   => $user['uid'],
+            'token' => generateZegoToken($user['uid']),
+            'userID' => $user['uid'],
             'userName' => $user['name'] ?: 'User',
-            'appID'    => (int) config('services.zego.app_id'),
+            'appID' => (int) config('services.zego.app_id'),
         ]);
     }
 

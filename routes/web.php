@@ -28,7 +28,6 @@ Route::middleware(['firebase.auth'])->group(function () {
 
     Route::prefix('patient')->controller(PatientController::class)->group(function () {
         Route::get('/appointment/{id}/cancel', 'cancelAppointment')->name('patient.cancel-appointment');
-        Route::get('/appointment/{id}/invoice', 'appointmentInvoice')->name('patient.appointment-invoice');
         Route::get('/appointment-details/{id}', 'appointmentDetails')->name('patient.appointment-details');
         Route::get('/appointments', 'appointments')->name('patient.appointments');
         Route::get('/dashboard', 'dashboard')->name('patient.dashboard');
@@ -171,3 +170,4 @@ Route::get('/terms-condition', function () {
 // Public review page — no auth required
 Route::get('/{appointmentId}/review', [ReviewController::class, 'show'])->name('review.show');
 Route::post('/{appointmentId}/review', [ReviewController::class, 'store'])->name('review.store');
+Route::get('/{appointmentId}/invoice', [PatientController::class, 'appointmentInvoice'])->name('patient.appointment-invoice');
