@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -121,13 +120,13 @@
 
         const userID = @json($user['uid']);
 
-        const userName = @json($user['name'] ?? 'User');
+        const userName = @json($user['name'] ?: 'User');
 
         const roomID = "call_{{ substr(md5($id), 0, 12) }}";
 
         const receiverID = @json($doctor['uid'] ?? '');
 
-        const receiverName = @json($doctor['name'] ?? 'User');
+        const receiverName = @json($doctor['name'] ?: 'User');
 
         const backUrl = @json($backUrl ?? url('/dashboard'));
 
@@ -352,4 +351,3 @@
 </body>
 
 </html>
-```

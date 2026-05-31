@@ -111,7 +111,7 @@
         const appID = {{ (int) config('services.zego.app_id') }};
         const serverToken = @json($token);
         const userID = @json($user['uid']);
-        const userName = @json($user['name'] ?? 'User');
+        const userName = @json($user['name'] ?: 'User');
         const roomID = "call_{{ substr(md5($id), 0, 12) }}";
         const receiverID = @json($doctor['uid'] ?? '');
         const receiverName = @json($doctor['name'] ?? 'User');

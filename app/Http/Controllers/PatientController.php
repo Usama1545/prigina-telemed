@@ -396,7 +396,7 @@ class PatientController extends Controller
         return response()->json([
             'token'    => generateZegoToken($user['uid']),
             'userID'   => $user['uid'],
-            'userName' => $user['name'] ?? 'User',
+            'userName' => $user['name'] ?: 'User',
             'appID'    => (int) config('services.zego.app_id'),
         ]);
     }

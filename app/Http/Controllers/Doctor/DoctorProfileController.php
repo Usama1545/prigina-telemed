@@ -402,7 +402,7 @@ class DoctorProfileController extends Controller
         return response()->json([
             'token'    => generateZegoToken($user['uid']),
             'userID'   => $user['uid'],
-            'userName' => $user['name'] ?? 'Doctor',
+            'userName' => $user['name'] ?: 'Doctor',
             'appID'    => (int) config('services.zego.app_id'),
         ]);
     }
