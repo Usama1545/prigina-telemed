@@ -11,7 +11,7 @@
                     <h6 class="text-secondary fw-bold text-uppercase mb-2">Appointment Review</h6>
                     @if ($alreadyReviewed)
                         <h1 class="fw-bold mb-3 text-primary">Thank You for Your Feedback!</h1>
-                        <p class="text-muted fs-5">Your review has already been submitted. We truly appreciate you taking the
+                        <p class="text-muted">Your review has already been submitted. We truly appreciate you taking the
                             time to share your experience.</p>
                     @else
                         <h1 class="fw-bold mb-3 text-primary">Thank You for Choosing<br>PriGina Global Telemed!</h1>
