@@ -36,8 +36,8 @@
 
 <meta property="og:image" content="{{ asset('build/img/logo.webp') }}">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Doctors Appointment  | Doccure">
+<meta name="twitter:title" content="Doctors Appointment  | Prigina Global Telemed">
 <meta name="twitter:description"
-    content="The responsive professional Doccure template offers many features, like scheduling appointments with  top doctors, clinics, and hospitals via voice, video call & chat.">
+    content="The responsive professional Prigina Global Telemed template offers many features, like scheduling appointments with  top doctors, clinics, and hospitals via voice, video call & chat.">
 <meta name="twitter:image" content="{{ URL::asset('build/admin/img/logo.png') }}">
-<title>Doccure - {{ $title }}</title>
+<title>Prigina Global Telemed - {{ $title }}</title>

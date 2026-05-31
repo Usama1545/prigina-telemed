@@ -1,10 +1,9 @@
 <?php $page = 'invoice'; ?>
 @extends('admin.layout.mainlayout')
 @section('content')
-
     <!-- ========================
-        Start Page Content
-    ========================= -->
+            Start Page Content
+        ========================= -->
 
     <div class="page-wrapper">
 
@@ -16,7 +15,7 @@
 
                 <div class="row">
                     <div class="col-sm-6 m-b-20">
-                        <img alt="Logo" class="inv-logo img-fluid" src="{{URL::asset('build/admin/img/logo.png')}}">
+                        <img alt="Logo" class="inv-logo img-fluid" src="{{ URL::asset('build/admin/img/logo.png') }}">
                     </div>
                     <div class="col-sm-6 m-b-20">
                         <div class="invoice-details">
@@ -30,7 +29,7 @@
                 <div class="row">
                     <div class="col-sm-12 m-b-20">
                         <ul class="list-unstyled mb-0">
-                            <li>Doccure Hospital</li>
+                            <li>Prigina Global Telemed Hospital</li>
                             <li>3864 Quiet Valley Lane,</li>
                             <li>Sherman Oaks, CA, 91403</li>
                             <li>GST No:</li>
@@ -41,7 +40,9 @@
                     <div class="col-sm-6 col-lg-7 col-xl-8 m-b-20">
                         <h6>Invoice to</h6>
                         <ul class="list-unstyled mb-0">
-                            <li><h5 class="mb-0"><strong>Charlene Reed</strong></h5></li>
+                            <li>
+                                <h5 class="mb-0"><strong>Charlene Reed</strong></h5>
+                            </li>
                             <li>4417 Goosetown Drive</li>
                             <li>Taylorsville, NC, 28681</li>
                             <li>United States</li>
@@ -52,7 +53,9 @@
                     <div class="col-sm-6 col-lg-5 col-xl-4 m-b-20">
                         <h6>Payment Details</h6>
                         <ul class="list-unstyled invoice-payment-details mb-0">
-                            <li><h5>Total Due: <span class="text-end">$200</span></h5></li>
+                            <li>
+                                <h5>Total Due: <span class="text-end">$200</span></h5>
+                            </li>
                             <li>Bank name: <span>Profit Bank Europe</span></li>
                             <li>Country: <span>United Kingdom</span></li>
                             <li>City: <span>London E1 8BF</span></li>
@@ -79,7 +82,8 @@
                             <tr>
                                 <td>1</td>
                                 <td>medicine1</td>
-                                <td class="d-none d-sm-table-cell">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                                <td class="d-none d-sm-table-cell">Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                                </td>
                                 <td>$10</td>
                                 <td>2</td>
                                 <td>$10</td>
@@ -87,7 +91,8 @@
                             <tr>
                                 <td>2</td>
                                 <td>medicine2</td>
-                                <td class="d-none d-sm-table-cell">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                                <td class="d-none d-sm-table-cell">Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                                </td>
                                 <td>$10</td>
                                 <td>1</td>
                                 <td>$10</td>
@@ -95,7 +100,8 @@
                             <tr>
                                 <td>3</td>
                                 <td>medicine3</td>
-                                <td class="d-none d-sm-table-cell">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                                <td class="d-none d-sm-table-cell">Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                                </td>
                                 <td>$90</td>
                                 <td>1</td>
                                 <td>$90</td>
@@ -103,7 +109,8 @@
                             <tr>
                                 <td>4</td>
                                 <td>medicine4</td>
-                                <td class="d-none d-sm-table-cell">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                                <td class="d-none d-sm-table-cell">Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                                </td>
                                 <td>$70</td>
                                 <td>1</td>
                                 <td>$70</td>
@@ -111,7 +118,8 @@
                             <tr>
                                 <td>5</td>
                                 <td>medicine5</td>
-                                <td class="d-none d-sm-table-cell">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                                <td class="d-none d-sm-table-cell">Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                                </td>
                                 <td>70</td>
                                 <td>1</td>
                                 <td>$70</td>
@@ -140,7 +148,9 @@
                                             </tr>
                                             <tr>
                                                 <th>Total:</th>
-                                                <td class="text-center text-primary"><h5>$200</h5></td>
+                                                <td class="text-center text-primary">
+                                                    <h5>$200</h5>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -150,7 +160,11 @@
                     </div>
                     <div class="invoice-info">
                         <h5>Other information</h5>
-                        <p class="text-muted mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sed dictum ligula, cursus blandit risus. Maecenas eget metus non tellus dignissim aliquam ut a ex. Maecenas sed vehicula dui, ac suscipit lacus. Sed finibus leo vitae lorem interdum, eu scelerisque tellus fermentum. Curabitur sit amet lacinia lorem. Nullam finibus pellentesque libero.</p>
+                        <p class="text-muted mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sed
+                            dictum ligula, cursus blandit risus. Maecenas eget metus non tellus dignissim aliquam ut a ex.
+                            Maecenas sed vehicula dui, ac suscipit lacus. Sed finibus leo vitae lorem interdum, eu
+                            scelerisque tellus fermentum. Curabitur sit amet lacinia lorem. Nullam finibus pellentesque
+                            libero.</p>
                     </div>
                 </div>
 
@@ -163,7 +177,6 @@
     </div>
 
     <!-- ========================
-        End Page Content
-    ========================= -->
-
+            End Page Content
+        ========================= -->
 @endsection

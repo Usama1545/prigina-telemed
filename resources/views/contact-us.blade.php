@@ -42,7 +42,7 @@
                             </div>
                             <div class="contact-details">
                                 <h4>Email Address</h4>
-                                <p>doccure@example.com</p>
+                                <p>info@priginaglobaltelemed.com</p>
                             </div>
                         </div>
                     </div>
@@ -95,5 +95,4 @@
             </div>
         </div>
     </section>
-   
 @endsection
