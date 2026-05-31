@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\FirestoreService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ReviewController extends Controller
 {
@@ -34,35 +35,36 @@ class ReviewController extends Controller
         }
 
         if (! empty($appointment['reviewSubmitted'])) {
-            return redirect('/' . $appointmentId . '/review')
+            return redirect('/'.$appointmentId.'/review')
                 ->with('error', 'You have already submitted a review for this appointment.');
         }
 
         $data = $request->validate([
-            'rating'  => 'required|integer|min:1|max:5',
+            'rating' => 'required|integer|min:1|max:5',
             'comment' => 'nullable|string|max:1000',
         ]);
 
-        $doctorId  = $appointment['doctorId']  ?? null;
+        $doctorId = $appointment['doctorId'] ?? null;
         $patientId = $appointment['patientId'] ?? null;
-        $now       = now()->toDateTimeString();
+        $now = now()->toDateTimeString();
 
         // Save the review
         $this->firestore->create('reviews', [
             'appointmentId' => $appointmentId,
-            'doctorId'      => $doctorId,
-            'patientId'     => $patientId,
-            'patientName'   => $appointment['patientName'] ?? '',
-            'rating'        => (int) $data['rating'],
-            'comment'       => $data['comment'] ?? '',
-            'createdAt'     => $now,
-            'updatedAt'     => $now,
+            'doctorId' => $doctorId,
+            'patientId' => $patientId,
+            'patientName' => $appointment['patientName'] ?? '',
+            'doctorName' => $appointment['doctorName'] ?? '',
+            'rating' => (int) $data['rating'],
+            'comment' => $data['comment'] ?? '',
+            'createdAt' => $now,
+            'updatedAt' => $now,
         ]);
 
         // Mark appointment so the form can't be resubmitted
         $this->firestore->update('appointments', $appointmentId, [
             'reviewSubmitted' => true,
-            'updatedAt'       => $now,
+            'updatedAt' => $now,
         ]);
 
         // Recalculate doctor rating in the background
@@ -70,7 +72,7 @@ class ReviewController extends Controller
             $this->updateDoctorRating($doctorId);
         }
 
-        return redirect('/' . $appointmentId . '/review')
+        return redirect('/'.$appointmentId.'/review')
             ->with('success', 'Thank you! Your review has been submitted.');
     }
 
@@ -91,7 +93,7 @@ class ReviewController extends Controller
                 return;
             }
 
-            $totalReviews  = count($reviews);
+            $totalReviews = count($reviews);
             $averageRating = round(
                 collect($reviews)->avg(fn ($r) => (float) ($r['rating'] ?? 0)),
                 2
@@ -99,13 +101,13 @@ class ReviewController extends Controller
 
             $this->firestore->update('doctors', $doctorId, [
                 'averageRating' => $averageRating,
-                'totalReviews'  => $totalReviews,
-                'updatedAt'     => now()->toDateTimeString(),
+                'totalReviews' => $totalReviews,
+                'updatedAt' => now()->toDateTimeString(),
             ]);
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::error('update-doctor-rating-failed', [
+            Log::error('update-doctor-rating-failed', [
                 'doctorId' => $doctorId,
-                'error'    => $e->getMessage(),
+                'error' => $e->getMessage(),
             ]);
         }
     }
