@@ -238,37 +238,48 @@
                 },
 
                 onIncomingCallCanceled() {
-
+                    window.location.href = backUrl;
                     console.log('Incoming call canceled');
                 },
 
                 onIncomingCallRejected() {
-
+                    window.location.href = backUrl;
                     console.log('Incoming call rejected');
                 },
 
                 onIncomingCallTimeout() {
-
+                    window.location.href = backUrl;
                     console.log('Incoming call timeout');
                 },
 
-                onOutgoingCallAccepted() {
-
-                    console.log('Call accepted', 's');
-                },
-
-                onOutgoingCallRejected() {
-
-                    console.log('Call rejected');
+                onIncomingCallTimeout(...args) {
+                    console.log('onIncomingCallTimeout', args);
                     window.location.href = backUrl;
                 },
 
-                onOutgoingCallTimeout() {
+                onOutgoingCallAccepted(...args) {
+                    console.log('onOutgoingCallAccepted', args);
+                },
 
-                    console.log('Outgoing call timeout');
+                onOutgoingCallRejected(...args) {
+                    console.log('onOutgoingCallRejected', args);
                     window.location.href = backUrl;
                 },
 
+                onOutgoingCallDeclined(...args) {
+                    console.log('onOutgoingCallDeclined', args);
+                    window.location.href = backUrl;
+                },
+
+                onOutgoingCallTimeout(...args) {
+                    console.log('onOutgoingCallTimeout', args);
+                    window.location.href = backUrl;
+                },
+
+                onCallEnd(...args) {
+                    console.log('onCallEnd', args);
+                    window.location.href = backUrl;
+                },
                 onCallEnd() {
 
                     console.log('Call ended, redirecting…');
