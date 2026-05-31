@@ -70,6 +70,16 @@
         </p>
 
         <p style="font-size:13px; color:#64748b; margin-top:24px;">This review link is unique to your appointment. It only takes about 30 seconds to complete.</p>
+
+        <hr style="border:none; border-top:1px solid #e2e8f0; margin:28px 0;">
+
+        <p style="font-size:14px; color:#334155; margin-bottom:6px;"><strong>Need a copy of your receipt?</strong></p>
+        <p style="font-size:13px; color:#64748b; margin-bottom:16px;">You can download or print an invoice for this appointment at any time from the button below.</p>
+        <div style="text-align:center; margin-bottom:8px;">
+            <a href="{{ $invoiceUrl }}" style="background:#f8fafc; color:#0284c7; text-decoration:none; padding:11px 28px; border-radius:8px; font-weight:600; font-size:14px; display:inline-block; border:1.5px solid #0ea5e9;">
+                &#8681; Download Invoice / Receipt
+            </a>
+        </div>
     </div>
     <div class="footer">
         &copy; {{ date('Y') }} Prigina Telemed. All rights reserved.<br>

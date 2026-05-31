@@ -419,6 +419,22 @@ class PatientController extends Controller
         return response()->json($appointment);
     }
 
+    public function appointmentInvoice($id)
+    {
+        $appointment = $this->firestore->find('appointments', $id);
+
+        if (! $appointment) {
+            abort(404);
+        }
+
+        // Ensure the authenticated patient owns this appointment
+        if (($appointment['patientId'] ?? null) !== current_user()['uid']) {
+            abort(403);
+        }
+
+        return view('patient.invoice', compact('appointment'));
+    }
+
     public function zegoToken()
     {
         $user = current_user();

@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Mail;
 
 class SendAppointmentReminders extends Command
 {
-    protected $signature   = 'appointments:send-reminders';
+    protected $signature = 'appointments:send-reminders';
+
     protected $description = 'Email patients whose appointment is ~24 h away (runs hourly, deduplicates via reminderSentAt)';
 
     public function __construct(private FirestoreService $firestore)
@@ -23,7 +24,7 @@ class SendAppointmentReminders extends Command
     {
         // Target window: appointments between 23 h and 25 h from now
         $windowStart = Carbon::now()->addHours(23);
-        $windowEnd   = Carbon::now()->addHours(25);
+        $windowEnd = Carbon::now()->addHours(25);
 
         $result = $this->firestore->paginatedQuery(
             collection: 'appointments',
@@ -41,6 +42,7 @@ class SendAppointmentReminders extends Command
 
         if (empty($appointments)) {
             $this->info('No appointments in the 24-h window — nothing to send.');
+
             return self::SUCCESS;
         }
 
@@ -50,10 +52,12 @@ class SendAppointmentReminders extends Command
             if (! empty($appt['reminderSentAt'])) {
                 continue;
             }
+            $patient = $this->firestore->find('patients', $appt['patientId']);
 
-            $email = $appt['patientEmail'] ?? null;
+            $email = $patient['email'] ?? null;
             if (! $email) {
-                $this->warn("Appointment {$appt['documentId']} has no patientEmail — skipped.");
+                $this->warn('No email — skipped.');
+
                 continue;
             }
 
@@ -64,7 +68,7 @@ class SendAppointmentReminders extends Command
 
                 $this->firestore->update('appointments', $appt['id'], [
                     'reminderSentAt' => now()->toDateTimeString(),
-                    'updatedAt'      => now()->toDateTimeString(),
+                    'updatedAt' => now()->toDateTimeString(),
                 ]);
 
                 $sent++;
@@ -72,14 +76,15 @@ class SendAppointmentReminders extends Command
             } catch (\Throwable $e) {
                 Log::error('appointment-reminder-failed', [
                     'appointment' => $appt['id'],
-                    'email'       => $email,
-                    'error'       => $e->getMessage(),
+                    'email' => $email,
+                    'error' => $e->getMessage(),
                 ]);
                 $this->error("Failed for {$appt['id']}: {$e->getMessage()}");
             }
         }
 
-        $this->info("Reminders sent: {$sent} / " . count($appointments));
+        $this->info("Reminders sent: {$sent} / ".count($appointments));
+
         return self::SUCCESS;
     }
 }

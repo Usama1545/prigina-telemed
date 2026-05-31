@@ -13,10 +13,12 @@ class ReviewRequest extends Mailable
     use Queueable, SerializesModels;
 
     public string $reviewUrl;
+    public string $invoiceUrl;
 
     public function __construct(public array $appointment)
     {
-        $this->reviewUrl = url('/' . $appointment['id'] . '/review');
+        $this->reviewUrl  = url('/' . $appointment['id'] . '/review');
+        $this->invoiceUrl = url('/patient/appointment/' . $appointment['id'] . '/invoice');
     }
 
     public function envelope(): Envelope
