@@ -14,60 +14,64 @@
     <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
 
     <script>
+        let currentCallID = null;
+        let ringtoneInterval = null;
+        let zimPlugin = null;
+
         document.addEventListener('visibilitychange', () => {
-
             if (document.hidden) {
-
-                _stopRingtone();
+                stopRingtone();
             }
         });
+
         window.addEventListener('focus', () => {
-
-            _stopRingtone();
+            stopRingtone();
         });
-        // ── Call ringtone (Web Audio) ────────────────────────────────────────────────
-        // Uses the shared _getCtx / _tone helpers defined in mainlayout.
-        let _ringInterval = null;
 
-        function _startRingtone() {
-
-            _stopRingtone();
+        function startRingtone() {
+            stopRingtone();
 
             function beep() {
-
                 try {
-
                     const ctx = _getCtx();
-
                     const t = ctx.currentTime;
-
                     _tone(ctx, 1200, t, 0.15, 0.7);
-
                     _tone(ctx, 1200, t + 0.18, 0.15, 0.7);
-
                 } catch (_) {}
             }
 
             beep();
-
-            _ringInterval = setInterval(beep, 1200);
+            ringtoneInterval = setInterval(beep, 1200);
         }
 
-        function _stopRingtone() {
-
-            if (_ringInterval) {
-
-                clearInterval(_ringInterval);
-
-                _ringInterval = null;
+        function stopRingtone() {
+            if (ringtoneInterval) {
+                clearInterval(ringtoneInterval);
+                ringtoneInterval = null;
             }
         }
-        // ────────────────────────────────────────────────────────────────────────────
+
+        async function rejectCall(callID) {
+            if (zimPlugin && callID) {
+                try {
+                    await zimPlugin.rejectCall(callID, {});
+                    console.log('[ZEGO] Call rejected');
+                    stopRingtone();
+                    currentCallID = null;
+                } catch (e) {
+                    console.error('[ZEGO] Failed to reject call:', e);
+                }
+            }
+        }
 
         (async function() {
             try {
                 const res = await fetch('{{ $tokenRoute }}');
-                if (!res.ok) return;
+                if (!res.ok) {
+                    console.error('[ZEGO] Failed to get token');
+                    return;
+                }
+
                 const {
                     token,
                     userID,
@@ -80,41 +84,87 @@
                 );
 
                 const zp = ZegoUIKitPrebuilt.create(kitToken);
-                zp.addPlugins({
+                zimPlugin = {
                     ZIM
-                });
+                };
+                zp.addPlugins(zimPlugin);
 
                 zp.setCallInvitationConfig({
                     enableNotifyWhenAppRunningInBackgroundOrQuit: true,
 
+                    // Custom UI for incoming call (optional but recommended)
+                    incomingCall: {
+                        // You can customize the incoming call UI here
+                        // Or let ZEGO use its default overlay
+                    },
+
                     onIncomingCallReceived(callID, caller, callType) {
                         console.log('[ZEGO] Incoming call from', caller.userName, 'type', callType);
-                        _startRingtone();
+                        currentCallID = callID;
+                        startRingtone();
+
+                        // Optional: Show a browser notification
+                        if (Notification.permission === 'granted') {
+                            new Notification('Incoming Call', {
+                                body: `${caller.userName} is calling you...`,
+                                icon: '/favicon.ico'
+                            });
+                        }
                     },
 
-                    onIncomingCallCanceled() {
-                        console.log('[ZEGO] Caller cancelled');
-                        _stopRingtone();
+                    onIncomingCallCanceled(callID) {
+                        console.log('[ZEGO] Caller cancelled call:', callID);
+                        if (currentCallID === callID) {
+                            stopRingtone();
+                            currentCallID = null;
+                        }
                     },
 
-                    onIncomingCallTimeout() {
+                    onIncomingCallTimeout(callID) {
                         console.log('[ZEGO] Incoming call timed out');
-                        _stopRingtone();
+                        if (currentCallID === callID) {
+                            stopRingtone();
+                            currentCallID = null;
+                        }
                     },
 
-                    onCallEnd() {
-                        _stopRingtone();
+                    onCallEnd(callID) {
+                        console.log('[ZEGO] Call ended');
+                        stopRingtone();
+                        currentCallID = null;
                         window.location.href = '{{ $dashRoute }}';
                     },
 
-                    onIncomingCallAccepted() {
-                        _stopRingtone();
+                    onIncomingCallAccepted(callID) {
+                        console.log('[ZEGO] Call accepted');
+                        stopRingtone();
+                        currentCallID = null;
+                    },
+
+                    // Add this to handle rejection
+                    onIncomingCallRejected(callID, reason) {
+                        console.log('[ZEGO] Call rejected:', reason);
+                        stopRingtone();
+                        currentCallID = null;
                     }
                 });
+
+                // Request notification permission
+                if ('Notification' in window && Notification.permission === 'default') {
+                    Notification.requestPermission();
+                }
 
             } catch (e) {
                 console.warn('[ZEGO] Call listener init failed:', e);
             }
         })();
+
+        // Optional: Clean up on page unload
+        window.addEventListener('beforeunload', () => {
+            if (currentCallID && zimPlugin) {
+                rejectCall(currentCallID);
+            }
+            stopRingtone();
+        });
     </script>
 @endif
