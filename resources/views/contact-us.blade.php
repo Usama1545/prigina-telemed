@@ -20,7 +20,7 @@
                             </div>
                             <div class="contact-details">
                                 <h4>Address</h4>
-                                <p>8432 Mante Highway, Aminaport, USA</p>
+                                <p>1600 laurel road , NJ 08021</p>
                             </div>
                         </div>
                     </div>
@@ -31,7 +31,7 @@
                             </div>
                             <div class="contact-details">
                                 <h4>Phone Number</h4>
-                                <p>+1 315 369 5943</p>
+                                <p>+1 8564268693</p>
                             </div>
                         </div>
                     </div>

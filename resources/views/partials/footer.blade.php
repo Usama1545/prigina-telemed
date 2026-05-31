@@ -5,21 +5,27 @@
                 <div class="row">
                     <div class="col-xl-4 col-md-7">
                         <div class="footer-widget">
-                            <img src="{{ asset('build/img/logo.webp') }}" alt="logo" class="img-fluid" style="max-width: 300px;">
+                            <img src="{{ asset('build/img/logo.webp') }}" alt="logo" class="img-fluid"
+                                style="max-width: 300px;">
                             <div class="social-icon">
                                 <h6 class="mb-3 footer-title text-white">Connect With Us</h6>
                                 <ul>
                                     <li>
-                                        <a href="https://www.facebook.com/profile.php?id=61588898595327&mibextid=wwXIfr&mibextid=wwXIfr"><i class="fa-brands fa-facebook"></i></a>
+                                        <a
+                                            href="https://www.facebook.com/profile.php?id=61588898595327&mibextid=wwXIfr&mibextid=wwXIfr"><i
+                                                class="fa-brands fa-facebook"></i></a>
                                     </li>
                                     <li>
                                         <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
                                     </li>
                                     <li>
-                                        <a href="https://www.instagram.com/prigina_global_telemed?igsh=MTh3YjVjejQ1cnJvcA=="><i class="fa-brands fa-instagram"></i></a>
+                                        <a
+                                            href="https://www.instagram.com/prigina_global_telemed?igsh=MTh3YjVjejQ1cnJvcA=="><i
+                                                class="fa-brands fa-instagram"></i></a>
                                     </li>
                                     <li>
-                                        <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                                        <a href="https://www.linkedin.com/company/prigina-global-telemed-llc/"><i
+                                                class="fa-brands fa-linkedin"></i></a>
                                     </li>
                                     <li>
                                         <a href="#"><i class="fa-brands fa-pinterest"></i></a>
@@ -34,9 +40,11 @@
                                 <div class="footer-widget footer-menu text-white">
                                     <h6 class="footer-title text-white">For Patients</h6>
                                     <ul>
-                                        <li><a class="text-white" href="{{ route('for-patients') }}">How It Works</a></li>
+                                        <li><a class="text-white" href="{{ route('for-patients') }}">How It Works</a>
+                                        </li>
                                         <li><a class="text-white" href="{{ route('patient-faqs') }}">Faqs</a></li>
-                                        <li><a class="text-white" href="{{ route('patient-reviews') }}">Patient Stories</a></li>
+                                        <li><a class="text-white" href="{{ route('patient-reviews') }}">Patient
+                                                Stories</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -44,9 +52,11 @@
                                 <div class="footer-widget footer-menu text-white">
                                     <h6 class="footer-title text-white">For Doctors</h6>
                                     <ul>
-                                        <li><a class="text-white" href="{{ route('for-doctors') }}">Join Our Network</a></li>
+                                        <li><a class="text-white" href="{{ route('for-doctors') }}">Join Our Network</a>
+                                        </li>
                                         <li><a class="text-white" href="{{ route('doctor-faqs') }}">FAQs</a></li>
-                                        <li><a class="text-white" href="{{ route('doctor-reviews') }}">Doctor Stories</a></li>
+                                        <li><a class="text-white" href="{{ route('doctor-reviews') }}">Doctor
+                                                Stories</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -57,6 +67,8 @@
                                         <li><a class="text-white" href="{{ route('about-us') }}">About Us</a></li>
                                         <li><a class="text-white" href="{{ route('our-mission') }}">Our Mission</a></li>
                                         <li><a class="text-white" href="{{ route('contact-us') }}">Contact Us</a></li>
+                                        <li><a class="text-white" href="{{ route('admin.login') }}">Admin Login</a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -64,17 +76,20 @@
                                 <div class="footer-widget footer-menu text-white">
                                     <h6 class="footer-title text-white">Legal</h6>
                                     <ul>
-                                        <li><a class="text-white" href="{{ route('privacy-policy') }}">Privacy Policy</a></li>
-                                        <li><a class="text-white" href="{{ route('terms-conditions') }}">Terms & Conditions</a></li>
-                                        <li><a class="text-white" href="{{ route('risk-disclaimer') }}">Risk Disclaimer</a></li>
+                                        <li><a class="text-white" href="{{ route('privacy-policy') }}">Privacy
+                                                Policy</a></li>
+                                        <li><a class="text-white" href="{{ route('terms-conditions') }}">Terms &
+                                                Conditions</a></li>
+                                        <li><a class="text-white" href="{{ route('risk-disclaimer') }}">Risk
+                                                Disclaimer</a></li>
                                     </ul>
                                 </div>
                             </div>
-                            
-                           
+
+
                         </div>
                     </div>
-                   
+
                 </div>
             </div>
         </div>
@@ -83,7 +98,8 @@
                 <!-- Copyright -->
                 <div class="copyright">
                     <div class="copyright-text mb-0">
-                        <p class="mb-0 ">Copyright © 2025 PriGina Global Telemed. All Rights Reserved</p>
+                        <p class="mb-0 ">PriGina Global Telemed LLC: Registered in the United States ©️ 2026 All Rights
+                            Reserved</p>
                     </div>
                     <!-- Copyright Menu -->
                     <div class="copyright-menu">
@@ -92,11 +108,10 @@
                             <li><a href="{{ url('privacy-policy') }}">Privacy Policy</a></li>
                         </ul>
                     </div>
-      
+
                 </div>
                 <!-- /Copyright -->
             </div>
         </div>
     </footer>
     <!-- /Footer Section -->
-
