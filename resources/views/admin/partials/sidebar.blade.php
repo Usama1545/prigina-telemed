@@ -26,10 +26,10 @@
                 <li class="{{ Request::is('admin/reviews') ? 'active' : '' }}">
                     <a href="{{ route('admin.reviews') }}"><i class="fe fe-star-o"></i> <span>Reviews</span></a>
                 </li>
-                <li class="{{ Request::is('admin/transactions-list') ? 'active' : '' }}">
+                {{-- <li class="{{ Request::is('admin/transactions-list') ? 'active' : '' }}">
                     <a href="{{ route('admin.transactions-list') }}"><i class="fe fe-activity"></i>
                         <span>Transactions</span></a>
-                </li>
+                </li> --}}
                 <li class="{{ Request::is('admin/settings') ? 'active' : '' }}">
                     <a href="{{ route('admin.settings') }}"><i class="fe fe-vector"></i> <span>Settings</span></a>
                 </li>
@@ -40,7 +40,8 @@
                     </a>
                 </li>
                 <li class="{{ Request::is('admin/notifications*') ? 'active' : '' }}">
-                    <a href="{{ route('admin.notifications') }}"><i class="fe fe-bell"></i> <span>Notifications</span></a>
+                    <a href="{{ route('admin.notifications') }}"><i class="fe fe-bell"></i>
+                        <span>Notifications</span></a>
                 </li>
                 <li class="{{ Request::is('admin/profile') ? 'active' : '' }}">
                     <a href="{{ route('admin.profile') }}"><i class="fe fe-user-plus"></i> <span>Profile</span></a>
