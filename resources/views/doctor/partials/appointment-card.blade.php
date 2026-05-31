@@ -200,7 +200,7 @@
 
             </li>
 
-            @if(($appointment['status'] ?? '') !== 'completed')
+            @if(!in_array($appointment['status'] ?? '', ['completed', 'cancelled']))
 
                 <li class="appointment-action">
 

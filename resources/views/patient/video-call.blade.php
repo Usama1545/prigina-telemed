@@ -134,7 +134,7 @@
         };
         document.addEventListener('keydown', e => {
             if (e.key === 'd' || e.key === 'D') dbg.style.display = dbg.style.display === 'block' ? 'none' :
-            'block';
+                'block';
         });
 
         function showErr(msg) {
@@ -185,9 +185,14 @@
                 onIncomingCallRejected() {
                     // log('Incoming call rejected');
                 },
+                onOutgoingCallDeclined(...args) {
+                    console.log('onOutgoingCallDeclined', args);
+                    window.location.href = backUrl;
+                },
 
                 onIncomingCallTimeout() {
                     // log('Incoming call timeout');
+                    window.location.href = backUrl;
                 },
 
                 onOutgoingCallAccepted() {

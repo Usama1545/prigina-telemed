@@ -57,29 +57,31 @@
                         <!-- upcoming -->
                         <div class="tab-pane fade show active" id="pills-upcoming" role="tabpanel"
                             aria-labelledby="pills-upcoming-tab">
-                            @foreach($appointments['upcoming'] as $appointment)                            
+                            @foreach($appointments['upcoming'] as $appointment)
                                 <!-- Appointment List -->
                                 <div class="appointment-wrap">
                                     <ul>
                                         <li>
                                             <div class="patinet-information">
-                                                <a href="javascript:void(0);" 
-                                                        class="view-appointment" 
+                                                <a href="javascript:void(0);"
+                                                        class="view-appointment"
                                                         data-id="{{ $appointment['id'] }}">
                                                     <img src="{{URL::asset('build/img/doctors/doctor-thumb-21.jpg')}}"
                                                         alt="User Image">
                                                 </a>
                                                 <div class="patient-info">
                                                      <p>{{ '#Apt' . (isset($appointment['id']) ? $appointment['id'] : '') }}</p>
-                                                    <h6><a href="javascript:void(0);" 
-                                                        class="view-appointment" 
+                                                    <h6><a href="javascript:void(0);"
+                                                        class="view-appointment"
                                                         data-id="{{ $appointment['id'] }}">{{$appointment['doctorName']}}</a></h6>
                                                 </div>
                                             </div>
                                         </li>
                                         <li class="appointment-info">
-                                            @php 
-                                                $date = isset($appointment['date']) ? \Carbon\Carbon::parse($appointment['date'])->format('d M Y') : '';
+                                            @php
+                                                $apptDate = isset($appointment['date']) ? \Carbon\Carbon::parse($appointment['date']) : null;
+                                                $date = $apptDate ? $apptDate->format('d M Y') : '';
+                                                $canCancel = $apptDate && $apptDate->gt(now()->addHours(24));
                                             @endphp
                                             <p><i class="isax isax-clock5"></i>{{ $date }}</p>
                                             <ul class="d-flex apponitment-types">
@@ -90,20 +92,21 @@
                                         <li class="appointment-action">
                                             <span class="bg-blue badge" style="background-color: #8484eb"><i class="isax isax-video5 me-1"></i>{{ $appointment['status'] }}</span>
                                         </li>
-                                        
+
                                         <li class="appointment-action">
                                             <ul>
                                                 <li>
-                                                    <a href="javascript:void(0);" 
-                                                        class="view-appointment" 
+                                                    <a href="javascript:void(0);"
+                                                        class="view-appointment"
                                                         data-id="{{ $appointment['id'] }}">
                                                         <i class="isax isax-eye4"></i>
                                                     </a>
                                                 </li>
+                                                @if($canCancel)
                                                 <li>
-                                                   <!-- //todo cancel -->
                                                     <a href="{{ route('patient.cancel-appointment', $appointment['id']) }}"><i class="isax isax-close-circle5"></i></a>
                                                 </li>
+                                                @endif
                                             </ul>
                                         </li>
                                         <li class="appointment-detail-btn">
@@ -296,29 +299,31 @@
                         <!-- pending -->
                         <div class="tab-pane fade " id="pills-pending" role="tabpanel"
                             aria-labelledby="pills-pending-tab">
-                            @foreach($appointments['pending'] as $appointment)                            
+                            @foreach($appointments['pending'] as $appointment)
                                 <!-- Appointment List -->
                                 <div class="appointment-wrap">
                                     <ul>
                                         <li>
                                             <div class="patinet-information">
-                                                <a href="javascript:void(0);" 
-                                                    class="view-appointment" 
+                                                <a href="javascript:void(0);"
+                                                    class="view-appointment"
                                                     data-id="{{ $appointment['id'] }}">
                                                     <img src="{{URL::asset('build/img/doctors/doctor-thumb-21.jpg')}}"
                                                         alt="User Image">
                                                 </a>
                                                 <div class="patient-info">
                                                      <p>{{ '#Apt' . (isset($appointment['id']) ? $appointment['id'] : '') }}</p>
-                                                    <h6><a href="javascript:void(0);" 
-                                                            class="view-appointment" 
+                                                    <h6><a href="javascript:void(0);"
+                                                            class="view-appointment"
                                                             data-id="{{ $appointment['id'] }}">{{$appointment['doctorName']}}</a></h6>
                                                 </div>
                                             </div>
                                         </li>
                                         <li class="appointment-info">
-                                            @php 
-                                                $date = isset($appointment['date']) ? \Carbon\Carbon::parse($appointment['date'])->format('d M Y') : '';
+                                            @php
+                                                $apptDate = isset($appointment['date']) ? \Carbon\Carbon::parse($appointment['date']) : null;
+                                                $date = $apptDate ? $apptDate->format('d M Y') : '';
+                                                $canCancel = $apptDate && $apptDate->gt(now()->addHours(24));
                                             @endphp
                                             <p><i class="isax isax-clock5"></i>{{ $date }}</p>
                                             <ul class="d-flex apponitment-types">
@@ -328,12 +333,12 @@
                                         <li class="appointment-info">
                                             <span class="bg-blue badge" style="background-color: #ff7420"><i class="isax isax-video5 me-1"></i>{{ $appointment['status'] }}</span>
                                         </li>
-                                        
+
                                         <li class="appointment-action">
                                             <ul>
                                                 <li>
-                                                    <a href="javascript:void(0);" 
-                                                    class="view-appointment" 
+                                                    <a href="javascript:void(0);"
+                                                    class="view-appointment"
                                                     data-id="{{ $appointment['id'] }}">
                                                     <i class="isax isax-eye4"></i>
                                                     </a>
@@ -341,9 +346,11 @@
                                                 <li>
                                                     <a href="{{ route('patient.conversations') }}"><i class="isax isax-messages-25"></i></a>
                                                 </li>
+                                                @if($canCancel)
                                                 <li>
                                                     <a href="{{ route('patient.cancel-appointment', $appointment['id']) }}"><i class="isax isax-close-circle5"></i></a>
                                                 </li>
+                                                @endif
                                             </ul>
                                         </li>
                                         <li class="appointment-detail-btn">

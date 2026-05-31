@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AppointmentCancelled;
 use App\Services\FirestoreService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Contract\Storage;
@@ -371,9 +375,39 @@ class PatientController extends Controller
 
     public function cancelAppointment($id)
     {
+        $appointment = $this->firestore->find('appointments', $id);
+
+        if (! $appointment) {
+            return redirect()->back()->with('error', 'Appointment not found.');
+        }
+
+        // Block cancellation within 24 hours of the appointment
+        if (! empty($appointment['date'])) {
+            $apptDate = Carbon::parse($appointment['date']);
+            if ($apptDate->lte(now()->addHours(24))) {
+                return redirect()->back()->with('error', 'Appointments cannot be cancelled within 24 hours of the scheduled time.');
+            }
+        }
+
         $this->firestore->update('appointments', $id, [
-            'status' => 'cancelled',
+            'status'      => 'cancelled',
+            'cancelledAt' => now()->toDateTimeString(),
+            'updatedAt'   => now()->toDateTimeString(),
         ]);
+
+        // Send cancellation + refund email
+        $email = $appointment['patientEmail'] ?? null;
+        if ($email) {
+            try {
+                Mail::to($email)->send(new AppointmentCancelled($appointment));
+            } catch (\Throwable $e) {
+                Log::error('appointment-cancellation-email-failed', [
+                    'appointment' => $id,
+                    'email'       => $email,
+                    'error'       => $e->getMessage(),
+                ]);
+            }
+        }
 
         return redirect()->back()->with('success', 'Appointment cancelled successfully.');
     }
