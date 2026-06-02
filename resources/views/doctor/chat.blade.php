@@ -900,39 +900,50 @@ $(document).ready(function() {
     function renderCallCard(call) {
         const currentUid = "{{ current_user()['uid'] }}";
         const isCaller = call.callerId === currentUid;
-        const isVideo = call.callType === 'video';
-        const icon = isVideo ? 'fa-video' : 'fa-phone';
-        const label = isVideo ? 'Video call' : 'Audio call';
+        const isVideo  = call.callType === 'video';
+        const icon     = isVideo ? 'fa-video' : 'fa-phone';
+        const label    = isVideo ? 'Video call' : 'Audio call';
 
-        let statusText = '';
+        let statusText  = '';
         let statusColor = '#6c757d';
         if (call.status === 'completed') {
             const mins = call.duration ? Math.floor(call.duration / 60) : 0;
             const secs = call.duration ? call.duration % 60 : 0;
-            statusText = call.duration
-                ? `${mins}:${String(secs).padStart(2, '0')}`
-                : 'Ended';
+            statusText  = call.duration ? `${mins}:${String(secs).padStart(2, '0')}` : 'Ended';
             statusColor = '#28a745';
         } else if (call.status === 'missed') {
-            statusText = isCaller ? 'No answer' : 'Missed';
+            statusText  = isCaller ? 'No answer' : 'Missed';
             statusColor = '#dc3545';
         } else if (call.status === 'rejected') {
-            statusText = isCaller ? 'Declined' : 'Declined';
+            statusText  = 'Declined';
             statusColor = '#dc3545';
         }
 
-        const timeString = new Date(call.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const timeString  = new Date(call.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        // Doctor view: own calls use the doctor icon (green, right); received use patient icon (blue, left)
+        const avatarIcon  = isCaller ? 'fa-user-doctor' : 'fa-user';
+        const avatarColor = isCaller ? '#28a745' : '#0d6efd';
 
         return `
-            <div class="d-flex justify-content-center my-2">
-                <div class="call-history-card d-flex align-items-center gap-2 px-3 py-2 rounded-3"
-                     style="background:#f0f4ff;border:1px solid #d0dbff;max-width:260px;font-size:13px;">
-                    <i class="fa-solid ${icon}" style="color:${statusColor};font-size:16px;"></i>
-                    <div>
-                        <div style="font-weight:600;color:#333;">${label}</div>
-                        <div style="color:${statusColor};font-size:12px;">${statusText}</div>
+            <div class="chats ${isCaller ? 'chats-right' : ''}">
+                <div class="chat-avatar">
+                    <i class="fa-solid ${avatarIcon}" style="font-size:32px;color:${avatarColor};"></i>
+                </div>
+                <div class="chat-content">
+                    <div class="chat-profile-name ${isCaller ? 'text-end justify-content-end' : ''}">
+                        <h6><span>${timeString}</span></h6>
                     </div>
-                    <div class="ms-auto text-muted" style="font-size:11px;white-space:nowrap;">${timeString}</div>
+                    <div class="message-content">
+                        <div class="d-flex align-items-center gap-2 px-3 py-2 rounded-3"
+                             style="background:#f0f4ff;border:1px solid #d0dbff;max-width:200px;font-size:13px;">
+                            <i class="fa-solid ${icon}" style="color:${statusColor};font-size:15px;"></i>
+                            <div>
+                                <div style="font-weight:600;color:#333;line-height:1.2;">${label}</div>
+                                <div style="color:${statusColor};font-size:11px;">${statusText}</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
