@@ -30,8 +30,10 @@
                                 <h4 class="doc-name">{{ $doctor['name'] }} <img
                                         src="{{ URL::asset('build/img/icons/badge-check.svg') }}" alt="Img">
                                     @foreach ($doctor['specializations'] as $specialization)
-                                        <span class="badge doctor-role-badge"><i
-                                                class="fa-solid fa-circle"></i>{{ $specialization }}</span>
+                                        <span class="badge doctor-role-badge">
+                                            <i class="fa-solid fa-circle"></i>
+                                            {{ ucwords(str_replace('_', ' ', $specialization)) }}
+                                        </span>
                                     @endforeach
                                 </h4>
                                 <p>{{ $doctor['qualification'] }}</p>
@@ -132,6 +134,9 @@
                         <a href="#speciality">Speciality</a>
                     </li>
                     <li>
+                        <a href="#languages">Languages</a>
+                    </li>
+                    <li>
                         <a href="#availability">Availability</a>
                     </li>
                     <li>
@@ -156,12 +161,30 @@
                         <div class="detail-title">
                             <h4>Speciality</h4>
                         </div>
+
                         <ul class="special-links">
                             @foreach ($doctor['specializations'] as $specialization)
-                                <li><a href="#">{{ $specialization }}</a></li>
+                                <li>
+                                    <a href="#">
+                                        {{ ucwords(str_replace('_', ' ', $specialization)) }}
+                                    </a>
+                                </li>
                             @endforeach
                         </ul>
                     </div>
+
+                    @if (!empty($doctor['languages']))
+                        <div class="doc-information-details" id="languages">
+                            <div class="detail-title">
+                                <h4>Languages Spoken</h4>
+                            </div>
+                            <ul class="special-links">
+                                @foreach ($doctor['languages'] as $language)
+                                    <li><a href="#">{{ $language }}</a></li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
                     @php
                         use Carbon\Carbon;

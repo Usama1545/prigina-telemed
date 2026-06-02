@@ -54,43 +54,6 @@
             text-decoration: underline;
         }
 
-        #dbgLog {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 9999;
-            max-height: 220px;
-            overflow-y: auto;
-            background: rgba(0, 0, 0, .92);
-            font-family: monospace;
-            font-size: 11px;
-            color: #94a3b8;
-            padding: 8px;
-        }
-
-        #dbgLog .e {
-            color: #f87171;
-        }
-
-        #dbgLog .s {
-            color: #86efac;
-        }
-
-        #dbgToggle {
-            position: fixed;
-            bottom: 8px;
-            right: 8px;
-            z-index: 10000;
-            background: rgba(255, 255, 255, .12);
-            border: none;
-            color: #94a3b8;
-            font-size: 11px;
-            padding: 3px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
     </style>
 </head>
 
@@ -102,10 +65,6 @@
     </div>
 
     <div id="zego-container"></div>
-
-    <button id="dbgToggle">🐛</button>
-
-    <div id="dbgLog"></div>
 
     <!-- ZIM SIGNALLING -->
     <script src="https://unpkg.com/zego-zim-web/index.js"></script>
@@ -157,36 +116,9 @@
             }).catch(() => {});
         }
 
-        // ─────────────────────────────────────────────────────────────
-        // Debug Logger
-        // ─────────────────────────────────────────────────────────────
-
-        const dbg = document.getElementById('dbgLog');
-
         function log(msg, cls = '') {
-
-            const ts = new Date().toTimeString().slice(0, 8);
-
-            const line = document.createElement('div');
-
-            if (cls) line.className = cls;
-
-            line.textContent = `[${ts}] ${msg}`;
-
-            dbg.appendChild(line);
-
-            dbg.scrollTop = dbg.scrollHeight;
-
             console[cls === 'e' ? 'error' : 'log']('[ZEGO]', msg);
         }
-
-        document.getElementById('dbgToggle').onclick = () => {
-
-            dbg.style.display =
-                dbg.style.display === 'block' ?
-                'none' :
-                'block';
-        };
 
         // ─────────────────────────────────────────────────────────────
         // Error UI

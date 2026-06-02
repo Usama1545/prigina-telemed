@@ -103,6 +103,7 @@ class DoctorProfileController extends Controller
             'qualification' => 'required',
             'experience' => 'required|string',
             'specializations' => 'required|array|min:1',
+            'languages' => 'required|array|min:1',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'consultationFee' => 'required|numeric',
             'workingDays' => 'required|array',
@@ -152,6 +153,7 @@ class DoctorProfileController extends Controller
 
         $this->firestore->update('doctors', $uid, [
             ...$data,
+            'languages' => $validated['languages'],
             'breaks' => $breaks,
             'consultationFee' => intval($validated['consultationFee']),
         ]);

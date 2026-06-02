@@ -1,6 +1,5 @@
 <?php
 
-use App\Services\FirebaseAuthService;
 use App\Services\FirestoreService;
 use App\Services\Zego\ZegoErrorCodes;
 use App\Services\Zego\ZegoServerAssistant;
@@ -41,14 +40,14 @@ if (! function_exists('current_user')) {
             $sessionUser = session('auth_user', []);
             $doc = [
                 'email' => $sessionUser['email'] ?? '',
-                'name'  => $sessionUser['name']  ?? '',
+                'name' => $sessionUser['name'] ?? '',
             ];
         }
 
         // Always expose both keys so callers can use either current_user()['uid']
         // or current_user()['id'] interchangeably.
-        $doc['uid']  = $uid;
-        $doc['id']   = $uid;
+        $doc['uid'] = $uid;
+        $doc['id'] = $uid;
         $doc['role'] = $role;
 
         return $user = $doc;
@@ -119,72 +118,21 @@ if (! function_exists('user')) {
 
     function user()
     {
-        $token = session('firebase_token');
-
-        if (! $token) {
+        if (! check()) {
             return null;
         }
 
-        $authService = app(FirebaseAuthService::class);
-
-        try {
-
-            $verified = $authService->verifyToken($token);
-
-        } catch (Exception $e) {
-
-            $refreshToken = session('firebase_refresh_token');
-
-            if (! $refreshToken) {
-                session()->forget([
-                    'firebase_token',
-                    'firebase_refresh_token',
-                ]);
-
-                return null;
-            }
-
-            $newToken = $authService->refreshIdToken($refreshToken);
-
-            if (! $newToken) {
-
-                session()->forget([
-                    'firebase_token',
-                    'firebase_refresh_token',
-                ]);
-
-                return null;
-            }
-
-            session([
-                'firebase_token' => $newToken,
-            ]);
-
-            try {
-
-                $verified = $authService->verifyToken($newToken);
-
-            } catch (Exception $e) {
-
-                session()->forget([
-                    'firebase_token',
-                    'firebase_refresh_token',
-                ]);
-
-                return null;
-            }
-        }
-
         return [
-            'uid' => $verified->claims()->get('sub'),
-            'role' => $verified->claims()->get('role'),
-            'email' => $verified->claims()->get('email'),
+            'uid' => session('auth_uid'),
+            'role' => session('auth_role'),
         ];
     }
 }
 if (! function_exists('check')) {
+
     function check()
     {
-        return user() !== null;
+        return session()->has('auth_uid')
+            && session()->has('auth_role');
     }
 }
