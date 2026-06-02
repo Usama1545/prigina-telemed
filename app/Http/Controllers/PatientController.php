@@ -308,16 +308,14 @@ class PatientController extends Controller
 
         $messages = array_map(function ($msg) {
 
-            $msg['type'] = 'message';
-
-            $msg['sortTime'] =
-                $msg['timestamp'] ?? now()->toIso8601String();
+            $msg['type']     = 'message';
+            $msg['sortTime'] = $msg['timestamp'] ?? now()->toIso8601String();
 
             return $msg;
 
-        }, $rawMessages);
+        }, array_reverse($rawMessages)); // DESC → ASC for timeline ordering
 
-        // Calls
+        // Calls — no orderBy so no composite index is required; PHP sorts below.
         $callsResult = $this->firestore->queryOffset(
             'calls',
             [
@@ -327,20 +325,22 @@ class PatientController extends Controller
                     'value' => $id,
                 ],
             ],
-            20,
+            50,
             0,
-            'startTime',
-            'DESC'
+            null,   // no server-side ordering → avoids missing composite index
+            'ASC'
         );
 
         $calls = array_map(function ($call) {
 
             $call['type'] = 'call';
 
-            $call['sortTime'] =
-                $call['startTime']
+            $ts = $call['startTime']
                 ?? $call['createdAt']
                 ?? now()->toIso8601String();
+
+            $call['timestamp'] = $ts;   // frontend uses this for display
+            $call['sortTime']  = $ts;   // PHP usort uses this
 
             return $call;
 

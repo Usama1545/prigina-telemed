@@ -53,16 +53,29 @@ class FirebaseAuthMiddleware
 
         $uid = $verified->claims()->get('sub');
         $role = $verified->claims()->get('role');
-        if (! $role) {
-            $firestore = app(FirestoreService::class);
 
-            $patient = $firestore->find('patients', $uid);
-            $role = 'patient';
-            if (! $patient) {
-                $doctor = $firestore->find('doctors', $uid);
-                $role = 'doctor';
-                if (! $doctor) {
-                    return redirect('/login');
+        if (! $role) {
+            // Use already-verified session role (set by a previous middleware pass)
+            // to avoid a Firestore round-trip on every authenticated request.
+            $sessionUid  = session('auth_uid');
+            $sessionRole = session('auth_role');
+
+            if ($sessionUid === $uid && in_array($sessionRole, ['patient', 'doctor'], true)) {
+                $role = $sessionRole;
+            } else {
+                // Fall back to Firestore lookup
+                $firestore = app(FirestoreService::class);
+
+                $patient = $firestore->find('patients', $uid);
+                if ($patient) {
+                    $role = 'patient';
+                } else {
+                    $doctor = $firestore->find('doctors', $uid);
+                    if ($doctor) {
+                        $role = 'doctor';
+                    } else {
+                        return redirect('/login');
+                    }
                 }
             }
         }

@@ -34,12 +34,21 @@ if (! function_exists('current_user')) {
 
         $doc = $firestore->find($collection, $uid);
 
+        // If Firestore timed-out or the document is missing, fall back to the
+        // basic user data that was saved in the session at login time so the
+        // user is not kicked back to the login screen unnecessarily.
         if (! $doc) {
-            return null;
+            $sessionUser = session('auth_user', []);
+            $doc = [
+                'email' => $sessionUser['email'] ?? '',
+                'name'  => $sessionUser['name']  ?? '',
+            ];
         }
 
-        // attach meta
-        $doc['id'] = $uid;
+        // Always expose both keys so callers can use either current_user()['uid']
+        // or current_user()['id'] interchangeably.
+        $doc['uid']  = $uid;
+        $doc['id']   = $uid;
         $doc['role'] = $role;
 
         return $user = $doc;
