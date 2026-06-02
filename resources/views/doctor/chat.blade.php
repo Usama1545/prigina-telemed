@@ -897,6 +897,47 @@ $(document).ready(function() {
         });
     }
 
+    function renderCallCard(call) {
+        const currentUid = "{{ current_user()['uid'] }}";
+        const isCaller = call.callerId === currentUid;
+        const isVideo = call.callType === 'video';
+        const icon = isVideo ? 'fa-video' : 'fa-phone';
+        const label = isVideo ? 'Video call' : 'Audio call';
+
+        let statusText = '';
+        let statusColor = '#6c757d';
+        if (call.status === 'completed') {
+            const mins = call.duration ? Math.floor(call.duration / 60) : 0;
+            const secs = call.duration ? call.duration % 60 : 0;
+            statusText = call.duration
+                ? `${mins}:${String(secs).padStart(2, '0')}`
+                : 'Ended';
+            statusColor = '#28a745';
+        } else if (call.status === 'missed') {
+            statusText = isCaller ? 'No answer' : 'Missed';
+            statusColor = '#dc3545';
+        } else if (call.status === 'rejected') {
+            statusText = isCaller ? 'Declined' : 'Declined';
+            statusColor = '#dc3545';
+        }
+
+        const timeString = new Date(call.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        return `
+            <div class="d-flex justify-content-center my-2">
+                <div class="call-history-card d-flex align-items-center gap-2 px-3 py-2 rounded-3"
+                     style="background:#f0f4ff;border:1px solid #d0dbff;max-width:260px;font-size:13px;">
+                    <i class="fa-solid ${icon}" style="color:${statusColor};font-size:16px;"></i>
+                    <div>
+                        <div style="font-weight:600;color:#333;">${label}</div>
+                        <div style="color:${statusColor};font-size:12px;">${statusText}</div>
+                    </div>
+                    <div class="ms-auto text-muted" style="font-size:11px;white-space:nowrap;">${timeString}</div>
+                </div>
+            </div>
+        `;
+    }
+
     function renderMessages(messages) {
 
         if (!messages || messages.length === 0) {
@@ -913,6 +954,11 @@ $(document).ready(function() {
         let html = '';
 
         messages.forEach(function(message) {
+
+            if (message.type === 'call') {
+                html += renderCallCard(message);
+                return;
+            }
 
             const isOwnMessage =
                 message.senderId === "{{ current_user()['uid'] }}";
@@ -935,7 +981,7 @@ $(document).ready(function() {
 
             html += `
                 <div class="chats ${isOwnMessage ? 'chats-right' : ''}">
-                    
+
                     <div class="chat-avatar">
                         <i class="fa-solid ${isOwnMessage ? 'fa-user-doctor' :  'fa-user' }"
                             style="font-size: 32px; color: ${isOwnMessage ? '#28a745' : '#0d6efd'};">
@@ -945,10 +991,10 @@ $(document).ready(function() {
                     <div class="chat-content">
 
                         <div class="chat-profile-name ${isOwnMessage ? 'text-end justify-content-end' : ''}">
-                            
+
                             <h6>
 
-                               
+
 
                                 <span>
                                     ${timeString}

@@ -286,19 +286,75 @@ class PatientController extends Controller
         $page = max((int) $request->query('page', 1), 1);
         $offset = ($page - 1) * $limit;
 
-        $messages = $this->firestore->queryOffset('messages', [
+        $rawMessages = $this->firestore->queryOffset('messages', [
             ['field' => 'conversationId', 'op' => '=', 'value' => $id],
         ], $limit + 1, $offset, 'timestamp', 'DESC');
 
-        $hasMore = count($messages) > $limit;
-        $messages = array_slice($messages, 0, $limit);
-        $messages = array_reverse($messages);
+        $hasMore = count($rawMessages) > $limit;
+        $rawMessages = array_slice($rawMessages, 0, $limit);
+        $rawMessages = array_reverse($rawMessages);
+
+        $messages = array_map(function ($msg) {
+            $msg['type'] = 'message';
+            return $msg;
+        }, $rawMessages);
+
+        $callsResult = $this->firestore->query('calls', [
+            ['field' => 'conversationId', 'op' => '=', 'value' => $id],
+        ], null, null, 'startTime', 'ASC');
+
+        $calls = array_map(function ($call) {
+            $call['type'] = 'call';
+            $call['timestamp'] = $call['startTime'] ?? $call['createdAt'] ?? now()->toIso8601String();
+            return $call;
+        }, $callsResult['documents'] ?? []);
+
+        $timeline = array_merge($messages, $calls);
+        usort($timeline, fn ($a, $b) => strtotime($a['timestamp']) - strtotime($b['timestamp']));
 
         return response()->json([
-            'messages' => $messages,
+            'messages' => $timeline,
             'nextPage' => $hasMore ? $page + 1 : null,
             'hasMore' => $hasMore,
         ]);
+    }
+
+    public function saveCall(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'callerId'   => 'required|string',
+            'receiverId' => 'required|string',
+            'callType'   => 'required|in:audio,video',
+            'status'     => 'required|in:completed,missed,rejected',
+            'duration'   => 'nullable|integer',
+            'startTime'  => 'nullable|string',
+            'endTime'    => 'nullable|string',
+        ]);
+
+        $conversation = $this->firestore->find('conversations', $id);
+        if (! $conversation) {
+            return response()->json(['error' => 'Conversation not found'], 404);
+        }
+
+        $this->firestore->create('calls', array_merge($validated, [
+            'conversationId' => $id,
+            'createdAt'      => now(),
+        ]));
+
+        $lastMessage = $validated['callType'] === 'video' ? 'Video call' : 'Audio call';
+
+        $uid = current_user()['uid'];
+        $isDoctor = $uid === ($conversation['doctorId'] ?? '');
+
+        $this->firestore->update('conversations', $id, [
+            'lastMessage'       => $lastMessage,
+            'lastMessageSender' => $uid,
+            'lastMessageTime'   => now(),
+            $isDoctor ? 'patientUnreadCount' : 'doctorUnreadCount' => ((int) ($conversation[$isDoctor ? 'patientUnreadCount' : 'doctorUnreadCount'] ?? 0)) + 1,
+            'updatedAt'         => now(),
+        ]);
+
+        return response()->json(['success' => true]);
     }
 
     public function sendMessage(Request $request, $id)

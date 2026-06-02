@@ -130,6 +130,33 @@
 
         const backUrl = @json($backUrl ?? url('/dashboard'));
 
+        const conversationId = @json($id);
+        const callerId = @json($user['uid']);
+        const csrfToken = @json(csrf_token());
+
+        let callStartTime = null;
+        let callStatus = 'missed';
+
+        function saveCallRecord(status, endTime) {
+            const duration = (callStartTime && endTime)
+                ? Math.round((endTime - callStartTime) / 1000)
+                : 0;
+            fetch(`/conversation/${conversationId}/save-call`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+                body: JSON.stringify({
+                    callerId: callerId,
+                    receiverId: receiverID,
+                    callType: 'audio',
+                    status: status,
+                    duration: duration,
+                    startTime: callStartTime ? new Date(callStartTime).toISOString() : null,
+                    endTime: endTime ? new Date(endTime).toISOString() : null,
+                }),
+                keepalive: true,
+            }).catch(() => {});
+        }
+
         // ─────────────────────────────────────────────────────────────
         // Debug Logger
         // ─────────────────────────────────────────────────────────────
@@ -230,59 +257,47 @@
                 enableNotifyWhenAppRunningInBackgroundOrQuit: true,
 
                 onIncomingCallReceived(callID, caller, callType, callees) {
-
-                    console.log(
-                        `Incoming call from ${caller.userName}`,
-                        's'
-                    );
+                    callStartTime = Date.now();
+                    callStatus = 'completed';
                 },
 
                 onIncomingCallCanceled() {
+                    saveCallRecord('missed', Date.now());
                     window.location.href = backUrl;
-                    console.log('Incoming call canceled');
                 },
 
                 onIncomingCallRejected() {
+                    saveCallRecord('rejected', Date.now());
                     window.location.href = backUrl;
-                    console.log('Incoming call rejected');
                 },
 
                 onIncomingCallTimeout() {
-                    window.location.href = backUrl;
-                    console.log('Incoming call timeout');
-                },
-
-                onIncomingCallTimeout(...args) {
-                    console.log('onIncomingCallTimeout', args);
+                    saveCallRecord('missed', Date.now());
                     window.location.href = backUrl;
                 },
 
-                onOutgoingCallAccepted(...args) {
-                    console.log('onOutgoingCallAccepted', args);
+                onOutgoingCallAccepted() {
+                    callStartTime = Date.now();
+                    callStatus = 'completed';
                 },
 
-                onOutgoingCallRejected(...args) {
-                    console.log('onOutgoingCallRejected', args);
+                onOutgoingCallRejected() {
+                    saveCallRecord('rejected', Date.now());
                     window.location.href = backUrl;
                 },
 
-                onOutgoingCallDeclined(...args) {
-                    console.log('onOutgoingCallDeclined', args);
+                onOutgoingCallDeclined() {
+                    saveCallRecord('rejected', Date.now());
                     window.location.href = backUrl;
                 },
 
-                onOutgoingCallTimeout(...args) {
-                    console.log('onOutgoingCallTimeout', args);
+                onOutgoingCallTimeout() {
+                    saveCallRecord('missed', Date.now());
                     window.location.href = backUrl;
                 },
 
-                onCallEnd(...args) {
-                    console.log('onCallEnd', args);
-                    window.location.href = backUrl;
-                },
                 onCallEnd() {
-
-                    console.log('Call ended, redirecting…');
+                    saveCallRecord(callStatus, Date.now());
                     window.location.href = backUrl;
                 },
             });

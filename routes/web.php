@@ -25,6 +25,7 @@ Route::middleware(['firebase.auth'])->group(function () {
     Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('conversation/{id}/messages', [PatientController::class, 'messages'])->name('conversation.messages');
+    Route::post('conversation/{id}/save-call', [PatientController::class, 'saveCall'])->name('conversation.save-call');
 
     Route::prefix('patient')->controller(PatientController::class)->group(function () {
         Route::get('/appointment/{id}/cancel', 'cancelAppointment')->name('patient.cancel-appointment');
