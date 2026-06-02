@@ -286,36 +286,80 @@ class PatientController extends Controller
         $page = max((int) $request->query('page', 1), 1);
         $offset = ($page - 1) * $limit;
 
-        $rawMessages = $this->firestore->queryOffset('messages', [
-            ['field' => 'conversationId', 'op' => '=', 'value' => $id],
-        ], $limit + 1, $offset, 'timestamp', 'DESC');
+        // Messages
+        $rawMessages = $this->firestore->queryOffset(
+            'messages',
+            [
+                [
+                    'field' => 'conversationId',
+                    'op' => '=',
+                    'value' => $id,
+                ],
+            ],
+            $limit + 1,
+            $offset,
+            'timestamp',
+            'DESC'
+        );
 
         $hasMore = count($rawMessages) > $limit;
+
         $rawMessages = array_slice($rawMessages, 0, $limit);
-        $rawMessages = array_reverse($rawMessages);
 
         $messages = array_map(function ($msg) {
+
             $msg['type'] = 'message';
 
+            $msg['sortTime'] =
+                $msg['timestamp'] ?? now()->toIso8601String();
+
             return $msg;
+
         }, $rawMessages);
 
-        $callsResult = $this->firestore->query('calls', [
-            ['field' => 'conversationId', 'op' => '=', 'value' => $id],
-        ], null, null, 'createdAt', 'ASC');
+        // Calls
+        $callsResult = $this->firestore->queryOffset(
+            'calls',
+            [
+                [
+                    'field' => 'conversationId',
+                    'op' => '=',
+                    'value' => $id,
+                ],
+            ],
+            20,
+            0,
+            'startTime',
+            'DESC'
+        );
 
         $calls = array_map(function ($call) {
+
             $call['type'] = 'call';
-            $call['timestamp'] = $call['createdAt'] ?? now()->toIso8601String();
+
+            $call['sortTime'] =
+                $call['startTime']
+                ?? $call['createdAt']
+                ?? now()->toIso8601String();
 
             return $call;
-        }, $callsResult['documents'] ?? []);
 
+        }, $callsResult);
+
+        // Merge
         $timeline = array_merge($messages, $calls);
-        usort($timeline, fn ($a, $b) => strtotime($a['timestamp']) - strtotime($b['timestamp']));
+
+        usort($timeline, function ($a, $b) {
+
+            return strcmp(
+                $a['sortTime'],
+                $b['sortTime']
+            );
+
+        });
 
         return response()->json([
-            'messages' => $timeline,
+            'messages' => array_values($timeline),
             'nextPage' => $hasMore ? $page + 1 : null,
             'hasMore' => $hasMore,
         ]);
