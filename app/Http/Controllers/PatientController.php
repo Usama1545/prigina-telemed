@@ -296,16 +296,18 @@ class PatientController extends Controller
 
         $messages = array_map(function ($msg) {
             $msg['type'] = 'message';
+
             return $msg;
         }, $rawMessages);
 
         $callsResult = $this->firestore->query('calls', [
             ['field' => 'conversationId', 'op' => '=', 'value' => $id],
-        ], null, null, 'startTime', 'ASC');
+        ], null, null, 'createdAt', 'ASC');
 
         $calls = array_map(function ($call) {
             $call['type'] = 'call';
-            $call['timestamp'] = $call['startTime'] ?? $call['createdAt'] ?? now()->toIso8601String();
+            $call['timestamp'] = $call['createdAt'] ?? now()->toIso8601String();
+
             return $call;
         }, $callsResult['documents'] ?? []);
 
@@ -322,13 +324,13 @@ class PatientController extends Controller
     public function saveCall(Request $request, $id)
     {
         $validated = $request->validate([
-            'callerId'   => 'required|string',
+            'callerId' => 'required|string',
             'receiverId' => 'required|string',
-            'callType'   => 'required|in:audio,video',
-            'status'     => 'required|in:completed,missed,rejected',
-            'duration'   => 'nullable|integer',
-            'startTime'  => 'nullable|string',
-            'endTime'    => 'nullable|string',
+            'callType' => 'required|in:audio,video',
+            'status' => 'required|in:completed,missed,rejected',
+            'duration' => 'nullable|integer',
+            'startTime' => 'nullable|string',
+            'endTime' => 'nullable|string',
         ]);
 
         $conversation = $this->firestore->find('conversations', $id);
@@ -338,7 +340,7 @@ class PatientController extends Controller
 
         $this->firestore->create('calls', array_merge($validated, [
             'conversationId' => $id,
-            'createdAt'      => now(),
+            'createdAt' => now(),
         ]));
 
         $lastMessage = $validated['callType'] === 'video' ? 'Video call' : 'Audio call';
@@ -347,11 +349,11 @@ class PatientController extends Controller
         $isDoctor = $uid === ($conversation['doctorId'] ?? '');
 
         $this->firestore->update('conversations', $id, [
-            'lastMessage'       => $lastMessage,
+            'lastMessage' => $lastMessage,
             'lastMessageSender' => $uid,
-            'lastMessageTime'   => now(),
+            'lastMessageTime' => now(),
             $isDoctor ? 'patientUnreadCount' : 'doctorUnreadCount' => ((int) ($conversation[$isDoctor ? 'patientUnreadCount' : 'doctorUnreadCount'] ?? 0)) + 1,
-            'updatedAt'         => now(),
+            'updatedAt' => now(),
         ]);
 
         return response()->json(['success' => true]);
