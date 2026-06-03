@@ -644,7 +644,7 @@ class DoctorProfileController extends Controller
 
         try {
 
-            if (! isset($user['stripeAccountId']) || ! $user['stripeAccountId']) {
+            if (! isset($user['stripeAccountId']) || ! $user['stripeAccountId'] || $user['stripeAccountId'] == '' || $user['stripeAccountId'] == null) {
 
                 $account = Account::create([
                     'type' => 'express',
