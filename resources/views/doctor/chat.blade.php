@@ -930,7 +930,7 @@
                     const secs = call.duration ? call.duration % 60 : 0;
                     statusText = call.duration ? `Duration: ${mins}:${String(secs).padStart(2, '0')}` : 'Ended';
                     statusColor = '#28a745';
-                } else if (call.status === 'missed') {
+                } else if (call.status === 'missed' || call.status === 'initiated') {
                     statusText = isCaller ? 'No answer' : 'Missed';
                     statusColor = '#dc3545';
                 } else if (call.status === 'rejected') {
@@ -1041,33 +1041,33 @@
                         <div class="message-content">
 
                             ${message.imageUrl ? `
-                                    <div class="chat-image mb-2">
-                                        <a href="${message.imageUrl}" download target="_blank">
-                                            <img src="${message.imageUrl}"
-                                                style="max-width:220px;border-radius:10px;cursor:pointer;">
-                                        </a>
-                                    </div>
-                                ` : ''}
+                                        <div class="chat-image mb-2">
+                                            <a href="${message.imageUrl}" download target="_blank">
+                                                <img src="${message.imageUrl}"
+                                                    style="max-width:220px;border-radius:10px;cursor:pointer;">
+                                            </a>
+                                        </div>
+                                    ` : ''}
 
                             ${message.documentUrl ? `
-                                    <div class="chat-document mb-2">
-                                        <a href="${message.documentUrl}"
-                                            download
-                                            target="_blank"
-                                            class="btn btn-sm btn-primary text-white">
+                                        <div class="chat-document mb-2">
+                                            <a href="${message.documentUrl}"
+                                                download
+                                                target="_blank"
+                                                class="btn btn-sm btn-primary text-white">
 
-                                            <i class="fa-solid fa-file-lines"></i>
-                                            Download Document
+                                                <i class="fa-solid fa-file-lines"></i>
+                                                Download Document
 
-                                        </a>
-                                    </div>
-                                ` : ''}
+                                            </a>
+                                        </div>
+                                    ` : ''}
 
                             ${message.text ? `
-                                    <p class="mb-0">
-                                        ${escapeHtml(message.text)}
-                                    </p>
-                                ` : ''}
+                                        <p class="mb-0">
+                                            ${escapeHtml(message.text)}
+                                        </p>
+                                    ` : ''}
 
                         </div>
 
