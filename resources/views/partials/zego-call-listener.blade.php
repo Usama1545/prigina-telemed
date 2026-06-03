@@ -182,6 +182,7 @@
                     enableNotifyWhenAppRunningInBackgroundOrQuit: true,
 
                     onIncomingCallReceived(callID, caller, callType) {
+                        console.log('[ZEGO] Incoming call from', caller.userName, 'callID:', callID);
                         currentCallID = callID;
                         startRingtone();
                         hideCallBars();
@@ -196,6 +197,7 @@
                     },
 
                     onIncomingCallCanceled(callID) {
+                        console.log('[ZEGO] Incoming call canceled, callID:', callID);
                         if (currentCallID === callID) {
                             stopRingtone();
                             showCallBars();
@@ -205,6 +207,7 @@
                     },
 
                     onIncomingCallTimeout(callID) {
+                        console.log('[ZEGO] Incoming call timed out, callID:', callID);
                         if (currentCallID === callID) {
                             stopRingtone();
                             showCallBars();
@@ -214,6 +217,7 @@
                     },
 
                     onIncomingCallRejected(callID) {
+                        console.log('[ZEGO] Incoming call rejected, callID:', callID);
                         if (currentCallID === callID) {
                             stopRingtone();
                             showCallBars();
@@ -225,6 +229,7 @@
                     // Fires on the caller side when callee accepts; kept here
                     // as a fallback in case the SDK fires it on the callee too.
                     onIncomingCallAccepted(callID) {
+                        console.log('[ZEGO] Incoming call accepted, callID:', callID);
                         preCallUrl = window.location.href;
                         stopRingtone();
                         stopCallAcceptWatcher();
@@ -233,6 +238,7 @@
                     },
 
                     onCallEnd(callID) {
+                        console.log('[ZEGO] Call ended, callID:', callID);
                         toggleCallMode(false);
                         stopRingtone();
                         showCallBars();
