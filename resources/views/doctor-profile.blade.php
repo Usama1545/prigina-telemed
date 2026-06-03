@@ -148,11 +148,29 @@
                         <div class="detail-title">
                             <h4>Doctor Bio</h4>
                         </div>
-                        <p>“Highly motivated and experienced doctor with a passion for
-                            providing excellent care to patients. Experienced in a wide variety of
-                            medical settings, with particular expertise in diagnostics, primary care and emergency
-                            medicine. Skilled in using the latest technology to streamline patient care. Committed to
-                            delivering compassionate, personalized care to each and every patient.”
+                        <?php
+                        $name = $doctor['name'] ?? 'Dr. John Doe';
+                        $qualification = $doctor['qualification'] ?? '';
+                        
+                        $experience = $doctor['experience'] ?? '';
+                        
+                        $specializations = $doctor['specializations'] ?? [];
+                        $bio = "Dr. $name holds a $qualification with $experience of experience ";
+                        if (!empty($specializations)) {
+                            $bio .=
+                                'and specializes in ' .
+                                implode(
+                                    ', ',
+                                    array_map(function ($spec) {
+                                        return ucwords(str_replace('_', ' ', $spec));
+                                    }, $specializations),
+                                ) .
+                                '.';
+                        }
+                        $bio .= 'Committed to providing the highest quality care to all patients.';
+                        
+                        ?>
+                        <p>{{ $bio }}
                         </p>
 
                     </div>
