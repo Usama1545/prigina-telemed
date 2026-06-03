@@ -467,11 +467,11 @@ class PatientController extends Controller
 
         $receiverName = $receiver['name'] ?? '';
 
-        $docId = Str::random(60);
+        $docId = 'call_'.Str::random(60);
 
         $this->firestore->createWithId('calls', $docId, [
             ...$validated,
-            'id' => 'call_'.$docId,
+            'id' => $docId,
             'callerId' => $callerId,
             'callerName' => $callerName,
             'receiverId' => $receiverId,
