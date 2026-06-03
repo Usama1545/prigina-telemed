@@ -11,7 +11,7 @@
                     <!-- sidebar group -->
                     <div class="sidebar-group left-sidebar chat_sidebar" id="chatSidebar">
                         <div id="chats" class="left-sidebar-wrap sidebar active slimscroll">
-                            
+
                             <!-- Left Chat Title -->
                             <div class="left-chat-title all-chats">
                                 <div class="left-chat-title all-chats d-flex align-items-center justify-content-between">
@@ -21,8 +21,7 @@
                                     </div>
 
                                     <div>
-                                        <a href="{{ route('doctor.dashboard') }}"
-                                        class="btn btn-sm btn-primary text-white">
+                                        <a href="{{ route('doctor.dashboard') }}" class="btn btn-sm btn-primary text-white">
 
                                             <i class="fa-solid fa-arrow-left me-1"></i>
                                             Dashboard
@@ -34,8 +33,10 @@
                                 <div class="add-section">
                                     <form>
                                         <div class="user-chat-search">
-                                            <span class="form-control-feedback"><i class="fa-solid fa-magnifying-glass"></i></span>
-                                            <input type="text" name="chat-search" placeholder="Search" class="form-control">
+                                            <span class="form-control-feedback"><i
+                                                    class="fa-solid fa-magnifying-glass"></i></span>
+                                            <input type="text" name="chat-search" placeholder="Search"
+                                                class="form-control">
                                         </div>
                                     </form>
                                 </div>
@@ -47,12 +48,17 @@
                                             <li class="user-list-item" data-conversation-id="{{ $conversation['id'] }}">
                                                 <a href="javascript:void(0);" class="conversation-item">
                                                     @php
-                                                        $nameParts = explode(' ', trim($conversation['patientName'] ?? ''));
-                                                        
-                                                        $initials = collect($nameParts)
-                                                            ->map(fn($part) => strtoupper(substr($part, 0, 1)))
-                                                            ->take(2)
-                                                            ->implode('') ?: 'P';
+                                                        $nameParts = explode(
+                                                            ' ',
+                                                            trim($conversation['patientName'] ?? ''),
+                                                        );
+
+                                                        $initials =
+                                                            collect($nameParts)
+                                                                ->map(fn($part) => strtoupper(substr($part, 0, 1)))
+                                                                ->take(2)
+                                                                ->implode('') ?:
+                                                            'P';
                                                     @endphp
 
                                                     <div class="avatar ">
@@ -63,25 +69,28 @@
                                                     <div class="users-list-body">
                                                         <div>
                                                             <h5>{{ $conversation['patientName'] ?: 'Patient' }}</h5>
-                                                            <p>{{ $conversation['lastMessage'] ?? "" }}</p>
+                                                            <p>{{ $conversation['lastMessage'] ?? '' }}</p>
                                                         </div>
-                                                        @if($conversation['lastMessageTime'] ?? null)
-                                                        <div class="last-chat-time">
-                                                            <small class="text-muted">{{ Carbon\Carbon::parse($conversation['lastMessageTime'])->diffForHumans() ?? $conversation['lastMessageTime'] }}</small>
-                                                            @if(($conversation['doctorUnreadCount'] ?? 0) > 0)
-                                                                <div class="chat-pin">
-                                                                    <span class="unread badge badge-primary">{{ $conversation['doctorUnreadCount'] ?? 0 }}</span>
-                                                                </div>
-                                                            @elseif(($conversation['patientUnreadCount'] ?? 0) == 0)
-                                                                <div class="chat-pin">
-                                                                    <i class="fa-solid fa-check-double text-primary"></i>
-                                                                </div>
-                                                            @else
-                                                                <div class="chat-pin">
-                                                                    <i class="fi fi-rr-check text-muted"></i>
-                                                                </div>
-                                                            @endif
-                                                        </div>
+                                                        @if ($conversation['lastMessageTime'] ?? null)
+                                                            <div class="last-chat-time">
+                                                                <small
+                                                                    class="text-muted">{{ Carbon\Carbon::parse($conversation['lastMessageTime'])->diffForHumans() ?? $conversation['lastMessageTime'] }}</small>
+                                                                @if (($conversation['doctorUnreadCount'] ?? 0) > 0)
+                                                                    <div class="chat-pin">
+                                                                        <span
+                                                                            class="unread badge badge-primary">{{ $conversation['doctorUnreadCount'] ?? 0 }}</span>
+                                                                    </div>
+                                                                @elseif(($conversation['patientUnreadCount'] ?? 0) == 0)
+                                                                    <div class="chat-pin">
+                                                                        <i
+                                                                            class="fa-solid fa-check-double text-primary"></i>
+                                                                    </div>
+                                                                @else
+                                                                    <div class="chat-pin">
+                                                                        <i class="fi fi-rr-check text-muted"></i>
+                                                                    </div>
+                                                                @endif
+                                                            </div>
                                                         @endif
                                                     </div>
                                                 </a>
@@ -118,12 +127,14 @@
                                 <div class="chat-options">
                                     <ul class="list-inline">
                                         <li class="list-inline-item">
-                                            <a href="javascript:void(0);" class="btn btn-outline-light" id="audioCallBtn" title="Audio Call" style="display: none;">
+                                            <a href="javascript:void(0);" class="btn btn-outline-light" id="audioCallBtn"
+                                                title="Audio Call" style="display: none;">
                                                 <i class="fa-solid fa-phone"></i>
                                             </a>
                                         </li>
                                         <li class="list-inline-item">
-                                            <a href="javascript:void(0);" class="btn btn-outline-light" id="videoCallBtn" title="Video Call" style="display: none;">
+                                            <a href="javascript:void(0);" class="btn btn-outline-light" id="videoCallBtn"
+                                                title="Video Call" style="display: none;">
                                                 <i class="fa-solid fa-video"></i>
                                             </a>
                                         </li>
@@ -132,15 +143,18 @@
                                                 <i class="fa-solid fa-ellipsis-vertical"></i>
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-end">
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#change-chat">Delete Chat</a>
+                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
+                                                    data-bs-target="#change-chat">Delete Chat</a>
                                             </div>
                                         </li>
                                     </ul>
                                 </div>
                                 <div class="chat-search">
                                     <form>
-                                        <span class="form-control-feedback"><i class="fa-solid fa-magnifying-glass"></i></span>
-                                        <input type="text" name="chat-search" placeholder="Search Chats" class="form-control">
+                                        <span class="form-control-feedback"><i
+                                                class="fa-solid fa-magnifying-glass"></i></span>
+                                        <input type="text" name="chat-search" placeholder="Search Chats"
+                                            class="form-control">
                                         <div class="close-btn-chat"><i class="fa fa-close"></i></div>
                                     </form>
                                 </div>
@@ -176,8 +190,9 @@
                                         </div>
                                     </div>
                                 </div>
-                               
-                                <input type="text" class="form-control chat_form" id="messageText" placeholder="Type your message here...">
+
+                                <input type="text" class="form-control chat_form" id="messageText"
+                                    placeholder="Type your message here...">
                                 <div class="form-buttons">
                                     <button class="btn send-btn" type="submit">
                                         <i class="isax isax-send-25"></i>
@@ -193,11 +208,12 @@
             </div>
         </div>
     </div>
-    
+
     <style>
         .doctor-sidebar {
             display: none;
         }
+
         .main-chat-blk {
             width: 100%;
             max-width: 100%;
@@ -205,22 +221,22 @@
             height: 100dvh;
         }
 
-    
+
         .chat-wrapper {
-             height: calc(100dvh - 150px);
+            height: calc(100dvh - 150px);
         }
 
-        
-        
+
+
         /* Desktop Styles */
         .chat-sec {
             display: flex;
             width: 100%;
-           
+
             background: #fff;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
         }
 
         .sidebar-group.left-sidebar {
@@ -230,7 +246,7 @@
             flex-shrink: 0;
         }
 
-       .chat {
+        .chat {
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -243,11 +259,12 @@
             height: calc(100vh - 150px);
             flex-direction: column;
         }
+
         /* Mobile Styles */
         @media (max-width: 991px) {
             .chat-wrapper {
                 height: calc(100dvh - 170px);
-                 flex: 1;
+                flex: 1;
                 overflow-y: auto;
                 overflow-x: hidden;
                 min-width: 0;
@@ -265,11 +282,12 @@
             .chat {
                 display: none !important;
             }
+
             .chat.show-on-mobile {
                 display: flex !important;
             }
 
-           
+
         }
 
         @media (max-width: 991.98px) {
@@ -315,617 +333,621 @@
     </style>
 @endsection
 @push('scripts')
-<script>
-$(document).ready(function() {
+    <script>
+        $(document).ready(function() {
 
-    let currentConversationId = null;
-    let previousMessageCount = 0;
-    let userScrolledUp = false;
-    let isSendingMessage = false;
-    let lastRenderedMessages = '';
-    let currentMessages = [];
-    let messagePage = 1;
-    let hasMoreMessages = false;
-    let isLoadingMessages = false;
-    let isLoadingOlderMessages = false;
-    const messagePageSize = 30;
+            let currentConversationId = null;
+            let previousMessageCount = 0;
+            let userScrolledUp = false;
+            let isSendingMessage = false;
+            let lastRenderedMessages = '';
+            let currentMessages = [];
+            let messagePage = 1;
+            let hasMoreMessages = false;
+            let isLoadingMessages = false;
+            let isLoadingOlderMessages = false;
+            const messagePageSize = 30;
 
-    const chatContainer = $('#chatMessagesContainer');
-    const sendBtn = $('.send-btn');
-    const sendBtnOriginalHtml = sendBtn.html();
+            const chatContainer = $('#chatMessagesContainer');
+            const sendBtn = $('.send-btn');
+            const sendBtnOriginalHtml = sendBtn.html();
 
-    // =========================
-    // FILE PICKERS
-    // =========================
+            // =========================
+            // FILE PICKERS
+            // =========================
 
-    $('#attachImageBtn').on('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
+            $('#attachImageBtn').on('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
 
-        $('#imageFileInput').trigger('click');
-    });
+                $('#imageFileInput').trigger('click');
+            });
 
-    $('#attachDocumentBtn').on('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
+            $('#attachDocumentBtn').on('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
 
-        $('#documentFileInput').trigger('click');
-    });
+                $('#documentFileInput').trigger('click');
+            });
 
-    $('#imageFileInput').on('change', function() {
+            $('#imageFileInput').on('change', function() {
 
-        const file = this.files[0];
+                const file = this.files[0];
 
-        if (!file) return;
+                if (!file) return;
 
-        sendFileMessage(file);
+                sendFileMessage(file);
 
-        $(this).val('');
-    });
+                $(this).val('');
+            });
 
-    $('#documentFileInput').on('change', function() {
+            $('#documentFileInput').on('change', function() {
 
-        const file = this.files[0];
+                const file = this.files[0];
 
-        if (!file) return;
+                if (!file) return;
 
-        sendFileMessage(file);
+                sendFileMessage(file);
 
-        $(this).val('');
-    });
+                $(this).val('');
+            });
 
-    // =========================
-    // MOBILE
-    // =========================
+            // =========================
+            // MOBILE
+            // =========================
 
-    function isMobile() {
-        return window.innerWidth <= 991;
-    }
+            function isMobile() {
+                return window.innerWidth <= 991;
+            }
 
-    function resetLayoutClasses() {
-        $('.sidebar-group.left-sidebar')
-            .removeClass('hide-on-mobile');
+            function resetLayoutClasses() {
+                $('.sidebar-group.left-sidebar')
+                    .removeClass('hide-on-mobile');
 
-        $('.chat')
-            .removeClass('show-on-mobile');
-    }
+                $('.chat')
+                    .removeClass('show-on-mobile');
+            }
 
-    function showChatOnMobile() {
+            function showChatOnMobile() {
 
-        if (isMobile()) {
+                if (isMobile()) {
 
-            $('.sidebar-group.left-sidebar')
-                .addClass('hide-on-mobile');
+                    $('.sidebar-group.left-sidebar')
+                        .addClass('hide-on-mobile');
 
-            $('.chat')
-                .addClass('show-on-mobile');
-        }
-    }
+                    $('.chat')
+                        .addClass('show-on-mobile');
+                }
+            }
 
-    function showSidebarOnMobile() {
+            function showSidebarOnMobile() {
 
-        if (isMobile()) {
+                if (isMobile()) {
 
-            $('.sidebar-group.left-sidebar')
-                .removeClass('hide-on-mobile');
+                    $('.sidebar-group.left-sidebar')
+                        .removeClass('hide-on-mobile');
 
-            $('.chat')
-                .removeClass('show-on-mobile');
-        }
-    }
+                    $('.chat')
+                        .removeClass('show-on-mobile');
+                }
+            }
 
-    // =========================
-    // CALL BUTTONS
-    // =========================
+            // =========================
+            // CALL BUTTONS
+            // =========================
 
-    $('#audioCallBtn').on('click', function (e) {
-        e.preventDefault();
-        if (currentConversationId) {
-            window.location.href = '/doctor/conversations/' + currentConversationId + '/audio-call';
-        }
-    });
+            $('#audioCallBtn').on('click', function(e) {
+                e.preventDefault();
+                if (currentConversationId) {
+                    window.location.href = '/doctor/conversations/' + currentConversationId + '/audio-call';
+                }
+            });
 
-    $('#videoCallBtn').on('click', function (e) {
-        e.preventDefault();
-        if (currentConversationId) {
-            window.location.href = '/doctor/conversations/' + currentConversationId + '/video-call';
-        }
-    });
+            $('#videoCallBtn').on('click', function(e) {
+                e.preventDefault();
+                if (currentConversationId) {
+                    window.location.href = '/doctor/conversations/' + currentConversationId + '/video-call';
+                }
+            });
 
-    $('#backToChatsBtn').click(function(e) {
+            $('#backToChatsBtn').click(function(e) {
 
-        e.preventDefault();
+                e.preventDefault();
 
-        showSidebarOnMobile();
+                showSidebarOnMobile();
 
-        currentConversationId = null;
-        window.currentConversationId = null;
-        currentMessages = [];
-        messagePage = 1;
-        hasMoreMessages = false;
-        previousMessageCount = 0;
-        lastRenderedMessages = '';
+                currentConversationId = null;
+                window.currentConversationId = null;
+                currentMessages = [];
+                messagePage = 1;
+                hasMoreMessages = false;
+                previousMessageCount = 0;
+                lastRenderedMessages = '';
 
-        $('#conversationId').val('');
+                $('#conversationId').val('');
 
-        $('#selectedDoctorName')
-            .text('Select a conversation');
+                $('#selectedDoctorName')
+                    .text('Select a conversation');
 
-        $('#audioCallBtn, #videoCallBtn').hide();
+                $('#audioCallBtn, #videoCallBtn').hide();
 
-        window.history.pushState(
-            {},
-            '',
-            '/doctor/conversations'
-        );
-    });
+                window.history.pushState({},
+                    '',
+                    '/doctor/conversations'
+                );
+            });
 
-    // =========================
-    // SCROLL
-    // =========================
+            // =========================
+            // SCROLL
+            // =========================
 
-    chatContainer.on('scroll', function() {
+            chatContainer.on('scroll', function() {
 
-        const scrollTop = chatContainer.scrollTop();
+                const scrollTop = chatContainer.scrollTop();
 
-        const scrollHeight =
-            chatContainer[0].scrollHeight;
+                const scrollHeight =
+                    chatContainer[0].scrollHeight;
 
-        const clientHeight =
-            chatContainer[0].clientHeight;
+                const clientHeight =
+                    chatContainer[0].clientHeight;
 
-        userScrolledUp =
-            (scrollTop + clientHeight)
-            < (scrollHeight - 50);
+                userScrolledUp =
+                    (scrollTop + clientHeight) <
+                    (scrollHeight - 50);
 
-        if (
-            scrollTop <= 80 &&
-            currentConversationId &&
-            hasMoreMessages &&
-            !isLoadingOlderMessages &&
-            !isLoadingMessages
-        ) {
-            loadMessages(currentConversationId, false, false, messagePage, true);
-        }
-    });
+                if (
+                    scrollTop <= 80 &&
+                    currentConversationId &&
+                    hasMoreMessages &&
+                    !isLoadingOlderMessages &&
+                    !isLoadingMessages
+                ) {
+                    loadMessages(currentConversationId, false, false, messagePage, true);
+                }
+            });
 
-    // =========================
-    // UI
-    // =========================
+            // =========================
+            // UI
+            // =========================
 
-    function setActiveConversation(conversationId) {
+            function setActiveConversation(conversationId) {
 
-        $('.user-list li')
-            .removeClass('active');
+                $('.user-list li')
+                    .removeClass('active');
 
-        $(`.user-list li[data-conversation-id="${conversationId}"]`)
-            .addClass('active');
-    }
+                $(`.user-list li[data-conversation-id="${conversationId}"]`)
+                    .addClass('active');
+            }
 
-    function setLoadingState() {
+            function setLoadingState() {
 
-        $('#messagesList').html(`
+                $('#messagesList').html(`
             <div class="chat-loading text-center p-5">
                 <div class="spinner-border text-primary"></div>
             </div>
         `);
-    }
+            }
 
-    function setSendingState(state) {
+            function setSendingState(state) {
 
-        isSendingMessage = state;
+                isSendingMessage = state;
 
-        if (state) {
+                if (state) {
 
-            sendBtn.prop('disabled', true);
+                    sendBtn.prop('disabled', true);
 
-            sendBtn.html(`
+                    sendBtn.html(`
                 <div class="spinner-border spinner-border-sm text-light"></div>
             `);
 
-        } else {
+                } else {
 
-            sendBtn.prop('disabled', false);
+                    sendBtn.prop('disabled', false);
 
-            sendBtn.html(sendBtnOriginalHtml);
-        }
-    }
-
-    // =========================
-    // MARK READ
-    // =========================
-
-    function markMessagesAsRead(conversationId) {
-
-        $.ajax({
-            url: '/doctor/conversation/' + conversationId + '/mark-read',
-            type: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}'
-            },
-            error: function(xhr) {
-                console.error(xhr);
+                    sendBtn.html(sendBtnOriginalHtml);
+                }
             }
-        });
-    }
 
-    // =========================
-    // OPEN CHAT
-    // =========================
+            // =========================
+            // MARK READ
+            // =========================
 
-    function openConversation(conversationId, doctorName = null) {
+            function markMessagesAsRead(conversationId) {
 
-        currentConversationId = conversationId;
-        window.currentConversationId = conversationId;
-        currentMessages = [];
-        messagePage = 1;
-        hasMoreMessages = false;
-        previousMessageCount = 0;
-        lastRenderedMessages = '';
+                $.ajax({
+                    url: '/doctor/conversation/' + conversationId + '/mark-read',
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    error: function(xhr) {
+                        console.error(xhr);
+                    }
+                });
+            }
 
-        $('#conversationId').val(conversationId);
+            // =========================
+            // OPEN CHAT
+            // =========================
 
-        if (doctorName) {
-            $('#selectedDoctorName').text(doctorName);
-        }
+            function openConversation(conversationId, doctorName = null) {
 
-        if (!isMobile()) {
+                currentConversationId = conversationId;
+                window.currentConversationId = conversationId;
+                currentMessages = [];
+                messagePage = 1;
+                hasMoreMessages = false;
+                previousMessageCount = 0;
+                lastRenderedMessages = '';
 
-            $('.sidebar-group.left-sidebar')
-                .removeClass('hide-on-mobile');
-        }
+                $('#conversationId').val(conversationId);
 
-        $('#audioCallBtn, #videoCallBtn').show();
+                if (doctorName) {
+                    $('#selectedDoctorName').text(doctorName);
+                }
 
-        setActiveConversation(conversationId);
+                if (!isMobile()) {
 
-        if (isMobile()) {
-            showChatOnMobile();
-        }
+                    $('.sidebar-group.left-sidebar')
+                        .removeClass('hide-on-mobile');
+                }
 
-        const newUrl =
-            '/doctor/conversations/' + conversationId;
+                $('#audioCallBtn, #videoCallBtn').show();
 
-        window.history.pushState(
-            { conversationId: conversationId },
-            '',
-            newUrl
-        );
-        setLoadingState();
-        loadMessages(conversationId, false, true);
+                setActiveConversation(conversationId);
 
-        markMessagesAsRead(conversationId);
+                if (isMobile()) {
+                    showChatOnMobile();
+                }
 
-       
+                const newUrl =
+                    '/doctor/conversations/' + conversationId;
 
-        
-    }
+                window.history.pushState({
+                        conversationId: conversationId
+                    },
+                    '',
+                    newUrl
+                );
+                setLoadingState();
+                loadMessages(conversationId, false, true);
 
-    // =========================
-    // INITIALIZE
-    // =========================
+                markMessagesAsRead(conversationId);
 
-    function initializeLayout() {
 
-        resetLayoutClasses();
 
-        let targetConversation = null;
 
-        const urlParts =
-            window.location.pathname.split('/');
+            }
 
-        const urlConvId =
-            urlParts[urlParts.length - 1];
+            // =========================
+            // INITIALIZE
+            // =========================
 
-        const hasUrlConversation = (
-            urlConvId &&
-            urlConvId !== 'conversations' &&
-            urlConvId !== 'doctor'
-        );
+            function initializeLayout() {
 
-        if (hasUrlConversation) {
+                resetLayoutClasses();
 
-            targetConversation =
-                $(`.user-list-item[data-conversation-id="${urlConvId}"]`);
-        }
+                let targetConversation = null;
 
-        if (
-            !targetConversation ||
-            !targetConversation.length
-        ) {
+                const urlParts =
+                    window.location.pathname.split('/');
 
-            targetConversation = isMobile()
-                ? $()
-                : $('.user-list-item').first();
-        }
+                const urlConvId =
+                    urlParts[urlParts.length - 1];
 
-        if (targetConversation.length) {
+                const hasUrlConversation = (
+                    urlConvId &&
+                    urlConvId !== 'conversations' &&
+                    urlConvId !== 'doctor'
+                );
 
-            const conversationId =
-                targetConversation.data('conversation-id');
+                if (hasUrlConversation) {
 
-            const doctorName =
-                targetConversation.find('h5').text();
+                    targetConversation =
+                        $(`.user-list-item[data-conversation-id="${urlConvId}"]`);
+                }
 
-            openConversation(
-                conversationId,
-                doctorName
-            );
+                if (
+                    !targetConversation ||
+                    !targetConversation.length
+                ) {
 
-        } else if ($('.user-list-item').length) {
+                    targetConversation = isMobile() ?
+                        $() :
+                        $('.user-list-item').first();
+                }
 
-            $('#selectedDoctorName')
-                .text('Select a conversation');
+                if (targetConversation.length) {
 
-            $('#messagesList').html(`
+                    const conversationId =
+                        targetConversation.data('conversation-id');
+
+                    const doctorName =
+                        targetConversation.find('h5').text();
+
+                    openConversation(
+                        conversationId,
+                        doctorName
+                    );
+
+                } else if ($('.user-list-item').length) {
+
+                    $('#selectedDoctorName')
+                        .text('Select a conversation');
+
+                    $('#messagesList').html(`
                 <div class="text-center text-muted p-5">
                     Select a conversation to start messaging
                 </div>
             `);
 
-        } else {
+                } else {
 
-            $('#selectedDoctorName')
-                .text('No conversations');
+                    $('#selectedDoctorName')
+                        .text('No conversations');
 
-            $('#messagesList').html(`
+                    $('#messagesList').html(`
                 <div class="text-center text-muted p-5">
                     No conversations available
                 </div>
             `);
-        }
+                }
 
-        if (isMobile() && !currentConversationId) {
-            showSidebarOnMobile();
-        }
-    }
+                if (isMobile() && !currentConversationId) {
+                    showSidebarOnMobile();
+                }
+            }
 
-    // =========================
-    // CLICK CHAT
-    // =========================
+            // =========================
+            // CLICK CHAT
+            // =========================
 
-    $(document).on('click', '.conversation-item', function(e) {
+            $(document).on('click', '.conversation-item', function(e) {
 
-        e.preventDefault();
+                e.preventDefault();
 
-        const li = $(this).closest('li');
+                const li = $(this).closest('li');
 
-        const conversationId =
-            li.data('conversation-id');
+                const conversationId =
+                    li.data('conversation-id');
 
-        const doctorName =
-            li.find('h5').text();
+                const doctorName =
+                    li.find('h5').text();
 
-        userScrolledUp = false;
+                userScrolledUp = false;
 
-        previousMessageCount = 0;
+                previousMessageCount = 0;
 
-        lastRenderedMessages = '';
-        currentMessages = [];
-        messagePage = 1;
-        hasMoreMessages = false;
+                lastRenderedMessages = '';
+                currentMessages = [];
+                messagePage = 1;
+                hasMoreMessages = false;
 
-        openConversation(
-            conversationId,
-            doctorName
-        );
-    });
+                openConversation(
+                    conversationId,
+                    doctorName
+                );
+            });
 
-    // =========================
-    // LOAD MESSAGES
-    // =========================
+            // =========================
+            // LOAD MESSAGES
+            // =========================
 
-    function loadMessages(
-        conversationId,
-        isPolling = false,
-        forceRender = false,
-        page = 1,
-        prependOlder = false
-    ) {
+            function loadMessages(
+                conversationId,
+                isPolling = false,
+                forceRender = false,
+                page = 1,
+                prependOlder = false
+            ) {
 
-        if (isLoadingMessages || isLoadingOlderMessages) {
-            return;
-        }
+                if (isLoadingMessages || isLoadingOlderMessages) {
+                    return;
+                }
 
-        if (!isPolling && !forceRender && !prependOlder) {
-            setLoadingState();
-        }
+                if (!isPolling && !forceRender && !prependOlder) {
+                    setLoadingState();
+                }
 
-        if (prependOlder) {
-            isLoadingOlderMessages = true;
-            $('#messagesList').prepend(`
+                if (prependOlder) {
+                    isLoadingOlderMessages = true;
+                    $('#messagesList').prepend(`
                 <div class="older-messages-loader text-center py-2">
                     <div class="spinner-border spinner-border-sm text-primary"></div>
                 </div>
             `);
-        } else {
-            isLoadingMessages = true;
-        }
-
-        const oldScrollHeight = chatContainer[0].scrollHeight;
-        const oldScrollTop = chatContainer.scrollTop();
-
-        $.ajax({
-
-            url: '/conversation/' + conversationId + '/messages',
-
-            type: 'GET',
-            data: {
-                limit: messagePageSize,
-                page: page,
-                latest: isPolling ? 1 : 0
-            },
-
-            success: function(response) {
-
-                if (!response.messages) return;
-
-                if (conversationId !== currentConversationId) {
-                    return;
-                }
-
-                const messagesString =
-                    JSON.stringify(response.messages);
-
-                if (
-                    messagesString === lastRenderedMessages &&
-                    isPolling
-                ) {
-                    return;
-                }
-
-                lastRenderedMessages = messagesString;
-
-                const oldMessageCount =
-                    currentMessages.length;
-
-                if (prependOlder) {
-                    currentMessages = mergeMessages(response.messages, currentMessages);
-                    messagePage = response.nextPage || page;
-                } else if (isPolling) {
-                    currentMessages = mergeMessages(currentMessages, response.messages);
-                    messagePage = Math.max(messagePage, response.nextPage || 1);
                 } else {
-                    currentMessages = response.messages;
-                    messagePage = response.nextPage || 1;
+                    isLoadingMessages = true;
                 }
 
-                hasMoreMessages = !!response.hasMore;
+                const oldScrollHeight = chatContainer[0].scrollHeight;
+                const oldScrollTop = chatContainer.scrollTop();
 
-                const newMessageCount =
-                    currentMessages.length;
+                $.ajax({
 
-                renderMessages(currentMessages);
+                    url: '/conversation/' + conversationId + '/messages',
 
-                if (prependOlder) {
+                    type: 'GET',
+                    data: {
+                        limit: messagePageSize,
+                        page: page,
+                        latest: isPolling ? 1 : 0
+                    },
 
-                    const newScrollHeight = chatContainer[0].scrollHeight;
-                    chatContainer.scrollTop(newScrollHeight - oldScrollHeight + oldScrollTop);
+                    success: function(response) {
 
-                } else if (!isPolling) {
+                        if (!response.messages) return;
 
-                    scrollToBottom();
+                        if (conversationId !== currentConversationId) {
+                            return;
+                        }
 
-                } else {
+                        const messagesString =
+                            JSON.stringify(response.messages);
 
-                    const hasNewMessages =
-                        newMessageCount > oldMessageCount;
+                        if (
+                            messagesString === lastRenderedMessages &&
+                            isPolling
+                        ) {
+                            return;
+                        }
 
-                    if (
-                        hasNewMessages &&
-                        !userScrolledUp
-                    ) {
-                        scrollToBottom();
-                    }
-                }
+                        lastRenderedMessages = messagesString;
 
-                previousMessageCount = newMessageCount;
+                        const oldMessageCount =
+                            currentMessages.length;
 
-                markMessagesAsRead(conversationId);
-            },
+                        if (prependOlder) {
+                            currentMessages = mergeMessages(response.messages, currentMessages);
+                            messagePage = response.nextPage || page;
+                        } else if (isPolling) {
+                            currentMessages = mergeMessages(currentMessages, response.messages);
+                            messagePage = Math.max(messagePage, response.nextPage || 1);
+                        } else {
+                            currentMessages = response.messages;
+                            messagePage = response.nextPage || 1;
+                        }
 
-            complete: function() {
-                isLoadingMessages = false;
-                isLoadingOlderMessages = false;
-                $('.older-messages-loader').remove();
-            },
+                        hasMoreMessages = !!response.hasMore;
 
-            error: function(xhr) {
+                        const newMessageCount =
+                            currentMessages.length;
 
-                console.error(xhr);
+                        renderMessages(currentMessages);
 
-                if (!isPolling && !prependOlder) {
+                        if (prependOlder) {
 
-                    $('#messagesList').html(`
+                            const newScrollHeight = chatContainer[0].scrollHeight;
+                            chatContainer.scrollTop(newScrollHeight - oldScrollHeight + oldScrollTop);
+
+                        } else if (!isPolling) {
+
+                            scrollToBottom();
+
+                        } else {
+
+                            const hasNewMessages =
+                                newMessageCount > oldMessageCount;
+
+                            if (
+                                hasNewMessages &&
+                                !userScrolledUp
+                            ) {
+                                scrollToBottom();
+                            }
+                        }
+
+                        previousMessageCount = newMessageCount;
+
+                        markMessagesAsRead(conversationId);
+                    },
+
+                    complete: function() {
+                        isLoadingMessages = false;
+                        isLoadingOlderMessages = false;
+                        $('.older-messages-loader').remove();
+                    },
+
+                    error: function(xhr) {
+
+                        console.error(xhr);
+
+                        if (!isPolling && !prependOlder) {
+
+                            $('#messagesList').html(`
                         <div class="text-center text-danger p-4">
                             Failed to load messages
                         </div>
                     `);
-                }
-            }
-        });
-    }
-
-    // =========================
-    // REFRESH SIDEBAR
-    // =========================
-
-    function refreshConversationList() {
-
-        $.ajax({
-
-            url: window.location.href,
-
-            type: 'GET',
-
-            success: function(response) {
-
-                const html = $(response)
-                    .find('#chatsidebar')
-                    .html();
-
-                if (html) {
-
-                    $('#chatsidebar').html(html);
-
-                    if (currentConversationId) {
-                        setActiveConversation(currentConversationId);
+                        }
                     }
-                }
-            },
-
-            error: function(xhr) {
-                console.error(xhr);
+                });
             }
-        });
-    }
 
-    // =========================
-    // RENDER
-    // =========================
+            // =========================
+            // REFRESH SIDEBAR
+            // =========================
 
-    function mergeMessages(existingMessages, incomingMessages) {
+            function refreshConversationList() {
 
-        const byId = new Map();
+                $.ajax({
 
-        existingMessages.concat(incomingMessages).forEach(function(message) {
-            byId.set(message.id || `${message.senderId}-${message.timestamp}-${message.text}`, message);
-        });
+                    url: window.location.href,
 
-        return Array.from(byId.values()).sort(function(a, b) {
-            return new Date(a.timestamp) - new Date(b.timestamp);
-        });
-    }
+                    type: 'GET',
 
-    function renderCallCard(call) {
-        const currentUid = "{{ current_user()['uid'] }}";
-        const isCaller = call.callerId === currentUid;
-        const isVideo  = call.callType === 'video';
-        const icon     = isVideo ? 'fa-video' : 'fa-phone';
-        const label    = isVideo ? 'Video call' : 'Audio call';
+                    success: function(response) {
 
-        let statusText  = '';
-        let statusColor = '#6c757d';
-        if (call.status === 'completed') {
-            const mins = call.duration ? Math.floor(call.duration / 60) : 0;
-            const secs = call.duration ? call.duration % 60 : 0;
-            statusText  = call.duration ? `${mins}:${String(secs).padStart(2, '0')}` : 'Ended';
-            statusColor = '#28a745';
-        } else if (call.status === 'missed') {
-            statusText  = isCaller ? 'No answer' : 'Missed';
-            statusColor = '#dc3545';
-        } else if (call.status === 'rejected') {
-            statusText  = 'Declined';
-            statusColor = '#dc3545';
-        }
+                        const html = $(response)
+                            .find('#chatsidebar')
+                            .html();
 
-        const timeString  = new Date(call.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        if (html) {
 
-        // Doctor view: own calls use the doctor icon (green, right); received use patient icon (blue, left)
-        const avatarIcon  = isCaller ? 'fa-user-doctor' : 'fa-user';
-        const avatarColor = isCaller ? '#28a745' : '#0d6efd';
+                            $('#chatsidebar').html(html);
 
-        return `
+                            if (currentConversationId) {
+                                setActiveConversation(currentConversationId);
+                            }
+                        }
+                    },
+
+                    error: function(xhr) {
+                        console.error(xhr);
+                    }
+                });
+            }
+
+            // =========================
+            // RENDER
+            // =========================
+
+            function mergeMessages(existingMessages, incomingMessages) {
+
+                const byId = new Map();
+
+                existingMessages.concat(incomingMessages).forEach(function(message) {
+                    byId.set(message.id || `${message.senderId}-${message.timestamp}-${message.text}`,
+                        message);
+                });
+
+                return Array.from(byId.values()).sort(function(a, b) {
+                    return new Date(a.timestamp) - new Date(b.timestamp);
+                });
+            }
+
+            function renderCallCard(call) {
+                const currentUid = "{{ current_user()['uid'] }}";
+                const isCaller = call.callerId === currentUid;
+                const isVideo = call.callType === 'video';
+                const icon = isVideo ? 'fa-video' : 'fa-phone';
+                const label = isVideo ? 'Video call' : 'Audio call';
+
+                let statusText = '';
+                let statusColor = '#6c757d';
+                if (call.status === 'completed') {
+                    const mins = call.duration ? Math.floor(call.duration / 60) : 0;
+                    const secs = call.duration ? call.duration % 60 : 0;
+                    statusText = call.duration ? `Duration: ${mins}:${String(secs).padStart(2, '0')}` : 'Ended';
+                    statusColor = '#28a745';
+                } else if (call.status === 'missed') {
+                    statusText = isCaller ? 'No answer' : 'Missed';
+                    statusColor = '#dc3545';
+                } else if (call.status === 'rejected') {
+                    statusText = 'Declined';
+                    statusColor = '#dc3545';
+                }
+
+                const timeString = new Date(call.timestamp).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                // Doctor view: own calls use the doctor icon (green, right); received use patient icon (blue, left)
+                const avatarIcon = isCaller ? 'fa-user-doctor' : 'fa-user';
+                const avatarColor = isCaller ? '#28a745' : '#0d6efd';
+
+                return `
             <div class="chats ${isCaller ? 'chats-right' : ''}">
                 <div class="chat-avatar">
                     <i class="fa-solid ${avatarIcon}" style="font-size:32px;color:${avatarColor};"></i>
@@ -947,50 +969,50 @@ $(document).ready(function() {
                 </div>
             </div>
         `;
-    }
+            }
 
-    function renderMessages(messages) {
+            function renderMessages(messages) {
 
-        if (!messages || messages.length === 0) {
+                if (!messages || messages.length === 0) {
 
-            $('#messagesList').html(`
+                    $('#messagesList').html(`
                 <div class="text-center text-muted p-5">
                     No messages yet
                 </div>
             `);
 
-            return;
-        }
+                    return;
+                }
 
-        let html = '';
+                let html = '';
 
-        messages.forEach(function(message) {
+                messages.forEach(function(message) {
 
-            if (message.type === 'call') {
-                html += renderCallCard(message);
-                return;
-            }
+                    if (message.type === 'call') {
+                        html += renderCallCard(message);
+                        return;
+                    }
 
-            const isOwnMessage =
-                message.senderId === "{{ current_user()['uid'] }}";
+                    const isOwnMessage =
+                        message.senderId === "{{ current_user()['uid'] }}";
 
-            const timeString =
-                new Date(message.timestamp)
-                .toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
+                    const timeString =
+                        new Date(message.timestamp)
+                        .toLocaleTimeString([], {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
 
-            let readIcon = '';
+                    let readIcon = '';
 
-            if (isOwnMessage) {
+                    if (isOwnMessage) {
 
-                readIcon = message.isRead
-                    ? `<i class="fa-solid fa-check-double text-primary ms-1"></i>`
-                    : `<i class="fa-solid fa-check ms-1 text-muted"></i>`;
-            }
+                        readIcon = message.isRead ?
+                            `<i class="fa-solid fa-check-double text-primary ms-1"></i>` :
+                            `<i class="fa-solid fa-check ms-1 text-muted"></i>`;
+                    }
 
-            html += `
+                    html += `
                 <div class="chats ${isOwnMessage ? 'chats-right' : ''}">
 
                     <div class="chat-avatar">
@@ -1019,33 +1041,33 @@ $(document).ready(function() {
                         <div class="message-content">
 
                             ${message.imageUrl ? `
-                                <div class="chat-image mb-2">
-                                    <a href="${message.imageUrl}" download target="_blank">
-                                        <img src="${message.imageUrl}"
-                                            style="max-width:220px;border-radius:10px;cursor:pointer;">
-                                    </a>
-                                </div>
-                            ` : ''}
+                                    <div class="chat-image mb-2">
+                                        <a href="${message.imageUrl}" download target="_blank">
+                                            <img src="${message.imageUrl}"
+                                                style="max-width:220px;border-radius:10px;cursor:pointer;">
+                                        </a>
+                                    </div>
+                                ` : ''}
 
                             ${message.documentUrl ? `
-                                <div class="chat-document mb-2">
-                                    <a href="${message.documentUrl}"
-                                        download
-                                        target="_blank"
-                                        class="btn btn-sm btn-primary text-white">
+                                    <div class="chat-document mb-2">
+                                        <a href="${message.documentUrl}"
+                                            download
+                                            target="_blank"
+                                            class="btn btn-sm btn-primary text-white">
 
-                                        <i class="fa-solid fa-file-lines"></i>
-                                        Download Document
+                                            <i class="fa-solid fa-file-lines"></i>
+                                            Download Document
 
-                                    </a>
-                                </div>
-                            ` : ''}
+                                        </a>
+                                    </div>
+                                ` : ''}
 
                             ${message.text ? `
-                                <p class="mb-0">
-                                    ${escapeHtml(message.text)}
-                                </p>
-                            ` : ''}
+                                    <p class="mb-0">
+                                        ${escapeHtml(message.text)}
+                                    </p>
+                                ` : ''}
 
                         </div>
 
@@ -1053,244 +1075,242 @@ $(document).ready(function() {
 
                 </div>
             `;
-        });
+                });
 
-        $('#messagesList').html(html);
-    }
-
-    // =========================
-    // HELPERS
-    // =========================
-
-    function escapeHtml(text) {
-
-        if (!text) return '';
-
-        const div = document.createElement('div');
-
-        div.textContent = text;
-
-        return div.innerHTML;
-    }
-
-    function scrollToBottom() {
-
-        setTimeout(function() {
-
-            const chatBody =
-                $('#chatMessagesContainer');
-
-            if (chatBody.length) {
-
-                chatBody.scrollTop(
-                    chatBody[0].scrollHeight
-                );
+                $('#messagesList').html(html);
             }
 
-        }, 100);
-    }
+            // =========================
+            // HELPERS
+            // =========================
 
-    // =========================
-    // SEND TEXT
-    // =========================
+            function escapeHtml(text) {
 
-    $('#messageForm').submit(function(e) {
+                if (!text) return '';
 
-        e.preventDefault();
+                const div = document.createElement('div');
 
-        if (isSendingMessage) return;
+                div.textContent = text;
 
-        const conversationId =
-            $('#conversationId').val();
-
-        const messageText =
-            $('#messageText').val().trim();
-
-        if (!conversationId) {
-
-            alert('Please select a conversation');
-
-            return;
-        }
-
-        if (!messageText) return;
-
-        setSendingState(true);
-
-        $.ajax({
-
-            url:
-                '/doctor/conversation/' +
-                conversationId +
-                '/send',
-
-            type: 'POST',
-
-            data: {
-                _token: '{{ csrf_token() }}',
-                text: messageText,
-                type: 'text'
-            },
-
-            success: function(response) {
-
-                $('#messageText').val('');
-
-                userScrolledUp = false;
-
-                loadMessages(
-                    conversationId,
-                    true,
-                    true
-                );
-
-                refreshConversationList();
-            },
-
-            error: function(xhr) {
-
-                alert('Failed to send message');
-
-                console.error(xhr);
-            },
-
-            complete: function() {
-                setSendingState(false);
+                return div.innerHTML;
             }
-        });
-    });
 
-    // =========================
-    // SEND FILE
-    // =========================
+            function scrollToBottom() {
 
-    function sendFileMessage(file) {
+                setTimeout(function() {
 
-        if (isSendingMessage) return;
+                    const chatBody =
+                        $('#chatMessagesContainer');
 
-        const conversationId =
-            $('#conversationId').val();
+                    if (chatBody.length) {
 
-        if (!conversationId) {
+                        chatBody.scrollTop(
+                            chatBody[0].scrollHeight
+                        );
+                    }
 
-            alert('Please select a conversation');
+                }, 100);
+            }
 
-            return;
-        }
+            // =========================
+            // SEND TEXT
+            // =========================
 
-        const formData = new FormData();
+            $('#messageForm').submit(function(e) {
 
-        formData.append(
-            '_token',
-            '{{ csrf_token() }}'
-        );
+                e.preventDefault();
 
-        formData.append('file', file);
+                if (isSendingMessage) return;
 
-        setSendingState(true);
+                const conversationId =
+                    $('#conversationId').val();
 
-        $.ajax({
+                const messageText =
+                    $('#messageText').val().trim();
 
-            url:
-                '/doctor/conversation/' +
-                conversationId +
-                '/send',
+                if (!conversationId) {
 
-            type: 'POST',
+                    alert('Please select a conversation');
 
-            data: formData,
+                    return;
+                }
 
-            processData: false,
+                if (!messageText) return;
 
-            contentType: false,
+                setSendingState(true);
 
-            success: function(response) {
+                $.ajax({
 
-                userScrolledUp = false;
+                    url: '/doctor/conversation/' +
+                        conversationId +
+                        '/send',
 
-                loadMessages(
-                    conversationId,
-                    true,
-                    true
+                    type: 'POST',
+
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        text: messageText,
+                        type: 'text'
+                    },
+
+                    success: function(response) {
+
+                        $('#messageText').val('');
+
+                        userScrolledUp = false;
+
+                        loadMessages(
+                            conversationId,
+                            true,
+                            true
+                        );
+
+                        refreshConversationList();
+                    },
+
+                    error: function(xhr) {
+
+                        alert('Failed to send message');
+
+                        console.error(xhr);
+                    },
+
+                    complete: function() {
+                        setSendingState(false);
+                    }
+                });
+            });
+
+            // =========================
+            // SEND FILE
+            // =========================
+
+            function sendFileMessage(file) {
+
+                if (isSendingMessage) return;
+
+                const conversationId =
+                    $('#conversationId').val();
+
+                if (!conversationId) {
+
+                    alert('Please select a conversation');
+
+                    return;
+                }
+
+                const formData = new FormData();
+
+                formData.append(
+                    '_token',
+                    '{{ csrf_token() }}'
                 );
 
-                refreshConversationList();
-            },
+                formData.append('file', file);
 
-            error: function(xhr) {
+                setSendingState(true);
 
-                console.error(xhr);
+                $.ajax({
 
-                if (xhr.responseJSON?.message) {
+                    url: '/doctor/conversation/' +
+                        conversationId +
+                        '/send',
 
-                    alert(xhr.responseJSON.message);
+                    type: 'POST',
+
+                    data: formData,
+
+                    processData: false,
+
+                    contentType: false,
+
+                    success: function(response) {
+
+                        userScrolledUp = false;
+
+                        loadMessages(
+                            conversationId,
+                            true,
+                            true
+                        );
+
+                        refreshConversationList();
+                    },
+
+                    error: function(xhr) {
+
+                        console.error(xhr);
+
+                        if (xhr.responseJSON?.message) {
+
+                            alert(xhr.responseJSON.message);
+
+                        } else {
+
+                            alert('Failed to upload file');
+                        }
+                    },
+
+                    complete: function() {
+                        setSendingState(false);
+                    }
+                });
+            }
+
+            // =========================
+            // HISTORY
+            // =========================
+
+            window.addEventListener('popstate', function(event) {
+                initializeLayout();
+            });
+
+            // =========================
+            // RESIZE
+            // =========================
+
+            $(window).on('resize', function() {
+
+                if (!isMobile()) {
+
+                    $('.sidebar-group.left-sidebar')
+                        .removeClass('hide-on-mobile');
+
+                    $('.chat')
+                        .removeClass('show-on-mobile');
+
+                    $('.sidebar-group.left-sidebar')[0]
+                        .style.removeProperty('display');
+
+                    $('.chat')[0]
+                        .style.removeProperty('display');
 
                 } else {
 
-                    alert('Failed to upload file');
+                    if (currentConversationId) {
+
+                        showChatOnMobile();
+
+                    } else {
+
+                        showSidebarOnMobile();
+                    }
                 }
-            },
+            });
 
-            complete: function() {
-                setSendingState(false);
-            }
+            // =========================
+            // INIT
+            // =========================
+
+            initializeLayout();
+
+            // =========================
+            // CLEANUP
+            // =========================
+
+            window.loadMessages = loadMessages;
+            window.currentConversationId = currentConversationId;
+
         });
-    }
-
-    // =========================
-    // HISTORY
-    // =========================
-
-    window.addEventListener('popstate', function(event) {
-        initializeLayout();
-    });
-
-    // =========================
-    // RESIZE
-    // =========================
-
-    $(window).on('resize', function() {
-
-        if (!isMobile()) {
-
-            $('.sidebar-group.left-sidebar')
-                .removeClass('hide-on-mobile');
-
-            $('.chat')
-                .removeClass('show-on-mobile');
-
-            $('.sidebar-group.left-sidebar')[0]
-                .style.removeProperty('display');
-
-            $('.chat')[0]
-                .style.removeProperty('display');
-
-        } else {
-
-            if (currentConversationId) {
-
-                showChatOnMobile();
-
-            } else {
-
-                showSidebarOnMobile();
-            }
-        }
-    });
-
-    // =========================
-    // INIT
-    // =========================
-
-    initializeLayout();
-
-    // =========================
-    // CLEANUP
-    // =========================
-
-    window.loadMessages = loadMessages;
-    window.currentConversationId = currentConversationId;
-
-});
-</script>
+    </script>
 @endpush
