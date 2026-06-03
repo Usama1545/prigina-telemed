@@ -478,8 +478,13 @@ class PatientController extends Controller
             'receiverName' => $receiverName,
             'roomId' => null,
             'createdAt' => now(),
-            'startTime' => $validated['startTime'] ?? now()->toIso8601String(),
-            'endTime' => $validated['endTime'] ?? now()->toIso8601String(),
+            'startTime' => isset($validated['startTime'])
+                ? Carbon::parse($validated['startTime'])
+                : now(),
+
+            'endTime' => isset($validated['endTime'])
+                ? Carbon::parse($validated['endTime'])
+                : now(),
         ]);
 
         $lastMessage = $validated['callType'] === 'video' ? 'Video call' : 'Audio call';
