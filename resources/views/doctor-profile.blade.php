@@ -167,7 +167,7 @@
                                 ) .
                                 '.';
                         }
-                        $bio .= 'Committed to providing the highest quality care to all patients.';
+                        $bio .= ' Committed to providing the highest quality care to all patients.';
                         
                         ?>
                         <p>{{ $bio }}
