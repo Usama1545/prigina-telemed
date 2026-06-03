@@ -177,7 +177,18 @@
                     ZIM
                 };
                 zp.addPlugins(zimPlugin);
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach(m => {
+                        m.addedNodes.forEach(node => {
+                            console.log('ADDED NODE', node);
+                        });
+                    });
+                });
 
+                observer.observe(document.body, {
+                    childList: true,
+                    subtree: true
+                });
                 zp.setCallInvitationConfig({
                     enableNotifyWhenAppRunningInBackgroundOrQuit: true,
 
@@ -185,8 +196,8 @@
                         console.log('[ZEGO] Incoming call from', caller.userName, 'callID:', callID);
                         currentCallID = callID;
                         startRingtone();
-                        hideCallBars();
-                        startCallAcceptWatcher();
+                        // hideCallBars();
+                        // startCallAcceptWatcher();
 
                         if (Notification.permission === 'granted') {
                             new Notification('Incoming Call', {
@@ -194,6 +205,7 @@
                                 icon: '/favicon.ico'
                             });
                         }
+
                     },
 
                     onIncomingCallCanceled(callID) {
@@ -232,8 +244,8 @@
                         console.log('[ZEGO] Incoming call accepted, callID:', callID);
                         preCallUrl = window.location.href;
                         stopRingtone();
-                        stopCallAcceptWatcher();
-                        toggleCallMode(true);
+                        // stopCallAcceptWatcher();
+                        // toggleCallMode(true);
                         currentCallID = null;
                     },
 
