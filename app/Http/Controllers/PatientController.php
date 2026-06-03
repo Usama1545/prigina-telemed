@@ -286,7 +286,28 @@ class PatientController extends Controller
         $page = max((int) $request->query('page', 1), 1);
         $offset = ($page - 1) * $limit;
 
+        $currentUserId = current_user()['uid'];
+
+        // conversation lookup
+        $conversation = $this->firestore->find('conversations', $id);
+
+        if (! $conversation) {
+            return response()->json([
+                'messages' => [],
+                'nextPage' => null,
+                'hasMore' => false,
+            ]);
+        }
+
+        $otherUserId =
+            $conversation['doctorId'] === $currentUserId
+                ? $conversation['patientId']
+                : $conversation['doctorId'];
+
+        // =========================
         // Messages
+        // =========================
+
         $rawMessages = $this->firestore->queryOffset(
             'messages',
             [
@@ -308,46 +329,98 @@ class PatientController extends Controller
 
         $messages = array_map(function ($msg) {
 
-            $msg['type']     = 'message';
-            $msg['sortTime'] = $msg['timestamp'] ?? now()->toIso8601String();
+            $msg['type'] = 'message';
+
+            $msg['sortTime'] =
+                $msg['timestamp']
+                ?? now()->toIso8601String();
 
             return $msg;
 
-        }, array_reverse($rawMessages)); // DESC → ASC for timeline ordering
+        }, array_reverse($rawMessages));
 
-        // Calls — no orderBy so no composite index is required; PHP sorts below.
-        $callsResult = $this->firestore->queryOffset(
+        // =========================
+        // Calls made by current user
+        // =========================
+
+        $outgoingCalls = $this->firestore->query(
             'calls',
             [
                 [
-                    'field' => 'conversationId',
+                    'field' => 'callerId',
                     'op' => '=',
-                    'value' => $id,
+                    'value' => $currentUserId,
+                ],
+                [
+                    'field' => 'receiverId',
+                    'op' => '=',
+                    'value' => $otherUserId,
                 ],
             ],
-            50,
-            0,
-            null,   // no server-side ordering → avoids missing composite index
-            'ASC'
+            null,
+            null,
+            'startTime',
+            'DESC'
+        );
+
+        // =========================
+        // Calls received by current user
+        // =========================
+
+        $incomingCalls = $this->firestore->query(
+            'calls',
+            [
+                [
+                    'field' => 'callerId',
+                    'op' => '=',
+                    'value' => $otherUserId,
+                ],
+                [
+                    'field' => 'receiverId',
+                    'op' => '=',
+                    'value' => $currentUserId,
+                ],
+            ],
+            null,
+            null,
+            'startTime',
+            'DESC'
+        );
+
+        // =========================
+        // Merge calls
+        // =========================
+
+        $allCalls = array_merge(
+            $outgoingCalls['documents'] ?? [],
+            $incomingCalls['documents'] ?? []
         );
 
         $calls = array_map(function ($call) {
 
             $call['type'] = 'call';
 
-            $ts = $call['startTime']
+            $ts =
+                $call['startTime']
                 ?? $call['createdAt']
                 ?? now()->toIso8601String();
 
-            $call['timestamp'] = $ts;   // frontend uses this for display
-            $call['sortTime']  = $ts;   // PHP usort uses this
+            $call['timestamp'] = $ts;
+
+            $call['sortTime'] = $ts;
 
             return $call;
 
-        }, $callsResult);
+        }, $allCalls);
 
-        // Merge
-        $timeline = array_merge($messages, $calls);
+        // =========================
+        // Final timeline
+        // =========================
+
+        $timeline = array_merge(
+            $messages,
+            $calls
+        );
 
         usort($timeline, function ($a, $b) {
 
@@ -368,8 +441,6 @@ class PatientController extends Controller
     public function saveCall(Request $request, $id)
     {
         $validated = $request->validate([
-            'callerId' => 'required|string',
-            'receiverId' => 'required|string',
             'callType' => 'required|in:audio,video',
             'status' => 'required|in:completed,missed,rejected',
             'duration' => 'nullable|integer',
@@ -382,15 +453,36 @@ class PatientController extends Controller
             return response()->json(['error' => 'Conversation not found'], 404);
         }
 
-        $this->firestore->create('calls', array_merge($validated, [
-            'conversationId' => $id,
+        $user = current_user();
+        $uid = $user['uid'];
+        $isDoctor = $uid === ($conversation['doctorId'] ?? '');
+
+        $callerId = $uid;
+        $callerName = $user['name'] ?? '';
+        $receiverId = $isDoctor ? ($conversation['patientId'] ?? '') : ($conversation['doctorId'] ?? '');
+
+        $receiver = $isDoctor
+            ? $this->firestore->find('patients', $receiverId)
+            : $this->firestore->find('doctors', $receiverId);
+
+        $receiverName = $receiver['name'] ?? '';
+
+        $docId = Str::random(60);
+
+        $this->firestore->createWithId('calls', $docId, [
+            ...$validated,
+            'id' => 'call_'.$docId,
+            'callerId' => $callerId,
+            'callerName' => $callerName,
+            'receiverId' => $receiverId,
+            'receiverName' => $receiverName,
+            'roomId' => null,
             'createdAt' => now(),
-        ]));
+            'startTime' => $validated['startTime'] ?? now()->toIso8601String(),
+            'endTime' => $validated['endTime'] ?? now()->toIso8601String(),
+        ]);
 
         $lastMessage = $validated['callType'] === 'video' ? 'Video call' : 'Audio call';
-
-        $uid = current_user()['uid'];
-        $isDoctor = $uid === ($conversation['doctorId'] ?? '');
 
         $this->firestore->update('conversations', $id, [
             'lastMessage' => $lastMessage,
