@@ -177,18 +177,38 @@
                     ZIM
                 };
                 zp.addPlugins(zimPlugin);
-                const observer = new MutationObserver((mutations) => {
-                    mutations.forEach(m => {
-                        m.addedNodes.forEach(node => {
-                            console.log('ADDED NODE', node);
-                        });
-                    });
-                });
+                clet inCall = false;
 
-                observer.observe(document.body, {
-                    childList: true,
-                    subtree: true
-                });
+                setInterval(() => {
+
+                    const callRoom =
+                        document.querySelector('[id^="zg-rtc-player-"]');
+
+                    if (callRoom && !inCall) {
+
+                        inCall = true;
+
+                        stopRingtone();
+
+                        toggleCallMode(true);
+
+                        console.log('CALL STARTED');
+                    }
+
+                    if (!callRoom && inCall) {
+
+                        inCall = false;
+
+                        stopRingtone();
+
+                        toggleCallMode(false);
+
+                        showCallBars();
+
+                        console.log('CALL ENDED');
+                    }
+
+                }, 500);
                 zp.setCallInvitationConfig({
                     enableNotifyWhenAppRunningInBackgroundOrQuit: true,
 
