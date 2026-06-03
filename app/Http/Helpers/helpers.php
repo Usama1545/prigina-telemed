@@ -1,7 +1,6 @@
 <?php
 
 use App\Services\FirestoreService;
-use App\Services\Zego\ZegoErrorCodes;
 use App\Services\Zego\ZegoServerAssistant;
 
 if (! function_exists('current_user')) {
@@ -96,21 +95,30 @@ if (! function_exists('topSpeacilalization')) {
 }
 if (! function_exists('generateZegoToken')) {
 
-    function generateZegoToken(string $userId, int $effectiveSeconds = 3600): string
-    {
-        $token = ZegoServerAssistant::generateToken04(
-            (int) config('services.zego.app_id'),
-            $userId,
-            config('services.zego.server_secret'),
-            $effectiveSeconds,
-            ''
-        );
+    function generateZegoToken(
+        string $userId,
+        int $effectiveSeconds = 3600
+    ): ?string {
+        try {
+            $token = ZegoServerAssistant::generateToken04(
+                (int) config('services.zego.app_id'),
+                $userId,
+                config('services.zego.server_secret'),
+                $effectiveSeconds,
+                ''
+            );
 
-        if ($token->code !== ZegoErrorCodes::success) {
-            throw new Exception('Failed to generate ZEGO token');
+            return $token->token;
+
+        } catch (Throwable $e) {
+
+            Log::error('ZEGO token generation failed', [
+                'message' => $e->getMessage(),
+                'userId' => $userId,
+            ]);
+
+            return null;
         }
-
-        return $token->token;
     }
 }
 
