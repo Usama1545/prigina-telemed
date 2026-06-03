@@ -83,8 +83,11 @@
 
         let callStartTime = null;
         let callStatus = 'missed';
+        let callSaved = false;
 
         function saveCallRecord(status, endTime) {
+            if (callSaved) return;
+            callSaved = true;
             const duration = (callStartTime && endTime)
                 ? Math.round((endTime - callStartTime) / 1000)
                 : 0;
@@ -146,8 +149,7 @@
                 enableNotifyWhenAppRunningInBackgroundOrQuit: true,
 
                 onIncomingCallReceived(callID, caller, callType, callees) {
-                    callStartTime = Date.now();
-                    callStatus = 'completed';
+                    // caller side only — do not set callStatus here
                 },
 
                 onIncomingCallCanceled() {
@@ -187,7 +189,7 @@
 
                 onCallEnd() {
                     saveCallRecord(callStatus, Date.now());
-                    window.location.href = backUrl;
+                    setTimeout(() => { window.location.href = backUrl; }, 400);
                 },
             });
 
@@ -250,6 +252,13 @@
         } catch (err) {
             showErr('Failed to initialise call: ' + (err.message || err));
         }
+
+        // Safety net: if ZEGO navigates away without firing onCallEnd, save here
+        window.addEventListener('beforeunload', () => {
+            if (callStartTime) {
+                saveCallRecord(callStatus, Date.now());
+            }
+        });
     </script>
 </body>
 

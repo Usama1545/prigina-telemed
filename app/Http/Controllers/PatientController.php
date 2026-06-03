@@ -664,6 +664,7 @@ class PatientController extends Controller
             'doctor' => $doctor,
             'user' => $user,
             'token' => $token,
+            'backUrl' => route('patient.conversations.show', $id),
         ]);
     }
 
@@ -691,6 +692,7 @@ class PatientController extends Controller
             'doctor' => $doctor,
             'user' => $user,
             'token' => $token,
+            'backUrl' => route('patient.conversations.show', $id),
         ]);
     }
 

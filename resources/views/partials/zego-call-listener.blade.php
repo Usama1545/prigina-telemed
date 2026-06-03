@@ -2,7 +2,6 @@
     $authRole = session('auth_role');
     $needsListener = in_array($authRole, ['patient', 'doctor']);
     $tokenRoute = $authRole === 'doctor' ? route('doctor.zego-token') : route('patient.zego-token');
-    $dashRoute = $authRole === 'doctor' ? route('doctor.dashboard') : route('patient.dashboard');
 @endphp
 
 @if ($needsListener)
@@ -17,15 +16,106 @@
         let currentCallID = null;
         let ringtoneInterval = null;
         let zimPlugin = null;
+        let callAcceptedObserver = null;
+        let preCallUrl = window.location.href;
+
+        // ── UI helpers ────────────────────────────────────────────────────────────
+
+        function hideCallBars() {
+            const header = document.querySelector('header.header-default');
+            const bottomNav = document.querySelector('.mobile-bottom-nav');
+            if (header) header.style.display = 'none';
+            if (bottomNav) bottomNav.style.display = 'none';
+        }
+
+        function showCallBars() {
+            const header = document.querySelector('header.header-default');
+            const bottomNav = document.querySelector('.mobile-bottom-nav');
+            if (header) header.style.display = '';
+            if (bottomNav) bottomNav.style.display = '';
+        }
+
+        function toggleCallMode(enabled) {
+
+            const selectors = [
+                '.header',
+                '.footer',
+                '.bottom-navigation',
+                '.sidebar',
+                '.topbar',
+                '.navbar',
+                '.main-wrapper > *:not(script)',
+                '.page-content',
+            ];
+
+            selectors.forEach(selector => {
+
+                document.querySelectorAll(selector)
+                    .forEach(el => {
+
+                        if (enabled) {
+
+                            el.dataset.prevDisplay =
+                                el.style.display || '';
+
+                            el.style.display = 'none';
+
+                        } else {
+
+                            el.style.display =
+                                el.dataset.prevDisplay || '';
+                        }
+                    });
+            });
+
+            document.body.style.background =
+                enabled ? '#000' : '';
+
+            document.body.style.overflow =
+                enabled ? 'hidden' : '';
+        }
+
+        // Watches for ZEGO adding its full-screen call-room overlay to <body>,
+        // which signals the user accepted the call. Stops ringtone when detected.
+        function startCallAcceptWatcher() {
+            stopCallAcceptWatcher();
+            callAcceptedObserver = new MutationObserver((mutations) => {
+                if (!currentCallID) {
+                    stopCallAcceptWatcher();
+                    return;
+                }
+                for (const m of mutations) {
+                    for (const node of m.addedNodes) {
+                        if (node.nodeType !== 1) continue;
+                        // Check after a tick so ZEGO finishes sizing the element
+                        setTimeout(() => {
+                            if (!currentCallID) return;
+                            const rect = node.getBoundingClientRect();
+                            if (rect.width > window.innerWidth * 0.7 &&
+                                rect.height > window.innerHeight * 0.7) {
+                                stopRingtone();
+                                stopCallAcceptWatcher();
+                            }
+                        }, 150);
+                    }
+                }
+            });
+            callAcceptedObserver.observe(document.body, {
+                childList: true
+            });
+        }
+
+        function stopCallAcceptWatcher() {
+            if (callAcceptedObserver) {
+                callAcceptedObserver.disconnect();
+                callAcceptedObserver = null;
+            }
+        }
+
+        // ── Ringtone ─────────────────────────────────────────────────────────────
 
         document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                stopRingtone();
-            }
-        });
-
-        window.addEventListener('focus', () => {
-            stopRingtone();
+            if (document.hidden) stopRingtone();
         });
 
         function startRingtone() {
@@ -55,14 +145,13 @@
             if (zimPlugin && callID) {
                 try {
                     await zimPlugin.rejectCall(callID, {});
-                    console.log('[ZEGO] Call rejected');
                     stopRingtone();
                     currentCallID = null;
-                } catch (e) {
-                    console.error('[ZEGO] Failed to reject call:', e);
-                }
+                } catch (e) {}
             }
         }
+
+        // ── Init ─────────────────────────────────────────────────────────────────
 
         (async function() {
             try {
@@ -92,18 +181,12 @@
                 zp.setCallInvitationConfig({
                     enableNotifyWhenAppRunningInBackgroundOrQuit: true,
 
-                    // Custom UI for incoming call (optional but recommended)
-                    incomingCall: {
-                        // You can customize the incoming call UI here
-                        // Or let ZEGO use its default overlay
-                    },
-
                     onIncomingCallReceived(callID, caller, callType) {
-                        console.log('[ZEGO] Incoming call from', caller.userName, 'type', callType);
                         currentCallID = callID;
                         startRingtone();
+                        hideCallBars();
+                        startCallAcceptWatcher();
 
-                        // Optional: Show a browser notification
                         if (Notification.permission === 'granted') {
                             new Notification('Incoming Call', {
                                 body: `${caller.userName} is calling you...`,
@@ -113,43 +196,56 @@
                     },
 
                     onIncomingCallCanceled(callID) {
-                        console.log('[ZEGO] Caller cancelled call:', callID);
                         if (currentCallID === callID) {
                             stopRingtone();
+                            showCallBars();
+                            stopCallAcceptWatcher();
                             currentCallID = null;
                         }
                     },
 
                     onIncomingCallTimeout(callID) {
-                        console.log('[ZEGO] Incoming call timed out');
                         if (currentCallID === callID) {
                             stopRingtone();
+                            showCallBars();
+                            stopCallAcceptWatcher();
                             currentCallID = null;
                         }
                     },
 
-                    onCallEnd(callID) {
-                        console.log('[ZEGO] Call ended');
-                        stopRingtone();
-                        currentCallID = null;
-                        window.location.href = '{{ $dashRoute }}';
+                    onIncomingCallRejected(callID) {
+                        if (currentCallID === callID) {
+                            stopRingtone();
+                            showCallBars();
+                            stopCallAcceptWatcher();
+                            currentCallID = null;
+                        }
                     },
 
+                    // Fires on the caller side when callee accepts; kept here
+                    // as a fallback in case the SDK fires it on the callee too.
                     onIncomingCallAccepted(callID) {
-                        console.log('[ZEGO] Call accepted');
+                        preCallUrl = window.location.href;
                         stopRingtone();
+                        stopCallAcceptWatcher();
+                        toggleCallMode(true);
                         currentCallID = null;
                     },
 
-                    // Add this to handle rejection
-                    onIncomingCallRejected(callID, reason) {
-                        console.log('[ZEGO] Call rejected:', reason);
+                    onCallEnd(callID) {
+                        toggleCallMode(false);
                         stopRingtone();
+                        showCallBars();
+                        stopCallAcceptWatcher();
                         currentCallID = null;
-                    }
+                        redirectAfterCallEnd();
+                        window.location.href = preCallUrl;
+                        // Safety net: in case ZEGO navigates away before firing onCallEnd
+                        // Do NOT redirect — the user is already on this page;
+                        // ZEGO closes its overlay and the page content is visible again.
+                    },
                 });
 
-                // Request notification permission
                 if ('Notification' in window && Notification.permission === 'default') {
                     Notification.requestPermission();
                 }
@@ -159,11 +255,8 @@
             }
         })();
 
-        // Optional: Clean up on page unload
         window.addEventListener('beforeunload', () => {
-            if (currentCallID && zimPlugin) {
-                rejectCall(currentCallID);
-            }
+            if (currentCallID && zimPlugin) rejectCall(currentCallID);
             stopRingtone();
         });
     </script>
