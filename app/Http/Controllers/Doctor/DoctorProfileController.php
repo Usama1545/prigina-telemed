@@ -402,10 +402,10 @@ class DoctorProfileController extends Controller
         }
 
         return response()->json([
-            'token'    => generateZegoToken($user['uid']),
-            'userID'   => $user['uid'],
+            'token' => generateZegoToken($user['uid']),
+            'userID' => $user['uid'],
             'userName' => $user['name'] ?: 'Doctor',
-            'appID'    => (int) config('services.zego.app_id'),
+            'appID' => (int) config('services.zego.app_id'),
         ]);
     }
 
@@ -680,6 +680,8 @@ class DoctorProfileController extends Controller
             return redirect($accountLink->url);
 
         } catch (\Exception $e) {
+            Log::error('Stripe onboarding error: '.$e->getMessage());
+
             return back()->with('error', $e->getMessage());
         }
     }
