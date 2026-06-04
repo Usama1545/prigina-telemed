@@ -173,12 +173,10 @@
                 );
 
                 const zp = ZegoUIKitPrebuilt.create(kitToken);
-                console.log('ZEGO INSTANCE', zp);
-
-                console.log(
-                    'METHODS',
-                    Object.keys(zp).sort()
-                );
+                console.log(zp.express);
+                console.log(Object.keys(zp.express));
+                console.log(zp.express.zegoWebRTC);
+                console.log(zp.express.zegoWebRTM);
                 zimPlugin = {
                     ZIM
                 };
