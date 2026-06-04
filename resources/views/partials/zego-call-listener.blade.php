@@ -181,34 +181,12 @@
 
                 setInterval(() => {
 
-                    const callRoom =
-                        document.querySelector('[id^="zg-rtc-player-"]');
+                    const players =
+                        document.querySelectorAll('[id^="zg-rtc-player-"]');
 
-                    if (callRoom && !inCall) {
+                    console.log('PLAYERS FOUND:', players.length);
 
-                        inCall = true;
-
-                        stopRingtone();
-
-                        toggleCallMode(true);
-
-                        console.log('CALL STARTED');
-                    }
-
-                    if (!callRoom && inCall) {
-
-                        inCall = false;
-
-                        stopRingtone();
-
-                        toggleCallMode(false);
-
-                        showCallBars();
-
-                        console.log('CALL ENDED');
-                    }
-
-                }, 500);
+                }, 1000);
                 zp.setCallInvitationConfig({
                     enableNotifyWhenAppRunningInBackgroundOrQuit: true,
 
