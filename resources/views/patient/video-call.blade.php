@@ -50,7 +50,6 @@
             cursor: pointer;
             text-decoration: underline;
         }
-
     </style>
 </head>
 
@@ -88,12 +87,15 @@
         function saveCallRecord(status, endTime) {
             if (callSaved) return;
             callSaved = true;
-            const duration = (callStartTime && endTime)
-                ? Math.round((endTime - callStartTime) / 1000)
-                : 0;
+            const duration = (callStartTime && endTime) ?
+                Math.round((endTime - callStartTime) / 1000) :
+                0;
             fetch(`/conversation/${conversationId}/save-call`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
                 body: JSON.stringify({
                     callerId: callerId,
                     receiverId: receiverID,
@@ -189,7 +191,9 @@
 
                 onCallEnd() {
                     saveCallRecord(callStatus, Date.now());
-                    setTimeout(() => { window.location.href = backUrl; }, 400);
+                    setTimeout(() => {
+                        window.location.href = backUrl;
+                    }, 400);
                 },
             });
 

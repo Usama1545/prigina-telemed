@@ -4,6 +4,35 @@
     $tokenRoute = $authRole === 'doctor' ? route('doctor.zego-token') : route('patient.zego-token');
 @endphp
 
+<style>
+    #zego-container {
+        width: 100%;
+        height: 100vh;
+    }
+
+    #errBanner {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 9999;
+        background: #7f1d1d;
+        color: #fca5a5;
+        padding: 12px 20px;
+        font-size: 13px;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    #errBanner a {
+        color: #fde68a;
+        margin-left: 16px;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+</style>
+
 @if ($needsListener)
     {{-- Global ZIM listener: shows ZEGO's built-in incoming call overlay on every patient/doctor page --}}
 
@@ -182,6 +211,27 @@
                 };
                 zp.addPlugins(zimPlugin);
                 let inCall = false;
+
+                const observer = new MutationObserver(() => {
+
+                    const zegoContainer =
+                        document.getElementById('zego-container');
+
+                    if (zegoContainer) {
+
+                        document.body.classList.add('zego-call-active');
+
+                        stopRingtone();
+                    } else {
+
+                        document.body.classList.remove('zego-call-active');
+                    }
+                });
+
+                observer.observe(document.body, {
+                    childList: true,
+                    subtree: true
+                });
 
                 // setInterval(() => {
 
