@@ -21,7 +21,8 @@
                 </div>
 
                 <div class="col-lg-8 col-xl-9">
-                    
+
+                    @include('partials.app-install-banner')
 
                     <section class="doctor-home-stats">
                         <article class="doctor-home-stat stat-blue">

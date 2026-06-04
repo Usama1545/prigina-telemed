@@ -25,7 +25,8 @@
                 </div>
 
                 <div class="col-lg-8 col-xl-9">
-                   
+
+                    @include('partials.app-install-banner')
 
                     <form class="patient-search-card" action="{{ route('doctors') }}" method="GET">
                         <i class="isax isax-search-normal-1"></i>
