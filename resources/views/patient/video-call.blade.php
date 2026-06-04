@@ -27,6 +27,7 @@
         #zego-container {
             width: 100%;
             height: 100vh;
+            position: relative;
         }
 
         #errBanner {
@@ -49,6 +50,16 @@
             margin-left: 16px;
             cursor: pointer;
             text-decoration: underline;
+        }
+
+        /* Hide Zego's post-call UI and other unwanted elements */
+        .zego-leave-room-container,
+        .zego-leave-room,
+        [class*="post-call"],
+        [class*="leave-room"],
+        .dialog-post-call,
+        .zego-dialog-post-call {
+            display: none !important;
         }
     </style>
 </head>
@@ -83,13 +94,19 @@
         let callStartTime = null;
         let callStatus = 'missed';
         let callSaved = false;
+        let zp = null;
+        let callEndHandled = false;
+        let callAccepted = false;
+        let forceRedirect = false;
 
         function saveCallRecord(status, endTime) {
+            console.log('SAVE CALL', status, endTime, callStartTime);
             if (callSaved) return;
             callSaved = true;
+
             const duration = (callStartTime && endTime) ?
-                Math.round((endTime - callStartTime) / 1000) :
-                0;
+                Math.round((endTime - callStartTime) / 1000) : 0;
+
             fetch(`/conversation/${conversationId}/save-call`, {
                 method: 'POST',
                 headers: {
@@ -106,160 +123,254 @@
                     endTime: endTime ? new Date(endTime).toISOString() : null,
                 }),
                 keepalive: true,
-            }).catch(() => {});
+            }).then(() => {
+                console.log('Call record saved successfully');
+            }).catch(err => {
+                console.error('Failed to save call record:', err);
+            });
         }
 
-        function log(msg, cls) {
-            console[cls === 'e' ? 'error' : 'log']('[ZegoCall]', msg);
+        function handleCallEnd(status) {
+            console.log('HANDLE CALL END', status);
+
+            if (callEndHandled) return;
+            callEndHandled = true;
+
+            console.log('Call ended with status:', status);
+            saveCallRecord(status, Date.now());
+
+            // Force redirect without showing Zego's UI
+            forceRedirect = true;
+
+            // Destroy Zego instance to prevent its UI from showing
+            if (zp && zp.destroy) {
+                try {
+                    zp.destroy();
+                } catch (e) {
+                    console.error('Error destroying Zego:', e);
+                }
+            }
+
+            // Clear the container
+            const container = document.getElementById('zego-container');
+            if (container) {
+                container.innerHTML = '';
+            }
+
+            // Redirect after saving
+            setTimeout(() => {
+                window.location.href = backUrl;
+            }, 500);
         }
 
         function showErr(msg) {
-            log(msg, 'e');
+            console.error('[ZEGO]', msg);
             document.getElementById('errText').textContent = msg;
             document.getElementById('errBanner').style.display = 'block';
+
+            // Redirect back after error
+            setTimeout(() => {
+                window.location.href = backUrl;
+            }, 3000);
         }
 
-        log(`appID=${appID}`);
-        log(`roomID=${roomID}`);
-        log(`userID=${userID}`);
-        log(`receiverID=${receiverID}`);
-
+        // Validation
         if (!appID) {
-            showErr('ZEGO_APP_ID is not configured.');
+            showErr('ZEGO_APP_ID missing');
+            throw new Error('ZEGO_APP_ID missing');
         }
+
         if (!serverToken) {
-            showErr('Token generation failed — check ZEGO_SERVER_SECRET.');
+            showErr('ZEGO token missing');
+            throw new Error('ZEGO token missing');
         }
 
-        // ── ZegoUIKit Prebuilt ────────────────────────────────────────────────────────
-        try {
-            const kitToken = ZegoUIKitPrebuilt.generateKitTokenForProduction(
-                appID, serverToken, roomID, userID, userName
-            );
-            // log('Kit token generated', 's');
+        if (!receiverID) {
+            showErr('Receiver ID missing');
+            throw new Error('Receiver ID missing');
+        }
 
-            const zp = ZegoUIKitPrebuilt.create(kitToken);
-            // log('ZEGO instance created', 's');
+        // Main initialization
+        (async function() {
+            try {
+                const kitToken = ZegoUIKitPrebuilt.generateKitTokenForProduction(
+                    appID,
+                    serverToken,
+                    roomID,
+                    userID,
+                    userName
+                );
 
-            zp.addPlugins({
-                ZIM
-            });
-            // log('ZIM plugin attached', 's');
+                zp = ZegoUIKitPrebuilt.create(kitToken);
+
+                // Add ZIM plugin
+                zp.addPlugins({
+                    ZIM
+                });
+
+                // Send invitation directly without joining room first
+                await sendCallInvitation();
+
+            } catch (err) {
+                console.error('Initialization error:', err);
+                showErr('Failed to initialise call: ' + (err.message || err));
+            }
+        })();
+
+        async function sendCallInvitation(maxAttempts = 5, retryDelay = 1000) {
+            // Set up call event handlers
+            setupCallEventHandlers();
+
+            // Send the invitation
+            for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+                try {
+                    console.log(`Sending call invitation (attempt ${attempt}/${maxAttempts})…`);
+
+                    const invitationResult = await zp.sendCallInvitation({
+                        callees: [{
+                            userID: receiverID,
+                            userName: receiverName,
+                        }],
+                        callType: ZegoUIKitPrebuilt.InvitationTypeVideoCall,
+                        timeout: 60,
+                    });
+
+                    console.log('Invitation sent successfully', invitationResult);
+                    return;
+
+                } catch (err) {
+                    console.error(`Attempt ${attempt} failed:`, err);
+
+                    if (attempt === maxAttempts) {
+                        showErr('Failed to send invitation: ' + (err.message || JSON.stringify(err)));
+                    } else {
+                        await new Promise(r => setTimeout(r, retryDelay));
+                    }
+                }
+            }
+        }
+
+        function setupCallEventHandlers() {
 
             zp.setCallInvitationConfig({
-
                 enableNotifyWhenAppRunningInBackgroundOrQuit: true,
 
                 onIncomingCallReceived(callID, caller, callType, callees) {
-                    // caller side only — do not set callStatus here
+                    console.log('Incoming call received from:', caller.userName);
                 },
 
                 onIncomingCallCanceled() {
-                    saveCallRecord('missed', Date.now());
-                    window.location.href = backUrl;
+                    console.log('Incoming call canceled');
+
+                    if (!callAccepted && !callEndHandled) {
+                        handleCallEnd('missed');
+                    }
                 },
 
                 onIncomingCallRejected() {
-                    saveCallRecord('rejected', Date.now());
-                    window.location.href = backUrl;
-                },
+                    console.log('Incoming call rejected');
 
-                onOutgoingCallDeclined() {
-                    saveCallRecord('rejected', Date.now());
-                    window.location.href = backUrl;
+                    if (!callAccepted && !callEndHandled) {
+                        handleCallEnd('rejected');
+                    }
                 },
 
                 onIncomingCallTimeout() {
-                    saveCallRecord('missed', Date.now());
-                    window.location.href = backUrl;
+                    console.log('Incoming call timeout');
+
+                    if (!callAccepted && !callEndHandled) {
+                        handleCallEnd('missed');
+                    }
                 },
 
-                onOutgoingCallAccepted() {
+                onOutgoingCallAccepted(data) {
+                    console.log('Outgoing call accepted', data);
+
+                    callAccepted = true;
                     callStartTime = Date.now();
                     callStatus = 'completed';
                 },
 
-                onOutgoingCallRejected() {
-                    saveCallRecord('rejected', Date.now());
-                    window.location.href = backUrl;
-                },
+                onOutgoingCallRejected(data) {
+                    console.log('Outgoing call rejected', data);
 
-                onOutgoingCallTimeout() {
-                    saveCallRecord('missed', Date.now());
-                    window.location.href = backUrl;
-                },
-
-                onCallEnd() {
-                    saveCallRecord(callStatus, Date.now());
-                    setTimeout(() => {
-                        window.location.href = backUrl;
-                    }, 400);
-                },
-            });
-
-            // ── SEND INVITATION (with ZIM-ready retry) ────────────────────────────────
-            // ZIM login is async — error 6000121 means "not logged in yet".
-            // Retry up to 8 times with 1 s gaps before giving up.
-            async function startCall(maxAttempts = 8, retryDelay = 1000) {
-
-                for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-
-                    try {
-
-                        // log(`Sending video call invitation (attempt ${attempt}/${maxAttempts})…`);
-
-                        await zp.sendCallInvitation({
-
-                            callees: [{
-                                userID: receiverID,
-                                userName: receiverName,
-                            }],
-
-                            callType: ZegoUIKitPrebuilt.InvitationTypeVideoCall,
-
-                            timeout: 60,
-                        });
-
-                        // log('Invitation sent', 's');
-                        return;
-
-                    } catch (err) {
-
-                        // 6000121 = ZIM not logged in yet; wait and retry
-                        if (err?.code === 6000121 && attempt < maxAttempts) {
-
-                            // log(`ZIM not ready (${err.code}), retrying in ${retryDelay}ms…`);
-
-                            await new Promise(r => setTimeout(r, retryDelay));
-
-                        } else {
-
-                            console.error(err);
-
-                            showErr(
-                                'Failed to send invitation: ' +
-                                JSON.stringify({
-                                    code: err?.code,
-                                    message: err?.message
-                                })
-                            );
-
-                            return;
-                        }
+                    if (!callAccepted && !callEndHandled) {
+                        handleCallEnd('rejected');
                     }
+                },
+
+                onOutgoingCallDeclined(data) {
+                    console.log('Outgoing call declined', data);
+
+                    if (!callAccepted && !callEndHandled) {
+                        handleCallEnd('rejected');
+                    }
+                },
+
+                onOutgoingCallTimeout(data) {
+                    console.log('Outgoing call timeout', data);
+
+                    if (!callAccepted && !callEndHandled) {
+                        handleCallEnd('missed');
+                    }
+                },
+
+                onCallInvitationEnded(reason, data) {
+                    console.log('Call invitation ended', reason, data);
+                },
+
+                onSetRoomConfigBeforeJoining(callType) {
+
+                    console.log('Preparing room config');
+
+                    return {
+
+                        showPreJoinView: false,
+                        showLeavingView: false,
+
+                        onJoinRoom() {
+                            console.log('ROOM JOINED');
+
+                            if (!callAccepted) {
+                                callAccepted = true;
+                                callStartTime = Date.now();
+                                callStatus = 'completed';
+                            }
+                        },
+
+                        onUserJoin(user) {
+                            console.log('REMOTE USER JOINED', user);
+
+                            if (!callAccepted) {
+                                callAccepted = true;
+                                callStartTime = Date.now();
+                                callStatus = 'completed';
+                            }
+                        },
+
+                        onUserLeave(user) {
+                            console.log('REMOTE USER LEFT', user);
+
+                            if (!callEndHandled) {
+                                handleCallEnd(callStatus);
+                            }
+                        },
+
+                        onLeaveRoom() {
+                            console.log('LOCAL USER LEFT ROOM');
+
+                            if (!callEndHandled) {
+                                handleCallEnd(callStatus);
+                            }
+                        }
+                    };
                 }
-            }
-
-            // Kick off after a short initial pause so ZIM can log in
-            setTimeout(() => startCall(), 1500);
-
-        } catch (err) {
-            showErr('Failed to initialise call: ' + (err.message || err));
+            });
         }
 
-        // Safety net: if ZEGO navigates away without firing onCallEnd, save here
+        // Safety net: if page closes unexpectedly
         window.addEventListener('beforeunload', () => {
-            if (callStartTime) {
+            if (callStartTime && !callSaved) {
                 saveCallRecord(callStatus, Date.now());
             }
         });

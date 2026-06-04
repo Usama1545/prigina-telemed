@@ -30,32 +30,33 @@
 
     <script>
         // ── State ─────────────────────────────────────────────────────────────────
-        let currentCallID   = null;
+        let currentCallID = null;
         let ringtoneInterval = null;
 
         // Outgoing call tracking (populated by window._startChatCall)
-        let _callStartTime       = null;
-        let _callStatus          = 'missed';
-        let _callSaved           = false;
-        let _callConversationId  = null;
-        let _callCallerId        = null;
-        let _callReceiverId      = null;
-        let _callType            = null;
-        let _callCsrfToken       = null;
+        let _callStartTime = null;
+        let _callStatus = 'missed';
+        let _callSaved = false;
+        let _callConversationId = null;
+        let _callCallerId = null;
+        let _callReceiverId = null;
+        let _callType = null;
+        let _callCsrfToken = null;
 
-        window._zegoReady        = false;
-        window._zegoInstance     = null;
-        window._zegoInitFailed   = false;
+        window._zegoReady = false;
+        window._zegoInstance = null;
+        window._zegoInitFailed = false;
 
         // ── Ringtone ──────────────────────────────────────────────────────────────
 
         function startRingtone() {
             stopRingtone();
+
             function beep() {
                 try {
                     const ctx = _getCtx();
-                    const t   = ctx.currentTime;
-                    _tone(ctx, 1200, t,        0.15, 0.7);
+                    const t = ctx.currentTime;
+                    _tone(ctx, 1200, t, 0.15, 0.7);
                     _tone(ctx, 1200, t + 0.18, 0.15, 0.7);
                 } catch (_) {}
             }
@@ -81,9 +82,9 @@
             if (_callSaved || !_callConversationId) return;
             _callSaved = true;
 
-            const duration = (_callStartTime && endTime)
-                ? Math.floor((endTime - _callStartTime) / 1000)
-                : 0;
+            const duration = (_callStartTime && endTime) ?
+                Math.floor((endTime - _callStartTime) / 1000) :
+                0;
 
             fetch(`/conversation/${_callConversationId}/save-call`, {
                 method: 'POST',
@@ -92,13 +93,13 @@
                     'X-CSRF-TOKEN': _callCsrfToken,
                 },
                 body: JSON.stringify({
-                    callerId:  _callCallerId,
+                    callerId: _callCallerId,
                     receiverId: _callReceiverId,
-                    callType:  _callType,
-                    status:    status,
-                    duration:  duration,
+                    callType: _callType,
+                    status: status,
+                    duration: duration,
                     startTime: _callStartTime ? new Date(_callStartTime).toISOString() : null,
-                    endTime:   endTime        ? new Date(endTime).toISOString()        : null,
+                    endTime: endTime ? new Date(endTime).toISOString() : null,
                 }),
                 keepalive: true,
             }).then(() => {
@@ -110,14 +111,14 @@
         }
 
         function _resetCallState() {
-            _callStartTime      = null;
-            _callStatus         = 'missed';
-            _callSaved          = false;
+            _callStartTime = null;
+            _callStatus = 'missed';
+            _callSaved = false;
             _callConversationId = null;
-            _callCallerId       = null;
-            _callReceiverId     = null;
-            _callType           = null;
-            _callCsrfToken      = null;
+            _callCallerId = null;
+            _callReceiverId = null;
+            _callType = null;
+            _callCsrfToken = null;
         }
 
         // ── DOM-based call state detection ────────────────────────────────────────
@@ -135,7 +136,7 @@
                     // ZEGO rendered its call UI → call is connected
                     if (!_callStartTime) {
                         _callStartTime = Date.now();
-                        _callStatus    = 'completed';
+                        _callStatus = 'completed';
                         document.body.classList.add('zego-call-active');
                         stopRingtone();
                     }
@@ -144,11 +145,13 @@
                     if (_callStartTime) {
                         const endTime = Date.now();
                         document.body.classList.remove('zego-call-active');
-                        _saveCallRecord(_callStatus, endTime);
+                        // _saveCallRecord(_callStatus, endTime);
                         _resetCallState();
                     }
                 }
-            }).observe(container, { childList: true });
+            }).observe(container, {
+                childList: true
+            });
         }
 
         // The listener partial is included after @yield('content'), so #zego-container
@@ -168,23 +171,26 @@
             }
 
             _callConversationId = conversationId;
-            _callCallerId       = callerId;
-            _callReceiverId     = receiverId;
-            _callType           = callType;
-            _callCsrfToken      = csrfToken;
-            _callSaved          = false;
-            _callStatus         = 'missed';
-            _callStartTime      = null;
+            _callCallerId = callerId;
+            _callReceiverId = receiverId;
+            _callType = callType;
+            _callCsrfToken = csrfToken;
+            _callSaved = false;
+            _callStatus = 'missed';
+            _callStartTime = null;
 
-            const invitationType = callType === 'video'
-                ? ZegoUIKitPrebuilt.InvitationTypeVideoCall
-                : ZegoUIKitPrebuilt.InvitationTypeVoiceCall;
+            const invitationType = callType === 'video' ?
+                ZegoUIKitPrebuilt.InvitationTypeVideoCall :
+                ZegoUIKitPrebuilt.InvitationTypeVoiceCall;
 
             (async function sendInvitation(maxAttempts = 8, retryDelay = 1000) {
                 for (let attempt = 1; attempt <= maxAttempts; attempt++) {
                     try {
                         await window._zegoInstance.sendCallInvitation({
-                            callees: [{ userID: receiverId, userName: receiverName }],
+                            callees: [{
+                                userID: receiverId,
+                                userName: receiverName
+                            }],
                             callType: invitationType,
                             timeout: 60,
                         });
@@ -213,17 +219,24 @@
                     return;
                 }
 
-                const { token, userID, userName, appID } = await res.json();
+                const {
+                    token,
+                    userID,
+                    userName,
+                    appID
+                } = await res.json();
 
                 const kitToken = ZegoUIKitPrebuilt.generateKitTokenForProduction(
                     appID, token, 'listener_' + userID, userID, userName
                 );
 
                 const zp = ZegoUIKitPrebuilt.create(kitToken);
-                zp.addPlugins({ ZIM });
+                zp.addPlugins({
+                    ZIM
+                });
 
                 window._zegoInstance = zp;
-                window._zegoReady    = true;
+                window._zegoReady = true;
 
                 zp.setCallInvitationConfig({
                     enableNotifyWhenAppRunningInBackgroundOrQuit: true,
@@ -276,24 +289,6 @@
 
                     // ── Outgoing call pre-connected outcomes ──────────────────────
                     // These fire reliably before call room connects (no DOM to detect yet).
-
-                    onOutgoingCallDeclined() {
-                        console.log('[ZEGO] Outgoing call declined');
-                        _saveCallRecord('rejected', Date.now());
-                        _resetCallState();
-                    },
-
-                    onOutgoingCallRejected() {
-                        console.log('[ZEGO] Outgoing call rejected');
-                        _saveCallRecord('rejected', Date.now());
-                        _resetCallState();
-                    },
-
-                    onOutgoingCallTimeout() {
-                        console.log('[ZEGO] Outgoing call timed out');
-                        _saveCallRecord('missed', Date.now());
-                        _resetCallState();
-                    },
                 });
 
                 if ('Notification' in window && Notification.permission === 'default') {
