@@ -220,18 +220,16 @@
         })();
 
         async function sendDirectCallInvitation(maxAttempts = 5, retryDelay = 1000) {
-
+            // First, wait for ZIM to be ready
+            // Set up call event handlers
             setupCallEventHandlers();
 
+            // Send the invitation
             for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-
                 try {
+                    console.log(`Sending call invitation (attempt ${attempt}/${maxAttempts})…`);
 
-                    console.log(
-                        `Sending call invitation (attempt ${attempt}/${maxAttempts})...`
-                    );
-
-                    const result = await zp.sendCallInvitation({
+                    const invitationResult = await zp.sendCallInvitation({
                         callees: [{
                             userID: receiverID,
                             userName: receiverName,
@@ -240,37 +238,90 @@
                         timeout: 60,
                     });
 
-                    console.log(
-                        'Invitation sent successfully',
-                        result
-                    );
+                    console.log('Invitation sent successfully', invitationResult);
+
+                    // After invitation is sent, join the room to show the call UI
 
                     return;
-
                 } catch (err) {
-
-                    console.error(
-                        `Attempt ${attempt} failed`,
-                        err
-                    );
+                    console.error(`Attempt ${attempt} failed:`, err);
 
                     if (attempt === maxAttempts) {
-
-                        showErr(
-                            'Failed to send invitation: ' +
-                            (err.message || JSON.stringify(err))
-                        );
-
+                        showErr('Failed to send invitation: ' + (err.message || JSON.stringify(err)));
                     } else {
-
-                        await new Promise(
-                            r => setTimeout(r, retryDelay)
-                        );
-
+                        await new Promise(r => setTimeout(r, retryDelay));
                     }
                 }
             }
         }
+
+        function setupCallEventHandlers() {
+            // Set up invitation config
+            zp.setCallInvitationConfig({
+                enableNotifyWhenAppRunningInBackgroundOrQuit: true,
+
+                onIncomingCallReceived(callID, caller, callType, callees) {
+                    console.log('Incoming call received from:', caller.userName);
+                },
+
+                onIncomingCallCanceled() {
+                    console.log('Incoming call canceled');
+                    if (!callAccepted && !callEndHandled) {
+                        handleCallEnd('missed');
+                    }
+                },
+
+                onIncomingCallRejected() {
+                    console.log('Incoming call rejected');
+                    if (!callAccepted && !callEndHandled) {
+                        handleCallEnd('rejected');
+                    }
+                },
+
+                onIncomingCallTimeout() {
+                    console.log('Incoming call timeout');
+                    if (!callAccepted && !callEndHandled) {
+                        handleCallEnd('missed');
+                    }
+                },
+
+                onOutgoingCallAccepted(data) {
+                    console.log('Outgoing call accepted', data);
+                    callAccepted = true;
+                    callStartTime = Date.now();
+                    callStatus = 'completed';
+                },
+
+                onOutgoingCallRejected(data) {
+                    console.log('Outgoing call rejected', data);
+                    if (!callAccepted && !callEndHandled) {
+                        handleCallEnd('rejected');
+                    }
+                },
+
+                onOutgoingCallDeclined(data) {
+                    console.log('Outgoing call declined', data);
+                    if (!callAccepted && !callEndHandled) {
+                        handleCallEnd('rejected');
+                    }
+                },
+
+                onOutgoingCallTimeout(data) {
+                    console.log('Outgoing call timeout', data);
+                    if (!callAccepted && !callEndHandled) {
+                        handleCallEnd('missed');
+                    }
+                },
+
+                onOutgoingCallEnd(data) {
+                    console.log('Call ended event fired', data);
+                    if (!callEndHandled) {
+                        handleCallEnd(callStatus);
+                    }
+                }
+            });
+        }
+
         // Safety net: if page closes unexpectedly
         window.addEventListener('beforeunload', () => {
             if (callStartTime && !callSaved) {
