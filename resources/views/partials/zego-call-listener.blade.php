@@ -311,19 +311,40 @@
                         currentCallID = null;
                     },
 
-                    onCallEnd(callID) {
-                        console.log('[ZEGO] Call ended, callID:', callID);
-                        toggleCallMode(false);
-                        stopRingtone();
-                        showCallBars();
-                        stopCallAcceptWatcher();
-                        currentCallID = null;
-                        redirectAfterCallEnd();
-                        window.location.href = preCallUrl;
-                        // Safety net: in case ZEGO navigates away before firing onCallEnd
-                        // Do NOT redirect — the user is already on this page;
-                        // ZEGO closes its overlay and the page content is visible again.
-                    },
+                    let pageReloaded = false;
+
+                    onSetRoomConfigBeforeJoining(callType) {
+
+                        return {
+
+                            showPreJoinView: false,
+                            showLeavingView: false,
+
+                            onLeaveRoom() {
+
+                                console.log('LOCAL LEFT ROOM');
+
+                                if (pageReloaded) return;
+                                pageReloaded = true;
+
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 500);
+                            },
+
+                            onUserLeave(user) {
+
+                                console.log('REMOTE LEFT ROOM', user);
+
+                                if (pageReloaded) return;
+                                pageReloaded = true;
+
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 500);
+                            }
+                        };
+                    }
                 });
 
                 if ('Notification' in window && Notification.permission === 'default') {
