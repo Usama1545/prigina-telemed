@@ -97,6 +97,12 @@
         let callSaved = false;
 
         function saveCallRecord(status, endTime) {
+            console.log(
+                'SAVE CALL',
+                status,
+                endTime,
+                callStartTime
+            );
             if (callSaved) return;
             callSaved = true;
             const duration = (callStartTime && endTime) ?
@@ -227,6 +233,26 @@
 
                 enableNotifyWhenAppRunningInBackgroundOrQuit: true,
 
+
+                onInvitationUserStateChanged(userInfos) {
+                    console.log(
+                        'onInvitationUserStateChanged',
+                        JSON.stringify(userInfos)
+                    );
+                },
+
+                onIncomingCallAcceptButtonPressed() {
+                    console.log('ACCEPT BUTTON PRESSED');
+                },
+
+                onIncomingCallDeclineButtonPressed() {
+                    console.log('DECLINE BUTTON PRESSED');
+                },
+
+                onOutgoingCallCancelButtonPressed() {
+                    console.log('CANCEL BUTTON PRESSED');
+                }
+
                 onIncomingCallReceived(callID, caller, callType, callees) {
                     // caller side only — incoming call on this page is not expected;
                     // do not set callStatus here to avoid corrupting the outgoing record
@@ -348,6 +374,8 @@
 
         // Safety net: if ZEGO navigates away without firing onCallEnd, save here
         window.addEventListener('beforeunload', () => {
+            console.log('BEFORE UNLOAD');
+
             if (callStartTime) {
                 saveCallRecord(callStatus, Date.now());
             }
