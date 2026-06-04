@@ -324,6 +324,10 @@
 
                 onCallInvitationEnded(reason, data) {
                     console.log('Call invitation ended', reason, data);
+
+                    if (!callAccepted && !callEndHandled) {
+                        handleCallEnd('missed');
+                    }
                 },
 
                 onSetRoomConfigBeforeJoining(callType) {
