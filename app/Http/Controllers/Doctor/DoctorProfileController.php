@@ -278,12 +278,25 @@ class DoctorProfileController extends Controller
             ['field' => 'doctorId', 'op' => '=', 'value' => $uid],
         ], null, null, 'lastMessageTime', 'DESC');
 
+        // Only show conversations where an appointment exists with that patient
+        $appointments = $this->firestore->query('appointments', [
+            ['field' => 'doctorId', 'op' => '=', 'value' => $uid],
+        ]);
+
+        $patientsWithAppointments = collect($appointments['documents'] ?? [])
+            ->pluck('patientId')
+            ->filter()
+            ->unique()
+            ->flip()
+            ->toArray();
+
         $conversations = collect($filteredConversations['documents'] ?? [])
+            ->filter(fn ($conv) => isset($patientsWithAppointments[$conv['patientId'] ?? '']))
             ->map(fn ($conversation) => $this->normalizeConversation($conversation))
+            ->values()
             ->all();
 
         return view('doctor.chat', compact('conversations'));
-
     }
 
     public function messages(Request $request, $id)

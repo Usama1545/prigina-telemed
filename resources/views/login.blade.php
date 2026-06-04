@@ -2,177 +2,128 @@
 @extends('layouts.mainlayout')
 
 @section('content')
-
-<div class="content">
-    <div class="container-fluid">
+    <div class="content container-fluid">
 
         <div class="row">
-            <div class="col-md-8 offset-md-2">
+            <div class="col-md-12 col-lg-10 offset-lg-1">
 
                 <div class="account-content">
 
-                    <div class="row align-items-center justify-content-center">
+                    <div class="col-md-7 col-lg-6 login-left">
 
-                        <div class="col-md-7 col-lg-6 login-left">
+                        <img src="{{ asset('build/img/login-1.jpeg') }}" class="img-fluid" alt="PriGina Global Telemed Login">
 
-                            <img
-                                src="{{ URL::asset('build/img/login-banner.png') }}"
-                                class="img-fluid"
-                                alt="PriGina Global Telemed Login"
-                            >
+                    </div>
 
+                    <div class="col-md-12 col-lg-6 login-right">
+
+                        <div class="login-header" id="loginHeader">
+                            <h3>
+                                Login
+                                <span>PriGina Global Telemed</span>
+                            </h3>
                         </div>
 
-                        <div class="col-md-12 col-lg-6 login-right">
+                        <form id="loginForm" onsubmit="return handleLogin(event)">
 
-                            <div
-                                class="login-header"
-                                id="loginHeader"
-                            >
-                                <h3>
-                                    Login
-                                    <span>PriGina Global Telemed</span>
-                                </h3>
+                            @csrf
+
+                            <div class="mb-3">
+
+                                <label class="form-label">
+                                    E-mail
+                                </label>
+
+                                <input type="text" id="email" class="form-control">
+
                             </div>
 
-                            <form
-                                id="loginForm"
-                                onsubmit="return handleLogin(event)"
-                            >
+                            <div class="mb-3">
 
-                                @csrf
-
-                                <div class="mb-3">
+                                <div class="form-group-flex">
 
                                     <label class="form-label">
-                                        E-mail
+                                        Password
                                     </label>
 
-                                    <input
-                                        type="text"
-                                        id="email"
-                                        class="form-control"
-                                    >
-
-                                </div>
-
-                                <div class="mb-3">
-
-                                    <div class="form-group-flex">
-
-                                        <label class="form-label">
-                                            Password
-                                        </label>
-
-                                        <a
-                                            href="{{ route('forgot-password') }}"
-                                            class="forgot-link"
-                                        >
-                                            Forgot password?
-                                        </a>
-
-                                    </div>
-
-                                    <div class="pass-group">
-
-                                        <input
-                                            type="password"
-                                            id="password"
-                                            class="form-control pass-input"
-                                        >
-
-                                        <span class="feather-eye-off toggle-password"></span>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="mb-3 form-check-box">
-
-                                    <div class="form-group-flex">
-
-                                        <div class="form-check mb-0">
-
-                                            <input
-                                                class="form-check-input"
-                                                type="checkbox"
-                                                id="remember"
-                                                checked
-                                            >
-
-                                            <label
-                                                class="form-check-label"
-                                                for="remember"
-                                            >
-                                                Remember Me
-                                            </label>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                <button
-                                    id="loginBtn"
-                                    class="btn btn-primary-gradient w-100"
-                                    type="submit"
-                                >
-
-                                    <span id="btnText">
-                                        Sign in
-                                    </span>
-
-                                    <span
-                                        id="btnSpinner"
-                                        class="spinner-border spinner-border-sm ms-2 d-none"
-                                    ></span>
-
-                                </button>
-
-                                <div class="login-or">
-
-                                    <span class="or-line"></span>
-
-                                    <span class="span-or">
-                                        or
-                                    </span>
-
-                                </div>
-
-                                <div class="social-login-btn">
-
-                                    <a
-                                        href="javascript:void(0);"
-                                        onclick="googleLogin()"
-                                        class="btn w-100"
-                                    >
-
-                                        <img
-                                            src="{{ URL::asset('build/img/icons/google-icon.svg') }}"
-                                            alt="google-icon"
-                                        >
-
-                                        Sign in With Google
-
+                                    <a href="{{ route('forgot-password') }}" class="forgot-link">
+                                        Forgot password?
                                     </a>
 
                                 </div>
 
-                                <div class="account-signup">
+                                <div class="pass-group">
 
-                                    <p>
-                                        Don't have an account ?
-                                        <a href="{{ url('register') }}">
-                                            Sign up
-                                        </a>
-                                    </p>
+                                    <input type="password" id="password" class="form-control pass-input">
+
+                                    <span class="feather-eye-off toggle-password"></span>
 
                                 </div>
 
-                            </form>
+                            </div>
 
-                        </div>
+                            <div class="mb-3 form-check-box">
+
+                                <div class="form-group-flex">
+
+                                    <div class="form-check mb-0">
+
+                                        <input class="form-check-input" type="checkbox" id="remember" checked>
+
+                                        <label class="form-check-label" for="remember">
+                                            Remember Me
+                                        </label>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <button id="loginBtn" class="btn btn-primary-gradient w-100" type="submit">
+
+                                <span id="btnText">
+                                    Sign in
+                                </span>
+
+                                <span id="btnSpinner" class="spinner-border spinner-border-sm ms-2 d-none"></span>
+
+                            </button>
+
+                            <div class="login-or">
+
+                                <span class="or-line"></span>
+
+                                <span class="span-or">
+                                    or
+                                </span>
+
+                            </div>
+
+                            <div class="social-login-btn">
+
+                                <a href="javascript:void(0);" onclick="googleLogin()" class="btn w-100">
+
+                                    <img src="{{ URL::asset('build/img/icons/google-icon.svg') }}" alt="google-icon">
+
+                                    Sign in With Google
+
+                                </a>
+
+                            </div>
+
+                            <div class="account-signup">
+
+                                <p>
+                                    Don't have an account ?
+                                    <a href="{{ url('register') }}">
+                                        Sign up
+                                    </a>
+                                </p>
+
+                            </div>
+
+                        </form>
 
                     </div>
 
@@ -181,101 +132,132 @@
             </div>
         </div>
 
-    </div>
-</div>
 
+    </div>
+    <style>
+        .login-right {
+            background: #fff;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+        }
+
+        .account-content {
+            min-height: calc(100vh - 180px);
+            display: flex;
+            align-items: center;
+        }
+
+        .login-left img {
+            max-width: 850px;
+            width: 100%;
+        }
+
+        .account-page .content {
+            padding: 40px 0 60px;
+            background: #fafbff !important;
+        }
+
+        .account-content {
+            margin: 0 20px;
+        }
+
+        .content {
+            min-height: 200px;
+            padding: 60px 0 36px;
+            background: #fafbff;
+        }
+    </style>
 @endsection
 
 @push('scripts')
+    <script>
+        let pendingVerificationUser = null;
 
-<script>
+        async function handleLogin(e) {
 
-let pendingVerificationUser = null;
+            e.preventDefault();
 
-async function handleLogin(e) {
+            const btn =
+                document.getElementById('loginBtn');
 
-    e.preventDefault();
+            const spinner =
+                document.getElementById('btnSpinner');
 
-    const btn =
-        document.getElementById('loginBtn');
+            const text =
+                document.getElementById('btnText');
 
-    const spinner =
-        document.getElementById('btnSpinner');
+            btn.disabled = true;
 
-    const text =
-        document.getElementById('btnText');
+            spinner.classList.remove('d-none');
 
-    btn.disabled = true;
+            text.innerText = 'Signing in...';
 
-    spinner.classList.remove('d-none');
+            const email =
+                document.getElementById('email').value;
 
-    text.innerText = 'Signing in...';
+            const password =
+                document.getElementById('password').value;
 
-    const email =
-        document.getElementById('email').value;
+            try {
 
-    const password =
-        document.getElementById('password').value;
+                const userCredential =
+                    await auth.signInWithEmailAndPassword(
+                        email,
+                        password
+                    );
 
-    try {
+                const user =
+                    userCredential.user;
 
-        const userCredential =
-            await auth.signInWithEmailAndPassword(
-                email,
-                password
-            );
+                if (!user.emailVerified) {
 
-        const user =
-            userCredential.user;
+                    showVerificationView(user);
 
-        if (!user.emailVerified) {
+                    return;
+                }
 
-            showVerificationView(user);
+                const token =
+                    await user.getIdToken();
 
-            return;
+                const refreshToken =
+                    user.refreshToken;
+
+                await sendTokenToBackend(
+                    token,
+                    refreshToken
+                );
+
+            } catch (error) {
+
+                showAlert(
+                    error.message || 'Login failed'
+                );
+
+                btn.disabled = false;
+
+                spinner.classList.add('d-none');
+
+                text.innerText = 'Sign in';
+            }
         }
 
-        const token =
-            await user.getIdToken();
+        function showVerificationView(user) {
 
-        const refreshToken =
-            user.refreshToken;
+            pendingVerificationUser = user;
 
-        await sendTokenToBackend(
-            token,
-            refreshToken
-        );
-
-    } catch (error) {
-
-        showAlert(
-            error.message || 'Login failed'
-        );
-
-        btn.disabled = false;
-
-        spinner.classList.add('d-none');
-
-        text.innerText = 'Sign in';
-    }
-}
-
-function showVerificationView(user) {
-
-    pendingVerificationUser = user;
-
-    document
-        .getElementById('loginHeader')
-        .innerHTML = `
+            document
+                .getElementById('loginHeader')
+                .innerHTML = `
             <h3>
                 Verify Email
                 <span>PriGina Global Telemed</span>
             </h3>
         `;
 
-    document
-        .getElementById('loginForm')
-        .innerHTML = `
+            document
+                .getElementById('loginForm')
+                .innerHTML = `
 
             <div class="text-center mb-4">
 
@@ -340,243 +322,240 @@ function showVerificationView(user) {
                 Back To Login
             </button>
         `;
-}
-
-async function resendVerificationEmail() {
-
-    try {
-
-        const btn =
-            document.getElementById('resendBtn');
-
-        btn.disabled = true;
-
-        btn.innerText = 'Sending...';
-
-        await pendingVerificationUser
-            .sendEmailVerification();
-
-        showAlert(
-            'Verification email sent successfully',
-            'success'
-        );
-
-    } catch (e) {
-
-        showAlert(
-            e.message || 'Failed to resend email'
-        );
-
-    } finally {
-
-        const btn =
-            document.getElementById('resendBtn');
-
-        btn.disabled = false;
-
-        btn.innerText =
-            'Resend Verification Email';
-    }
-}
-
-async function checkVerificationStatus() {
-
-    try {
-
-        const btn =
-            document.getElementById('checkBtn');
-
-        btn.disabled = true;
-
-        btn.innerText = 'Checking...';
-
-        await pendingVerificationUser.reload();
-
-        const refreshedUser =
-            auth.currentUser;
-
-        if (!refreshedUser.emailVerified) {
-
-            showAlert(
-                'Email is still not verified'
-            );
-
-            return;
         }
 
-        const token =
-            await refreshedUser.getIdToken();
+        async function resendVerificationEmail() {
 
-        const refreshToken =
-            refreshedUser.refreshToken;
+            try {
 
-        await sendTokenToBackend(
-            token,
-            refreshToken
-        );
+                const btn =
+                    document.getElementById('resendBtn');
 
-    } catch (e) {
+                btn.disabled = true;
 
-        showAlert(
-            e.message || 'Verification failed'
-        );
+                btn.innerText = 'Sending...';
 
-    } finally {
+                await pendingVerificationUser
+                    .sendEmailVerification();
 
-        const btn =
-            document.getElementById('checkBtn');
+                showAlert(
+                    'Verification email sent successfully',
+                    'success'
+                );
 
-        if (btn) {
+            } catch (e) {
 
-            btn.disabled = false;
+                showAlert(
+                    e.message || 'Failed to resend email'
+                );
 
-            btn.innerText =
-                'I Have Verified My Email';
-        }
-    }
-}
+            } finally {
 
-async function googleLogin() {
+                const btn =
+                    document.getElementById('resendBtn');
 
-    const provider =
-        new firebase.auth.GoogleAuthProvider();
+                btn.disabled = false;
 
-    try {
-
-        const result =
-            await auth.signInWithPopup(provider);
-
-        const user =
-            result.user;
-
-        if (!user.emailVerified) {
-
-            showVerificationView(user);
-
-            return;
+                btn.innerText =
+                    'Resend Verification Email';
+            }
         }
 
-        const token =
-            await user.getIdToken();
+        async function checkVerificationStatus() {
 
-        const refreshToken =
-            user.refreshToken;
+            try {
 
-        await sendTokenToBackend(
-            token,
-            refreshToken
-        );
+                const btn =
+                    document.getElementById('checkBtn');
 
-    } catch (error) {
+                btn.disabled = true;
 
-        showAlert(
-            error.message || 'Google login failed'
-        );
-    }
-}
+                btn.innerText = 'Checking...';
 
-async function refreshCsrfToken() {
+                await pendingVerificationUser.reload();
 
-    const response =
-        await fetch('/csrf-token', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-            },
-            credentials: 'same-origin',
-        });
+                const refreshedUser =
+                    auth.currentUser;
 
-    const data =
-        await response.json();
+                if (!refreshedUser.emailVerified) {
 
-    const csrfMeta =
-        document.querySelector(
-            'meta[name="csrf-token"]'
-        );
+                    showAlert(
+                        'Email is still not verified'
+                    );
 
-    const csrfInput =
-        document.querySelector(
-            'input[name="_token"]'
-        );
+                    return;
+                }
 
-    if (data.token && csrfMeta) {
-        csrfMeta.setAttribute(
-            'content',
-            data.token
-        );
-    }
+                const token =
+                    await refreshedUser.getIdToken();
 
-    if (data.token && csrfInput) {
-        csrfInput.value = data.token;
-    }
+                const refreshToken =
+                    refreshedUser.refreshToken;
 
-    return data.token;
-}
+                await sendTokenToBackend(
+                    token,
+                    refreshToken
+                );
 
-async function postLoginToken(token, refreshToken) {
+            } catch (e) {
 
-    return fetch('/auth/login', {
+                showAlert(
+                    e.message || 'Verification failed'
+                );
 
-        method: 'POST',
+            } finally {
 
-        headers: {
-            'Content-Type': 'application/json',
+                const btn =
+                    document.getElementById('checkBtn');
 
-            'X-CSRF-TOKEN':
+                if (btn) {
+
+                    btn.disabled = false;
+
+                    btn.innerText =
+                        'I Have Verified My Email';
+                }
+            }
+        }
+
+        async function googleLogin() {
+
+            const provider =
+                new firebase.auth.GoogleAuthProvider();
+
+            try {
+
+                const result =
+                    await auth.signInWithPopup(provider);
+
+                const user =
+                    result.user;
+
+                if (!user.emailVerified) {
+
+                    showVerificationView(user);
+
+                    return;
+                }
+
+                const token =
+                    await user.getIdToken();
+
+                const refreshToken =
+                    user.refreshToken;
+
+                await sendTokenToBackend(
+                    token,
+                    refreshToken
+                );
+
+            } catch (error) {
+
+                showAlert(
+                    error.message || 'Google login failed'
+                );
+            }
+        }
+
+        async function refreshCsrfToken() {
+
+            const response =
+                await fetch('/csrf-token', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                    },
+                    credentials: 'same-origin',
+                });
+
+            const data =
+                await response.json();
+
+            const csrfMeta =
                 document.querySelector(
                     'meta[name="csrf-token"]'
-                ).getAttribute('content'),
+                );
 
-            'Accept': 'application/json',
-        },
+            const csrfInput =
+                document.querySelector(
+                    'input[name="_token"]'
+                );
 
-        credentials: 'same-origin',
+            if (data.token && csrfMeta) {
+                csrfMeta.setAttribute(
+                    'content',
+                    data.token
+                );
+            }
 
-        body: JSON.stringify({
-            token: token,
-            refreshToken: refreshToken
-        })
-    });
-}
+            if (data.token && csrfInput) {
+                csrfInput.value = data.token;
+            }
 
-async function sendTokenToBackend(
-    token,
-    refreshToken
-) {
+            return data.token;
+        }
 
-    let response =
-        await postLoginToken(
+        async function postLoginToken(token, refreshToken) {
+
+            return fetch('/auth/login', {
+
+                method: 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json',
+
+                    'X-CSRF-TOKEN': document.querySelector(
+                        'meta[name="csrf-token"]'
+                    ).getAttribute('content'),
+
+                    'Accept': 'application/json',
+                },
+
+                credentials: 'same-origin',
+
+                body: JSON.stringify({
+                    token: token,
+                    refreshToken: refreshToken
+                })
+            });
+        }
+
+        async function sendTokenToBackend(
             token,
             refreshToken
-        );
+        ) {
 
-    if (response.status === 419) {
+            let response =
+                await postLoginToken(
+                    token,
+                    refreshToken
+                );
 
-        await refreshCsrfToken();
+            if (response.status === 419) {
 
-        response =
-            await postLoginToken(
-                token,
-                refreshToken
-            );
-    }
+                await refreshCsrfToken();
 
-    const data =
-        await response.json();
+                response =
+                    await postLoginToken(
+                        token,
+                        refreshToken
+                    );
+            }
 
-    if (response.ok) {
+            const data =
+                await response.json();
 
-        window.location.href =
-            '/dashboard';
+            if (response.ok) {
 
-    } else {
+                window.location.href =
+                    '/dashboard';
 
-        showAlert(
-            data.error || 'Login failed'
-        );
-    }
-}
+            } else {
 
-</script>
-
+                showAlert(
+                    data.error || 'Login failed'
+                );
+            }
+        }
+    </script>
 @endpush

@@ -272,12 +272,25 @@ class PatientController extends Controller
             ['field' => 'patientId', 'op' => '=', 'value' => $uid],
         ], null, null, 'lastMessageTime', 'DESC');
 
+        // Only show conversations where an appointment exists with that doctor
+        $appointments = $this->firestore->query('appointments', [
+            ['field' => 'patientId', 'op' => '=', 'value' => $uid],
+        ]);
+
+        $doctorsWithAppointments = collect($appointments['documents'] ?? [])
+            ->pluck('doctorId')
+            ->filter()
+            ->unique()
+            ->flip()
+            ->toArray();
+
         $conversations = collect($filteredConversations['documents'] ?? [])
+            ->filter(fn ($conv) => isset($doctorsWithAppointments[$conv['doctorId'] ?? '']))
             ->map(fn ($conversation) => $this->normalizeConversation($conversation))
+            ->values()
             ->all();
 
         return view('patient.chat', compact('conversations'));
-
     }
 
     public function messages(Request $request, $id)
@@ -765,6 +778,16 @@ class PatientController extends Controller
 
         if (! $patient) {
             abort(403);
+        }
+
+        // Block conversation creation if no appointment exists with this doctor
+        $appointment = $this->firestore->query('appointments', [
+            ['field' => 'patientId', 'op' => '=', 'value' => $patient['uid']],
+            ['field' => 'doctorId', 'op' => '=', 'value' => $doctor['uid']],
+        ], 1);
+
+        if (empty($appointment['documents'] ?? [])) {
+            abort(403, 'You must have an appointment with this doctor before starting a chat.');
         }
 
         $converastion = $this->firestore->query('conversations', [

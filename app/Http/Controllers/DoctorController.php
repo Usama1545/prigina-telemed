@@ -131,9 +131,22 @@ class DoctorController extends Controller
             return $firestore->query('reviews', $baseFilter, 5, null)['documents'] ?? [];
         });
 
+        $patient = current_patient();
+        $hasAppointment = false;
+
+        if ($patient) {
+            $patientAppointments = $firestore->query('appointments', [
+                ['field' => 'patientId', 'op' => '=', 'value' => $patient['uid']],
+                ['field' => 'doctorId', 'op' => '=', 'value' => $id],
+            ], 1);
+
+            $hasAppointment = !empty($patientAppointments['documents'] ?? []);
+        }
+
         return view('doctor-profile', [
             'doctor' => $doctor,
             'reviews' => $reviews,
+            'hasAppointment' => $hasAppointment,
             ...$stats
         ]);
     }

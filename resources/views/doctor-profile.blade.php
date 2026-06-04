@@ -86,11 +86,13 @@
                                 </li>
                                 <li>
 
+                                    @if($hasAppointment)
                                     <ul class="contact-doctors">
                                         <li><a href="{{ route('conversation.create', $doctor['uid']) }}"><span><img
                                                         src="{{ URL::asset('build/img/icons/device-message2.svg') }}"
                                                         alt="Img"></span>Contact Doctor</a></li>
                                     </ul>
+                                    @endif
                                 </li>
                             </ul>
                         </div>
