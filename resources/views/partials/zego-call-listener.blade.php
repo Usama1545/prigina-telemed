@@ -177,7 +177,7 @@
                     ZIM
                 };
                 zp.addPlugins(zimPlugin);
-                clet inCall = false;
+                let inCall = false;
 
                 setInterval(() => {
 
