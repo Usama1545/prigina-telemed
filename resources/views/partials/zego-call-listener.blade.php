@@ -31,6 +31,16 @@
         cursor: pointer;
         text-decoration: underline;
     }
+
+    body.zego-call-active .header.header-default,
+    body.zego-call-active .bottom-nav,
+    body.zego-call-active .mobile-bottom-nav {
+        display: none !important;
+    }
+
+    body.zego-call-active #zego-container {
+        z-index: 999999 !important;
+    }
 </style>
 
 @if ($needsListener)
