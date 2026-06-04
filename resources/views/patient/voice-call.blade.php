@@ -220,18 +220,18 @@
         })();
 
         async function sendDirectCallInvitation(maxAttempts = 5, retryDelay = 1000) {
-            // First, wait for ZIM to be ready
-            await waitForZIM(maxAttempts, retryDelay);
 
-            // Set up call event handlers
             setupCallEventHandlers();
 
-            // Send the invitation
             for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-                try {
-                    console.log(`Sending call invitation (attempt ${attempt}/${maxAttempts})…`);
 
-                    const invitationResult = await zp.sendCallInvitation({
+                try {
+
+                    console.log(
+                        `Sending call invitation (attempt ${attempt}/${maxAttempts})...`
+                    );
+
+                    const result = await zp.sendCallInvitation({
                         callees: [{
                             userID: receiverID,
                             userName: receiverName,
@@ -240,209 +240,37 @@
                         timeout: 60,
                     });
 
-                    console.log('Invitation sent successfully', invitationResult);
-
-                    // After invitation is sent, join the room to show the call UI
-                    await joinCallRoom();
+                    console.log(
+                        'Invitation sent successfully',
+                        result
+                    );
 
                     return;
+
                 } catch (err) {
-                    console.error(`Attempt ${attempt} failed:`, err);
+
+                    console.error(
+                        `Attempt ${attempt} failed`,
+                        err
+                    );
 
                     if (attempt === maxAttempts) {
-                        showErr('Failed to send invitation: ' + (err.message || JSON.stringify(err)));
+
+                        showErr(
+                            'Failed to send invitation: ' +
+                            (err.message || JSON.stringify(err))
+                        );
+
                     } else {
-                        await new Promise(r => setTimeout(r, retryDelay));
+
+                        await new Promise(
+                            r => setTimeout(r, retryDelay)
+                        );
+
                     }
                 }
             }
         }
-
-        async function waitForZIM(maxAttempts = 5, retryDelay = 1000) {
-            for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-                try {
-                    const zim = zp.getPlugin('ZIM');
-                    if (zim && zim.isLoggedIn) {
-                        console.log('ZIM is ready');
-                        return;
-                    }
-
-                    console.log(`Waiting for ZIM (attempt ${attempt}/${maxAttempts})…`);
-                    await new Promise(r => setTimeout(r, retryDelay));
-                } catch (err) {
-                    console.log(`ZIM check attempt ${attempt} failed:`, err);
-                    await new Promise(r => setTimeout(r, retryDelay));
-                }
-            }
-            console.log('ZIM may not be ready, continuing anyway...');
-        }
-
-        function setupCallEventHandlers() {
-            // Set up invitation config
-            zp.setCallInvitationConfig({
-                enableNotifyWhenAppRunningInBackgroundOrQuit: true,
-
-                onIncomingCallReceived(callID, caller, callType, callees) {
-                    console.log('Incoming call received from:', caller.userName);
-                },
-
-                onIncomingCallCanceled() {
-                    console.log('Incoming call canceled');
-                    if (!callAccepted && !callEndHandled) {
-                        handleCallEnd('missed');
-                    }
-                },
-
-                onIncomingCallRejected() {
-                    console.log('Incoming call rejected');
-                    if (!callAccepted && !callEndHandled) {
-                        handleCallEnd('rejected');
-                    }
-                },
-
-                onIncomingCallTimeout() {
-                    console.log('Incoming call timeout');
-                    if (!callAccepted && !callEndHandled) {
-                        handleCallEnd('missed');
-                    }
-                },
-
-                onOutgoingCallAccepted(data) {
-                    console.log('Outgoing call accepted', data);
-                    callAccepted = true;
-                    callStartTime = Date.now();
-                    callStatus = 'completed';
-                },
-
-                onOutgoingCallRejected(data) {
-                    console.log('Outgoing call rejected', data);
-                    if (!callAccepted && !callEndHandled) {
-                        handleCallEnd('rejected');
-                    }
-                },
-
-                onOutgoingCallDeclined(data) {
-                    console.log('Outgoing call declined', data);
-                    if (!callAccepted && !callEndHandled) {
-                        handleCallEnd('rejected');
-                    }
-                },
-
-                onOutgoingCallTimeout(data) {
-                    console.log('Outgoing call timeout', data);
-                    if (!callAccepted && !callEndHandled) {
-                        handleCallEnd('missed');
-                    }
-                },
-
-                onCallEnd(data) {
-                    console.log('Call ended event fired', data);
-                    if (!callEndHandled) {
-                        handleCallEnd(callStatus);
-                    }
-                }
-            });
-        }
-
-        async function joinCallRoom() {
-            return new Promise((resolve, reject) => {
-                try {
-                    // Configure the UI - hide all unnecessary UI elements
-                    const config = {
-                        showPreJoinView: false, // Don't show pre-join screen
-                        showScreenSharingButton: false,
-                        showTextChat: false,
-                        showInviteButton: false,
-                        showRemoveUserButton: false,
-                        turnOnMicrophoneWhenJoining: true,
-                        turnOnCameraWhenJoining: false,
-                        showMyCameraToggleButton: false,
-                        showAudioVideoSettingsButton: true,
-                        showLayoutButton: false,
-                        showNonVideoUser: true,
-                        showLeaveRoomButton: true, // Show leave button but we'll handle it
-                        showRoomDetailsButton: false,
-                        showUserListButton: false,
-                        container: document.getElementById('zego-container'),
-                        onLeaveRoom: () => {
-                            console.log('Leave room button clicked');
-                            if (!callEndHandled) {
-                                if (callAccepted) {
-                                    handleCallEnd(callStatus);
-                                } else {
-                                    handleCallEnd('missed');
-                                }
-                            }
-                        },
-                        onUserLeave: (users) => {
-                            console.log('User left:', users);
-                            // If the other person left and call was accepted
-                            if (callAccepted && !callEndHandled) {
-                                handleCallEnd(callStatus);
-                            }
-                        },
-                        onJoinRoom: () => {
-                            console.log('Joined room successfully');
-                            // Hide any post-call dialogs that might appear
-                            setTimeout(hidePostCallUI, 100);
-                        }
-                    };
-
-                    // Join the room
-                    zp.joinRoom(roomID, config);
-
-                    // Continuously hide unwanted UI elements
-                    const hideInterval = setInterval(() => {
-                        if (forceRedirect || callEndHandled) {
-                            clearInterval(hideInterval);
-                            return;
-                        }
-                        hidePostCallUI();
-                    }, 500);
-
-                    resolve();
-                } catch (err) {
-                    reject(err);
-                }
-            });
-        }
-
-        function hidePostCallUI() {
-            // Hide any post-call or leave room dialogs
-            const selectors = [
-                '.zego-leave-room-container',
-                '.zego-leave-room',
-                '.dialog-post-call',
-                '.zego-dialog-post-call',
-                '[class*="post-call"]',
-                '[class*="leave-room"]',
-                '.zego-dialog-container',
-                '.zego-float-tool-box',
-                // Add more selectors as needed
-            ];
-
-            selectors.forEach(selector => {
-                const elements = document.querySelectorAll(selector);
-                elements.forEach(el => {
-                    if (el && el.style) {
-                        el.style.display = 'none';
-                        // Also try to remove if it's a dialog
-                        if (el.classList && el.classList.contains('zego-dialog-container')) {
-                            el.remove();
-                        }
-                    }
-                });
-            });
-
-            // Also hide any backdrop/modals
-            const modals = document.querySelectorAll('.modal, .dialog, [role="dialog"]');
-            modals.forEach(modal => {
-                if (modal && modal.style && !modal.closest('#zego-container')) {
-                    modal.style.display = 'none';
-                }
-            });
-        }
-
         // Safety net: if page closes unexpectedly
         window.addEventListener('beforeunload', () => {
             if (callStartTime && !callSaved) {
