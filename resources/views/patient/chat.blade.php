@@ -320,6 +320,8 @@
     <script>
         $(document).ready(function() {
 
+            const CURRENT_UID = "{{ current_user()['uid'] }}";
+
             let currentConversationId = null;
             let previousMessageCount = 0;
             let userScrolledUp = false;
@@ -962,6 +964,59 @@
         `;
             }
 
+            function buildMessageHtml(message) {
+
+                if (message.type === 'call') {
+                    return renderCallCard(message);
+                }
+
+                const isOwnMessage = message.senderId === CURRENT_UID;
+
+                const ts = message.timestamp || message.createdAt || new Date().toISOString();
+                const timeString = new Date(ts).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                let readIcon = '';
+
+                if (isOwnMessage) {
+                    readIcon = message.isRead ?
+                        `<i class="fa-solid fa-check-double text-primary ms-1"></i>` :
+                        `<i class="fa-solid fa-check ms-1 text-muted"></i>`;
+                }
+
+                return `
+                <div class="chats ${isOwnMessage ? 'chats-right' : ''}">
+                    <div class="chat-avatar">
+                        <i class="fa-solid ${isOwnMessage ? 'fa-user' : 'fa-user-doctor'}"
+                            style="font-size: 32px; color: ${isOwnMessage ? '#28a745' : '#0d6efd'};">
+                        </i>
+                    </div>
+                    <div class="chat-content">
+                        <div class="chat-profile-name ${isOwnMessage ? 'text-end justify-content-end' : ''}">
+                            <h6><span>${timeString} ${readIcon}</span></h6>
+                        </div>
+                        <div class="message-content">
+                            ${message.imageUrl ? `
+                                <div class="chat-image mb-2">
+                                    <a href="${message.imageUrl}" download target="_blank">
+                                        <img src="${message.imageUrl}" style="max-width:220px;border-radius:10px;cursor:pointer;">
+                                    </a>
+                                </div>` : ''}
+                            ${message.documentUrl ? `
+                                <div class="chat-document mb-2">
+                                    <a href="${message.documentUrl}" download target="_blank"
+                                        class="btn btn-sm btn-primary text-white">
+                                        <i class="fa-solid fa-file-lines"></i> Download Document
+                                    </a>
+                                </div>` : ''}
+                            ${message.text ? `<p class="mb-0">${escapeHtml(message.text)}</p>` : ''}
+                        </div>
+                    </div>
+                </div>`;
+            }
+
             function renderMessages(messages) {
 
                 if (!messages || messages.length === 0) {
@@ -976,96 +1031,8 @@
                 }
 
                 let html = '';
-
                 messages.forEach(function(message) {
-
-                    if (message.type === 'call') {
-                        html += renderCallCard(message);
-                        return;
-                    }
-
-                    const isOwnMessage =
-                        message.senderId === "{{ current_user()['uid'] }}";
-
-                    const timeString =
-                        new Date(message.timestamp)
-                        .toLocaleTimeString([], {
-                            hour: '2-digit',
-                            minute: '2-digit'
-                        });
-
-                    let readIcon = '';
-
-                    if (isOwnMessage) {
-
-                        readIcon = message.isRead ?
-                            `<i class="fa-solid fa-check-double text-primary ms-1"></i>` :
-                            `<i class="fa-solid fa-check ms-1 text-muted"></i>`;
-                    }
-
-                    html += `
-                <div class="chats ${isOwnMessage ? 'chats-right' : ''}">
-
-                    <div class="chat-avatar">
-                        <i class="fa-solid ${isOwnMessage ? 'fa-user' :  'fa-user-doctor' }"
-                            style="font-size: 32px; color: ${isOwnMessage ? '#28a745' : '#0d6efd'};">
-                        </i>
-                    </div>
-
-                    <div class="chat-content">
-
-                        <div class="chat-profile-name ${isOwnMessage ? 'text-end justify-content-end' : ''}">
-
-                            <h6>
-
-
-
-                                <span>
-                                    ${timeString}
-                                    ${readIcon}
-                                </span>
-
-                            </h6>
-
-                        </div>
-
-                        <div class="message-content">
-
-                            ${message.imageUrl ? `
-                                                    <div class="chat-image mb-2">
-                                                        <a href="${message.imageUrl}" download target="_blank">
-                                                            <img src="${message.imageUrl}"
-                                                                style="max-width:220px;border-radius:10px;cursor:pointer;">
-                                                        </a>
-                                                    </div>
-                                                ` : ''}
-
-                            ${message.documentUrl ? `
-                                                    <div class="chat-document mb-2">
-                                                        <a href="${message.documentUrl}"
-                                                            download
-                                                            target="_blank"
-                                                            class="btn btn-sm btn-primary text-white">
-
-                                                            <i class="fa-solid fa-file-lines"></i>
-                                                            Download Document
-
-                                                        </a>
-                                                    </div>
-                                                ` : ''}
-
-                            ${message.text ? `
-                                                    <p class="mb-0">
-                                                        ${escapeHtml(message.text)}
-                                                    </p>
-                                                ` : ''}
-
-                        </div>
-
-                    </div>
-
-                </div>
-            `;
+                    html += buildMessageHtml(message);
                 });
 
                 $('#messagesList').html(html);
@@ -1150,13 +1117,10 @@
 
                         userScrolledUp = false;
 
-                        loadMessages(
-                            conversationId,
-                            true,
-                            true
-                        );
-
-                        refreshConversationList();
+                        if (response.message) {
+                            window.appendMessage(response.message);
+                            window.updateSidebarConversation(conversationId, response.message.text || messageText, false);
+                        }
                     },
 
                     error: function(xhr) {
@@ -1219,13 +1183,12 @@
 
                         userScrolledUp = false;
 
-                        loadMessages(
-                            conversationId,
-                            true,
-                            true
-                        );
-
-                        refreshConversationList();
+                        if (response.message) {
+                            window.appendMessage(response.message);
+                            const previewText = response.message.text ||
+                                (response.message.imageUrl ? '📷 Photo' : '📄 Document');
+                            window.updateSidebarConversation(conversationId, previewText, false);
+                        }
                     },
 
                     error: function(xhr) {
@@ -1306,7 +1269,59 @@
             window.onCallEnded = function() {
                 if (currentConversationId) {
                     loadMessages(currentConversationId, false, true);
-                    refreshConversationList();
+                }
+            };
+
+            // =========================
+            // REAL-TIME HELPERS (used by mainlayout Pusher handler)
+            // =========================
+
+            window.markConversationRead = markMessagesAsRead;
+
+            window.appendMessage = function(message) {
+                if (!message) return;
+
+                // Clear placeholder if present
+                $('#messagesList .text-center').remove();
+
+                $('#messagesList').append(buildMessageHtml(message));
+                currentMessages.push(message);
+
+                if (!userScrolledUp) scrollToBottom();
+            };
+
+            window.updateSidebarConversation = function(conversationId, text, isIncoming) {
+                const li = $(`.user-list-item[data-conversation-id="${conversationId}"]`);
+                if (!li.length) return;
+
+                li.find('.users-list-body p').text(text || '');
+
+                let timeBlock = li.find('.last-chat-time');
+                if (!timeBlock.length) {
+                    li.find('.users-list-body').append(
+                        `<div class="last-chat-time"><small class="text-muted">just now</small><div class="chat-pin"></div></div>`
+                    );
+                    timeBlock = li.find('.last-chat-time');
+                }
+
+                timeBlock.find('small').text('just now');
+
+                const pin = timeBlock.find('.chat-pin');
+                if (isIncoming && window.currentConversationId !== conversationId) {
+                    const badge = pin.find('.unread.badge');
+                    const count = badge.length ? (parseInt(badge.text()) || 0) + 1 : 1;
+                    pin.html(`<span class="unread badge badge-primary">${count}</span>`);
+                } else if (!isIncoming) {
+                    pin.html(`<i class="fi fi-rr-check text-muted"></i>`);
+                } else {
+                    pin.html(`<i class="fa-solid fa-check-double text-primary"></i>`);
+                }
+
+                const parent = li.parent();
+                li.detach().prependTo(parent);
+
+                if (window.currentConversationId === conversationId) {
+                    li.addClass('active');
                 }
             };
 

@@ -42,6 +42,8 @@ class NewMessageEvent implements ShouldBroadcastNow
             'receiverId' => $this->data['receiverId'] ?? null,
             'senderName' => $this->data['senderName'] ?? null,
             'text' => $this->data['text'] ?? null,
+            'imageUrl' => $this->data['imageUrl'] ?? null,
+            'documentUrl' => $this->data['documentUrl'] ?? null,
             'conversationId' => $this->data['conversationId'] ?? null,
             'createdAt' => $this->data['createdAt'] ?? null,
         ];

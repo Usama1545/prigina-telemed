@@ -137,22 +137,27 @@
 
                                                                                 showNotification(e);
 
-                                                                                console.log('new message', e);
-
-                                                                                // refresh sidebar
-                                                                                if (typeof refreshConversationList === 'function') {
-                                                                                    refreshConversationList();
+                                                                                // Update sidebar preview in-place (no page refetch)
+                                                                                if (typeof window.updateSidebarConversation === 'function') {
+                                                                                    window.updateSidebarConversation(e.conversationId, e.text, true);
                                                                                 }
 
-                                                                                // refresh open chat only if same conversation
-                                                                                if (
-                                                                                    typeof loadMessages === 'function' &&
-                                                                                    window.currentConversationId === e.conversationId
-                                                                                ) {
-
-                                                                                    loadMessages(e.conversationId, true, true);
-
-                                                                                    markMessagesAsRead(e.conversationId);
+                                                                                // Append to open chat if this conversation is active
+                                                                                if (window.currentConversationId === e.conversationId) {
+                                                                                    if (typeof window.appendMessage === 'function') {
+                                                                                        window.appendMessage({
+                                                                                            id: e.messageId,
+                                                                                            senderId: e.senderId,
+                                                                                            text: e.text,
+                                                                                            imageUrl: e.imageUrl || null,
+                                                                                            documentUrl: e.documentUrl || null,
+                                                                                            timestamp: e.createdAt,
+                                                                                            isRead: false,
+                                                                                        });
+                                                                                    }
+                                                                                    if (typeof window.markConversationRead === 'function') {
+                                                                                        window.markConversationRead(e.conversationId);
+                                                                                    }
                                                                                 }
                                                                             });
                                                                             Echo.channel(`appointments.${userId}`)
