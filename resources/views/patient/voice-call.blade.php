@@ -187,30 +187,16 @@
 
             const observer = new MutationObserver(() => {
 
-                const container = document.getElementById('zego-container');
+                const container =
+                    document.getElementById('zego-container');
 
-                const active =
-                    container &&
-                    container.children.length > 0;
-
-                if (active && !callStartedAt) {
-
-                    callStartedAt = Date.now();
-
-                    console.log('CALL CONNECTED');
-                }
-
-                if (!active && callStartedAt) {
-
-                    console.log('CALL ENDED');
-
-                    console.log(
-                        'DURATION',
-                        Math.floor((Date.now() - callStartedAt) / 1000)
-                    );
-
-                    callStartedAt = null;
-                }
+                console.log(
+                    'MUTATION',
+                    'children:',
+                    container.children.length,
+                    'html length:',
+                    container.innerHTML.length
+                );
 
             });
 
@@ -220,6 +206,7 @@
                     subtree: true
                 }
             );
+            console.log('OBSERVER ATTACHED');
 
             // ─────────────────────────────────────────────────────────
             // Incoming Call Listener
