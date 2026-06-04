@@ -251,7 +251,7 @@
 
                 onOutgoingCallCancelButtonPressed() {
                     console.log('CANCEL BUTTON PRESSED');
-                }
+                },
 
                 onIncomingCallReceived(callID, caller, callType, callees) {
                     // caller side only — incoming call on this page is not expected;
