@@ -173,20 +173,26 @@
                 );
 
                 const zp = ZegoUIKitPrebuilt.create(kitToken);
+                console.log('ZEGO INSTANCE', zp);
+
+                console.log(
+                    'METHODS',
+                    Object.keys(zp).sort()
+                );
                 zimPlugin = {
                     ZIM
                 };
                 zp.addPlugins(zimPlugin);
                 let inCall = false;
 
-                setInterval(() => {
+                // setInterval(() => {
 
-                    const players =
-                        document.querySelectorAll('[id^="zg-rtc-player-"]');
+                //     const players =
+                //         document.querySelectorAll('[id^="zg-rtc-player-"]');
 
-                    console.log('PLAYERS FOUND:', players.length);
+                //     console.log('PLAYERS FOUND:', players.length);
 
-                }, 1000);
+                // }, 1000);
                 zp.setCallInvitationConfig({
                     enableNotifyWhenAppRunningInBackgroundOrQuit: true,
 
