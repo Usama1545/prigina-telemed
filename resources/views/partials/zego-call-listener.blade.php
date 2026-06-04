@@ -5,18 +5,41 @@
 @endphp
 
 <style>
-    body.zego-call-active .header,
-    body.zego-call-active .footer,
+    #zego-container {
+        width: 100%;
+        height: 100vh;
+    }
+
+    #errBanner {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 9999;
+        background: #7f1d1d;
+        color: #fca5a5;
+        padding: 12px 20px;
+        font-size: 13px;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    #errBanner a {
+        color: #fde68a;
+        margin-left: 16px;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    body.zego-call-active .header.header-default,
     body.zego-call-active .bottom-nav,
-    body.zego-call-active .mobile-bottom-nav,
-    body.zego-call-active .bottom-navigation,
-    body.zego-call-active .sidebar {
+    body.zego-call-active .mobile-bottom-nav {
         display: none !important;
     }
 
     body.zego-call-active #zego-container {
         z-index: 999999 !important;
-        pointer-events: auto !important;
     }
 </style>
 
@@ -29,25 +52,110 @@
     <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
 
     <script>
-        // ── State ─────────────────────────────────────────────────────────────────
         let currentCallID = null;
         let ringtoneInterval = null;
+        let zimPlugin = null;
+        let callAcceptedObserver = null;
+        let preCallUrl = window.location.href;
 
-        // Outgoing call tracking (populated by window._startChatCall)
-        let _callStartTime = null;
-        let _callStatus = 'missed';
-        let _callSaved = false;
-        let _callConversationId = null;
-        let _callCallerId = null;
-        let _callReceiverId = null;
-        let _callType = null;
-        let _callCsrfToken = null;
+        // ── UI helpers ────────────────────────────────────────────────────────────
 
-        window._zegoReady = false;
-        window._zegoInstance = null;
-        window._zegoInitFailed = false;
+        function hideCallBars() {
+            const header = document.querySelector('header.header-default');
+            const bottomNav = document.querySelector('.mobile-bottom-nav');
+            if (header) header.style.display = 'none';
+            if (bottomNav) bottomNav.style.display = 'none';
+        }
 
-        // ── Ringtone ──────────────────────────────────────────────────────────────
+        function showCallBars() {
+            const header = document.querySelector('header.header-default');
+            const bottomNav = document.querySelector('.mobile-bottom-nav');
+            if (header) header.style.display = '';
+            if (bottomNav) bottomNav.style.display = '';
+        }
+
+        function toggleCallMode(enabled) {
+
+            const selectors = [
+                '.header',
+                '.footer',
+                '.bottom-navigation',
+                '.sidebar',
+                '.topbar',
+                '.navbar',
+                '.main-wrapper > *:not(script)',
+                '.page-content',
+            ];
+
+            selectors.forEach(selector => {
+
+                document.querySelectorAll(selector)
+                    .forEach(el => {
+
+                        if (enabled) {
+
+                            el.dataset.prevDisplay =
+                                el.style.display || '';
+
+                            el.style.display = 'none';
+
+                        } else {
+
+                            el.style.display =
+                                el.dataset.prevDisplay || '';
+                        }
+                    });
+            });
+
+            document.body.style.background =
+                enabled ? '#000' : '';
+
+            document.body.style.overflow =
+                enabled ? 'hidden' : '';
+        }
+
+        // Watches for ZEGO adding its full-screen call-room overlay to <body>,
+        // which signals the user accepted the call. Stops ringtone when detected.
+        function startCallAcceptWatcher() {
+            stopCallAcceptWatcher();
+            callAcceptedObserver = new MutationObserver((mutations) => {
+                if (!currentCallID) {
+                    stopCallAcceptWatcher();
+                    return;
+                }
+                for (const m of mutations) {
+                    for (const node of m.addedNodes) {
+                        if (node.nodeType !== 1) continue;
+                        // Check after a tick so ZEGO finishes sizing the element
+                        setTimeout(() => {
+                            if (!currentCallID) return;
+                            const rect = node.getBoundingClientRect();
+                            if (rect.width > window.innerWidth * 0.7 &&
+                                rect.height > window.innerHeight * 0.7) {
+                                stopRingtone();
+                                stopCallAcceptWatcher();
+                            }
+                        }, 150);
+                    }
+                }
+            });
+            callAcceptedObserver.observe(document.body, {
+                childList: true
+            });
+        }
+
+        function stopCallAcceptWatcher() {
+            if (callAcceptedObserver) {
+                callAcceptedObserver.disconnect();
+                callAcceptedObserver = null;
+            }
+        }
+
+        // ── Ringtone ─────────────────────────────────────────────────────────────
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) stopRingtone();
+        });
 
         function startRingtone() {
             stopRingtone();
@@ -60,6 +168,7 @@
                     _tone(ctx, 1200, t + 0.18, 0.15, 0.7);
                 } catch (_) {}
             }
+
             beep();
             ringtoneInterval = setInterval(beep, 1200);
         }
@@ -71,151 +180,23 @@
             }
         }
 
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) stopRingtone();
-        });
-
-        // ── Call record saving ────────────────────────────────────────────────────
-
-        function _saveCallRecord(status, endTime) {
-            // Only the caller saves the record
-            if (_callSaved || !_callConversationId) return;
-            _callSaved = true;
-
-            const duration = (_callStartTime && endTime) ?
-                Math.floor((endTime - _callStartTime) / 1000) :
-                0;
-
-            fetch(`/conversation/${_callConversationId}/save-call`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': _callCsrfToken,
-                },
-                body: JSON.stringify({
-                    callerId: _callCallerId,
-                    receiverId: _callReceiverId,
-                    callType: _callType,
-                    status: status,
-                    duration: duration,
-                    startTime: _callStartTime ? new Date(_callStartTime).toISOString() : null,
-                    endTime: endTime ? new Date(endTime).toISOString() : null,
-                }),
-                keepalive: true,
-            }).then(() => {
-                // Refresh chat messages to surface the new call card
-                if (window.loadMessages && window.currentConversationId) {
-                    window.loadMessages(window.currentConversationId, true, true);
-                }
-            }).catch(() => {});
-        }
-
-        function _resetCallState() {
-            _callStartTime = null;
-            _callStatus = 'missed';
-            _callSaved = false;
-            _callConversationId = null;
-            _callCallerId = null;
-            _callReceiverId = null;
-            _callType = null;
-            _callCsrfToken = null;
-        }
-
-        // ── DOM-based call state detection ────────────────────────────────────────
-        //
-        // Watch #zego-container for ZEGO rendering/removing its call UI.
-        // Called once the DOM is ready (the container is a permanent element in
-        // each chat page, so it exists by the time this script runs).
-
-        function _watchContainer() {
-            const container = document.getElementById('zego-container');
-            if (!container) return; // not on a chat page — nothing to do
-
-            new MutationObserver(() => {
-                if (container.children.length > 0) {
-                    // ZEGO rendered its call UI → call is connected
-                    if (!_callStartTime) {
-                        _callStartTime = Date.now();
-                        _callStatus = 'completed';
-                        document.body.classList.add('zego-call-active');
-                        stopRingtone();
-                    }
-                } else {
-                    // ZEGO removed its call UI → call has ended
-                    if (_callStartTime) {
-                        const endTime = Date.now();
-                        document.body.classList.remove('zego-call-active');
-                        // _saveCallRecord(_callStatus, endTime);
-                        _resetCallState();
-                    }
-                }
-            }).observe(container, {
-                childList: true
-            });
-        }
-
-        // The listener partial is included after @yield('content'), so #zego-container
-        // is already in the DOM at this point.
-        _watchContainer();
-
-        // ── Public API for chat pages ─────────────────────────────────────────────
-
-        window._startChatCall = function(receiverId, receiverName, callType, conversationId, callerId, csrfToken) {
-            if (!window._zegoInstance || !window._zegoReady) {
-                console.warn('[ZEGO] Instance not ready yet — please wait a moment');
-                return;
+        async function rejectCall(callID) {
+            if (zimPlugin && callID) {
+                try {
+                    await zimPlugin.rejectCall(callID, {});
+                    stopRingtone();
+                    currentCallID = null;
+                } catch (e) {}
             }
-            if (_callStartTime) {
-                console.warn('[ZEGO] A call is already in progress');
-                return;
-            }
+        }
 
-            _callConversationId = conversationId;
-            _callCallerId = callerId;
-            _callReceiverId = receiverId;
-            _callType = callType;
-            _callCsrfToken = csrfToken;
-            _callSaved = false;
-            _callStatus = 'missed';
-            _callStartTime = null;
-
-            const invitationType = callType === 'video' ?
-                ZegoUIKitPrebuilt.InvitationTypeVideoCall :
-                ZegoUIKitPrebuilt.InvitationTypeVoiceCall;
-
-            (async function sendInvitation(maxAttempts = 8, retryDelay = 1000) {
-                for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-                    try {
-                        await window._zegoInstance.sendCallInvitation({
-                            callees: [{
-                                userID: receiverId,
-                                userName: receiverName
-                            }],
-                            callType: invitationType,
-                            timeout: 60,
-                        });
-                        console.log('[ZEGO] Call invitation sent');
-                        return;
-                    } catch (err) {
-                        if (err?.code === 6000121 && attempt < maxAttempts) {
-                            await new Promise(r => setTimeout(r, retryDelay));
-                        } else {
-                            console.error('[ZEGO] Failed to send invitation:', err);
-                            _resetCallState();
-                            return;
-                        }
-                    }
-                }
-            })();
-        };
-
-        // ── Init ──────────────────────────────────────────────────────────────────
+        // ── Init ─────────────────────────────────────────────────────────────────
 
         (async function() {
             try {
                 const res = await fetch('{{ $tokenRoute }}');
                 if (!res.ok) {
-                    console.error('[ZEGO] Failed to fetch token');
+                    console.error('[ZEGO] Failed to get token');
                     return;
                 }
 
@@ -231,35 +212,70 @@
                 );
 
                 const zp = ZegoUIKitPrebuilt.create(kitToken);
-                zp.addPlugins({
+                console.log(zp.express);
+                console.log(Object.keys(zp.express));
+                console.log(zp.express.zegoWebRTC);
+                console.log(zp.express.zegoWebRTM);
+                zimPlugin = {
                     ZIM
+                };
+                zp.addPlugins(zimPlugin);
+                let inCall = false;
+
+                const observer = new MutationObserver(() => {
+
+                    const zegoContainer =
+                        document.getElementById('zego-container');
+
+                    if (zegoContainer) {
+
+                        document.body.classList.add('zego-call-active');
+
+                        stopRingtone();
+                    } else {
+
+                        document.body.classList.remove('zego-call-active');
+                    }
                 });
 
-                window._zegoInstance = zp;
-                window._zegoReady = true;
+                observer.observe(document.body, {
+                    childList: true,
+                    subtree: true
+                });
 
+                // setInterval(() => {
+
+                //     const players =
+                //         document.querySelectorAll('[id^="zg-rtc-player-"]');
+
+                //     console.log('PLAYERS FOUND:', players.length);
+
+                // }, 1000);
                 zp.setCallInvitationConfig({
                     enableNotifyWhenAppRunningInBackgroundOrQuit: true,
 
-                    // ── Incoming call events ──────────────────────────────────────
-
-                    onIncomingCallReceived(callID, caller) {
+                    onIncomingCallReceived(callID, caller, callType) {
                         console.log('[ZEGO] Incoming call from', caller.userName, 'callID:', callID);
                         currentCallID = callID;
                         startRingtone();
+                        // hideCallBars();
+                        // startCallAcceptWatcher();
 
                         if (Notification.permission === 'granted') {
                             new Notification('Incoming Call', {
                                 body: `${caller.userName} is calling you...`,
-                                icon: '/favicon.ico',
+                                icon: '/favicon.ico'
                             });
                         }
+
                     },
 
                     onIncomingCallCanceled(callID) {
                         console.log('[ZEGO] Incoming call canceled, callID:', callID);
                         if (currentCallID === callID) {
                             stopRingtone();
+                            showCallBars();
+                            stopCallAcceptWatcher();
                             currentCallID = null;
                         }
                     },
@@ -268,27 +284,46 @@
                         console.log('[ZEGO] Incoming call timed out, callID:', callID);
                         if (currentCallID === callID) {
                             stopRingtone();
+                            showCallBars();
+                            stopCallAcceptWatcher();
                             currentCallID = null;
                         }
                     },
 
                     onIncomingCallRejected(callID) {
-                        console.log('[ZEGO] Incoming call rejected (by self), callID:', callID);
+                        console.log('[ZEGO] Incoming call rejected, callID:', callID);
                         if (currentCallID === callID) {
                             stopRingtone();
+                            showCallBars();
+                            stopCallAcceptWatcher();
                             currentCallID = null;
                         }
                     },
 
+                    // Fires on the caller side when callee accepts; kept here
+                    // as a fallback in case the SDK fires it on the callee too.
                     onIncomingCallAccepted(callID) {
                         console.log('[ZEGO] Incoming call accepted, callID:', callID);
+                        preCallUrl = window.location.href;
                         stopRingtone();
+                        // stopCallAcceptWatcher();
+                        // toggleCallMode(true);
                         currentCallID = null;
-                        // UI transition is handled by _watchContainer detecting children in #zego-container
                     },
 
-                    // ── Outgoing call pre-connected outcomes ──────────────────────
-                    // These fire reliably before call room connects (no DOM to detect yet).
+                    onCallEnd(callID) {
+                        console.log('[ZEGO] Call ended, callID:', callID);
+                        toggleCallMode(false);
+                        stopRingtone();
+                        showCallBars();
+                        stopCallAcceptWatcher();
+                        currentCallID = null;
+                        redirectAfterCallEnd();
+                        window.location.href = preCallUrl;
+                        // Safety net: in case ZEGO navigates away before firing onCallEnd
+                        // Do NOT redirect — the user is already on this page;
+                        // ZEGO closes its overlay and the page content is visible again.
+                    },
                 });
 
                 if ('Notification' in window && Notification.permission === 'default') {
@@ -296,16 +331,13 @@
                 }
 
             } catch (e) {
-                console.error('[ZEGO] Call listener init failed:', e);
-                window._zegoInitFailed = true;
+                console.warn('[ZEGO] Call listener init failed:', e);
             }
         })();
 
         window.addEventListener('beforeunload', () => {
+            if (currentCallID && zimPlugin) rejectCall(currentCallID);
             stopRingtone();
-            if (_callStartTime && !_callSaved) {
-                _saveCallRecord(_callStatus, Date.now());
-            }
         });
     </script>
 @endif
