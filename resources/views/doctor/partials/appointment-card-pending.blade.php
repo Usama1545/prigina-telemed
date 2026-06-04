@@ -78,12 +78,22 @@
                                 </a>
 
                                 <a
-                                    href="{{ route('doctor.video-call', $appointment['id']) }}"
+                                    href="{{ route('doctor.appointment-video-call', $appointment['id']) }}"
                                     class="btn btn-xs btn-outline-success rounded-pill px-2 py-1"
                                     title="Video Call"
                                 >
 
                                     <i class="fa-solid fa-video"></i>
+
+                                </a>
+
+                                <a
+                                    href="{{ route('doctor.appointment-audio-call', $appointment['id']) }}"
+                                    class="btn btn-xs btn-outline-primary rounded-pill px-2 py-1"
+                                    title="Audio Call"
+                                >
+
+                                    <i class="fa-solid fa-phone"></i>
 
                                 </a>
 

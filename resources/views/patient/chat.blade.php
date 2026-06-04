@@ -421,6 +421,7 @@
             $('#audioCallBtn').on('click', function(e) {
                 e.preventDefault();
                 if (currentConversationId) {
+                    $(this).html('<span class="spinner-border spinner-border-sm" role="status"></span>').addClass('disabled');
                     window.location.href = '/patient/conversations/' + currentConversationId +
                         '/audio-call';
                 }
@@ -429,6 +430,7 @@
             $('#videoCallBtn').on('click', function(e) {
                 e.preventDefault();
                 if (currentConversationId) {
+                    $(this).html('<span class="spinner-border spinner-border-sm" role="status"></span>').addClass('disabled');
                     window.location.href = '/patient/conversations/' + currentConversationId +
                         '/video-call';
                 }
@@ -1026,33 +1028,33 @@
                         <div class="message-content">
 
                             ${message.imageUrl ? `
-                                            <div class="chat-image mb-2">
-                                                <a href="${message.imageUrl}" download target="_blank">
-                                                    <img src="${message.imageUrl}"
-                                                        style="max-width:220px;border-radius:10px;cursor:pointer;">
-                                                </a>
-                                            </div>
-                                        ` : ''}
+                                                <div class="chat-image mb-2">
+                                                    <a href="${message.imageUrl}" download target="_blank">
+                                                        <img src="${message.imageUrl}"
+                                                            style="max-width:220px;border-radius:10px;cursor:pointer;">
+                                                    </a>
+                                                </div>
+                                            ` : ''}
 
                             ${message.documentUrl ? `
-                                            <div class="chat-document mb-2">
-                                                <a href="${message.documentUrl}"
-                                                    download
-                                                    target="_blank"
-                                                    class="btn btn-sm btn-primary text-white">
+                                                <div class="chat-document mb-2">
+                                                    <a href="${message.documentUrl}"
+                                                        download
+                                                        target="_blank"
+                                                        class="btn btn-sm btn-primary text-white">
 
-                                                    <i class="fa-solid fa-file-lines"></i>
-                                                    Download Document
+                                                        <i class="fa-solid fa-file-lines"></i>
+                                                        Download Document
 
-                                                </a>
-                                            </div>
-                                        ` : ''}
+                                                    </a>
+                                                </div>
+                                            ` : ''}
 
                             ${message.text ? `
-                                            <p class="mb-0">
-                                                ${escapeHtml(message.text)}
-                                            </p>
-                                        ` : ''}
+                                                <p class="mb-0">
+                                                    ${escapeHtml(message.text)}
+                                                </p>
+                                            ` : ''}
 
                         </div>
 

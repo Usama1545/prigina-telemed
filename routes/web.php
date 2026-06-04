@@ -39,6 +39,8 @@ Route::middleware(['firebase.auth'])->group(function () {
         Route::get('/zego-token', 'zegoToken')->name('patient.zego-token');
         Route::get('/conversations/{id}/audio-call', 'audioCall')->name('patient.audio-call');
         Route::get('/conversations/{id}/video-call', 'videoCall')->name('patient.video-call');
+        Route::get('/appointments/{id}/video-call', 'appointmentVideoCall')->name('patient.appointment-video-call');
+        Route::get('/appointments/{id}/audio-call', 'appointmentAudioCall')->name('patient.appointment-audio-call');
         Route::get('conversation/{doctor_id}/create', 'createConversation')->name('conversation.create');
         Route::post('conversation/{id}/send', 'sendMessage');
         Route::get('conversations/{id}', 'conversations')->name('patient.conversations.show');
@@ -63,6 +65,8 @@ Route::middleware(['firebase.auth'])->group(function () {
         Route::post('/update-available', 'updateAvailableTimings')->name('doctor.update-availability');
         Route::get('/conversations/{id}/audio-call', 'audioCall')->name('doctor.audio-call');
         Route::get('/conversations/{id}/video-call', 'videoCall')->name('doctor.video-call');
+        Route::get('/appointments/{id}/video-call', 'appointmentVideoCall')->name('doctor.appointment-video-call');
+        Route::get('/appointments/{id}/audio-call', 'appointmentAudioCall')->name('doctor.appointment-audio-call');
         Route::get('conversation/{patient_id}/create', 'createConversation')->name('doctor.conversation.create');
         Route::post('conversation/{id}/send', 'sendMessage');
         Route::get('conversations/{id}', 'conversations')->name('doctor.conversations.show');

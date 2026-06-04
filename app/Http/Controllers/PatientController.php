@@ -696,6 +696,64 @@ class PatientController extends Controller
         ]);
     }
 
+    public function appointmentVideoCall($appointmentId)
+    {
+        $appointment = $this->firestore->find('appointments', $appointmentId);
+        if (! $appointment) {
+            abort(404);
+        }
+
+        $user = current_user();
+        if (! $user) {
+            abort(403);
+        }
+
+        $doctorId = $appointment['doctorId'] ?? null;
+        if (! $doctorId) {
+            abort(404);
+        }
+
+        $doctor = $this->firestore->find('doctors', $doctorId) ?? [];
+        $token = generateZegoToken($user['uid']);
+
+        return view('patient.video-call', [
+            'id' => $appointmentId,
+            'doctor' => $doctor,
+            'user' => $user,
+            'token' => $token,
+            'backUrl' => route('patient.appointments'),
+        ]);
+    }
+
+    public function appointmentAudioCall($appointmentId)
+    {
+        $appointment = $this->firestore->find('appointments', $appointmentId);
+        if (! $appointment) {
+            abort(404);
+        }
+
+        $user = current_user();
+        if (! $user) {
+            abort(403);
+        }
+
+        $doctorId = $appointment['doctorId'] ?? null;
+        if (! $doctorId) {
+            abort(404);
+        }
+
+        $doctor = $this->firestore->find('doctors', $doctorId) ?? [];
+        $token = generateZegoToken($user['uid']);
+
+        return view('patient.voice-call', [
+            'id' => $appointmentId,
+            'doctor' => $doctor,
+            'user' => $user,
+            'token' => $token,
+            'backUrl' => route('patient.appointments'),
+        ]);
+    }
+
     public function createConversation($id)
     {
         $doctor = $this->firestore->find('doctors', $id);
