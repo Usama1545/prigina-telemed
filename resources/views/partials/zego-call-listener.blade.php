@@ -317,9 +317,6 @@
                         stopRingtone();
                         showCallBars();
                         stopCallAcceptWatcher();
-                        currentCallID = null;
-                        redirectAfterCallEnd();
-                        window.location.href = preCallUrl;
                         // Safety net: in case ZEGO navigates away before firing onCallEnd
                         // Do NOT redirect — the user is already on this page;
                         // ZEGO closes its overlay and the page content is visible again.
