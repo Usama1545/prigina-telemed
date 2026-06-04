@@ -45,10 +45,7 @@
                                 <div class="sidebar-body chat-body" id="chatsidebar">
                                     <ul class="user-list">
                                         @foreach ($conversations as $index => $conversation)
-                                            <li class="user-list-item"
-                                                data-conversation-id="{{ $conversation['id'] }}"
-                                                data-receiver-id="{{ $conversation['patientId'] ?? '' }}"
-                                                data-receiver-name="{{ $conversation['patientName'] ?? 'Patient' }}">
+                                            <li class="user-list-item" data-conversation-id="{{ $conversation['id'] }}">
                                                 <a href="javascript:void(0);" class="conversation-item">
                                                     @php
                                                         $nameParts = explode(
@@ -212,38 +209,9 @@
         </div>
     </div>
 
-    {{-- ZEGO renders its call UI into this container when a call connects --}}
-    <div id="zego-container"></div>
-
     <style>
         .doctor-sidebar {
             display: none;
-        }
-
-        /* ── ZEGO call container ──────────────────────────── */
-        #zego-container {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 100% !important;
-            height: 100% !important;
-            z-index: -1;
-            pointer-events: none;
-            background: transparent;
-        }
-
-        body.zego-call-active #zego-container {
-            z-index: 999999 !important;
-            pointer-events: auto !important;
-            background: #0f172a !important;
-        }
-
-        body.zego-call-active .header,
-        body.zego-call-active .footer,
-        body.zego-call-active .bottom-nav,
-        body.zego-call-active .mobile-bottom-nav,
-        body.zego-call-active .sidebar {
-            display: none !important;
         }
 
         .main-chat-blk {
@@ -369,8 +337,6 @@
         $(document).ready(function() {
 
             let currentConversationId = null;
-            let currentReceiverId     = null;
-            let currentReceiverName   = null;
             let previousMessageCount = 0;
             let userScrolledUp = false;
             let isSendingMessage = false;
@@ -470,48 +436,18 @@
             // CALL BUTTONS
             // =========================
 
-            // Wait up to 2.5 s (10 × 250 ms) for ZEGO to finish initialising,
-            // then dispatch the call. Handles the race between page-ready and
-            // the async token fetch + ZegoUIKitPrebuilt.create().
-            function dispatchCall(callType) {
-                if (!currentConversationId || !currentReceiverId) return;
-
-                let attempts = 0;
-
-                function tryCall() {
-                    if (window._zegoReady) {
-                        window._startChatCall(
-                            currentReceiverId,
-                            currentReceiverName || 'Patient',
-                            callType,
-                            currentConversationId,
-                            '{{ current_user()["uid"] }}',
-                            '{{ csrf_token() }}'
-                        );
-                        return;
-                    }
-
-                    if (window._zegoInitFailed || attempts >= 10) {
-                        console.error('[ZEGO] Cannot start call — service did not initialise.');
-                        alert('Call service failed to load. Please refresh the page and try again.');
-                        return;
-                    }
-
-                    attempts++;
-                    setTimeout(tryCall, 250);
-                }
-
-                tryCall();
-            }
-
             $('#audioCallBtn').on('click', function(e) {
                 e.preventDefault();
-                dispatchCall('audio');
+                if (currentConversationId) {
+                    window.location.href = '/doctor/conversations/' + currentConversationId + '/audio-call';
+                }
             });
 
             $('#videoCallBtn').on('click', function(e) {
                 e.preventDefault();
-                dispatchCall('video');
+                if (currentConversationId) {
+                    window.location.href = '/doctor/conversations/' + currentConversationId + '/video-call';
+                }
             });
 
             $('#backToChatsBtn').click(function(e) {
@@ -522,8 +458,6 @@
 
                 currentConversationId = null;
                 window.currentConversationId = null;
-                currentReceiverId   = null;
-                currentReceiverName = null;
                 currentMessages = [];
                 messagePage = 1;
                 hasMoreMessages = false;
@@ -645,11 +579,6 @@
                 hasMoreMessages = false;
                 previousMessageCount = 0;
                 lastRenderedMessages = '';
-
-                // Capture receiver info for outgoing calls
-                const li = $(`.user-list-item[data-conversation-id="${conversationId}"]`);
-                currentReceiverId   = li.data('receiver-id')   || null;
-                currentReceiverName = li.data('receiver-name') || doctorName || 'Patient';
 
                 $('#conversationId').val(conversationId);
 
@@ -1112,33 +1041,33 @@
                         <div class="message-content">
 
                             ${message.imageUrl ? `
-                                        <div class="chat-image mb-2">
-                                            <a href="${message.imageUrl}" download target="_blank">
-                                                <img src="${message.imageUrl}"
-                                                    style="max-width:220px;border-radius:10px;cursor:pointer;">
-                                            </a>
-                                        </div>
-                                    ` : ''}
+                                            <div class="chat-image mb-2">
+                                                <a href="${message.imageUrl}" download target="_blank">
+                                                    <img src="${message.imageUrl}"
+                                                        style="max-width:220px;border-radius:10px;cursor:pointer;">
+                                                </a>
+                                            </div>
+                                        ` : ''}
 
                             ${message.documentUrl ? `
-                                        <div class="chat-document mb-2">
-                                            <a href="${message.documentUrl}"
-                                                download
-                                                target="_blank"
-                                                class="btn btn-sm btn-primary text-white">
+                                            <div class="chat-document mb-2">
+                                                <a href="${message.documentUrl}"
+                                                    download
+                                                    target="_blank"
+                                                    class="btn btn-sm btn-primary text-white">
 
-                                                <i class="fa-solid fa-file-lines"></i>
-                                                Download Document
+                                                    <i class="fa-solid fa-file-lines"></i>
+                                                    Download Document
 
-                                            </a>
-                                        </div>
-                                    ` : ''}
+                                                </a>
+                                            </div>
+                                        ` : ''}
 
                             ${message.text ? `
-                                        <p class="mb-0">
-                                            ${escapeHtml(message.text)}
-                                        </p>
-                                    ` : ''}
+                                            <p class="mb-0">
+                                                ${escapeHtml(message.text)}
+                                            </p>
+                                        ` : ''}
 
                         </div>
 
