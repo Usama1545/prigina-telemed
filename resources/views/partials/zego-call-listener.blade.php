@@ -251,6 +251,8 @@
                 //     console.log('PLAYERS FOUND:', players.length);
 
                 // }, 1000);
+                let pageReloaded = false;
+
                 zp.setCallInvitationConfig({
                     enableNotifyWhenAppRunningInBackgroundOrQuit: true,
 
@@ -311,7 +313,6 @@
                         currentCallID = null;
                     },
 
-                    let pageReloaded = false;
 
                     onSetRoomConfigBeforeJoining(callType) {
 
