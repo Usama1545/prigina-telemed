@@ -1,4 +1,6 @@
 <?php $page = 'doctor-register'; ?>
+<link rel="stylesheet" href="{{ URL::asset('build/plugins/intltelinput/css/intlTelInput.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('build/plugins/intltelinput/css/demo.css') }}">
 @extends('layouts.mainlayout')
 @section('content')
     <!-- Page Content -->
@@ -56,8 +58,10 @@
                                     <label class="form-label">Phone</label>
 
                                     <input
-                                        class="form-control group_formcontrol form-control-phone @error('phone') is-invalid @enderror"
+                                        class="form-control form-control-lg group_formcontrol form-control-phone @error('phone') is-invalid @enderror"
                                         id="Userphone" name="phone" type="text" value="{{ old('phone') }}">
+                                    <input type="hidden" name="country_code" id="country_code">
+
 
                                     @error('phone')
                                         <div class="invalid-feedback">
@@ -290,6 +294,8 @@
     <!-- /Page Content -->
 @endsection
 @push('scripts')
+    <script src="{{ URL::asset('build/plugins/intltelinput/js/intlTelInput.js') }}"></script>
+
     <script>
         $(document).ready(function() {
 
@@ -309,7 +315,7 @@
         const iti = window.intlTelInput(phoneInput, {
             initialCountry: "auto",
             separateDialCode: true,
-            preferredCountries: ["us", "pk"],
+            preferredCountries: ["us"],
             geoIpLookup: function(callback) {
 
                 fetch("https://ipinfo.io/json?token=")

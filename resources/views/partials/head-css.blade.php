@@ -293,7 +293,7 @@
 @endif
 
 @if (Route::is([
-        'doctor-register',
+        'doctor-register.home',
         'doctor-signup',
         'email-otp',
         'forgot-password2',
