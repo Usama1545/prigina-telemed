@@ -55,8 +55,13 @@
             text-decoration: underline;
         }
 
-        /* Hide Zego's pre-join view */
-        .zego-pre-join {
+        /* Hide Zego's post-call UI and other unwanted elements */
+        .zego-leave-room-container,
+        .zego-leave-room,
+        [class*="post-call"],
+        [class*="leave-room"],
+        .dialog-post-call,
+        .zego-dialog-post-call {
             display: none !important;
         }
     </style>
@@ -96,6 +101,7 @@
         let zp = null;
         let callEndHandled = false;
         let callAccepted = false;
+        let forceRedirect = false;
 
         function saveCallRecord(status, endTime) {
             console.log('SAVE CALL', status, endTime, callStartTime);
@@ -135,9 +141,22 @@
             console.log('Call ended with status:', status);
             saveCallRecord(status, Date.now());
 
-            // Clean up Zego instance
+            // Force redirect without showing Zego's UI
+            forceRedirect = true;
+
+            // Destroy Zego instance to prevent its UI from showing
             if (zp && zp.destroy) {
-                zp.destroy();
+                try {
+                    zp.destroy();
+                } catch (e) {
+                    console.error('Error destroying Zego:', e);
+                }
+            }
+
+            // Clear the container
+            const container = document.getElementById('zego-container');
+            if (container) {
+                container.innerHTML = '';
             }
 
             // Redirect after saving
@@ -150,6 +169,11 @@
             console.error('[ZEGO]', msg);
             document.getElementById('errText').textContent = msg;
             document.getElementById('errBanner').style.display = 'block';
+
+            // Redirect back after error
+            setTimeout(() => {
+                window.location.href = backUrl;
+            }, 3000);
         }
 
         // Validation
@@ -227,10 +251,6 @@
 
                     if (attempt === maxAttempts) {
                         showErr('Failed to send invitation: ' + (err.message || JSON.stringify(err)));
-                        // Redirect back after error
-                        setTimeout(() => {
-                            window.location.href = backUrl;
-                        }, 3000);
                     } else {
                         await new Promise(r => setTimeout(r, retryDelay));
                     }
@@ -241,7 +261,6 @@
         async function waitForZIM(maxAttempts = 5, retryDelay = 1000) {
             for (let attempt = 1; attempt <= maxAttempts; attempt++) {
                 try {
-                    // Check if ZIM is ready by trying to get the plugin
                     const zim = zp.getPlugin('ZIM');
                     if (zim && zim.isLoggedIn) {
                         console.log('ZIM is ready');
@@ -269,21 +288,21 @@
 
                 onIncomingCallCanceled() {
                     console.log('Incoming call canceled');
-                    if (!callAccepted) {
+                    if (!callAccepted && !callEndHandled) {
                         handleCallEnd('missed');
                     }
                 },
 
                 onIncomingCallRejected() {
                     console.log('Incoming call rejected');
-                    if (!callAccepted) {
+                    if (!callAccepted && !callEndHandled) {
                         handleCallEnd('rejected');
                     }
                 },
 
                 onIncomingCallTimeout() {
                     console.log('Incoming call timeout');
-                    if (!callAccepted) {
+                    if (!callAccepted && !callEndHandled) {
                         handleCallEnd('missed');
                     }
                 },
@@ -297,28 +316,30 @@
 
                 onOutgoingCallRejected(data) {
                     console.log('Outgoing call rejected', data);
-                    if (!callAccepted) {
+                    if (!callAccepted && !callEndHandled) {
                         handleCallEnd('rejected');
                     }
                 },
 
                 onOutgoingCallDeclined(data) {
                     console.log('Outgoing call declined', data);
-                    if (!callAccepted) {
+                    if (!callAccepted && !callEndHandled) {
                         handleCallEnd('rejected');
                     }
                 },
 
                 onOutgoingCallTimeout(data) {
                     console.log('Outgoing call timeout', data);
-                    if (!callAccepted) {
+                    if (!callAccepted && !callEndHandled) {
                         handleCallEnd('missed');
                     }
                 },
 
                 onCallEnd(data) {
                     console.log('Call ended event fired', data);
-                    handleCallEnd(callStatus);
+                    if (!callEndHandled) {
+                        handleCallEnd(callStatus);
+                    }
                 }
             });
         }
@@ -326,7 +347,7 @@
         async function joinCallRoom() {
             return new Promise((resolve, reject) => {
                 try {
-                    // Configure the UI - hide pre-join and show only call UI
+                    // Configure the UI - hide all unnecessary UI elements
                     const config = {
                         showPreJoinView: false, // Don't show pre-join screen
                         showScreenSharingButton: false,
@@ -339,39 +360,85 @@
                         showAudioVideoSettingsButton: true,
                         showLayoutButton: false,
                         showNonVideoUser: true,
-                        // Custom UI config
+                        showLeaveRoomButton: true, // Show leave button but we'll handle it
+                        showRoomDetailsButton: false,
+                        showUserListButton: false,
                         container: document.getElementById('zego-container'),
                         onLeaveRoom: () => {
-                            console.log('Left room');
-                            if (callAccepted && !callEndHandled) {
-                                handleCallEnd(callStatus);
-                            } else if (!callAccepted) {
-                                handleCallEnd('missed');
+                            console.log('Leave room button clicked');
+                            if (!callEndHandled) {
+                                if (callAccepted) {
+                                    handleCallEnd(callStatus);
+                                } else {
+                                    handleCallEnd('missed');
+                                }
                             }
                         },
                         onUserLeave: (users) => {
                             console.log('User left:', users);
+                            // If the other person left and call was accepted
                             if (callAccepted && !callEndHandled) {
                                 handleCallEnd(callStatus);
                             }
+                        },
+                        onJoinRoom: () => {
+                            console.log('Joined room successfully');
+                            // Hide any post-call dialogs that might appear
+                            setTimeout(hidePostCallUI, 100);
                         }
                     };
 
                     // Join the room
                     zp.joinRoom(roomID, config);
 
-                    // Hide any pre-join elements that might appear
-                    setTimeout(() => {
-                        const preJoinElements = document.querySelectorAll(
-                            '.zego-pre-join, .pre-join-view');
-                        preJoinElements.forEach(el => {
-                            if (el) el.style.display = 'none';
-                        });
-                    }, 100);
+                    // Continuously hide unwanted UI elements
+                    const hideInterval = setInterval(() => {
+                        if (forceRedirect || callEndHandled) {
+                            clearInterval(hideInterval);
+                            return;
+                        }
+                        hidePostCallUI();
+                    }, 500);
 
                     resolve();
                 } catch (err) {
                     reject(err);
+                }
+            });
+        }
+
+        function hidePostCallUI() {
+            // Hide any post-call or leave room dialogs
+            const selectors = [
+                '.zego-leave-room-container',
+                '.zego-leave-room',
+                '.dialog-post-call',
+                '.zego-dialog-post-call',
+                '[class*="post-call"]',
+                '[class*="leave-room"]',
+                '.zego-dialog-container',
+                '.zego-float-tool-box',
+                // Add more selectors as needed
+            ];
+
+            selectors.forEach(selector => {
+                const elements = document.querySelectorAll(selector);
+                elements.forEach(el => {
+                    if (el && el.style) {
+                        el.style.display = 'none';
+                        // Also try to remove if it's a dialog
+                        if (el.classList && el.classList.contains('zego-dialog-container')) {
+                            el.remove();
+                        }
+                    }
+                });
+            });
+
+            // Also hide any backdrop/modals
+            const modals = document.querySelectorAll('.modal, .dialog, [role="dialog"]');
+            modals.forEach(modal => {
+                if (modal && modal.style && !modal.closest('#zego-container')) {
+                    modal.style.display = 'none';
                 }
             });
         }
