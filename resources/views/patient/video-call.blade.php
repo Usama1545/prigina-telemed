@@ -2,10 +2,13 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Video Call — Prigina</title>
+
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('build/img/prigina-gav.png') }}">
+
     <style>
         *,
         *::before,
@@ -75,8 +78,10 @@
 
     <!-- ZIM SIGNALLING -->
     <script src="https://unpkg.com/zego-zim-web/index.js"></script>
+
     <!-- ZEGO PREBUILT -->
     <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
+
     <script>
         const appID = {{ (int) config('services.zego.app_id') }};
         const serverToken = @json($token);
@@ -84,9 +89,8 @@
         const userName = @json($user['name'] ?: 'User');
         const roomID = "call_{{ substr(md5($id), 0, 12) }}";
         const receiverID = @json($doctor['uid'] ?? '');
-        const receiverName = @json($doctor['name'] ?? 'User');
+        const receiverName = @json($doctor['name'] ?: 'User');
         const backUrl = @json($backUrl ?? url('/dashboard'));
-
         const conversationId = @json($id);
         const callerId = @json($user['uid']);
         const csrfToken = @json(csrf_token());
@@ -209,7 +213,7 @@
                 });
 
                 // Send invitation directly without joining room first
-                await sendCallInvitation();
+                await sendDirectCallInvitation();
 
             } catch (err) {
                 console.error('Initialization error:', err);
@@ -217,7 +221,8 @@
             }
         })();
 
-        async function sendCallInvitation(maxAttempts = 5, retryDelay = 1000) {
+        async function sendDirectCallInvitation(maxAttempts = 5, retryDelay = 1000) {
+            // First, wait for ZIM to be ready
             // Set up call event handlers
             setupCallEventHandlers();
 
@@ -236,8 +241,10 @@
                     });
 
                     console.log('Invitation sent successfully', invitationResult);
-                    return;
 
+                    // After invitation is sent, join the room to show the call UI
+
+                    return;
                 } catch (err) {
                     console.error(`Attempt ${attempt} failed:`, err);
 
@@ -367,7 +374,6 @@
                 }
             });
         }
-
         // Safety net: if page closes unexpectedly
         window.addEventListener('beforeunload', () => {
             if (callStartTime && !callSaved) {
@@ -375,6 +381,7 @@
             }
         });
     </script>
+
 </body>
 
 </html>
