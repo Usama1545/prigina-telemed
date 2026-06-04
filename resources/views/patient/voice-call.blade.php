@@ -30,6 +30,7 @@
         #zego-container {
             width: 100%;
             height: 100vh;
+            position: relative;
         }
 
         #errBanner {
@@ -52,6 +53,11 @@
             margin-left: 16px;
             cursor: pointer;
             text-decoration: underline;
+        }
+
+        /* Hide Zego's pre-join view */
+        .zego-pre-join {
+            display: none !important;
         }
     </style>
 </head>
@@ -89,6 +95,7 @@
         let callSaved = false;
         let zp = null;
         let callEndHandled = false;
+        let callAccepted = false;
 
         function saveCallRecord(status, endTime) {
             console.log('SAVE CALL', status, endTime, callStartTime);
@@ -128,18 +135,19 @@
             console.log('Call ended with status:', status);
             saveCallRecord(status, Date.now());
 
+            // Clean up Zego instance
+            if (zp && zp.destroy) {
+                zp.destroy();
+            }
+
             // Redirect after saving
             setTimeout(() => {
                 window.location.href = backUrl;
             }, 500);
         }
 
-        function log(msg, cls = '') {
-            console[cls === 'e' ? 'error' : 'log']('[ZEGO]', msg);
-        }
-
         function showErr(msg) {
-            log(msg, 'e');
+            console.error('[ZEGO]', msg);
             document.getElementById('errText').textContent = msg;
             document.getElementById('errBanner').style.display = 'block';
         }
@@ -153,6 +161,11 @@
         if (!serverToken) {
             showErr('ZEGO token missing');
             throw new Error('ZEGO token missing');
+        }
+
+        if (!receiverID) {
+            showErr('Receiver ID missing');
+            throw new Error('Receiver ID missing');
         }
 
         // Main initialization
@@ -173,23 +186,80 @@
                     ZIM
                 });
 
-                // Set up call event handlers BEFORE joining
-                setupCallEventHandlers();
-
-                // Join the room (this shows the UI)
-                await joinRoom();
-
-                // Send invitation after joining
-                setTimeout(() => startCall(), 2000);
+                // Send invitation directly without joining room first
+                await sendDirectCallInvitation();
 
             } catch (err) {
-                console.error(err);
+                console.error('Initialization error:', err);
                 showErr('Failed to initialise call: ' + (err.message || err));
             }
         })();
 
+        async function sendDirectCallInvitation(maxAttempts = 5, retryDelay = 1000) {
+            // First, wait for ZIM to be ready
+            await waitForZIM(maxAttempts, retryDelay);
+
+            // Set up call event handlers
+            setupCallEventHandlers();
+
+            // Send the invitation
+            for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+                try {
+                    console.log(`Sending call invitation (attempt ${attempt}/${maxAttempts})…`);
+
+                    const invitationResult = await zp.sendCallInvitation({
+                        callees: [{
+                            userID: receiverID,
+                            userName: receiverName,
+                        }],
+                        callType: ZegoUIKitPrebuilt.InvitationTypeVoiceCall,
+                        timeout: 60,
+                    });
+
+                    console.log('Invitation sent successfully', invitationResult);
+
+                    // After invitation is sent, join the room to show the call UI
+                    await joinCallRoom();
+
+                    return;
+                } catch (err) {
+                    console.error(`Attempt ${attempt} failed:`, err);
+
+                    if (attempt === maxAttempts) {
+                        showErr('Failed to send invitation: ' + (err.message || JSON.stringify(err)));
+                        // Redirect back after error
+                        setTimeout(() => {
+                            window.location.href = backUrl;
+                        }, 3000);
+                    } else {
+                        await new Promise(r => setTimeout(r, retryDelay));
+                    }
+                }
+            }
+        }
+
+        async function waitForZIM(maxAttempts = 5, retryDelay = 1000) {
+            for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+                try {
+                    // Check if ZIM is ready by trying to get the plugin
+                    const zim = zp.getPlugin('ZIM');
+                    if (zim && zim.isLoggedIn) {
+                        console.log('ZIM is ready');
+                        return;
+                    }
+
+                    console.log(`Waiting for ZIM (attempt ${attempt}/${maxAttempts})…`);
+                    await new Promise(r => setTimeout(r, retryDelay));
+                } catch (err) {
+                    console.log(`ZIM check attempt ${attempt} failed:`, err);
+                    await new Promise(r => setTimeout(r, retryDelay));
+                }
+            }
+            console.log('ZIM may not be ready, continuing anyway...');
+        }
+
         function setupCallEventHandlers() {
-            // Set up invitation config for receiving events
+            // Set up invitation config
             zp.setCallInvitationConfig({
                 enableNotifyWhenAppRunningInBackgroundOrQuit: true,
 
@@ -199,53 +269,66 @@
 
                 onIncomingCallCanceled() {
                     console.log('Incoming call canceled');
-                    handleCallEnd('missed');
+                    if (!callAccepted) {
+                        handleCallEnd('missed');
+                    }
                 },
 
                 onIncomingCallRejected() {
                     console.log('Incoming call rejected');
-                    handleCallEnd('rejected');
+                    if (!callAccepted) {
+                        handleCallEnd('rejected');
+                    }
                 },
 
                 onIncomingCallTimeout() {
                     console.log('Incoming call timeout');
-                    handleCallEnd('missed');
+                    if (!callAccepted) {
+                        handleCallEnd('missed');
+                    }
                 },
 
-                onOutgoingCallAccepted() {
-                    console.log('Outgoing call accepted');
+                onOutgoingCallAccepted(data) {
+                    console.log('Outgoing call accepted', data);
+                    callAccepted = true;
                     callStartTime = Date.now();
                     callStatus = 'completed';
                 },
 
-                onOutgoingCallRejected() {
-                    console.log('Outgoing call rejected');
-                    handleCallEnd('rejected');
+                onOutgoingCallRejected(data) {
+                    console.log('Outgoing call rejected', data);
+                    if (!callAccepted) {
+                        handleCallEnd('rejected');
+                    }
                 },
 
-                onOutgoingCallDeclined() {
-                    console.log('Outgoing call declined');
-                    handleCallEnd('rejected');
+                onOutgoingCallDeclined(data) {
+                    console.log('Outgoing call declined', data);
+                    if (!callAccepted) {
+                        handleCallEnd('rejected');
+                    }
                 },
 
-                onOutgoingCallTimeout() {
-                    console.log('Outgoing call timeout');
-                    handleCallEnd('missed');
+                onOutgoingCallTimeout(data) {
+                    console.log('Outgoing call timeout', data);
+                    if (!callAccepted) {
+                        handleCallEnd('missed');
+                    }
                 },
 
-                onCallEnd() {
-                    console.log('Call ended event fired');
+                onCallEnd(data) {
+                    console.log('Call ended event fired', data);
                     handleCallEnd(callStatus);
                 }
             });
         }
 
-        async function joinRoom() {
+        async function joinCallRoom() {
             return new Promise((resolve, reject) => {
                 try {
-                    // Configure the UI
+                    // Configure the UI - hide pre-join and show only call UI
                     const config = {
-                        showPreJoinView: false, // Skip pre-join screen
+                        showPreJoinView: false, // Don't show pre-join screen
                         showScreenSharingButton: false,
                         showTextChat: false,
                         showInviteButton: false,
@@ -254,14 +337,21 @@
                         turnOnCameraWhenJoining: false,
                         showMyCameraToggleButton: false,
                         showAudioVideoSettingsButton: true,
+                        showLayoutButton: false,
+                        showNonVideoUser: true,
+                        // Custom UI config
+                        container: document.getElementById('zego-container'),
                         onLeaveRoom: () => {
                             console.log('Left room');
-                            handleCallEnd(callStatus);
+                            if (callAccepted && !callEndHandled) {
+                                handleCallEnd(callStatus);
+                            } else if (!callAccepted) {
+                                handleCallEnd('missed');
+                            }
                         },
                         onUserLeave: (users) => {
                             console.log('User left:', users);
-                            // If the other person left and call was accepted
-                            if (callStartTime && !callEndHandled) {
+                            if (callAccepted && !callEndHandled) {
                                 handleCallEnd(callStatus);
                             }
                         }
@@ -269,45 +359,21 @@
 
                     // Join the room
                     zp.joinRoom(roomID, config);
+
+                    // Hide any pre-join elements that might appear
+                    setTimeout(() => {
+                        const preJoinElements = document.querySelectorAll(
+                            '.zego-pre-join, .pre-join-view');
+                        preJoinElements.forEach(el => {
+                            if (el) el.style.display = 'none';
+                        });
+                    }, 100);
+
                     resolve();
                 } catch (err) {
                     reject(err);
                 }
             });
-        }
-
-        async function startCall(maxAttempts = 8, retryDelay = 1000) {
-            for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-                try {
-                    console.log(`Sending call invitation (attempt ${attempt}/${maxAttempts})…`);
-
-                    const result = await zp.sendCallInvitation({
-                        callees: [{
-                            userID: receiverID,
-                            userName: receiverName,
-                        }],
-                        callType: ZegoUIKitPrebuilt.InvitationTypeVoiceCall,
-                        timeout: 60,
-                    });
-
-                    console.log('Invitation sent successfully', result);
-                    return;
-                } catch (err) {
-                    const code = err?.code || err?.message;
-
-                    if (err?.code === 6000121 && attempt < maxAttempts) {
-                        console.log(`ZIM not ready (${err.code}), retrying in ${retryDelay}ms…`);
-                        await new Promise(r => setTimeout(r, retryDelay));
-                    } else {
-                        console.error('Failed to send invitation:', err);
-                        showErr('Failed to send invitation: ' + JSON.stringify({
-                            code: err?.code,
-                            message: err?.message
-                        }));
-                        return;
-                    }
-                }
-            }
         }
 
         // Safety net: if page closes unexpectedly
