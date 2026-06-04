@@ -135,6 +135,8 @@
         }
 
         function handleCallEnd(status) {
+            console.log('HANDLE CALL END', status);
+
             if (callEndHandled) return;
             callEndHandled = true;
 
@@ -256,7 +258,7 @@
         }
 
         function setupCallEventHandlers() {
-            // Set up invitation config
+
             zp.setCallInvitationConfig({
                 enableNotifyWhenAppRunningInBackgroundOrQuit: true,
 
@@ -266,6 +268,7 @@
 
                 onIncomingCallCanceled() {
                     console.log('Incoming call canceled');
+
                     if (!callAccepted && !callEndHandled) {
                         handleCallEnd('missed');
                     }
@@ -273,6 +276,7 @@
 
                 onIncomingCallRejected() {
                     console.log('Incoming call rejected');
+
                     if (!callAccepted && !callEndHandled) {
                         handleCallEnd('rejected');
                     }
@@ -280,6 +284,7 @@
 
                 onIncomingCallTimeout() {
                     console.log('Incoming call timeout');
+
                     if (!callAccepted && !callEndHandled) {
                         handleCallEnd('missed');
                     }
@@ -287,6 +292,7 @@
 
                 onOutgoingCallAccepted(data) {
                     console.log('Outgoing call accepted', data);
+
                     callAccepted = true;
                     callStartTime = Date.now();
                     callStatus = 'completed';
@@ -294,6 +300,7 @@
 
                 onOutgoingCallRejected(data) {
                     console.log('Outgoing call rejected', data);
+
                     if (!callAccepted && !callEndHandled) {
                         handleCallEnd('rejected');
                     }
@@ -301,6 +308,7 @@
 
                 onOutgoingCallDeclined(data) {
                     console.log('Outgoing call declined', data);
+
                     if (!callAccepted && !callEndHandled) {
                         handleCallEnd('rejected');
                     }
@@ -308,20 +316,64 @@
 
                 onOutgoingCallTimeout(data) {
                     console.log('Outgoing call timeout', data);
+
                     if (!callAccepted && !callEndHandled) {
                         handleCallEnd('missed');
                     }
                 },
 
-                onOutgoingCallEnd(data) {
-                    console.log('Call ended event fired', data);
-                    if (!callEndHandled) {
-                        handleCallEnd(callStatus);
-                    }
+                onCallInvitationEnded(reason, data) {
+                    console.log('Call invitation ended', reason, data);
+                },
+
+                onSetRoomConfigBeforeJoining(callType) {
+
+                    console.log('Preparing room config');
+
+                    return {
+
+                        showPreJoinView: false,
+                        showLeavingView: false,
+
+                        onJoinRoom() {
+                            console.log('ROOM JOINED');
+
+                            if (!callAccepted) {
+                                callAccepted = true;
+                                callStartTime = Date.now();
+                                callStatus = 'completed';
+                            }
+                        },
+
+                        onUserJoin(user) {
+                            console.log('REMOTE USER JOINED', user);
+
+                            if (!callAccepted) {
+                                callAccepted = true;
+                                callStartTime = Date.now();
+                                callStatus = 'completed';
+                            }
+                        },
+
+                        onUserLeave(user) {
+                            console.log('REMOTE USER LEFT', user);
+
+                            if (!callEndHandled) {
+                                handleCallEnd(callStatus);
+                            }
+                        },
+
+                        onLeaveRoom() {
+                            console.log('LOCAL USER LEFT ROOM');
+
+                            if (!callEndHandled) {
+                                handleCallEnd(callStatus);
+                            }
+                        }
+                    };
                 }
             });
         }
-
         // Safety net: if page closes unexpectedly
         window.addEventListener('beforeunload', () => {
             if (callStartTime && !callSaved) {
