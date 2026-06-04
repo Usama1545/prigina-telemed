@@ -73,21 +73,13 @@
 
     <script>
         const appID = {{ (int) config('services.zego.app_id') }};
-
         const serverToken = @json($token);
-
         const userID = @json($user['uid']);
-
         const userName = @json($user['name'] ?: 'User');
-
         const roomID = "call_{{ substr(md5($id), 0, 12) }}";
-
         const receiverID = @json($doctor['uid'] ?? '');
-
         const receiverName = @json($doctor['name'] ?: 'User');
-
         const backUrl = @json($backUrl ?? url('/dashboard'));
-
         const conversationId = @json($id);
         const callerId = @json($user['uid']);
         const csrfToken = @json(csrf_token());
@@ -95,19 +87,17 @@
         let callStartTime = null;
         let callStatus = 'missed';
         let callSaved = false;
+        let zp = null;
+        let callEndHandled = false;
 
         function saveCallRecord(status, endTime) {
-            console.log(
-                'SAVE CALL',
-                status,
-                endTime,
-                callStartTime
-            );
+            console.log('SAVE CALL', status, endTime, callStartTime);
             if (callSaved) return;
             callSaved = true;
+
             const duration = (callStartTime && endTime) ?
-                Math.round((endTime - callStartTime) / 1000) :
-                0;
+                Math.round((endTime - callStartTime) / 1000) : 0;
+
             fetch(`/conversation/${conversationId}/save-call`, {
                 method: 'POST',
                 headers: {
@@ -124,35 +114,37 @@
                     endTime: endTime ? new Date(endTime).toISOString() : null,
                 }),
                 keepalive: true,
-            }).catch(() => {});
+            }).then(() => {
+                console.log('Call record saved successfully');
+            }).catch(err => {
+                console.error('Failed to save call record:', err);
+            });
+        }
+
+        function handleCallEnd(status) {
+            if (callEndHandled) return;
+            callEndHandled = true;
+
+            console.log('Call ended with status:', status);
+            saveCallRecord(status, Date.now());
+
+            // Redirect after saving
+            setTimeout(() => {
+                window.location.href = backUrl;
+            }, 500);
         }
 
         function log(msg, cls = '') {
             console[cls === 'e' ? 'error' : 'log']('[ZEGO]', msg);
         }
 
-        // ─────────────────────────────────────────────────────────────
-        // Error UI
-        // ─────────────────────────────────────────────────────────────
-
         function showErr(msg) {
-
             log(msg, 'e');
-
             document.getElementById('errText').textContent = msg;
-
             document.getElementById('errBanner').style.display = 'block';
         }
 
-        // ─────────────────────────────────────────────────────────────
         // Validation
-        // ─────────────────────────────────────────────────────────────
-
-        console.log(`appID=${appID}`);
-        console.log(`roomID=${roomID}`);
-        console.log(`userID=${userID}`);
-        console.log(`receiverID=${receiverID}`);
-
         if (!appID) {
             showErr('ZEGO_APP_ID missing');
             throw new Error('ZEGO_APP_ID missing');
@@ -163,14 +155,10 @@
             throw new Error('ZEGO token missing');
         }
 
-        // ─────────────────────────────────────────────────────────────
-        // ZEGO INIT
-        // ─────────────────────────────────────────────────────────────
-
-        try {
-
-            const kitToken =
-                ZegoUIKitPrebuilt.generateKitTokenForProduction(
+        // Main initialization
+        (async function() {
+            try {
+                const kitToken = ZegoUIKitPrebuilt.generateKitTokenForProduction(
                     appID,
                     serverToken,
                     roomID,
@@ -178,205 +166,153 @@
                     userName
                 );
 
-            console.log('Kit token generated', 's');
+                zp = ZegoUIKitPrebuilt.create(kitToken);
 
-            const zp = ZegoUIKitPrebuilt.create(kitToken);
+                // Add ZIM plugin
+                zp.addPlugins({
+                    ZIM
+                });
 
-            console.log('ZEGO instance created', 's');
+                // Set up call event handlers BEFORE joining
+                setupCallEventHandlers();
 
-            // IMPORTANT
-            zp.addPlugins({
-                ZIM,
-            });
-            setInterval(() => {
+                // Join the room (this shows the UI)
+                await joinRoom();
 
-                const container =
-                    document.getElementById('zego-container');
+                // Send invitation after joining
+                setTimeout(() => startCall(), 2000);
 
-                console.log(
-                    'CHILDREN:',
-                    container.children.length
-                );
+            } catch (err) {
+                console.error(err);
+                showErr('Failed to initialise call: ' + (err.message || err));
+            }
+        })();
 
-            }, 2000);
-
-            let callStartedAt = null;
-
-            const observer = new MutationObserver(() => {
-
-                const container =
-                    document.getElementById('zego-container');
-
-                console.log(
-                    'MUTATION',
-                    'children:',
-                    container.children.length,
-                    'html length:',
-                    container.innerHTML.length
-                );
-
-            });
-
-            observer.observe(
-                document.getElementById('zego-container'), {
-                    childList: true,
-                    subtree: true
-                }
-            );
-            console.log('OBSERVER ATTACHED');
-
-            // ─────────────────────────────────────────────────────────
-            // Incoming Call Listener
-            // ─────────────────────────────────────────────────────────
-
+        function setupCallEventHandlers() {
+            // Set up invitation config for receiving events
             zp.setCallInvitationConfig({
-
                 enableNotifyWhenAppRunningInBackgroundOrQuit: true,
 
-
-                onInvitationUserStateChanged(userInfos) {
-                    console.log(
-                        'onInvitationUserStateChanged',
-                        JSON.stringify(userInfos)
-                    );
-                },
-
-                onIncomingCallAcceptButtonPressed() {
-                    console.log('ACCEPT BUTTON PRESSED');
-                },
-
-                onIncomingCallDeclineButtonPressed() {
-                    console.log('DECLINE BUTTON PRESSED');
-                },
-
-                onOutgoingCallCancelButtonPressed() {
-                    console.log('CANCEL BUTTON PRESSED');
-                },
-
                 onIncomingCallReceived(callID, caller, callType, callees) {
-                    // caller side only — incoming call on this page is not expected;
-                    // do not set callStatus here to avoid corrupting the outgoing record
+                    console.log('Incoming call received from:', caller.userName);
                 },
 
                 onIncomingCallCanceled() {
-                    saveCallRecord('missed', Date.now());
-                    window.location.href = backUrl;
+                    console.log('Incoming call canceled');
+                    handleCallEnd('missed');
                 },
 
                 onIncomingCallRejected() {
-                    saveCallRecord('rejected', Date.now());
-                    window.location.href = backUrl;
+                    console.log('Incoming call rejected');
+                    handleCallEnd('rejected');
                 },
 
                 onIncomingCallTimeout() {
-                    saveCallRecord('missed', Date.now());
-                    window.location.href = backUrl;
+                    console.log('Incoming call timeout');
+                    handleCallEnd('missed');
                 },
 
                 onOutgoingCallAccepted() {
+                    console.log('Outgoing call accepted');
                     callStartTime = Date.now();
                     callStatus = 'completed';
                 },
 
                 onOutgoingCallRejected() {
-                    saveCallRecord('rejected', Date.now());
-                    window.location.href = backUrl;
+                    console.log('Outgoing call rejected');
+                    handleCallEnd('rejected');
                 },
 
                 onOutgoingCallDeclined() {
-                    saveCallRecord('rejected', Date.now());
-                    window.location.href = backUrl;
+                    console.log('Outgoing call declined');
+                    handleCallEnd('rejected');
                 },
 
                 onOutgoingCallTimeout() {
-                    saveCallRecord('missed', Date.now());
-                    window.location.href = backUrl;
+                    console.log('Outgoing call timeout');
+                    handleCallEnd('missed');
                 },
 
                 onCallEnd() {
-                    saveCallRecord(callStatus, Date.now());
-                    setTimeout(() => {
-                        window.location.href = backUrl;
-                    }, 400);
-                },
+                    console.log('Call ended event fired');
+                    handleCallEnd(callStatus);
+                }
             });
+        }
 
-            // ─────────────────────────────────────────────────────────
-            // SEND INVITATION (with ZIM-ready retry)
-            // ─────────────────────────────────────────────────────────
-
-            // ZIM login is async — error 6000121 means "not logged in yet".
-            // Retry up to 8 times with 1 s gaps before giving up.
-            async function startCall(maxAttempts = 8, retryDelay = 1000) {
-
-                for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-
-                    try {
-
-                        console.log(`Sending call invitation (attempt ${attempt}/${maxAttempts})…`);
-
-                        await zp.sendCallInvitation({
-
-                            callees: [{
-                                userID: receiverID,
-                                userName: receiverName,
-                            }],
-
-                            callType: ZegoUIKitPrebuilt.InvitationTypeVoiceCall,
-
-                            timeout: 60,
-                        });
-
-                        console.log('Invitation sent', 's');
-                        return;
-
-                    } catch (err) {
-
-                        const code = err?.code ?? err?.message;
-
-                        // 6000121 = ZIM not logged in yet; wait and retry
-                        if (err?.code === 6000121 && attempt < maxAttempts) {
-
-                            console.log(`ZIM not ready (${err.code}), retrying in ${retryDelay}ms…`);
-
-                            await new Promise(r => setTimeout(r, retryDelay));
-
-                        } else {
-
-                            console.error(err);
-
-                            showErr(
-                                'Failed to send invitation: ' +
-                                JSON.stringify({
-                                    code: err?.code,
-                                    message: err?.message
-                                })
-                            );
-
-                            return;
+        async function joinRoom() {
+            return new Promise((resolve, reject) => {
+                try {
+                    // Configure the UI
+                    const config = {
+                        showPreJoinView: false, // Skip pre-join screen
+                        showScreenSharingButton: false,
+                        showTextChat: false,
+                        showInviteButton: false,
+                        showRemoveUserButton: false,
+                        turnOnMicrophoneWhenJoining: true,
+                        turnOnCameraWhenJoining: false,
+                        showMyCameraToggleButton: false,
+                        showAudioVideoSettingsButton: true,
+                        onLeaveRoom: () => {
+                            console.log('Left room');
+                            handleCallEnd(callStatus);
+                        },
+                        onUserLeave: (users) => {
+                            console.log('User left:', users);
+                            // If the other person left and call was accepted
+                            if (callStartTime && !callEndHandled) {
+                                handleCallEnd(callStatus);
+                            }
                         }
+                    };
+
+                    // Join the room
+                    zp.joinRoom(roomID, config);
+                    resolve();
+                } catch (err) {
+                    reject(err);
+                }
+            });
+        }
+
+        async function startCall(maxAttempts = 8, retryDelay = 1000) {
+            for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+                try {
+                    console.log(`Sending call invitation (attempt ${attempt}/${maxAttempts})…`);
+
+                    const result = await zp.sendCallInvitation({
+                        callees: [{
+                            userID: receiverID,
+                            userName: receiverName,
+                        }],
+                        callType: ZegoUIKitPrebuilt.InvitationTypeVoiceCall,
+                        timeout: 60,
+                    });
+
+                    console.log('Invitation sent successfully', result);
+                    return;
+                } catch (err) {
+                    const code = err?.code || err?.message;
+
+                    if (err?.code === 6000121 && attempt < maxAttempts) {
+                        console.log(`ZIM not ready (${err.code}), retrying in ${retryDelay}ms…`);
+                        await new Promise(r => setTimeout(r, retryDelay));
+                    } else {
+                        console.error('Failed to send invitation:', err);
+                        showErr('Failed to send invitation: ' + JSON.stringify({
+                            code: err?.code,
+                            message: err?.message
+                        }));
+                        return;
                     }
                 }
             }
-
-            // Kick off after a short initial pause so ZIM can log in
-            setTimeout(() => startCall(), 1500);
-
-        } catch (err) {
-
-            console.error(err);
-
-            showErr(
-                'Failed to initialise call: ' +
-                (err.message || err)
-            );
         }
 
-        // Safety net: if ZEGO navigates away without firing onCallEnd, save here
+        // Safety net: if page closes unexpectedly
         window.addEventListener('beforeunload', () => {
-            console.log('BEFORE UNLOAD');
-
-            if (callStartTime) {
+            if (callStartTime && !callSaved) {
                 saveCallRecord(callStatus, Date.now());
             }
         });
