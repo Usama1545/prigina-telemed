@@ -182,6 +182,17 @@
             zp.addPlugins({
                 ZIM,
             });
+            setInterval(() => {
+
+                const container =
+                    document.getElementById('zego-container');
+
+                console.log(
+                    'CHILDREN:',
+                    container.children.length
+                );
+
+            }, 2000);
 
             let callStartedAt = null;
 
