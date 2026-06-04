@@ -217,79 +217,77 @@
 
 
     <!-- DOCTORS -->
-    <section class="py-5">
-        <div class="container">
-            <div class="position-relative mb-5">
-                <div class="text-center">
-                    <h6 class="text-secondary">FEATURED SPECIALISTS</h6>
-                    <h2 class="fw-bold mb-0">Experienced Physicians. Trusted Insights.</h2>
+    @if (check())
+        <section class="py-5">
+            <div class="container">
+                <div class="position-relative mb-5">
+                    <div class="text-center">
+                        <h6 class="text-secondary">FEATURED SPECIALISTS</h6>
+                        <h2 class="fw-bold mb-0">Experienced Physicians. Trusted Insights.</h2>
+                    </div>
+                    <a href="{{ route('doctors') }}"
+                        class="view-specialists-link text-primary fw-semibold text-decoration-none d-inline-flex align-items-center mt-3 mt-md-0">
+                        View All Specialists <i class="fa-solid fa-arrow-right ms-2"></i>
+                    </a>
                 </div>
-                <a href="{{ route('doctors') }}"
-                    class="view-specialists-link text-primary fw-semibold text-decoration-none d-inline-flex align-items-center mt-3 mt-md-0">
-                    View All Specialists <i class="fa-solid fa-arrow-right ms-2"></i>
-                </a>
-            </div>
 
-            <div class="doctors-slider">
+                <div class="doctors-slider">
 
-                @foreach ($doctors as $doctor)
-                    <div class="slide-item wow fadeInUp" data-wow-duration="1s">
-                        <div class="card doctor-item">
-                            <div class="card-img card-img-hover">
-                                <a href="{{ route('doctor-details', $doctor['id']) }}"><img
-                                        src="{{ $doctor['profilePicture'] ?? URL::asset('build/img/doctor-grid/doctor-grid-01.jpg') }}"
-                                        alt="" class="dr-card-img"></a>
-                                <div class="grid-overlay-item">
-                                    <span class="badge bg-orange"><i
-                                            class="fa-solid fa-star me-1"></i>{{ $doctor['rating'] ?? 0 }}</span>
-                                    <a href="javascript:void(0)" class="fav-icon">
-                                        <i class="fa fa-heart"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="card-body p-0">
-                                <div class="d-flex active-bar">
-                                    <a href="#"
-                                        class="text-indigo fw-medium fs-14">{{ $doctor['specializations'][0] ?? '' }}</a>
-                                    @if (($doctor['available'] ?? false) === true)
-                                        <span class="badge bg-success-light d-inline-flex align-items-center">
-                                            <i class="fa-solid fa-circle fs-5 me-1"></i>
-                                            Available
-                                        </span>
-                                    @else
-                                        <span class="badge bg-danger-light d-inline-flex align-items-center">
-                                            <i class="fa-solid fa-circle fs-5 me-1"></i>
-                                            Not Available
-                                        </span>
-                                    @endif
-                                </div>
-                                <div class="doctor-info">
-                                    <div class="doctor-info-detail">
-                                        <h3 class="mb-1 custom-title"><a
-                                                href="{{ route('doctor-details', $doctor['id']) }}">{{ $doctor['name'] }}</a>
-                                        </h3>
-                                        <div class="doctor-location">
-                                            <p class="location-title"></i><span class="fw-medium">Experience:
-                                                    {{ $doctor['experience'] }}</span>
-                                            </p>
-                                        </div>
-                                        @if (isset($doctor['practiceCountry']))
-                                            <div class="d-flex align-items-center gap-2">
-                                                <img src="https://flagcdn.com/24x18/{{ strtolower($doctor['practiceCountry']) }}.png"
-                                                    alt="{{ $doctor['practiceCountry'] }}" width="24"
-                                                    class="rounded-sm" />
-
-                                                <span class="fw-medium">
-                                                    {{ Symfony\Component\Intl\Countries::getName($doctor['practiceCountry']) }}
-                                                </span>
-                                            </div>
-                                        @endif
-
+                    @foreach ($doctors as $doctor)
+                        <div class="slide-item wow fadeInUp" data-wow-duration="1s">
+                            <div class="card doctor-item">
+                                <div class="card-img card-img-hover">
+                                    <a href="{{ route('doctor-details', $doctor['id']) }}"><img
+                                            src="{{ $doctor['profilePicture'] ?? URL::asset('build/img/doctor-grid/doctor-grid-01.jpg') }}"
+                                            alt="" class="dr-card-img"></a>
+                                    <div class="grid-overlay-item">
+                                        <span class="badge bg-orange"><i
+                                                class="fa-solid fa-star me-1"></i>{{ $doctor['rating'] ?? 0 }}</span>
+                                        <a href="javascript:void(0)" class="fav-icon">
+                                            <i class="fa fa-heart"></i>
+                                        </a>
                                     </div>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="d-flex active-bar">
+                                        <a href="#"
+                                            class="text-indigo fw-medium fs-14">{{ $doctor['specializations'][0] ?? '' }}</a>
+                                        @if (($doctor['available'] ?? false) === true)
+                                            <span class="badge bg-success-light d-inline-flex align-items-center">
+                                                <i class="fa-solid fa-circle fs-5 me-1"></i>
+                                                Available
+                                            </span>
+                                        @else
+                                            <span class="badge bg-danger-light d-inline-flex align-items-center">
+                                                <i class="fa-solid fa-circle fs-5 me-1"></i>
+                                                Not Available
+                                            </span>
+                                        @endif
+                                    </div>
+                                    <div class="doctor-info">
+                                        <div class="doctor-info-detail">
+                                            <h3 class="mb-1 custom-title"><a
+                                                    href="{{ route('doctor-details', $doctor['id']) }}">{{ $doctor['name'] }}</a>
+                                            </h3>
+                                            <div class="doctor-location">
+                                                <p class="location-title"></i><span class="fw-medium">Experience:
+                                                        {{ $doctor['experience'] }}</span>
+                                                </p>
+                                            </div>
+                                            @if (isset($doctor['practiceCountry']))
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <img src="https://flagcdn.com/24x18/{{ strtolower($doctor['practiceCountry']) }}.png"
+                                                        alt="{{ $doctor['practiceCountry'] }}" width="24"
+                                                        class="rounded-sm" />
 
+                                                    <span class="fw-medium">
+                                                        {{ Symfony\Component\Intl\Countries::getName($doctor['practiceCountry']) }}
+                                                    </span>
+                                                </div>
+                                            @endif
 
+                                        </div>
 
-                                    @if (session('firebase_token'))
                                         <div class="doctor-footer">
                                             <div>
                                                 <p class="mb-1">Consultation Fees</p>
@@ -301,18 +299,130 @@
                                                 <i class="isax isax-export-3 icon-2"></i>
                                             </a>
                                         </div>
-                                    @endif
 
-
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
 
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+    @else
+        <section class="py-5 leftpadding">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h6 class="text-secondary fw-semibold">GLOBAL MEDICAL SPECIALTIES</h6>
+                    <h2 class="fw-bold">Access Expert Second Opinions<br>Across Multiple Specialties</h2>
+                    <p class="text-muted mx-auto" style="max-width:480px;">
+                        Connect with experienced physicians across a wide range of medical specialties worldwide.
+                    </p>
+                </div>
+
+                <div class="row g-3 justify-content-center">
+                    @php
+                        $specialties = [
+                            [
+                                'name' => 'Cardiology',
+                                'icon' => 'fa-solid fa-heart-pulse',
+                                'color' => '#e74c3c',
+                                'bg' => '#fdecea',
+                            ],
+                            [
+                                'name' => 'Neurology',
+                                'icon' => 'fa-solid fa-brain',
+                                'color' => '#8e44ad',
+                                'bg' => '#f3eafd',
+                            ],
+                            [
+                                'name' => 'Orthopedics',
+                                'icon' => 'fa-solid fa-bone',
+                                'color' => '#2980b9',
+                                'bg' => '#eaf4fd',
+                            ],
+                            [
+                                'name' => 'Pulmonology',
+                                'icon' => 'fa-solid fa-lungs',
+                                'color' => '#16a085',
+                                'bg' => '#e8f8f5',
+                            ],
+                            [
+                                'name' => 'Pediatrics',
+                                'icon' => 'fa-solid fa-baby',
+                                'color' => '#e67e22',
+                                'bg' => '#fef5ec',
+                            ],
+                            [
+                                'name' => "Women's Health",
+                                'icon' => 'fa-solid fa-venus',
+                                'color' => '#e91e8c',
+                                'bg' => '#fde8f4',
+                            ],
+                            [
+                                'name' => 'Internal Medicine',
+                                'icon' => 'fa-solid fa-stethoscope',
+                                'color' => '#1abc9c',
+                                'bg' => '#e8faf6',
+                            ],
+                            [
+                                'name' => 'Oncology',
+                                'icon' => 'fa-solid fa-ribbon',
+                                'color' => '#9b59b6',
+                                'bg' => '#f5eefa',
+                            ],
+                            [
+                                'name' => 'Endocrinology',
+                                'icon' => 'fa-solid fa-dna',
+                                'color' => '#5b6abf',
+                                'bg' => '#edeffe',
+                            ],
+                            [
+                                'name' => 'Family Medicine',
+                                'icon' => 'fa-solid fa-people-group',
+                                'color' => '#27ae60',
+                                'bg' => '#eafaf1',
+                            ],
+                            [
+                                'name' => 'ENT',
+                                'icon' => 'fa-solid fa-ear-listen',
+                                'color' => '#f39c12',
+                                'bg' => '#fef9ec',
+                            ],
+                            [
+                                'name' => 'Dermatology',
+                                'icon' => 'fa-solid fa-hand-dots',
+                                'color' => '#00b4d8',
+                                'bg' => '#e8f8fc',
+                            ],
+                        ];
+                    @endphp
+
+                    @foreach ($specialties as $spec)
+                        <div class="col-6 col-md-3">
+                            <div class="specialty-card text-center p-3 border rounded-3 bg-white h-100">
+                                <div class="specialty-icon mx-auto mb-3"
+                                    style="background:{{ $spec['bg'] }}; color:{{ $spec['color'] }};">
+                                    <i class="{{ $spec['icon'] }}"></i>
+                                </div>
+                                <p class="fw-semibold mb-0 small">{{ $spec['name'] }}</p>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+                <div class="mt-4 p-3 border rounded-3 d-flex align-items-center gap-3 specialty-note">
+                    <div class="specialty-note-icon">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div>
+                        <p class="mb-0 fw-bold">And many more specialties available.</p>
+                        <p class="mb-0 text-muted small">Specialist profiles become visible after account creation.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif
 
     <section class="bg-light">
         <div class="container pt-3 pt-md-0">
@@ -550,6 +660,7 @@
                 bottom: 0;
                 width: auto;
             }
+
         }
 
         .list-check {
@@ -645,6 +756,65 @@
             color: var(--primary);
             display: block;
             line-height: 1;
+        }
+
+        /* SPECIALTIES GRID (guest view) */
+        .specialty-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .specialty-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .specialty-icon {
+            width: 74px;
+            height: 74px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+
+        .specialty-note {
+            background: #f8f9fa;
+        }
+
+        .specialty-note-icon {
+            width: 44px;
+            min-width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: color-mix(in srgb, var(--primary) 12%, white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: var(--primary);
+        }
+
+        .leftpadding {
+            padding: 0 220px;
+        }
+
+        @media (max-width: 1200px) {
+            .leftpadding {
+                padding: 0 100px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .leftpadding {
+                padding: 0 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .leftpadding {
+                padding: 0 10px;
+            }
         }
     </style>
 @endsection

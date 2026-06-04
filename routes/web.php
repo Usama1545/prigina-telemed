@@ -78,7 +78,7 @@ Route::middleware(['firebase.auth'])->group(function () {
 
 });
 
-Route::get('/doctors', [DoctorController::class, 'index'])->name('doctors');
+Route::get('/doctors', [DoctorController::class, 'index'])->middleware('firebase.auth')->name('doctors');
 Route::get('/doctor-details/{id}', [DoctorController::class, 'show'])->name('doctor-details');
 
 Route::get('/about-us', function () {
