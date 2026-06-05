@@ -50,36 +50,52 @@
                 <div class="col-lg-7 col-md-12 d-flex">
                     <div class="card contact-form-card w-100">
                         <div class="card-body">
-                            <form action="#">
+
+                            @if (session('success'))
+                                <div class="alert alert-success mb-3">{{ session('success') }}</div>
+                            @endif
+
+                            @if ($errors->any())
+                                <div class="alert alert-danger mb-3">
+                                    <ul class="mb-0">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
+                            <form action="{{ route('contact-us.send') }}" method="POST">
+                                @csrf
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Name</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Email</label>
-                                            <input type="text" class="form-control">
+                                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Phone Number</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="phone" class="form-control" value="{{ old('phone') }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Services</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="service" class="form-control" value="{{ old('service') }}">
                                         </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label class="form-label">Message</label>
-                                            <textarea class="form-control" rows="6"></textarea>
+                                            <textarea name="message" class="form-control @error('message') is-invalid @enderror" rows="6">{{ old('message') }}</textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-12">

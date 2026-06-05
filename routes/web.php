@@ -106,6 +106,21 @@ Route::get('/contact-us', function () {
     return view('contact-us');
 })->name('contact-us');
 
+Route::post('/contact-us', function (\Illuminate\Http\Request $request) {
+    $data = $request->validate([
+        'name'    => 'required|string|max:100',
+        'email'   => 'required|email|max:150',
+        'phone'   => 'nullable|string|max:30',
+        'service' => 'nullable|string|max:100',
+        'message' => 'required|string|max:2000',
+    ]);
+
+    \Illuminate\Support\Facades\Mail::to('info@priginaglobaltelemed.com')
+        ->send(new \App\Mail\ContactMail($data));
+
+    return back()->with('success', 'Your message has been sent. We will get back to you shortly.');
+})->name('contact-us.send');
+
 Route::get('/patient-faqs', function () {
     return view('patient-faq');
 })->name('patient-faqs');

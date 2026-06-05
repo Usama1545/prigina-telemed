@@ -7,7 +7,7 @@
         <div class="container">
             <div class="row align-items-center">
 
-                <div class="col-lg-5">
+                <div class="col-lg-5 order-2 order-lg-1">
                     <h1 class="fw-bold text-primary display-5">
                         When the Diagnosis Matters,<br>
                         <span class="text-secondary">Get a Second Opinion.</span>
@@ -116,7 +116,7 @@
 
                 </div>
 
-                <div class="col-lg-7 text-center  hero-image mt-4 mt-md-0">
+                <div class="col-lg-7 text-center hero-image order-1 order-lg-2 mb-4 mb-lg-0">
                     <img src="{{ asset('build/img/home-1.jpeg') }}" class="img-fluid">
                 </div>
 
@@ -451,7 +451,7 @@
                     @endphp
 
                     @foreach ($specialties as $spec)
-                        <div class="col-6 col-md-3">
+                        <div class="col-6 col-md-3 {{ $loop->index >= 6 ? 'd-none d-md-block' : '' }}">
                             <div class="specialty-card text-center p-3 border rounded-3 bg-white h-100">
                                 <div class="specialty-icon mx-auto mb-3"
                                     style="background:{{ $spec['bg'] }}; color:{{ $spec['color'] }};">
@@ -477,10 +477,10 @@
     @endif
 
     <section class="bg-light">
-        <div class="container pt-3 pt-md-0">
+        <div class="container py-4 py-lg-0">
             <div class="row align-items-center">
 
-                <div class="col-md-3">
+                <div class="col-lg-3">
                     <h6 class="text-secondary text-start">WHAT YOU RECEIVE</h6>
 
                     <h2>Your Second Opinion Includes:</h2>
@@ -516,7 +516,7 @@
                     </ul>
                 </div>
 
-                <div class="col-md-9 text-center recieve-section-image">
+                <div class="col-lg-9 text-center recieve-section-image">
                     <img src="{{ asset('build/img/home-2.jpeg') }}" class="img-fluid">
                 </div>
 
