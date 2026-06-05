@@ -18,6 +18,24 @@
                         giving you clarity, confidence, and control over your health decisions.
                     </p>
 
+                    <div class="d-flex align-items-center gap-3 mt-4 trust-badges">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fi fi-rr-shield-check trust-badge-icon text-secondary"></i>
+                            <div>
+                                <p class="mb-0 fw-bold small lh-sm">USA-Registered</p>
+                                <p class="mb-0 text-muted small lh-sm">Telemedicine Company</p>
+                            </div>
+                        </div>
+                        <div class="trust-divider"></div>
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fi fi-rr-globe trust-badge-icon text-secondary"></i>
+                            <div>
+                                <p class="mb-0 fw-bold small lh-sm">Healthcare</p>
+                                <p class="mb-0 text-muted small lh-sm">Without Borders</p>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="mt-4 d-flex gap-3">
                         <a href="{{ check() ? route('doctors') : route('login') }}" class="btn btn-primary px-4 py-2">
                             Get a Second Opinion
@@ -27,41 +45,75 @@
                         </a>
                     </div>
 
-                    <div class="row mt-5 text-center g-3">
+                    <div class="hero-features mt-5">
 
-                        <div class="col-6 col-md-3">
-                            <div class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm  icon-soft-primary mb-2"
-                                style="width: 40px;height: 40px;">
-                                <i class="fa fa-globe text-primary"></i>
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="d-flex align-items-start gap-3">
+                                    <div class="hero-feat-icon" style="background:#dce8f7;">
+                                        <i class="fa fa-globe" style="color:#2e6dc8;"></i>
+                                    </div>
+                                    <div>
+                                        <p class="fw-bold mb-1 small">Global Physician Network</p>
+                                        <p class="text-muted mb-0 small">Connect with specialists worldwide.</p>
+                                    </div>
+                                </div>
                             </div>
-                            <p class="small mb-0">Global Specialists</p>
+                            <div class="col-6">
+                                <div class="d-flex align-items-start gap-3">
+                                    <div class="hero-feat-icon" style="background:#d5f0ec;">
+                                        <i class="fa fa-shield-alt" style="color:#1a9e87;"></i>
+                                    </div>
+                                    <div>
+                                        <p class="fw-bold mb-1 small">Private & Secure</p>
+                                        <p class="text-muted mb-0 small">Your data and health information are always
+                                            protected.</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="col-6 col-md-3">
-                            <div class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm  icon-soft-secondary mb-2"
-                                style="width: 40px;height: 40px;">
-                                <i class="fa fa-shield-alt text-secondary"></i>
-                            </div>
-                            <p class="small mb-0">Private & Secure</p>
-                        </div>
+                        <hr class="my-3">
 
-                        <div class="col-6 col-md-3">
-                            <div class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm icon-soft-primary mb-2"
-                                style="width: 40px;height: 40px;">
-                                <i class="fa fa-file text-primary"></i>
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="d-flex align-items-start gap-3">
+                                    <div class="hero-feat-icon" style="background:#e8e0f8;">
+                                        <i class="fa fa-file-alt" style="color:#7c4dbd;"></i>
+                                    </div>
+                                    <div>
+                                        <p class="fw-bold mb-1 small">Detailed Expert Review</p>
+                                        <p class="text-muted mb-0 small">Comprehensive, evidence-based second opinions.</p>
+                                    </div>
+                                </div>
                             </div>
-                            <p class="small mb-0">Comprehensive Review</p>
-                        </div>
+                            <div class="col-6">
+                                <div class="d-flex align-items-start gap-3">
+                                    <div class="hero-feat-icon" style="background:#fdeede;">
+                                        <i class="fa fa-clock" style="color:#e07b28;"></i>
+                                    </div>
+                                    <div>
+                                        <p class="fw-bold mb-1 small">Fast Turnaround</p>
+                                        <p class="text-muted mb-0 small">Timely insights so you can make confident decisions
+                                            sooner.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="alert alert-primary mt-4 mb-0 d-flex align-items-center gap-3" role="alert"
+                                style="background: #e0e5ed">
 
-                        <div class="col-6 col-md-3">
-                            <div class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm  icon-soft-primary mb-2"
-                                style="width: 40px;height: 40px;">
-                                <i class="fa fa-clock text-primary"></i>
+                                <div class="rounded-circle bg-white d-flex align-items-center justify-content-center flex-shrink-0"
+                                    style="width: 50px; height: 50px;">
+                                    <i class="fa-solid fa-lock text-primary"></i>
+                                </div>
+
+                                <span>Specialist profiles become visible after account creation.</span>
+
                             </div>
-                            <p class="small mb-0">Fast Turnaround</p>
                         </div>
 
                     </div>
+
                 </div>
 
                 <div class="col-lg-7 text-center  hero-image mt-4 mt-md-0">
@@ -793,6 +845,29 @@
             justify-content: center;
             font-size: 22px;
             color: var(--primary);
+        }
+
+        .hero-feat-icon {
+            width: 56px;
+            min-width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .trust-badge-icon {
+            font-size: 2rem;
+            display: block;
+            line-height: 1;
+        }
+
+        .trust-divider {
+            width: 1px;
+            height: 36px;
+            background: #dee2e6;
         }
 
         .leftpadding {

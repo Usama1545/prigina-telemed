@@ -17,13 +17,26 @@
 
                     <div class="col-md-12 col-lg-6 login-right">
 
-                        <div class="login-header" id="loginHeader">
-                            <h3>
-                                Login
-                                <span>PriGina Global Telemed</span>
-                            </h3>
-                        </div>
+                        <div class="login-header text-center mb-4" id="loginHeader">
 
+                            <div class="d-flex align-items-center justify-content-center gap-3 mb-2">
+
+                                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center"
+                                    style="width: 70px; height: 70px;">
+                                    <i class="fa-solid fa-lock text-primary fs-3"></i>
+                                </div>
+
+                                <h2 class="mb-0 fw-bold">
+                                    Sign In
+                                </h2>
+
+                            </div>
+
+                            <p class="text-muted mb-0">
+                                Access your PriGina Global Telemed account
+                            </p>
+
+                        </div>
                         <form id="loginForm" onsubmit="return handleLogin(event)">
 
                             @csrf

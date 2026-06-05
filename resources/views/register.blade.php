@@ -23,12 +23,16 @@
 
                         <div class="login-header">
 
-                            <h3>
-                                Patient Register
+                            <h3 class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                                <span></span>
 
-                                <a href="{{ url('doctor-register') }}">
-                                    Are you a Doctor?
-                                </a>
+                                <span class="d-flex align-items-center gap-2">
+                                    <small>Are you a Physician?</small>
+
+                                    <a href="{{ url('doctor-register') }}" class="btn btn-outline-primary btn-sm">
+                                        Join Our Network
+                                    </a>
+                                </span>
                             </h3>
 
                         </div>
