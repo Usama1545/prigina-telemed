@@ -527,15 +527,15 @@
 
     <section class="py-4 mx-md-4">
         <div class="container ">
-            <div class="p-4 border rounded bg-light mx-5 d-flex align-items-stretch disclaimer-box">
+            <div class="p-4 border rounded bg-light mx-5 d-flex flex-column flex-md-row align-items-center align-items-md-stretch disclaimer-box">
 
                 <!-- ICON -->
-                <div class="disclaimer-icon">
+                <div class="disclaimer-icon mb-3 mb-md-0">
                     <i class="fi fi-rr-shield-check"></i>
                 </div>
 
                 <!-- TEXT -->
-                <div class="ms-3">
+                <div class="ms-md-3 text-center text-md-start">
                     <h6 class="mb-1 mt-2 fw-bold text-primary">
                         PriGina Global Telemed provides structured second medical opinions to support your healthcare
                         decisions.
