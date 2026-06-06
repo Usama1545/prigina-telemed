@@ -328,6 +328,22 @@
             text-transform: uppercase;
         }
 
+        .chat-date-separator {
+            display: flex;
+            align-items: center;
+            margin: 16px 12px;
+            color: #6c757d;
+            font-size: 12px;
+        }
+
+        .chat-date-separator::before,
+        .chat-date-separator::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e5e7eb;
+            margin: 0 10px;
+        }
+
         .doctor-content.content {
             padding: 0px !important;
         }
@@ -1033,6 +1049,18 @@
                 </div>`;
             }
 
+            function formatDateSeparator(ts) {
+                const date = new Date(ts);
+                const today = new Date();
+                const yesterday = new Date();
+                yesterday.setDate(today.getDate() - 1);
+
+                if (date.toDateString() === today.toDateString()) return 'Today';
+                if (date.toDateString() === yesterday.toDateString()) return 'Yesterday';
+
+                return date.toLocaleDateString([], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            }
+
             function renderMessages(messages) {
 
                 if (!messages || messages.length === 0) {
@@ -1047,7 +1075,17 @@
                 }
 
                 let html = '';
+                let lastDateStr = '';
+
                 messages.forEach(function(message) {
+                    const ts = message.timestamp || message.createdAt || new Date().toISOString();
+                    const dateStr = new Date(ts).toDateString();
+
+                    if (dateStr !== lastDateStr) {
+                        lastDateStr = dateStr;
+                        html += `<div class="chat-date-separator"><span>${formatDateSeparator(ts)}</span></div>`;
+                    }
+
                     html += buildMessageHtml(message);
                 });
 
