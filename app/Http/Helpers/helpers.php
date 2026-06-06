@@ -1,5 +1,6 @@
 <?php
 
+use App\Services\FirebaseAuthService;
 use App\Services\FirestoreService;
 use App\Services\Zego\ZegoServerAssistant;
 
@@ -140,7 +141,19 @@ if (! function_exists('check')) {
 
     function check()
     {
-        return session()->has('auth_uid')
-            && session()->has('auth_role');
+        $token = session('firebase_token');
+
+        if (! $token) {
+            return false;
+        }
+
+        try {
+            app(FirebaseAuthService::class)
+                ->verifyToken($token);
+
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 }
