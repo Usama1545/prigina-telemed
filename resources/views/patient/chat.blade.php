@@ -165,11 +165,14 @@
                             </div>
                         </div>
 
-                        <div class="chat-body" id="chatMessagesContainer"
-                            style="flex: 1; overflow-y: auto; min-height: 0;">
-                            <div class="messages" id="messagesList">
-                                <div class="text-center text-muted p-5" id="noMessagesPlaceholder">
-                                    Select a conversation to start messaging
+                        <div style="position: relative; flex: 1; display: flex; flex-direction: column; min-height: 0;">
+                            <div id="scrollDateBadge" class="chat-scroll-date-badge"><span></span></div>
+                            <div class="chat-body" id="chatMessagesContainer"
+                                style="flex: 1; overflow-y: auto; min-height: 0;">
+                                <div class="messages" id="messagesList">
+                                    <div class="text-center text-muted p-5" id="noMessagesPlaceholder">
+                                        Select a conversation to start messaging
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -316,6 +319,7 @@
         .chat-date-separator {
             display: flex;
             align-items: center;
+            justify-content: center;
             margin: 16px 12px;
             color: #6c757d;
             font-size: 12px;
@@ -327,6 +331,37 @@
             flex: 1;
             border-bottom: 1px solid #e5e7eb;
             margin: 0 10px;
+        }
+
+        .chat-date-separator span {
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .chat-scroll-date-badge {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 30;
+            pointer-events: none;
+        }
+
+        .chat-scroll-date-badge span {
+            display: block;
+            background: rgba(11, 20, 26, 0.55);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 5px 14px;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            white-space: nowrap;
+        }
+
+        .chat-scroll-date-badge.visible span {
+            opacity: 1;
         }
 
         /* ... rest of your existing CSS ... */
@@ -349,6 +384,7 @@
             let isLoadingMessages = false;
             let isLoadingOlderMessages = false;
             const messagePageSize = 30;
+            let scrollDateTimeout = null;
 
             const chatContainer = $('#chatMessagesContainer');
             const sendBtn = $('.send-btn');
@@ -511,6 +547,29 @@
                     !isLoadingMessages
                 ) {
                     loadMessages(currentConversationId, false, false, messagePage, true);
+                }
+
+                // Floating date badge
+                if (scrollTop > 0) {
+                    const containerRect = chatContainer[0].getBoundingClientRect();
+                    const separators = document.querySelectorAll('#messagesList .chat-date-separator');
+                    let currentLabel = '';
+                    for (let i = 0; i < separators.length; i++) {
+                        if (separators[i].getBoundingClientRect().top <= containerRect.top + 40) {
+                            currentLabel = separators[i].querySelector('span').textContent;
+                        } else {
+                            break;
+                        }
+                    }
+                    if (currentLabel) {
+                        const badge = document.getElementById('scrollDateBadge');
+                        badge.querySelector('span').textContent = currentLabel;
+                        badge.classList.add('visible');
+                        clearTimeout(scrollDateTimeout);
+                        scrollDateTimeout = setTimeout(function() {
+                            badge.classList.remove('visible');
+                        }, 1500);
+                    }
                 }
             });
 
