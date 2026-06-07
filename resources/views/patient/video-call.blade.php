@@ -95,8 +95,6 @@
         const callerId = @json($user['uid']);
         const csrfToken = @json(csrf_token());
 
-        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-
         let callStartTime = null;
         let callStatus = 'missed';
         let callSaved = false;
@@ -209,6 +207,16 @@
 
                 zp = ZegoUIKitPrebuilt.create(kitToken);
 
+                // Force H264 at express engine level for mobile interoperability
+                try {
+                    if (zp.express && typeof zp.express.setVideoConfig === 'function') {
+                        zp.express.setVideoConfig({ codecID: 1 }); // 1 = H264
+                        console.log('[ZEGO] H264 set at express engine level');
+                    }
+                } catch (e) {
+                    console.warn('[ZEGO] express setVideoConfig error:', e);
+                }
+
                 // Add ZIM plugin
                 zp.addPlugins({
                     ZIM
@@ -240,7 +248,6 @@
                         }],
                         callType: ZegoUIKitPrebuilt.InvitationTypeVideoCall,
                         timeout: 60,
-                        ...(isIOS ? { videoCodec: 'H264' } : {}),
                     });
 
                     console.log('Invitation sent successfully', invitationResult);
@@ -342,12 +349,10 @@
                         showPreJoinView: false,
                         showLeavingView: false,
 
-                        ...(isIOS ? {
-                            scenario: {
-                                mode: ZegoUIKitPrebuilt.OneOOneCall,
-                                config: { videoCodec: 'H264' },
-                            }
-                        } : {}),
+                        scenario: {
+                            mode: ZegoUIKitPrebuilt.OneOOneCall,
+                            config: { videoCodec: 'H264' },
+                        },
 
                         onJoinRoom() {
                             console.log('ROOM JOINED');
