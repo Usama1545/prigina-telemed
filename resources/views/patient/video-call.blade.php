@@ -95,6 +95,8 @@
         const callerId = @json($user['uid']);
         const csrfToken = @json(csrf_token());
 
+        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
         let callStartTime = null;
         let callStatus = 'missed';
         let callSaved = false;
@@ -238,6 +240,7 @@
                         }],
                         callType: ZegoUIKitPrebuilt.InvitationTypeVideoCall,
                         timeout: 60,
+                        ...(isIOS ? { videoCodec: 'H264' } : {}),
                     });
 
                     console.log('Invitation sent successfully', invitationResult);
@@ -338,6 +341,13 @@
 
                         showPreJoinView: false,
                         showLeavingView: false,
+
+                        ...(isIOS ? {
+                            scenario: {
+                                mode: ZegoUIKitPrebuilt.OneOOneCall,
+                                config: { videoCodec: 'H264' },
+                            }
+                        } : {}),
 
                         onJoinRoom() {
                             console.log('ROOM JOINED');
