@@ -316,7 +316,6 @@
 
                     onSetRoomConfigBeforeJoining(callType) {
 
-                        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
                         const isVideoCall = callType === ZegoUIKitPrebuilt.InvitationTypeVideoCall;
 
                         return {
@@ -324,7 +323,7 @@
                             showPreJoinView: false,
                             showLeavingView: false,
 
-                            ...(isIOS && isVideoCall ? {
+                            ...(isVideoCall ? {
                                 scenario: {
                                     mode: ZegoUIKitPrebuilt.OneOOneCall,
                                     config: { videoCodec: 'H264' },
