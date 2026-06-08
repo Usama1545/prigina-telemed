@@ -3,7 +3,7 @@
 @section('content')
     <!-- index -->
     <!-- HERO -->
-    <section class="mb-5 mt-2">
+    <section class=" mt-2">
         <div class="container">
             <div class="row align-items-center">
 
@@ -124,6 +124,33 @@
         </div>
     </section>
 
+
+    <!-- Brochure Download -->
+    <section class="py-4">
+        <div class="px-3">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="d-flex align-items-center gap-4 p-4 rounded-3 border" style="background:#f8faff;">
+                        <div class="flex-shrink-0 d-flex align-items-center justify-content-center rounded-3"
+                            style="width:72px;height:72px;background:#e8eef8;">
+                            <i class="fi fi-rr-document d-block lh-1 text-primary"
+                                style="font-size:2.2rem;margin-top:6px;"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5 class="fw-bold mb-1">Learn More About PriGina</h5>
+                            <p class="text-muted mb-2 small">Download our patient brochure to learn more about how we can
+                                help you.</p>
+                            <a href="{{ asset('build/file.pdf') }}" download
+                                class="fw-semibold text-primary text-decoration-none">
+                                Download Brochure <i class="fi fi-rr-download ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /Brochure Download -->
 
     <section class="py-5 text-center how-works">
         <div class="container">
@@ -527,7 +554,8 @@
 
     <section class="py-4 mx-md-4">
         <div class="container ">
-            <div class="p-4 border rounded bg-light mx-5 d-flex flex-column flex-md-row align-items-center align-items-md-stretch disclaimer-box">
+            <div
+                class="p-4 border rounded bg-light mx-5 d-flex flex-column flex-md-row align-items-center align-items-md-stretch disclaimer-box">
 
                 <!-- ICON -->
                 <div class="disclaimer-icon mb-3 mb-md-0">
