@@ -62,13 +62,20 @@
                     </a>
                 </li>
 
+                <li class="{{ Request::is('patient/reports*') ? 'active' : '' }}">
+                    <a href="{{ route('patient.reports') }}">
+                        <i class="isax isax-document-text"></i>
+                        <span>Medical Reports</span>
+                    </a>
+                </li>
+
                 <li class="{{ route('patient.conversations') === url()->current() ? 'active' : '' }}">
                     <a href="{{ route('patient.conversations') }}">
                         <i class="isax isax-messages-1"></i>
 
                         <span>Messages</span>
 
-                      
+
                     </a>
                 </li>
 

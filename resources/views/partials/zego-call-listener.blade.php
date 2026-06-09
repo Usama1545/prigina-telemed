@@ -39,7 +39,7 @@
     }
 
     body.zego-call-active #zego-container {
-        z-index: 9999 !important;
+        z-index: 999 !important;
     }
 </style>
 
@@ -326,7 +326,9 @@
                             ...(isVideoCall ? {
                                 scenario: {
                                     mode: ZegoUIKitPrebuilt.OneOOneCall,
-                                    config: { videoCodec: 'H264' },
+                                    config: {
+                                        videoCodec: 'H264'
+                                    },
                                 }
                             } : {}),
 

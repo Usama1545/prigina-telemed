@@ -782,11 +782,17 @@ class DoctorProfileController extends Controller
 
     public function completeAppointment($id)
     {
+        $appointment = $this->firestore->find('appointments', $id);
+
         $this->firestore->update('appointments', $id, [
             'status' => 'completed',
         ]);
 
-        return back()->with('success', 'Appointment completed successfully.');
+        $report = DoctorReportController::createFromAppointment($this->firestore, $appointment);
+
+        return redirect()
+            ->route('doctor.reports.edit', $report['id'])
+            ->with('success', 'Appointment completed. Please fill out the second opinion report.');
     }
 
     public function acceptAppointment($id)
