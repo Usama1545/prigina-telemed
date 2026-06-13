@@ -286,6 +286,7 @@ class PatientController extends Controller
 
         $conversations = collect($filteredConversations['documents'] ?? [])
             ->filter(fn ($conv) => isset($doctorsWithAppointments[$conv['doctorId'] ?? '']))
+            ->filter(fn ($conv) => !($conv['deletedByPatient'] ?? false))
             ->map(fn ($conversation) => $this->normalizeConversation($conversation))
             ->values()
             ->all();
@@ -815,6 +816,8 @@ class PatientController extends Controller
             'lastMessageTime' => null,
             'lastReadByDoctor' => null,
             'lastReadByPatient' => null,
+            'deletedByPatient' => false,
+            'deletedByDoctor' => false,
             'createdAt' => now(),
             'updatedAt' => now(),
         ]);
@@ -842,6 +845,24 @@ class PatientController extends Controller
         }
 
         return true;
+    }
+
+    public function deleteConversation($id)
+    {
+        $uid = current_user()['uid'];
+        $conversation = $this->firestore->find('conversations', $id);
+
+        if (! $conversation || ($conversation['patientId'] ?? '') !== $uid) {
+            return response()->json(['success' => false], 404);
+        }
+
+        $this->firestore->update('conversations', $id, ['deletedByPatient' => true]);
+
+        if ($conversation['deletedByDoctor'] ?? false) {
+            $this->firestore->permanentlyDeleteConversation($id);
+        }
+
+        return response()->json(['success' => true]);
     }
 
     private function normalizeConversation(array $conversation): array

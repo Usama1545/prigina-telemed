@@ -47,6 +47,7 @@ Route::middleware(['firebase.auth'])->group(function () {
         Route::post('conversation/{id}/send', 'sendMessage');
         Route::get('conversations/{id}', 'conversations')->name('patient.conversations.show');
         Route::POST('conversation/{id}/mark-read', 'markRead')->name('patient.conversations.mark-read');
+        Route::post('conversation/{id}/delete', 'deleteConversation')->name('patient.conversation.delete');
         Route::post('agree/consent', 'agreeToConsent')->name('consent.agree');
     });
 
@@ -87,6 +88,7 @@ Route::middleware(['firebase.auth'])->group(function () {
         Route::post('conversation/{id}/send', 'sendMessage');
         Route::get('conversations/{id}', 'conversations')->name('doctor.conversations.show');
         Route::POST('conversation/{id}/mark-read', 'markRead')->name('doctor.conversations.mark-read');
+        Route::post('conversation/{id}/delete', 'deleteConversation')->name('doctor.conversation.delete');
         Route::get('/payout-setup', 'payout')->name('doctor.payout');
         Route::get('/setup-payout', 'setupPayout')->name('doctor.payout-setup');
         Route::get('/setup-complete', 'payoutComplete')->name('doctor.payout.complete');
