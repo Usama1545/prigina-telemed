@@ -292,6 +292,7 @@ class DoctorProfileController extends Controller
 
         $conversations = collect($filteredConversations['documents'] ?? [])
             ->filter(fn ($conv) => isset($patientsWithAppointments[$conv['patientId'] ?? '']))
+            ->filter(fn ($conv) => !($conv['deletedByDoctor'] ?? false))
             ->map(fn ($conversation) => $this->normalizeConversation($conversation))
             ->values()
             ->all();
@@ -593,6 +594,8 @@ class DoctorProfileController extends Controller
             'lastMessageTime' => null,
             'lastReadByDoctor' => null,
             'lastReadByPatient' => null,
+            'deletedByPatient' => false,
+            'deletedByDoctor' => false,
             'createdAt' => now(),
             'updatedAt' => now(),
         ]);
@@ -662,6 +665,24 @@ class DoctorProfileController extends Controller
         }
 
         return true;
+    }
+
+    public function deleteConversation($id)
+    {
+        $uid = current_user()['uid'];
+        $conversation = $this->firestore->find('conversations', $id);
+
+        if (! $conversation || ($conversation['doctorId'] ?? '') !== $uid) {
+            return response()->json(['success' => false], 404);
+        }
+
+        $this->firestore->update('conversations', $id, ['deletedByDoctor' => true]);
+
+        if ($conversation['deletedByPatient'] ?? false) {
+            $this->firestore->permanentlyDeleteConversation($id);
+        }
+
+        return response()->json(['success' => true]);
     }
 
     private function normalizeConversation(array $conversation): array
@@ -782,11 +803,17 @@ class DoctorProfileController extends Controller
 
     public function completeAppointment($id)
     {
+        $appointment = $this->firestore->find('appointments', $id);
+
         $this->firestore->update('appointments', $id, [
             'status' => 'completed',
         ]);
 
-        return back()->with('success', 'Appointment completed successfully.');
+        $report = DoctorReportController::createFromAppointment($this->firestore, $appointment);
+
+        return redirect()
+            ->route('doctor.reports.edit', $report['id'])
+            ->with('success', 'Appointment completed. Please fill out the second opinion report.');
     }
 
     public function acceptAppointment($id)

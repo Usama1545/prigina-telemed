@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AdminNotificationController;
 use App\Http\Controllers\Admin\AdminPatientController;
 use App\Http\Controllers\Admin\AdminPaymentController;
 use App\Http\Controllers\Admin\AdminReportController;
+use App\Http\Controllers\Admin\AdminSecondOpinionController;
 use Illuminate\Support\Facades\Route;
 
 // =============================
@@ -59,6 +60,14 @@ Route::middleware(['admin.auth'])->group(function () {
     Route::post('/notifications/read-all', [AdminNotificationController::class, 'markAllRead'])->name('notifications.read-all');
 
     Route::get('/reports', [AdminReportController::class, 'index'])->name('reports');
+
+    Route::prefix('second-opinion')->controller(AdminSecondOpinionController::class)->group(function () {
+        Route::get('/', 'index')->name('second-opinion.index');
+        Route::get('/{id}', 'show')->name('second-opinion.show');
+        Route::post('/{id}/approve', 'approve')->name('second-opinion.approve');
+        Route::post('/{id}/revision', 'requestRevision')->name('second-opinion.revision');
+        Route::post('/{id}/publish', 'publish')->name('second-opinion.publish');
+    });
     Route::get('/reviews', [AdminDashboardController::class, 'reviews'])->name('reviews');
     Route::delete('/reviews/{review}', [AdminDashboardController::class, 'deleteReview'])->name('reviews.delete');
 

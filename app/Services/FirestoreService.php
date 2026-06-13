@@ -533,6 +533,28 @@ class FirestoreService
         }
     }
 
+    public function permanentlyDeleteConversation(string $conversationId): void
+    {
+        try {
+            $messages = $this->db->collection('messages')
+                ->where('conversationId', '=', $conversationId)
+                ->documents();
+
+            $batch = $this->db->batch();
+            foreach ($messages as $doc) {
+                $batch->delete($doc->reference());
+            }
+            $batch->delete($this->db->collection('conversations')->document($conversationId));
+            $batch->commit();
+
+            $this->flushCollectionCache('messages');
+            $this->flushCollectionCache('conversations');
+        } catch (Exception $e) {
+            Log::error('Firestore permanentlyDeleteConversation error: '.$e->getMessage());
+            throw $e;
+        }
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Storage URL

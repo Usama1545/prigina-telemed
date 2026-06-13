@@ -3,8 +3,10 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\Doctor\DoctorProfileController;
+use App\Http\Controllers\Doctor\DoctorReportController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\IndexController;
+use App\Http\Controllers\Patient\PatientReportController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
@@ -45,7 +47,22 @@ Route::middleware(['firebase.auth'])->group(function () {
         Route::post('conversation/{id}/send', 'sendMessage');
         Route::get('conversations/{id}', 'conversations')->name('patient.conversations.show');
         Route::POST('conversation/{id}/mark-read', 'markRead')->name('patient.conversations.mark-read');
+        Route::post('conversation/{id}/delete', 'deleteConversation')->name('patient.conversation.delete');
         Route::post('agree/consent', 'agreeToConsent')->name('consent.agree');
+    });
+
+    Route::prefix('doctor')->controller(DoctorReportController::class)->group(function () {
+        Route::get('/reports', 'index')->name('doctor.reports');
+        Route::get('/reports/{id}/edit', 'edit')->name('doctor.reports.edit');
+        Route::post('/reports/{id}/save-draft', 'saveDraft')->name('doctor.reports.save-draft');
+        Route::post('/reports/{id}/submit', 'submit')->name('doctor.reports.submit');
+        Route::get('/reports/{id}/pdf', 'previewPdf')->name('doctor.reports.pdf');
+    });
+
+    Route::prefix('patient')->controller(PatientReportController::class)->group(function () {
+        Route::get('/reports', 'index')->name('patient.reports');
+        Route::get('/reports/{id}', 'show')->name('patient.reports.show');
+        Route::get('/reports/{id}/pdf', 'pdf')->name('patient.reports.pdf');
     });
 
     Route::prefix('doctor')->controller(DoctorProfileController::class)->group(function () {
@@ -71,6 +88,7 @@ Route::middleware(['firebase.auth'])->group(function () {
         Route::post('conversation/{id}/send', 'sendMessage');
         Route::get('conversations/{id}', 'conversations')->name('doctor.conversations.show');
         Route::POST('conversation/{id}/mark-read', 'markRead')->name('doctor.conversations.mark-read');
+        Route::post('conversation/{id}/delete', 'deleteConversation')->name('doctor.conversation.delete');
         Route::get('/payout-setup', 'payout')->name('doctor.payout');
         Route::get('/setup-payout', 'setupPayout')->name('doctor.payout-setup');
         Route::get('/setup-complete', 'payoutComplete')->name('doctor.payout.complete');

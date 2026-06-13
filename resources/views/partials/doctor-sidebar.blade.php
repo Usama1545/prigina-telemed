@@ -71,6 +71,12 @@
                         <span>Reviews</span>
                     </a>
                 </li> --}}
+                <li class="{{ Request::is('doctor/reports*') ? 'active' : '' }}">
+                    <a href="{{ route('doctor.reports') }}">
+                        <i class="isax isax-document-text"></i>
+                        <span>Reports</span>
+                    </a>
+                </li>
                 <li class="{{ route('doctor.payout') === url()->current() ? 'active' : '' }}">
                     <a href="{{route('doctor.payout')}}">
                         <i class="fa-solid fa-money-bill-1"></i>

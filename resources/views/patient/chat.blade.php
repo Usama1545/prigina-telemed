@@ -366,6 +366,26 @@
 
         /* ... rest of your existing CSS ... */
     </style>
+
+    <!-- Delete Chat Modal -->
+    <div class="modal fade" id="change-chat" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Chat</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p class="mb-1">Are you sure you want to delete this conversation?</p>
+                    <small class="text-muted">The chat will be removed from your view. It is permanently deleted only when the other party deletes it too.</small>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteChat">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @push('scripts')
     <script>
@@ -1386,6 +1406,56 @@
 
                 if (!userScrolledUp) scrollToBottom();
             };
+
+            // =========================
+            // DELETE CHAT
+            // =========================
+
+            $('#confirmDeleteChat').on('click', function () {
+                const conversationId = window.currentConversationId;
+                if (!conversationId) return;
+
+                const $btn = $(this);
+                $btn.prop('disabled', true).text('Deleting…');
+
+                $.ajax({
+                    url: '/patient/conversation/' + conversationId + '/delete',
+                    type: 'POST',
+                    data: { _token: '{{ csrf_token() }}' },
+                    success: function () {
+                        $('#change-chat').modal('hide');
+                        $(`.user-list-item[data-conversation-id="${conversationId}"]`).remove();
+
+                        window.currentConversationId = null;
+                        currentConversationId = null;
+                        isLoadingMessages = false;
+                        isLoadingOlderMessages = false;
+                        currentMessages = [];
+                        lastRenderedMessages = '';
+
+                        const nextConv = $('.user-list-item').first();
+                        if (nextConv.length) {
+                            openConversation(nextConv.data('conversation-id'), nextConv.find('h5').text());
+                        } else {
+                            $('#conversationId').val('');
+                            $('#selectedDoctorName').text('No conversations');
+                            $('#audioCallBtn, #videoCallBtn').hide();
+                            $('#messagesList').html('<div class="text-center text-muted p-5">No conversations available</div>');
+                            window.history.pushState({}, '', '/patient/conversations');
+                        }
+                    },
+                    error: function () {
+                        alert('Failed to delete conversation. Please try again.');
+                    },
+                    complete: function () {
+                        $btn.prop('disabled', false).text('Delete');
+                    }
+                });
+            });
+
+            $('#change-chat').on('hidden.bs.modal', function () {
+                $('#confirmDeleteChat').prop('disabled', false).text('Delete');
+            });
 
             window.updateSidebarConversation = function(conversationId, text, isIncoming) {
                 const li = $(`.user-list-item[data-conversation-id="${conversationId}"]`);
