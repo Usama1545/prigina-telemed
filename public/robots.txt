@@ -1,2 +1,11 @@
 User-agent: *
-Disallow:
+Disallow: /admin/
+Disallow: /api/
+Disallow: /patient/
+Disallow: /doctor/
+Disallow: /booking/
+Disallow: /dashboard
+Disallow: /profile
+Disallow: /csrf-token
+
+Sitemap: https://priginaglobaltelemed.com/sitemap.xml

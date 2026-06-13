@@ -26,6 +26,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<link rel="canonical" href="{{ url()->current() }}">
+
 <meta name="description"
     content="PriGina Global Telemed helps patients connect with experienced doctors worldwide to receive trusted second medical opinions online through secure telemedicine consultations.">
 
