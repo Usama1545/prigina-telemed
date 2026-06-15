@@ -144,7 +144,7 @@ class DoctorReportController extends Controller
             'id' => $reportId,
             'report_number' => $reportNumber,
             'appointment_id' => $appointment['id'],
-            'patient_id' => $appointment['patientId'] ?? '',
+            'patientId' => $appointment['patientId'] ?? '',
             'doctorId' => $doctor['uid'],
             'status' => 'draft',
             'created_at' => now(),

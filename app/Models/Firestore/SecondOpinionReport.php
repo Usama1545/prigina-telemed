@@ -17,13 +17,14 @@ class SecondOpinionReport extends BaseModel
         switch ($action) {
             case 'view':
                 if ($user->role === 'doctor') {
-                    return ! $data || ($data['doctor_id'] ?? null) === $user->id;
+                    return ! $data || ($data['doctorId'] ?? null) === $user->id;
                 }
                 if ($user->role === 'patient') {
                     return ! $data
-                        || (($data['patient_id'] ?? null) === $user->id
+                        || (($data['patientId'] ?? null) === $user->id
                             && ($data['status'] ?? '') === 'published');
                 }
+
                 return false;
 
             case 'create':
