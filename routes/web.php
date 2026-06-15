@@ -92,6 +92,8 @@ Route::middleware(['firebase.auth'])->group(function () {
         Route::get('/payout-setup', 'payout')->name('doctor.payout');
         Route::get('/setup-payout', 'setupPayout')->name('doctor.payout-setup');
         Route::get('/setup-complete', 'payoutComplete')->name('doctor.payout.complete');
+        Route::post('/toggle-availability', 'toggleAvailability')->name('doctor.toggle-availability');
+        Route::post('/appointment/{id}/reschedule', 'rescheduleAppointment')->name('doctor.reschedule-appointment');
     });
 
 });

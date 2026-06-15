@@ -1,299 +1,722 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Second Opinion Report {{ $report['report_number'] ?? '' }} — PriGina Global Telemed</title>
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f1f5f9; color: #1e293b; padding: 32px 16px; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-        .page { max-width: 820px; margin: 0 auto; background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 4px 32px rgba(15,23,42,.10); }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+            font-size: 13px;
+        }
 
-        .pdf-header { background: linear-gradient(135deg, #1d4ed8 0%, #0891b2 100%); padding: 36px 48px 28px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
-        .pdf-header .brand h1 { color: #fff; font-size: 20px; font-weight: 800; }
-        .pdf-header .brand p { color: rgba(255,255,255,.75); font-size: 12px; margin-top: 4px; }
-        .pdf-header .report-meta { text-align: right; }
-        .pdf-header .report-meta .report-num { font-size: 22px; font-weight: 800; color: #fff; }
-        .pdf-header .report-meta p { color: rgba(255,255,255,.8); font-size: 12px; margin-top: 4px; }
+        .page {
+            max-width: 860px;
+            margin: 32px auto;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, .08);
+        }
 
-        .pdf-body { padding: 36px 48px; }
+        /* ── Header ── */
+        .pdf-header {
+            padding: 24px 36px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 3px solid #1d4ed8;
+            gap: 16px;
+        }
 
-        .section { margin-bottom: 28px; }
-        .section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #1d4ed8; border-bottom: 2px solid #dbeafe; padding-bottom: 6px; margin-bottom: 14px; }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .info-item label { font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: .04em; display: block; margin-bottom: 3px; }
-        .info-item span { font-size: 14px; color: #1e293b; font-weight: 500; }
+        .brand img {
+            height: 82px;
+            width: auto;
+        }
 
-        .doc-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-        .doc-tag { background: #dbeafe; color: #1d4ed8; padding: 4px 12px; border-radius: 50px; font-size: 12px; font-weight: 600; }
+        .brand-text .name {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1d4ed8;
+            letter-spacing: -.3px;
+        }
 
-        .text-content { font-size: 14px; line-height: 1.7; color: #374151; }
-        .text-content p { margin-bottom: 8px; }
+        .brand-text .tagline {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 2px;
+            font-style: italic;
+        }
 
-        .findings-list { list-style: none; padding: 0; }
-        .findings-list li { padding: 6px 0; padding-left: 20px; position: relative; font-size: 14px; color: #374151; }
-        .findings-list li::before { content: '●'; position: absolute; left: 0; color: #1d4ed8; font-size: 10px; top: 8px; }
+        .report-id {
+            text-align: right;
+        }
 
-        .rec-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-        .rec-tag { background: #ecfdf3; color: #15803d; padding: 4px 12px; border-radius: 50px; font-size: 12px; font-weight: 600; border: 1px solid #bbf7d0; }
+        .report-id .num {
+            font-size: 22px;
+            font-weight: 800;
+            color: #1d4ed8;
+        }
 
-        .questions-list { list-style: none; padding: 0; counter-reset: q; }
-        .questions-list li { padding: 8px 0; padding-left: 28px; position: relative; font-size: 14px; color: #374151; border-bottom: 1px solid #f1f5f9; counter-increment: q; }
-        .questions-list li::before { content: counter(q) "."; position: absolute; left: 0; color: #64748b; font-weight: 700; }
+        .report-id .type {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: #64748b;
+            margin-top: 2px;
+        }
 
-        .cert-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px 24px; display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; }
-        .cert-name { font-size: 16px; font-weight: 700; color: #1e293b; }
-        .cert-specialty { font-size: 13px; color: #64748b; margin-top: 2px; }
-        .cert-date { font-size: 12px; color: #64748b; text-align: right; }
-        .cert-stamp { background: #ecfdf3; border: 2px solid #22c55e; border-radius: 10px; padding: 8px 16px; text-align: center; }
-        .cert-stamp span { display: block; font-size: 11px; font-weight: 700; color: #15803d; text-transform: uppercase; letter-spacing: .06em; }
+        .report-id .date-line {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 6px;
+            line-height: 1.7;
+        }
 
-        .disclaimer { background: #fefce8; border: 1px solid #fde047; border-radius: 10px; padding: 14px 18px; margin-top: 24px; }
-        .disclaimer p { font-size: 12px; color: #713f12; line-height: 1.5; margin: 0; }
+        /* ── Two-column info rows ── */
+        .info-row {
+            display: flex;
+            border-bottom: 1px solid #e2e8f0;
+        }
 
-        .print-actions { text-align: center; padding: 24px; border-top: 1px solid #f1f5f9; }
-        .print-btn { background: #1d4ed8; color: #fff; border: none; padding: 12px 32px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; margin: 0 8px; }
-        .print-btn:hover { background: #1e40af; }
-        .back-btn { background: #f1f5f9; color: #374151; border: none; padding: 12px 32px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; margin: 0 8px; text-decoration: none; display: inline-block; }
+        .info-col {
+            flex: 1;
+            padding: 18px 24px;
+        }
+
+        .info-col+.info-col {
+            border-left: 1px solid #e2e8f0;
+        }
+
+        /* ── Full-width sections ── */
+        .section {
+            padding: 16px 36px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 10.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: #1d4ed8;
+            margin-bottom: 10px;
+        }
+
+        /* ── Field pairs ── */
+        .field {
+            margin-bottom: 10px;
+        }
+
+        .field:last-child {
+            margin-bottom: 0;
+        }
+
+        .field label {
+            display: block;
+            font-size: 10px;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            margin-bottom: 2px;
+        }
+
+        .field span {
+            font-size: 13px;
+            color: #1e293b;
+            font-weight: 500;
+        }
+
+        .field .big {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 16px;
+        }
+
+        /* ── Badges / tags ── */
+        .badge-blue {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1d4ed8;
+            padding: 2px 10px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-green {
+            display: inline-block;
+            background: #f0fdf4;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+            padding: 2px 10px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* ── Rich text ── */
+        .text-content {
+            font-size: 13px;
+            line-height: 1.75;
+            color: #374151;
+        }
+
+        .text-content p {
+            margin-bottom: 6px;
+        }
+
+        /* ── Lists ── */
+        .bullet-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .bullet-list li {
+            padding: 4px 0 4px 16px;
+            position: relative;
+            font-size: 13px;
+            color: #374151;
+            line-height: 1.5;
+        }
+
+        .bullet-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #1d4ed8;
+            font-weight: 700;
+        }
+
+        .rec-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .numbered-list {
+            list-style: none;
+            padding: 0;
+            counter-reset: q;
+        }
+
+        .numbered-list li {
+            padding: 5px 0 5px 24px;
+            position: relative;
+            font-size: 13px;
+            color: #374151;
+            border-bottom: 1px solid #f8fafc;
+            counter-increment: q;
+        }
+
+        .numbered-list li::before {
+            content: counter(q) ".";
+            position: absolute;
+            left: 0;
+            color: #64748b;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        /* ── Bottom row: disclaimer + cert ── */
+        .bottom-row {
+            display: flex;
+        }
+
+        .bottom-col {
+            flex: 1;
+            padding: 18px 24px;
+        }
+
+        .bottom-col+.bottom-col {
+            border-left: 1px solid #e2e8f0;
+        }
+
+        .disclaimer-box {
+            background: #fefce8;
+            border: 1px solid #fde047;
+            border-radius: 6px;
+            padding: 12px 14px;
+            font-size: 11px;
+            color: #713f12;
+            line-height: 1.6;
+        }
+
+        .sig-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .sig-sub {
+            font-size: 12px;
+            color: #64748b;
+            line-height: 1.6;
+            margin-top: 2px;
+        }
+
+        .certified-badge {
+            display: inline-block;
+            background: #f0fdf4;
+            border: 1px solid #22c55e;
+            border-radius: 6px;
+            padding: 5px 12px;
+            margin-top: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #15803d;
+        }
+
+        /* ── Action bar (hidden on print) ── */
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 20px 36px;
+            border-top: 1px solid #e2e8f0;
+            background: #f8fafc;
+            gap: 40px;
+        }
+
+        .action-bar-title {
+            font-size: 10.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: #1d4ed8;
+            margin-bottom: 12px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .action-buttons span {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px 18px 12px;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: #374151;
+            cursor: pointer;
+            text-align: center;
+            min-width: 90px;
+            transition: background .15s, border-color .15s;
+        }
+
+        .action-buttons span:hover {
+            background: #eff6ff;
+            border-color: #bfdbfe;
+        }
+
+        .action-buttons span i {
+            font-size: 22px;
+            color: #1d4ed8;
+            line-height: 1;
+        }
+
+        .contact-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .contact-list li {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 12px;
+            color: #374151;
+            padding: 4px 0;
+        }
+
+        .contact-list li i {
+            font-size: 14px;
+            color: #1d4ed8;
+            flex-shrink: 0;
+        }
+
+        /* ── Footer bar ── */
+        .pdf-footer {
+            background: #1d4ed8;
+            padding: 13px 36px;
+            text-align: center;
+        }
+
+        .pdf-footer p {
+            font-size: 12px;
+            color: rgba(255, 255, 255, .9);
+            font-weight: 500;
+        }
 
         @media print {
-            body { background: #fff; padding: 0; }
-            .page { box-shadow: none; border-radius: 0; }
-            .print-actions { display: none; }
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+
+            body {
+                background: #fff;
+                padding: 0;
+            }
+
+            .page {
+                margin: 0;
+                max-width: 100%;
+                border: none;
+                border-radius: 0;
+                box-shadow: none;
+            }
         }
     </style>
 </head>
+
 <body>
+    <div class="page">
 
-<div class="page">
-
-    {{-- Header --}}
-    <div class="pdf-header">
-        <div class="brand">
-            <h1>PriGina Global Telemed</h1>
-            <p>Healthcare without borders.</p>
-        </div>
-        <div class="report-meta">
-            <div class="report-num">{{ $report['report_number'] ?? 'N/A' }}</div>
-            <p>Second Opinion Report</p>
-            <p>{{ isset($report['report_information']['report_date']) ? \Carbon\Carbon::parse($report['report_information']['report_date'])->format('M d, Y') : '' }}</p>
-        </div>
-    </div>
-
-    <div class="pdf-body">
-
-        {{-- 1. Report Information --}}
-        <div class="section">
-            <div class="section-title">Report Information</div>
-            <div class="info-grid">
-                <div class="info-item">
-                    <label>Report Number</label>
-                    <span>{{ $report['report_number'] ?? '—' }}</span>
+        {{-- ── Header ── --}}
+        <div class="pdf-header">
+            <div class="brand">
+                <img src="{{ asset('build/img/logo.webp') }}" alt="PriGina Logo" onerror="this.style.display='none'">
+                {{-- <div class="brand-text">
+                    <div class="name">PriGina Global Telemed</div>
+                    <div class="tagline">Healthcare without borders.</div>
+                </div> --}}
+            </div>
+            <div class="report-id">
+                <div class="num">{{ $report['report_number'] ?? 'N/A' }}</div>
+                <div class="type">Second Opinion Report</div>
+                <div class="date-line">
+                    @if (isset($report['report_information']['report_date']))
+                        Report Date:
+                        {{ \Carbon\Carbon::parse($report['report_information']['report_date'])->format('M d, Y') }}<br>
+                    @endif
+                    Case ID: {{ $report['report_information']['case_id'] ?? '—' }}
                 </div>
-                <div class="info-item">
-                    <label>Report Date</label>
-                    <span>{{ isset($report['report_information']['report_date']) ? \Carbon\Carbon::parse($report['report_information']['report_date'])->format('M d, Y') : '—' }}</span>
+            </div>
+        </div>
+
+        {{-- ── Row 1: Report Info | Physician Info ── --}}
+        <div class="info-row">
+            <div class="info-col">
+                <div class="section-title">1. Report Information</div>
+                <div class="grid-2">
+                    <div class="field">
+                        <label>Report Number</label>
+                        <span>{{ $report['report_number'] ?? '—' }}</span>
+                    </div>
+                    <div class="field">
+                        <label>Report Date</label>
+                        <span>{{ isset($report['report_information']['report_date']) ? \Carbon\Carbon::parse($report['report_information']['report_date'])->format('M d, Y') : '—' }}</span>
+                    </div>
+                    <div class="field">
+                        <label>Case ID</label>
+                        <span>{{ $report['report_information']['case_id'] ?? '—' }}</span>
+                    </div>
+                    <div class="field">
+                        <label>Country of Practice</label>
+                        <span>{{ $report['report_information']['country_of_practice'] ?? '—' }}</span>
+                    </div>
                 </div>
-                <div class="info-item">
+            </div>
+            <div class="info-col">
+                <div class="section-title">2. Physician Information</div>
+                <div class="field">
                     <label>Physician</label>
-                    <span>Dr. {{ $report['report_information']['physician_name'] ?? '—' }}</span>
+                    <span class="big">Dr. {{ $report['report_information']['physician_name'] ?? '—' }}</span>
                 </div>
-                <div class="info-item">
-                    <label>Specialty</label>
-                    <span>{{ $report['report_information']['specialty'] ?? '—' }}</span>
-                </div>
-                <div class="info-item">
-                    <label>Case ID</label>
-                    <span>{{ $report['report_information']['case_id'] ?? '—' }}</span>
-                </div>
-                <div class="info-item">
-                    <label>Country of Practice</label>
-                    <span>{{ $report['report_information']['country_of_practice'] ?? '—' }}</span>
+                <div class="grid-2" style="margin-top:10px;">
+                    <div class="field">
+                        <label>Specialty</label>
+                        <span>{{ $report['report_information']['specialty'] ?? '—' }}</span>
+                    </div>
+                    <div class="field">
+                        <label>Country</label>
+                        <span>{{ $report['report_information']['country_of_practice'] ?? '—' }}</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        {{-- 2. Patient Information --}}
-        <div class="section">
-            <div class="section-title">Patient Information</div>
-            <div class="info-grid">
-                <div class="info-item">
-                    <label>Patient Name</label>
-                    <span>{{ $report['patient_information']['patient_name'] ?? '—' }}</span>
+        {{-- ── Row 2: Patient Info | Documents Reviewed ── --}}
+        <div class="info-row">
+            <div class="info-col">
+                <div class="section-title">3. Patient Information</div>
+                <div class="grid-2">
+                    <div class="field">
+                        <label>Patient Name</label>
+                        <span>{{ $report['patient_information']['patient_name'] ?? '—' }}</span>
+                    </div>
+                    <div class="field">
+                        <label>Age</label>
+                        <span>{{ $report['patient_information']['age'] ?? '—' }}</span>
+                    </div>
+                    <div class="field">
+                        <label>Gender</label>
+                        <span>{{ $report['patient_information']['gender'] ?? '—' }}</span>
+                    </div>
                 </div>
-                <div class="info-item">
-                    <label>Age</label>
-                    <span>{{ $report['patient_information']['age'] ?? '—' }}</span>
-                </div>
-                <div class="info-item">
-                    <label>Gender</label>
-                    <span>{{ $report['patient_information']['gender'] ?? '—' }}</span>
-                </div>
+                @if (!empty($report['patient_information']['primary_concern']))
+                    <div class="field" style="margin-top:10px;">
+                        <label>Primary Concern / Diagnosis Under Review</label>
+                        <span>{{ $report['patient_information']['primary_concern'] }}</span>
+                    </div>
+                @endif
             </div>
-            @if(!empty($report['patient_information']['primary_concern']))
-            <div style="margin-top:12px;">
-                <div class="info-item">
-                    <label>Primary Concern / Diagnosis Under Review</label>
-                    <span>{{ $report['patient_information']['primary_concern'] }}</span>
-                </div>
-            </div>
-            @endif
-        </div>
-
-        {{-- 3. Documents Reviewed --}}
-        @php
-            $docLabels = [
-                'medical_records'    => 'Medical Records',
-                'laboratory_results' => 'Lab Results',
-                'imaging_studies'    => 'Imaging Studies',
-                'pathology_reports'  => 'Pathology Reports',
-                'operative_reports'  => 'Operative Reports',
-                'consultation_notes' => 'Consultation Notes',
-            ];
-            $reviewedDocs = collect($docLabels)->filter(fn($label, $key) => !empty($report['documents_reviewed'][$key] ?? false));
-        @endphp
-        @if($reviewedDocs->isNotEmpty() || !empty($report['documents_reviewed']['other']))
-        <div class="section">
-            <div class="section-title">Documents Reviewed</div>
-            <div class="doc-tags">
-                @foreach($reviewedDocs as $key => $label)
-                    <span class="doc-tag">{{ $label }}</span>
-                @endforeach
-                @if(!empty($report['documents_reviewed']['other']))
-                    <span class="doc-tag">{{ $report['documents_reviewed']['other'] }}</span>
+            <div class="info-col">
+                <div class="section-title">4. Documents Reviewed</div>
+                @php
+                    $docLabels = [
+                        'medical_records' => 'Medical Records',
+                        'laboratory_results' => 'Lab Results',
+                        'imaging_studies' => 'Imaging Studies',
+                        'pathology_reports' => 'Pathology Reports',
+                        'operative_reports' => 'Operative Reports',
+                        'consultation_notes' => 'Consultation Notes',
+                    ];
+                    $reviewedDocs = collect($docLabels)->filter(
+                        fn($_, $key) => !empty($report['documents_reviewed'][$key] ?? false),
+                    );
+                @endphp
+                @if ($reviewedDocs->isNotEmpty() || !empty($report['documents_reviewed']['other']))
+                    <ul class="bullet-list">
+                        @foreach ($reviewedDocs as $key => $label)
+                            <li>{{ $label }}</li>
+                        @endforeach
+                        @if (!empty($report['documents_reviewed']['other']))
+                            <li>{{ $report['documents_reviewed']['other'] }}</li>
+                        @endif
+                    </ul>
+                @else
+                    <span style="font-size:12px;color:#94a3b8;">No documents listed</span>
                 @endif
             </div>
         </div>
+
+        {{-- ── 5. Clinical Summary ── --}}
+        @if (!empty($report['clinical_summary']))
+            <div class="section">
+                <div class="section-title">5. Clinical Summary</div>
+                <div class="text-content">{!! $report['clinical_summary'] !!}</div>
+            </div>
         @endif
 
-        {{-- 4. Clinical Summary --}}
-        @if(!empty($report['clinical_summary']))
-        <div class="section">
-            <div class="section-title">Clinical Summary</div>
-            <div class="text-content">{!! $report['clinical_summary'] !!}</div>
-        </div>
+        {{-- ── 6. Second Opinion Assessment ── --}}
+        @if (!empty($report['second_opinion_assessment']))
+            <div class="section">
+                <div class="section-title">6. Second Opinion Assessment</div>
+                <div class="text-content">{!! $report['second_opinion_assessment'] !!}</div>
+            </div>
         @endif
 
-        {{-- 5. Second Opinion Assessment --}}
-        @if(!empty($report['second_opinion_assessment']))
-        <div class="section">
-            <div class="section-title">Second Opinion Assessment</div>
-            <div class="text-content">{!! $report['second_opinion_assessment'] !!}</div>
-        </div>
+        {{-- ── 7. Key Findings ── --}}
+        @if (!empty($report['key_findings']))
+            <div class="section">
+                <div class="section-title">7. Key Findings</div>
+                <ul class="bullet-list">
+                    @foreach ($report['key_findings'] as $finding)
+                        @if (trim($finding))
+                            <li>{{ $finding }}</li>
+                        @endif
+                    @endforeach
+                </ul>
+            </div>
         @endif
 
-        {{-- 6. Key Findings --}}
-        @if(!empty($report['key_findings']))
-        <div class="section">
-            <div class="section-title">Key Findings</div>
-            <ul class="findings-list">
-                @foreach($report['key_findings'] as $finding)
-                    @if(trim($finding))
-                    <li>{{ $finding }}</li>
-                    @endif
-                @endforeach
-            </ul>
-        </div>
+        {{-- ── 8. Diagnostic Considerations ── --}}
+        @if (!empty($report['diagnostic_considerations']))
+            <div class="section">
+                <div class="section-title">8. Diagnostic Considerations</div>
+                <div class="text-content">{!! $report['diagnostic_considerations'] !!}</div>
+            </div>
         @endif
 
-        {{-- 7. Diagnostic Considerations --}}
-        @if(!empty($report['diagnostic_considerations']))
-        <div class="section">
-            <div class="section-title">Diagnostic Considerations</div>
-            <div class="text-content">{!! $report['diagnostic_considerations'] !!}</div>
-        </div>
-        @endif
-
-        {{-- 8. Recommendations --}}
+        {{-- ── 9. Recommendations ── --}}
         @php
             $recLabels = [
-                'additional_testing'      => 'Additional Testing',
-                'additional_imaging'      => 'Additional Imaging',
-                'specialist_referral'     => 'Specialist Referral',
-                'treatment_modification'  => 'Treatment Modification',
-                'monitoring'              => 'Monitoring / Observation',
-                'surgical_consultation'   => 'Surgical Consultation',
+                'additional_testing' => 'Additional Testing',
+                'additional_imaging' => 'Additional Imaging',
+                'specialist_referral' => 'Specialist Referral',
+                'treatment_modification' => 'Treatment Modification',
+                'monitoring' => 'Monitoring / Observation',
+                'surgical_consultation' => 'Surgical Consultation',
                 'lifestyle_modifications' => 'Lifestyle Modifications',
-                'other'                   => 'Other',
+                'other' => 'Other',
             ];
-            $selectedRecs = collect($recLabels)->filter(fn($label, $key) => !empty($report['recommendations'][$key] ?? false));
+            $selectedRecs = collect($recLabels)->filter(
+                fn($_, $key) => !empty($report['recommendations'][$key] ?? false),
+            );
         @endphp
-        @if($selectedRecs->isNotEmpty() || !empty($report['recommendations']['details']))
-        <div class="section">
-            <div class="section-title">Recommendations</div>
-            @if($selectedRecs->isNotEmpty())
-            <div class="rec-tags">
-                @foreach($selectedRecs as $key => $label)
-                    <span class="rec-tag">{{ $label }}</span>
-                @endforeach
-            </div>
-            @endif
-            @if(!empty($report['recommendations']['details']))
-            <div class="text-content" style="margin-top:10px;">{{ $report['recommendations']['details'] }}</div>
-            @endif
-        </div>
-        @endif
-
-        {{-- 9. Questions for Physician --}}
-        @if(!empty($report['questions_for_physician']))
-        <div class="section">
-            <div class="section-title">Questions to Discuss with Treating Physician</div>
-            <ul class="questions-list">
-                @foreach($report['questions_for_physician'] as $question)
-                    @if(trim($question))
-                    <li>{{ $question }}</li>
-                    @endif
-                @endforeach
-            </ul>
-        </div>
-        @endif
-
-        {{-- 10. Patient-Friendly Summary --}}
-        @if(!empty($report['patient_friendly_summary']))
-        <div class="section">
-            <div class="section-title">Patient-Friendly Summary</div>
-            <div class="text-content">{!! $report['patient_friendly_summary'] !!}</div>
-        </div>
-        @endif
-
-        {{-- 11. Certification --}}
-        <div class="section">
-            <div class="section-title">Physician Certification</div>
-            <div class="cert-box">
-                <div>
-                    <div class="cert-name">Dr. {{ $report['certification']['physician_name'] ?? '—' }}</div>
-                    <div class="cert-specialty">{{ $report['certification']['specialty'] ?? '' }}</div>
-                    @if(!empty($report['certification']['certified_at']))
-                    <div class="cert-date" style="margin-top:8px;">
-                        Certified on {{ \Carbon\Carbon::parse($report['certification']['certified_at'])->format('M d, Y') }}
+        @if ($selectedRecs->isNotEmpty() || !empty($report['recommendations']['details']))
+            <div class="section">
+                <div class="section-title">9. Recommendations</div>
+                @if ($selectedRecs->isNotEmpty())
+                    <div class="rec-tags">
+                        @foreach ($selectedRecs as $key => $label)
+                            <span class="badge-green">{{ $label }}</span>
+                        @endforeach
                     </div>
-                    @endif
+                @endif
+                @if (!empty($report['recommendations']['details']))
+                    <div class="text-content" style="margin-top:8px;">{{ $report['recommendations']['details'] }}</div>
+                @endif
+            </div>
+        @endif
+
+        {{-- ── 10. Questions for Physician ── --}}
+        @if (!empty($report['questions_for_physician']))
+            <div class="section">
+                <div class="section-title">10. Questions to Discuss with Treating Physician</div>
+                <ol class="numbered-list">
+                    @foreach ($report['questions_for_physician'] as $question)
+                        @if (trim($question))
+                            <li>{{ $question }}</li>
+                        @endif
+                    @endforeach
+                </ol>
+            </div>
+        @endif
+
+        {{-- ── 11. Patient-Friendly Summary ── --}}
+        @if (!empty($report['patient_friendly_summary']))
+            <div class="section">
+                <div class="section-title">11. Patient-Friendly Summary</div>
+                <div class="text-content">{!! $report['patient_friendly_summary'] !!}</div>
+            </div>
+        @endif
+
+        {{-- ── Bottom: Disclaimer | Physician Certification ── --}}
+        <div class="bottom-row" style="border-top: 1px solid #e2e8f0;">
+            <div class="bottom-col">
+                <div class="section-title">Disclaimer</div>
+                <div class="disclaimer-box">
+                    This second opinion report is prepared based on the medical documents provided. It does not replace
+                    the patient's treating physician's judgment and is intended to assist in informed medical
+                    decision-making. PriGina Global Telemed and the reviewing physician are not responsible for
+                    treatment decisions made based on this report.
                 </div>
-                @if(!empty($report['certification']['certified_at']))
-                <div class="cert-stamp">
-                    <span>Certified</span>
-                    <span style="font-size:18px;color:#22c55e;">✓</span>
+            </div>
+            <div class="bottom-col">
+                <div class="section-title">Physician Certification</div>
+                <div class="sig-name">Dr. {{ $report['certification']['physician_name'] ?? '—' }}</div>
+                <div class="sig-sub">
+                    {{ $report['certification']['specialty'] ?? '' }}<br>
+                    PriGina Global Telemed
                 </div>
+                @if (!empty($report['certification']['certified_at']))
+                    <div class="certified-badge">
+                        &#10003; Certified on {{ \Carbon\Carbon::parse($report['certification']['certified_at'])->format('M d, Y') }}
+                    </div>
                 @endif
             </div>
         </div>
 
-        {{-- Disclaimer --}}
-        <div class="disclaimer">
-            <p><strong>Disclaimer:</strong> This second opinion report is prepared based on the medical documents provided. It does not replace the patient's treating physician's judgment and is intended to assist in informed medical decision-making. PriGina Global Telemed and the reviewing physician are not responsible for treatment decisions made based on this report.</p>
+        {{-- ── Action Bar (hidden on print) ── --}}
+        <div class="action-bar">
+            <div>
+                <div class="action-bar-title">Patient Dashboard Actions</div>
+                <div class="action-buttons" id="actionBar">
+                    <span onclick="downloadPdf()"><i class="fi fi-rr-file-download"></i>Download PDF</span>
+                    <span onclick="window.print()"><i class="fi fi-rr-print"></i>Print Report</span>
+                    <span onclick="history.back()"><i class="fi fi-rr-arrow-left"></i>Go Back</span>
+                </div>
+            </div>
+            <div>
+                <div class="action-bar-title">Need Help?</div>
+                <ul class="contact-list">
+                    <li><i class="fi fi-rr-globe"></i> www.priginaglobaltelemed.com</li>
+                    <li><i class="fi fi-rr-envelope"></i> support@priginaglobaltelemed.com</li>
+                    <li><i class="fi fi-rr-phone-call"></i> +1 (833) 774-4462</li>
+                </ul>
+            </div>
         </div>
 
+        {{-- ── Footer bar ── --}}
+        <div class="pdf-footer">
+            <p>PriGina Global Telemed &mdash; Healthcare without borders.</p>
+        </div>
     </div>
 
-    {{-- Print Actions --}}
-    <div class="print-actions">
-        <a href="javascript:history.back()" class="back-btn">← Back</a>
-        <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
-    </div>
+    <script>
+        function downloadPdf() {
+            const actionButtons = document.querySelector('.action-buttons');
+            const page = document.querySelector('.page');
 
-</div>
+            // Hide only the buttons; keep bar title + contact info visible in the PDF
+            actionButtons.style.display = 'none';
 
+            // Strip layout styles that add whitespace to the canvas capture
+            page.style.margin = '0';
+            page.style.borderRadius = '0';
+            page.style.boxShadow = 'none';
+            page.style.maxWidth = 'none';
+
+            const filename = 'PriGina-Report-{{ addslashes($report['report_number'] ?? 'report') }}.pdf';
+
+            html2pdf()
+                .set({
+                    margin: [0, 0, 0, 0],
+                    filename: filename,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: {
+                        scale: 2,
+                        useCORS: true,
+                        logging: false,
+                        scrollX: 0,
+                        scrollY: 0,
+                        windowWidth: page.scrollWidth,
+                    },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                    pagebreak: { mode: ['avoid-all', 'css'] },
+                })
+                .from(page)
+                .save()
+                .then(() => {
+                    actionButtons.style.display = '';
+                    page.style.margin = '';
+                    page.style.borderRadius = '';
+                    page.style.boxShadow = '';
+                    page.style.maxWidth = '';
+                });
+        }
+    </script>
 </body>
+
 </html>

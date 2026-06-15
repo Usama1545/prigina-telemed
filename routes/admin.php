@@ -67,6 +67,8 @@ Route::middleware(['admin.auth'])->group(function () {
         Route::post('/{id}/approve', 'approve')->name('second-opinion.approve');
         Route::post('/{id}/revision', 'requestRevision')->name('second-opinion.revision');
         Route::post('/{id}/publish', 'publish')->name('second-opinion.publish');
+        Route::get('/{id}/pdf', 'previewPdf')->name('second-opinion.pdf');
+
     });
     Route::get('/reviews', [AdminDashboardController::class, 'reviews'])->name('reviews');
     Route::delete('/reviews/{review}', [AdminDashboardController::class, 'deleteReview'])->name('reviews.delete');

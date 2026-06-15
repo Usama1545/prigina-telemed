@@ -224,6 +224,31 @@
 
                 </li>
 
+                @if(($appointment['status'] ?? '') === 'confirmed')
+
+                    <li class="appointment-action mt-2">
+
+                        <button
+                            type="button"
+                            class="btn btn-outline-secondary w-100 reschedule-btn"
+                            data-id="{{ $appointment['id'] }}"
+                            data-date="{{ $appointment['date'] ?? '' }}"
+                            data-start="{{ $appointment['startTime'] ?? '' }}"
+                            data-end="{{ $appointment['endTime'] ?? '' }}"
+                            data-bs-toggle="modal"
+                            data-bs-target="#rescheduleModal"
+                        >
+
+                            <i class="isax isax-calendar-edit me-1"></i>
+
+                            Reschedule
+
+                        </button>
+
+                    </li>
+
+                @endif
+
             @endif
 
         </ul>

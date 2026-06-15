@@ -4,12 +4,12 @@
     <div class="doctor-profile-card">
         <div class="widget-profile pro-widget-content text-center">
             <div class="profile-info-widget">
-                <a href="{{url('profile-settings')}}" class="booking-doc-img">
-                    <img src="{{ current_user()['profilePicture'] ? current_user()['profilePicture'] : URL::asset('build/img/doctors-dashboard/profile-06.jpg')}}"
+                <a href="{{ url('profile-settings') }}" class="booking-doc-img">
+                    <img src="{{ current_user()['profilePicture'] ? current_user()['profilePicture'] : URL::asset('build/img/doctors-dashboard/profile-06.jpg') }}"
                         alt="User Image">
                 </a>
                 <div class="profile-det-info">
-                    <h3><a href="{{url('profile-settings')}}">{{ current_user()['name'] }}</a></h3>
+                    <h3><a href="{{ url('profile-settings') }}">{{ current_user()['name'] }}</a></h3>
                 </div>
             </div>
             <p class="doctor-qualification">
@@ -36,25 +36,28 @@
             Availability
         </label>
 
-        <select class="form-select modern-select">
-            <option>I am Available Now</option>
-            <option>Not Available</option>
+        @php $isAvailable = current_user()['available'] ?? true; @endphp
+
+        <select id="availability-select" class="form-select modern-select"
+            data-url="{{ route('doctor.toggle-availability') }}" data-token="{{ csrf_token() }}">
+            <option value="1" {{ $isAvailable ? 'selected' : '' }}>I am Available Now</option>
+            <option value="0" {{ !$isAvailable ? 'selected' : '' }}>Not Available</option>
         </select>
 
     </div>
 
     {{-- Sidebar Navigation --}}
-   <div class="dashboard-widget modern-sidebar-menu">
+    <div class="dashboard-widget modern-sidebar-menu">
         <nav class="dashboard-menu p-2">
             <ul>
                 <li class="{{ route('doctor.dashboard') === url()->current() ? 'active' : '' }}">
-                    <a href="{{route('doctor.dashboard')}}">
+                    <a href="{{ route('doctor.dashboard') }}">
                         <i class="isax isax-category-2"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li class="{{ route('doctor.appointments') === url()->current() ? 'active' : '' }}">
-                    <a href="{{route('doctor.appointments')}}">
+                    <a href="{{ route('doctor.appointments') }}">
                         <i class="isax isax-calendar-1"></i>
                         <span>Appointments</span>
                     </a>
@@ -78,28 +81,28 @@
                     </a>
                 </li>
                 <li class="{{ route('doctor.payout') === url()->current() ? 'active' : '' }}">
-                    <a href="{{route('doctor.payout')}}">
+                    <a href="{{ route('doctor.payout') }}">
                         <i class="fa-solid fa-money-bill-1"></i>
                         <span>Payout Settings</span>
                     </a>
                 </li>
                 <li class="{{ route('doctor.conversations') === url()->current() ? 'active' : '' }}">
-                    <a href="{{route('doctor.conversations')}}">
+                    <a href="{{ route('doctor.conversations') }}">
                         <i class="isax isax-messages-1"></i>
                         <span>Message</span>
                         <small class="unread-msg">7</small>
                     </a>
                 </li>
                 <li class="{{ route('doctor.settings') === url()->current() ? 'active' : '' }}">
-                    <a href="{{route('doctor.settings')}}">
+                    <a href="{{ route('doctor.settings') }}">
                         <i class="isax isax-setting-2"></i>
                         <span>Profile Settings</span>
                     </a>
                 </li>
-               
-               
+
+
                 <li>
-                    <a href="{{route('login')}}">
+                    <a href="{{ route('login') }}">
                         <i class="isax isax-logout"></i>
                         <span>Logout</span>
                     </a>
@@ -114,7 +117,7 @@
 <div class="mobile-bottom-nav d-lg-none">
 
     <a href="{{ route('doctor.dashboard') }}"
-       class="{{ route('doctor.dashboard') === url()->current() ? 'active' : '' }}">
+        class="{{ route('doctor.dashboard') === url()->current() ? 'active' : '' }}">
 
         <i class="isax isax-category-2"></i>
         <span>Home</span>
@@ -122,7 +125,7 @@
     </a>
 
     <a href="{{ route('doctor.appointments') }}"
-       class="{{ route('doctor.appointments') === url()->current() ? 'active' : '' }}">
+        class="{{ route('doctor.appointments') === url()->current() ? 'active' : '' }}">
 
         <i class="isax isax-calendar-1"></i>
         <span>Appointments</span>
@@ -130,15 +133,14 @@
     </a>
 
     <a href="{{ route('doctor.conversations') }}"
-       class="{{ route('doctor.conversations') === url()->current() ? 'active' : '' }}">
+        class="{{ route('doctor.conversations') === url()->current() ? 'active' : '' }}">
 
         <i class="isax isax-messages-1"></i>
         <span>Chat</span>
 
     </a>
 
-    <a href="{{ route('doctor.payout') }}"
-       class="{{ route('doctor.payout') === url()->current() ? 'active' : '' }}">
+    <a href="{{ route('doctor.payout') }}" class="{{ route('doctor.payout') === url()->current() ? 'active' : '' }}">
 
         <i class="isax isax-money"></i>
         <span>Payout</span>
@@ -146,7 +148,7 @@
     </a>
 
     <a href="{{ route('doctor.settings') }}"
-       class="{{ route('doctor.settings') === url()->current() ? 'active' : '' }}">
+        class="{{ route('doctor.settings') === url()->current() ? 'active' : '' }}">
 
         <i class="isax isax-setting-2"></i>
         <span>Profile</span>
@@ -156,13 +158,12 @@
 </div>
 
 <style>
-
     .doctor-profile-card {
         background: #fff;
         border-radius: 24px;
         padding: 25px;
         margin-bottom: 20px;
-        box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
     }
 
     .doctor-profile-top {
@@ -238,7 +239,7 @@
         border-radius: 20px;
         padding: 20px;
         margin-bottom: 20px;
-        box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
     }
 
     .modern-select {
@@ -253,7 +254,7 @@
         padding: 20px;
     }
 
-   
+
 
     .modern-unread-msg {
         margin-left: auto;
@@ -280,7 +281,7 @@
         align-items: center;
         padding: 10px 5px;
         z-index: 9999;
-        box-shadow: 0 -5px 25px rgba(0,0,0,0.06);
+        box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.06);
     }
 
     .mobile-bottom-nav a {
@@ -305,9 +306,9 @@
     }
 
     .doc-container {
-            padding-bottom: 25px !important;
-        }
-     
+        padding-bottom: 25px !important;
+    }
+
 
     @media (max-width: 991px) {
 
@@ -318,6 +319,7 @@
         .content {
             padding-bottom: 90px;
         }
+
         .doc-container {
             padding-bottom: 70px !important;
         }
@@ -327,5 +329,43 @@
         }
 
     }
-
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const select = document.getElementById('availability-select');
+        if (!select) return;
+
+        select.addEventListener('change', function() {
+            const isAvailable = parseInt(this.value);
+            const url = this.dataset.url;
+            const token = this.dataset.token;
+
+            select.disabled = true;
+
+            fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': token,
+                    },
+                    body: JSON.stringify({
+                        isAvailable
+                    }),
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.success) {
+                        // revert on failure
+                        select.value = isAvailable ? '0' : '1';
+                    }
+                })
+                .catch(() => {
+                    select.value = isAvailable ? '0' : '1';
+                })
+                .finally(() => {
+                    select.disabled = false;
+                });
+        });
+    });
+</script>

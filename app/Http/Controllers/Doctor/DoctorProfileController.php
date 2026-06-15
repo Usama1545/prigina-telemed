@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Doctor;
 
 use App\Http\Controllers\Controller;
+use App\Mail\AppointmentCompleted;
+use App\Mail\AppointmentConfirmed;
+use App\Mail\AppointmentRejected;
 use App\Services\FirestoreService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Contract\Storage;
@@ -292,7 +296,7 @@ class DoctorProfileController extends Controller
 
         $conversations = collect($filteredConversations['documents'] ?? [])
             ->filter(fn ($conv) => isset($patientsWithAppointments[$conv['patientId'] ?? '']))
-            ->filter(fn ($conv) => !($conv['deletedByDoctor'] ?? false))
+            ->filter(fn ($conv) => ! ($conv['deletedByDoctor'] ?? false))
             ->map(fn ($conversation) => $this->normalizeConversation($conversation))
             ->values()
             ->all();
@@ -393,9 +397,29 @@ class DoctorProfileController extends Controller
 
     public function cancelAppointment($id)
     {
+        $appointment = $this->firestore->find('appointments', $id);
+
         $this->firestore->update('appointments', $id, [
             'status' => 'cancelled',
+            'rejectedAt' => now()->toDateTimeString(),
+            'updatedAt' => now()->toDateTimeString(),
         ]);
+
+        if ($appointment) {
+            $patient = $this->firestore->find('patients', $appointment['patientId'] ?? '');
+            $email = $patient['email'] ?? null;
+            if ($email) {
+                try {
+                    Mail::to($email)->send(new AppointmentRejected($appointment));
+                } catch (\Throwable $e) {
+                    Log::error('appointment-rejected-email-failed', [
+                        'appointment' => $id,
+                        'email' => $email,
+                        'error' => $e->getMessage(),
+                    ]);
+                }
+            }
+        }
 
         return redirect()->back()->with('success', 'Appointment cancelled successfully.');
     }
@@ -807,7 +831,25 @@ class DoctorProfileController extends Controller
 
         $this->firestore->update('appointments', $id, [
             'status' => 'completed',
+            'completedAt' => now()->toDateTimeString(),
+            'updatedAt' => now()->toDateTimeString(),
         ]);
+
+        if ($appointment) {
+            $patient = $this->firestore->find('patients', $appointment['patientId'] ?? '');
+            $email = $patient['email'] ?? null;
+            if ($email) {
+                try {
+                    Mail::to($email)->send(new AppointmentCompleted($appointment));
+                } catch (\Throwable $e) {
+                    Log::error('appointment-completed-email-failed', [
+                        'appointment' => $id,
+                        'email' => $email,
+                        'error' => $e->getMessage(),
+                    ]);
+                }
+            }
+        }
 
         $report = DoctorReportController::createFromAppointment($this->firestore, $appointment);
 
@@ -818,10 +860,75 @@ class DoctorProfileController extends Controller
 
     public function acceptAppointment($id)
     {
+        $appointment = $this->firestore->find('appointments', $id);
+
         $this->firestore->update('appointments', $id, [
             'status' => 'confirmed',
+            'confirmedAt' => now()->toDateTimeString(),
+            'updatedAt' => now()->toDateTimeString(),
         ]);
 
+        if ($appointment) {
+            $patient = $this->firestore->find('patients', $appointment['patientId'] ?? '');
+            $email = $patient['email'] ?? null;
+            if ($email) {
+                try {
+                    Mail::to($email)->send(new AppointmentConfirmed($appointment));
+                } catch (\Throwable $e) {
+                    Log::error('appointment-confirmed-email-failed', [
+                        'appointment' => $id,
+                        'email' => $email,
+                        'error' => $e->getMessage(),
+                    ]);
+                }
+            }
+        }
+
         return back()->with('success', 'Appointment accepted successfully.');
+    }
+
+    public function toggleAvailability(Request $request)
+    {
+        $validated = $request->validate([
+            'isAvailable' => 'required|boolean',
+        ]);
+
+        $uid = current_user()['uid'];
+
+        $this->firestore->update('doctors', $uid, [
+            'isAvailable' => $validated['isAvailable'],
+        ]);
+
+        return response()->json(['success' => true, 'isAvailable' => $validated['isAvailable']]);
+    }
+
+    public function rescheduleAppointment(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'date' => 'required|date|after_or_equal:today',
+            'startTime' => 'required|string',
+            'endTime' => 'required|string',
+        ]);
+
+        $appointment = $this->firestore->find('appointments', $id);
+
+        if (! $appointment || ($appointment['doctorId'] ?? '') !== current_user()['uid']) {
+            return response()->json(['success' => false, 'message' => 'Appointment not found.'], 404);
+        }
+
+        $formattedDate = Carbon::parse($validated['date'])->format('d M Y');
+
+        $this->firestore->update('appointments', $id, [
+            'date' => $validated['date'],
+            'startTime' => $validated['startTime'],
+            'endTime' => $validated['endTime'],
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'formattedDate' => $formattedDate,
+            'startTime' => $validated['startTime'],
+            'endTime' => $validated['endTime'],
+        ]);
     }
 }

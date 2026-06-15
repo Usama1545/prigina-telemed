@@ -140,4 +140,11 @@ class AdminSecondOpinionController extends Controller
             'createdAt' => now(),
         ]);
     }
+
+    public function previewPdf(string $id)
+    {
+        $report = $this->firestore->find('second_opinion_reports', $id);
+
+        return view('doctor.reports.pdf', compact('report'));
+    }
 }

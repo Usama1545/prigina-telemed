@@ -200,6 +200,53 @@
 
     </div>
 </div>
+
+{{-- Reschedule Modal --}}
+<div class="modal fade" id="rescheduleModal" tabindex="-1" aria-labelledby="rescheduleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="rescheduleModalLabel">Reschedule Appointment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <input type="hidden" id="reschedule-appointment-id">
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">New Date</label>
+                    <input type="date" id="reschedule-date" class="form-control" min="{{ date('Y-m-d') }}">
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-6">
+                        <label class="form-label fw-semibold">Start Time</label>
+                        <input type="time" id="reschedule-start" class="form-control">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label fw-semibold">End Time</label>
+                        <input type="time" id="reschedule-end" class="form-control">
+                    </div>
+                </div>
+
+                <div id="reschedule-error" class="alert alert-danger mt-3 d-none"></div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="reschedule-save-btn">
+                    <span id="reschedule-spinner" class="spinner-border spinner-border-sm me-1 d-none"></span>
+                    Save Changes
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <style>
     body {
             background-color: #f5f7fb !important
@@ -394,6 +441,127 @@ onSnapshot(appointmentsQuery, (snapshot) => {
 
 });
 
+</script>
+
+<script>
+(function () {
+
+    // Populate modal when a reschedule button is clicked
+    document.addEventListener('click', function (e) {
+        const btn = e.target.closest('.reschedule-btn');
+        if (!btn) return;
+
+        document.getElementById('reschedule-appointment-id').value = btn.dataset.id;
+
+        // Parse date string to yyyy-mm-dd for the date input
+        const rawDate = btn.dataset.date;
+        let isoDate = '';
+        if (rawDate) {
+            try {
+                const d = new Date(rawDate);
+                if (!isNaN(d)) {
+                    isoDate = d.toISOString().split('T')[0];
+                }
+            } catch (_) {}
+        }
+        document.getElementById('reschedule-date').value = isoDate;
+
+        // Convert "9:00 AM" → "09:00" for time inputs
+        function toInputTime(str) {
+            if (!str) return '';
+            const [time, meridiem] = str.trim().split(' ');
+            if (!meridiem) return str; // already 24h
+            let [h, m] = time.split(':').map(Number);
+            if (meridiem.toUpperCase() === 'PM' && h !== 12) h += 12;
+            if (meridiem.toUpperCase() === 'AM' && h === 12) h = 0;
+            return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+        }
+
+        document.getElementById('reschedule-start').value = toInputTime(btn.dataset.start);
+        document.getElementById('reschedule-end').value   = toInputTime(btn.dataset.end);
+        document.getElementById('reschedule-error').classList.add('d-none');
+    });
+
+    document.getElementById('reschedule-save-btn').addEventListener('click', function () {
+        const id        = document.getElementById('reschedule-appointment-id').value;
+        const date      = document.getElementById('reschedule-date').value;
+        const startTime = document.getElementById('reschedule-start').value;
+        const endTime   = document.getElementById('reschedule-end').value;
+        const errorEl   = document.getElementById('reschedule-error');
+        const spinner   = document.getElementById('reschedule-spinner');
+
+        errorEl.classList.add('d-none');
+
+        if (!date || !startTime || !endTime) {
+            errorEl.textContent = 'Please fill in all fields.';
+            errorEl.classList.remove('d-none');
+            return;
+        }
+
+        if (endTime <= startTime) {
+            errorEl.textContent = 'End time must be after start time.';
+            errorEl.classList.remove('d-none');
+            return;
+        }
+
+        // Format time back to "9:00 AM"
+        function toDisplayTime(val) {
+            const [h, m] = val.split(':').map(Number);
+            const meridiem = h >= 12 ? 'PM' : 'AM';
+            const h12 = h % 12 || 12;
+            return `${h12}:${String(m).padStart(2, '0')} ${meridiem}`;
+        }
+
+        this.disabled = true;
+        spinner.classList.remove('d-none');
+
+        fetch(`/doctor/appointment/${id}/reschedule`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            },
+            body: JSON.stringify({
+                date:      date,
+                startTime: toDisplayTime(startTime),
+                endTime:   toDisplayTime(endTime),
+            }),
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                bootstrap.Modal.getInstance(document.getElementById('rescheduleModal')).hide();
+                // Update the card's displayed date/time without full reload
+                const card = document.getElementById(`appointment-${id}`);
+                if (card) {
+                    const dateSpan = card.querySelectorAll('.appointment-info span')[0];
+                    const timeSpan = card.querySelectorAll('.appointment-info span')[1];
+                    if (dateSpan) dateSpan.textContent = data.formattedDate;
+                    if (timeSpan) timeSpan.textContent = `${data.startTime} - ${data.endTime}`;
+                    // Update button data attributes
+                    const btn = card.querySelector('.reschedule-btn');
+                    if (btn) {
+                        btn.dataset.date  = date;
+                        btn.dataset.start = data.startTime;
+                        btn.dataset.end   = data.endTime;
+                    }
+                }
+            } else {
+                errorEl.textContent = data.message ?? 'Something went wrong.';
+                errorEl.classList.remove('d-none');
+            }
+        })
+        .catch(() => {
+            errorEl.textContent = 'Network error. Please try again.';
+            errorEl.classList.remove('d-none');
+        })
+        .finally(() => {
+            this.disabled = false;
+            spinner.classList.add('d-none');
+        });
+    });
+
+})();
 </script>
 
 @endsection

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewAppointmentBooked;
+use App\Mail\NewAppointmentNotification;
 use App\Models\Firestore\Appointment;
 use App\Models\Firestore\AppSetting;
 use App\Models\Firestore\Doctor;
@@ -9,6 +11,8 @@ use App\Services\FirestoreService;
 use Carbon\Carbon;
 use Flutterwave\Flutterwave;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Stripe\Checkout\Session as StripeSession;
 use Stripe\Stripe;
 
@@ -282,6 +286,38 @@ class BookingController extends Controller
                 'stripeSessionId' => $session->id,
                 'paymentCompletedAt' => now(),
             ]);
+
+            $firestore = app(FirestoreService::class);
+
+            // Notify patient
+            $patient = $firestore->find('patients', $appointment['patientId'] ?? '');
+            $patientEmail = $patient['email'] ?? null;
+            if ($patientEmail) {
+                try {
+                    Mail::to($patientEmail)->send(new NewAppointmentBooked($appointment));
+                } catch (\Throwable $e) {
+                    Log::error('new-appointment-patient-email-failed', [
+                        'appointment' => $bookingId,
+                        'email'       => $patientEmail,
+                        'error'       => $e->getMessage(),
+                    ]);
+                }
+            }
+
+            // Notify doctor
+            $doctor = $firestore->find('doctors', $appointment['doctorId'] ?? '');
+            $doctorEmail = $doctor['email'] ?? null;
+            if ($doctorEmail) {
+                try {
+                    Mail::to($doctorEmail)->send(new NewAppointmentNotification($appointment));
+                } catch (\Throwable $e) {
+                    Log::error('new-appointment-doctor-email-failed', [
+                        'appointment' => $bookingId,
+                        'email'       => $doctorEmail,
+                        'error'       => $e->getMessage(),
+                    ]);
+                }
+            }
 
             return view('booking-success', ['booking_id' => $bookingId, 'appointment' => $appointment]);
 
