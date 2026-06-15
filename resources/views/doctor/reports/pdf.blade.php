@@ -642,7 +642,8 @@
                 </div>
                 @if (!empty($report['certification']['certified_at']))
                     <div class="certified-badge">
-                        &#10003; Certified on {{ \Carbon\Carbon::parse($report['certification']['certified_at'])->format('M d, Y') }}
+                        &#10003; Certified on
+                        {{ \Carbon\Carbon::parse($report['certification']['certified_at'])->format('M d, Y') }}
                     </div>
                 @endif
             </div>
@@ -662,8 +663,8 @@
                 <div class="action-bar-title">Need Help?</div>
                 <ul class="contact-list">
                     <li><i class="fi fi-rr-globe"></i> www.priginaglobaltelemed.com</li>
-                    <li><i class="fi fi-rr-envelope"></i> support@priginaglobaltelemed.com</li>
-                    <li><i class="fi fi-rr-phone-call"></i> +1 (833) 774-4462</li>
+                    <li><i class="fi fi-rr-envelope"></i> info@priginaglobaltelemed.com</li>
+                    <li><i class="fi fi-rr-phone-call"></i> +1 (856) 426-8693</li>
                 </ul>
             </div>
         </div>
@@ -694,7 +695,10 @@
                 .set({
                     margin: [0, 0, 0, 0],
                     filename: filename,
-                    image: { type: 'jpeg', quality: 0.98 },
+                    image: {
+                        type: 'jpeg',
+                        quality: 0.98
+                    },
                     html2canvas: {
                         scale: 2,
                         useCORS: true,
@@ -703,8 +707,14 @@
                         scrollY: 0,
                         windowWidth: page.scrollWidth,
                     },
-                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                    pagebreak: { mode: ['avoid-all', 'css'] },
+                    jsPDF: {
+                        unit: 'mm',
+                        format: 'a4',
+                        orientation: 'portrait'
+                    },
+                    pagebreak: {
+                        mode: ['avoid-all', 'css']
+                    },
                 })
                 .from(page)
                 .save()
