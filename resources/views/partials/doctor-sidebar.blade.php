@@ -90,7 +90,6 @@
                     <a href="{{ route('doctor.conversations') }}">
                         <i class="isax isax-messages-1"></i>
                         <span>Message</span>
-                        <small class="unread-msg">7</small>
                     </a>
                 </li>
                 <li class="{{ route('doctor.settings') === url()->current() ? 'active' : '' }}">
@@ -137,6 +136,14 @@
 
         <i class="isax isax-messages-1"></i>
         <span>Chat</span>
+
+    </a>
+
+    <a href="{{ route('doctor.reports') }}"
+        class="{{ route('doctor.reports') === url()->current() ? 'active' : '' }}">
+
+        <i class="isax isax-document-text"></i>
+        <span>Reports</span>
 
     </a>
 

@@ -1,6 +1,6 @@
 @php
     $currentUser = current_user() ?? [];
-    $profileImage = ($currentUser['photoUrl'] ?? null) ?: URL::asset('build/img/doctors-dashboard/profile-06.jpg');
+    $profileImage = $currentUser['photoUrl'] ?? null ?: URL::asset('build/img/doctors-dashboard/profile-06.jpg');
 @endphp
 
 <div class="profile-sidebar patient-sidebar profile-sidebar-new">
@@ -13,8 +13,7 @@
             <div class="profile-info-widget">
 
                 <a href="{{ route('patient.settings') }}" class="booking-doc-img">
-                    <img src="{{ $profileImage }}"
-                         alt="User Image">
+                    <img src="{{ $profileImage }}" alt="User Image">
                 </a>
 
                 <div class="profile-det-info">
@@ -105,7 +104,7 @@
 <div class="mobile-bottom-nav d-lg-none">
 
     <a href="{{ route('patient.dashboard') }}"
-       class="{{ route('patient.dashboard') === url()->current() ? 'active' : '' }}">
+        class="{{ route('patient.dashboard') === url()->current() ? 'active' : '' }}">
 
         <i class="isax isax-category-2"></i>
         <span>Home</span>
@@ -113,7 +112,7 @@
     </a>
 
     <a href="{{ route('patient.conversations') }}"
-       class="{{ route('patient.conversations') === url()->current() ? 'active' : '' }}">
+        class="{{ route('patient.conversations') === url()->current() ? 'active' : '' }}">
 
         <i class="isax isax-messages-1"></i>
         <span>Chat</span>
@@ -121,15 +120,23 @@
     </a>
 
     <a href="{{ route('patient.appointments') }}"
-       class="{{ route('patient.appointments') === url()->current() ? 'active' : '' }}">
+        class="{{ route('patient.appointments') === url()->current() ? 'active' : '' }}">
 
         <i class="isax isax-calendar-1"></i>
         <span>Appointments</span>
 
     </a>
 
+    <a href="{{ route('patient.reports') }}"
+        class="{{ route('patient.reports') === url()->current() ? 'active' : '' }}">
+
+        <i class="isax isax-document-text"></i>
+        <span>Reports</span>
+
+    </a>
+
     <a href="{{ route('patient.settings') }}"
-       class="{{ route('patient.settings') === url()->current() ? 'active' : '' }}">
+        class="{{ route('patient.settings') === url()->current() ? 'active' : '' }}">
 
         <i class="isax isax-setting-2"></i>
         <span>Profile</span>
@@ -139,13 +146,12 @@
 </div>
 
 <style>
-
     .patient-profile-card {
         background: #fff;
         border-radius: 24px;
         padding: 25px;
         margin-bottom: 20px;
-        box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
     }
 
     .patient-profile-card .booking-doc-img img {
@@ -186,7 +192,7 @@
         background: #fff;
         border-radius: 24px;
         padding: 20px;
-        box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
     }
 
     .modern-unread-msg {
@@ -214,7 +220,7 @@
         align-items: center;
         padding: 10px 5px;
         z-index: 9999;
-        box-shadow: 0 -5px 25px rgba(0,0,0,0.06);
+        box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.06);
     }
 
     .mobile-bottom-nav a {
@@ -257,5 +263,4 @@
         }
 
     }
-
 </style>
