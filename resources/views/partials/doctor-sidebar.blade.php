@@ -5,7 +5,7 @@
         <div class="widget-profile pro-widget-content text-center">
             <div class="profile-info-widget">
                 <a href="{{ url('profile-settings') }}" class="booking-doc-img">
-                    <img src="{{ current_user()['profilePicture'] ? current_user()['profilePicture'] : URL::asset('build/img/doctors-dashboard/profile-06.jpg') }}"
+                    <img src="{{ !empty(current_user()['profilePicture']) ? current_user()['profilePicture'] : URL::asset('build/img/doctors-dashboard/profile-06.jpg') }}"
                         alt="User Image">
                 </a>
                 <div class="profile-det-info">
