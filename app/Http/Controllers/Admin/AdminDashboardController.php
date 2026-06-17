@@ -284,10 +284,10 @@ class AdminDashboardController extends Controller
         }
 
         $previousStatus = $appointment['status'] ?? '';
-        $newStatus      = $data['status'];
+        $newStatus = $data['status'];
 
         $this->firestore->update('appointments', $appointmentId, [
-            'status'    => $newStatus,
+            'status' => $newStatus,
             'updatedAt' => now()->toDateTimeString(),
             'updatedBy' => session('auth_uid'),
         ]);
@@ -298,11 +298,11 @@ class AdminDashboardController extends Controller
 
         // Send 1st review-request email when appointment transitions to completed
         $completedStatuses = ['completed', 'completedPaid'];
-        $wasNotCompleted   = ! \in_array($previousStatus, $completedStatuses, true);
-        $isNowCompleted    = \in_array($newStatus, $completedStatuses, true);
+        $wasNotCompleted = ! \in_array($previousStatus, $completedStatuses, true);
+        $isNowCompleted = \in_array($newStatus, $completedStatuses, true);
 
         if ($wasNotCompleted && $isNowCompleted) {
-            $now          = now()->toDateTimeString();
+            $now = now()->toDateTimeString();
             $patientEmail = $appointment['patientEmail'] ?? null;
 
             // Stamp completion time so the follow-up command can find this doc
@@ -318,12 +318,12 @@ class AdminDashboardController extends Controller
                     // Mark that reminder #1 was sent so the command tracks follow-ups
                     $this->firestore->update('appointments', $appointmentId, [
                         'reviewReminderCount' => 1,
-                        'lastReviewEmailAt'   => $now,
+                        'lastReviewEmailAt' => $now,
                     ]);
                 } catch (\Throwable $e) {
                     Log::error('review-request-mail-failed', [
                         'appointment' => $appointmentId,
-                        'error'       => $e->getMessage(),
+                        'error' => $e->getMessage(),
                     ]);
                 }
             }
@@ -336,6 +336,7 @@ class AdminDashboardController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
+            'color' => 'required|string|max:255',
             'image' => 'nullable|image|max:2048',
             'isActive' => 'nullable|boolean',
         ]);
@@ -347,6 +348,7 @@ class AdminDashboardController extends Controller
         }
         $updateData = [
             'name' => $data['name'],
+            'color' => $data['color'],
             'isActive' => (bool) ($data['isActive'] ?? false),
             'updatedAt' => now()->toDateTimeString(),
             'updatedBy' => session('auth_uid'),
@@ -381,6 +383,7 @@ class AdminDashboardController extends Controller
         $this->firestore->createWithId('categories', $id, [
             'id' => $id,
             'name' => $data['name'],
+            'color' => $data['color'],
             'imageUrl' => $data['imageUrl'] ?? null,
             'isActive' => (bool) ($data['isActive'] ?? true),
             'createdAt' => now()->toDateTimeString(),
@@ -396,6 +399,7 @@ class AdminDashboardController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
+            'color' => 'required|string|max:255',
             'image' => 'nullable|image|max:2048',
             'isActive' => 'nullable|boolean',
         ]);

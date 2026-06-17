@@ -11,7 +11,7 @@
                 <div class="row align-items-center">
 
                     <div class="col">
-                        <h3 class="page-title">Specialities</h3>
+                        <h3 class="page-title">Specializations</h3>
 
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item">
@@ -21,7 +21,7 @@
                             </li>
 
                             <li class="breadcrumb-item active">
-                                Specialities
+                                Specializations
                             </li>
                         </ul>
                     </div>
@@ -72,8 +72,9 @@
 
                                     <thead>
                                         <tr>
-                                            <th>#</th>
+                                            <th>Name</th>
                                             <th>Speciality</th>
+                                            <th>color</th>
                                             <th>Status</th>
                                             <th>Actions</th>
                                         </tr>
@@ -93,24 +94,35 @@
                                             <tr>
 
                                                 <td>
-                                                    {{ $speciality['id'] ?? '-' }}
+                                                    {{ $speciality['name'] ?? '-' }}
                                                 </td>
 
                                                 <td>
                                                     <h2 class="table-avatar">
 
-                                                        <a href="#" class="avatar avatar-sm me-2">
+                                                        <a href="{{ $image }}" target="_blank"
+                                                            class="avatar avatar-sm me-2">
 
                                                             <img class="avatar-img rounded-circle" src="{{ $image }}"
-                                                                alt="Speciality Image">
+                                                                alt="Speciality Image" width="50">
                                                         </a>
 
-                                                        <a href="#">
-                                                            {{ $speciality['name'] ?? '-' }}
-                                                        </a>
+                                                        {{-- <input type="color" class="form-control"
+                                                            value="{{ $speciality['color'] }}" readonly disabled> --}}
 
                                                     </h2>
                                                 </td>
+
+                                                <td>
+                                                    <input type="color" class="form-control"
+                                                        value="{{ $speciality['color'] }}" readonly disabled
+                                                        style="
+                                                        width: 55px;
+                                                        background-color: white;
+                                                        border: 0px !important;
+                                                        border-radius: 10px !important;">
+                                                </td>
+
 
                                                 <td>
 
@@ -199,6 +211,18 @@
                                                                     <input type="text" name="name"
                                                                         class="form-control"
                                                                         value="{{ $speciality['name'] }}" required>
+
+                                                                </div>
+
+                                                                <div class="mb-3">
+
+                                                                    <label class="form-label fw-semibold">
+                                                                        Color
+                                                                    </label>
+
+                                                                    <input type="color" name="name"
+                                                                        class="form-control"
+                                                                        value="{{ $speciality['color'] }}" required>
 
                                                                 </div>
 
@@ -329,6 +353,15 @@
                             </label>
 
                             <input type="text" name="name" class="form-control" required>
+
+                        </div>
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+                                Color
+                            </label>
+
+                            <input type="color" name="color" class="form-control" required>
 
                         </div>
 
@@ -501,7 +534,10 @@
             `;
         }
 
-        async function fetchSpecialities({ append = false, cursor = null } = {}) {
+        async function fetchSpecialities({
+            append = false,
+            cursor = null
+        } = {}) {
             const url = new URL(specialityConfig.dataUrl, window.location.origin);
 
             if (specialitySearch) {
@@ -598,7 +634,9 @@
                 </div>
             `);
             const el = document.getElementById(id);
-            bootstrap.Toast.getOrCreateInstance(el, { delay: 3000 }).show();
+            bootstrap.Toast.getOrCreateInstance(el, {
+                delay: 3000
+            }).show();
             el.addEventListener('hidden.bs.toast', () => el.remove());
         }
 
@@ -608,9 +646,9 @@
             if (!toggle) return;
 
             const specialityId = toggle.dataset.id;
-            const isActive     = toggle.checked ? 1 : 0;
-            const formCheck    = toggle.closest('.form-check');
-            const label        = formCheck?.querySelector('.form-check-label');
+            const isActive = toggle.checked ? 1 : 0;
+            const formCheck = toggle.closest('.form-check');
+            const label = formCheck?.querySelector('.form-check-label');
 
             // Loading state
             toggle.disabled = true;
@@ -627,7 +665,9 @@
                         'X-CSRF-TOKEN': specialityConfig.csrf,
                         'Accept': 'application/json',
                     },
-                    body: JSON.stringify({ isActive }),
+                    body: JSON.stringify({
+                        isActive
+                    }),
                 });
 
                 if (!response.ok) throw new Error();

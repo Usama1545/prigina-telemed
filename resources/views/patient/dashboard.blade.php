@@ -44,24 +44,29 @@
                         <div class="patient-category-grid">
                             @forelse($categories as $index => $category)
                                 @php
-                                    $categoryImage = $category['image']
-                                        ?? $category['imageUrl']
-                                        ?? $category['icon']
-                                        ?? $category['iconUrl']
-                                        ?? asset($defaultCategoryImages[$index % count($defaultCategoryImages)]);
+                                    $categoryImage =
+                                        $category['image'] ??
+                                        ($category['imageUrl'] ??
+                                            ($category['icon'] ??
+                                                ($category['iconUrl'] ??
+                                                    asset(
+                                                        $defaultCategoryImages[$index % count($defaultCategoryImages)],
+                                                    ))));
                                 @endphp
-                                <a href="{{ route('doctors', ['category[]' => $category['name'] ?? $category['id'] ?? '']) }}"
-                                   class="patient-category-card category-tone-{{ ($index % 5) + 1 }}">
+                                <a href="{{ route('doctors', ['category[]' => $category['name'] ?? ($category['id'] ?? '')]) }}"
+                                    class="patient-category-card " style="background-color: {{ $category['color'] }}33">
                                     <span>
                                         <img src="{{ $categoryImage }}" alt="{{ $category['name'] ?? 'Category' }}">
                                     </span>
                                     <strong>{{ $category['name'] ?? 'Speciality' }}</strong>
                                 </a>
                             @empty
-                                @foreach(['Cardiology', 'Clinical Documents', 'Dentist', 'Neurology', 'Pediatrics'] as $index => $name)
-                                    <a href="{{ route('doctors') }}" class="patient-category-card category-tone-{{ ($index % 5) + 1 }}">
+                                @foreach (['Cardiology', 'Clinical Documents', 'Dentist', 'Neurology', 'Pediatrics'] as $index => $name)
+                                    <a href="{{ route('doctors') }}" class="patient-category-card"
+                                        style="background-color: {{ $category['color'] }}33">
                                         <span>
-                                            <img src="{{ asset($defaultCategoryImages[$index % count($defaultCategoryImages)]) }}" alt="{{ $name }}">
+                                            <img src="{{ asset($defaultCategoryImages[$index % count($defaultCategoryImages)]) }}"
+                                                alt="{{ $name }}">
                                         </span>
                                         <strong>{{ $name }}</strong>
                                     </a>
@@ -80,10 +85,11 @@
                             <div class="appointment-icon">
                                 <i class="isax isax-calendar-tick"></i>
                             </div>
-                            @if($nextAppointment)
+                            @if ($nextAppointment)
                                 <div class="appointment-copy">
                                     <h3>Dr. {{ $nextAppointment['doctorName'] ?? 'Doctor' }}</h3>
-                                    <p>{{ $nextAppointment['patientLocalTime'] ?? (($nextAppointment['startTime'] ?? '') . ' - ' . ($nextAppointment['endTime'] ?? '')) }}</p>
+                                    <p>{{ $nextAppointment['patientLocalTime'] ?? ($nextAppointment['startTime'] ?? '') . ' - ' . ($nextAppointment['endTime'] ?? '') }}
+                                    </p>
                                     <a href="{{ route('patient.appointments') }}">View Appointment</a>
                                 </div>
                             @else
@@ -109,11 +115,12 @@
                         <div class="patient-doctor-row">
                             @forelse($doctors as $doctor)
                                 @php
-                                    $doctorId = $doctor['uid'] ?? $doctor['id'] ?? null;
+                                    $doctorId = $doctor['uid'] ?? ($doctor['id'] ?? null);
                                 @endphp
                                 <article class="patient-doctor-card">
                                     <div class="doctor-card-top">
-                                        <img src="{{ $doctor['profilePicture'] ?? asset('build/img/doctor-grid/doctor-grid-01.jpg') }}" alt="{{ $doctor['name'] ?? 'Doctor' }}">
+                                        <img src="{{ $doctor['profilePicture'] ?? asset('build/img/doctor-grid/doctor-grid-01.jpg') }}"
+                                            alt="{{ $doctor['name'] ?? 'Doctor' }}">
                                         <div>
                                             <h3>
                                                 Dr. {{ $doctor['name'] ?? 'Doctor' }}
@@ -128,13 +135,14 @@
                                             </div>
                                             <div class="doctor-availability">
                                                 <i class="fa-solid fa-circle-check"></i>
-                                                {{ ($doctor['available'] ?? false) ? 'Available' : 'Not Available' }}
+                                                {{ $doctor['available'] ?? false ? 'Available' : 'Not Available' }}
                                             </div>
                                         </div>
                                     </div>
                                     <div class="doctor-card-bottom">
                                         <strong>${{ number_format((float) ($doctor['consultationFee'] ?? 0), 0) }}</strong>
-                                        <a href="{{ $doctorId ? route('doctor-details', $doctorId) : route('doctors') }}">Book Now</a>
+                                        <a href="{{ $doctorId ? route('doctor-details', $doctorId) : route('doctors') }}">Book
+                                            Now</a>
                                     </div>
                                 </article>
                             @empty
@@ -145,8 +153,10 @@
                                             <h3>Find a Specialist <i class="fa-solid fa-circle-check"></i></h3>
                                             <p>Second opinion care</p>
                                             <small>Global physicians</small>
-                                            <div class="doctor-rating"><i class="fa-solid fa-star"></i> 5.0 <span>(0)</span></div>
-                                            <div class="doctor-availability"><i class="fa-solid fa-circle-check"></i> Available</div>
+                                            <div class="doctor-rating"><i class="fa-solid fa-star"></i> 5.0 <span>(0)</span>
+                                            </div>
+                                            <div class="doctor-availability"><i class="fa-solid fa-circle-check"></i>
+                                                Available</div>
                                         </div>
                                     </div>
                                     <div class="doctor-card-bottom">
@@ -167,10 +177,13 @@
                                         <i class="isax isax-shield-tick"></i>
                                     </div>
                                     <div>
-                                        <span>{{ $tip['category'] ?? $tip['type'] ?? 'Wellness' }}</span>
+                                        <span>{{ $tip['category'] ?? ($tip['type'] ?? 'Wellness') }}</span>
                                         <h3>{{ $tip['title'] ?? 'Stay protected' }}</h3>
-                                        <p class="tip-description">{{ $tip['description'] ?? $tip['content'] ?? 'Small daily habits can support better long-term health.' }}</p>
-                                        <button type="button" class="tip-read-more">Read More <i class="isax isax-arrow-down-1"></i></button>
+                                        <p class="tip-description">
+                                            {{ $tip['description'] ?? ($tip['content'] ?? 'Small daily habits can support better long-term health.') }}
+                                        </p>
+                                        <button type="button" class="tip-read-more">Read More <i
+                                                class="isax isax-arrow-down-1"></i></button>
                                     </div>
                                 </article>
                             @empty
@@ -181,8 +194,10 @@
                                     <div>
                                         <span>Wellness</span>
                                         <h3>Protect Your Health</h3>
-                                        <p class="tip-description">Keep your records updated, follow doctor guidance, and schedule care when symptoms change.</p>
-                                        <button type="button" class="tip-read-more">Read More <i class="isax isax-arrow-down-1"></i></button>
+                                        <p class="tip-description">Keep your records updated, follow doctor guidance, and
+                                            schedule care when symptoms change.</p>
+                                        <button type="button" class="tip-read-more">Read More <i
+                                                class="isax isax-arrow-down-1"></i></button>
                                     </div>
                                 </article>
                             @endforelse
@@ -385,7 +400,7 @@
         }
 
         .patient-section-head h2,
-        .patient-tips-section > h2 {
+        .patient-tips-section>h2 {
             margin: 0;
             color: #071842;
             font-size: 24px;
@@ -441,11 +456,25 @@
             line-height: 1.25;
         }
 
-        .category-tone-1 { background: #fff0f3; }
-        .category-tone-2 { background: #f0f7ff; }
-        .category-tone-3 { background: #eefbf8; }
-        .category-tone-4 { background: #f4efff; }
-        .category-tone-5 { background: #fff5eb; }
+        .category-tone-1 {
+            background: #fff0f3;
+        }
+
+        .category-tone-2 {
+            background: #f0f7ff;
+        }
+
+        .category-tone-3 {
+            background: #eefbf8;
+        }
+
+        .category-tone-4 {
+            background: #f4efff;
+        }
+
+        .category-tone-5 {
+            background: #fff5eb;
+        }
 
         .patient-appointment-card {
             position: relative;
@@ -634,7 +663,7 @@
             font-weight: 800;
         }
 
-        .patient-tips-section > h2 {
+        .patient-tips-section>h2 {
             margin-bottom: 18px;
         }
 
@@ -770,7 +799,7 @@
             }
 
             .patient-section-head h2,
-            .patient-tips-section > h2 {
+            .patient-tips-section>h2 {
                 font-size: 20px;
             }
 
@@ -1015,18 +1044,18 @@
 @endsection
 
 @push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.tip-read-more').forEach(function (button) {
-        button.addEventListener('click', function () {
-            const card = button.closest('.patient-tip-card');
-            const expanded = card.classList.toggle('is-expanded');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.tip-read-more').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    const card = button.closest('.patient-tip-card');
+                    const expanded = card.classList.toggle('is-expanded');
 
-            button.innerHTML = expanded
-                ? 'Show Less <i class="isax isax-arrow-up-2"></i>'
-                : 'Read More <i class="isax isax-arrow-down-1"></i>';
+                    button.innerHTML = expanded ?
+                        'Show Less <i class="isax isax-arrow-up-2"></i>' :
+                        'Read More <i class="isax isax-arrow-down-1"></i>';
+                });
+            });
         });
-    });
-});
-</script>
+    </script>
 @endpush
