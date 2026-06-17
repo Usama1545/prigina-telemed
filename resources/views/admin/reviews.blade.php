@@ -75,7 +75,6 @@
                                             </td>
                                         </tr>
                                     @empty
-                                        <tr><td colspan="6" class="text-center text-muted">No reviews found.</td></tr>
                                     @endforelse
                                 </tbody>
                             </table>
