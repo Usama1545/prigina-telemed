@@ -905,7 +905,7 @@ class DoctorProfileController extends Controller
         $uid = current_user()['uid'];
 
         $this->firestore->update('doctors', $uid, [
-            'isAvailable' => $validated['isAvailable'],
+            'available' => $validated['isAvailable'] ? true : false,
         ]);
 
         return response()->json(['success' => true, 'isAvailable' => $validated['isAvailable']]);
