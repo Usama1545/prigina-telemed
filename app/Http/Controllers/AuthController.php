@@ -436,13 +436,12 @@ class AuthController extends Controller
 
             $phone = $firebaseUser->phoneNumber;
 
-            $existing =
-                $this->firestore
-                    ->getDocumentByField(
-                        'users',
-                        'email',
-                        $email
-                    );
+            $firestoreService = app(FirestoreService::class);
+
+            $existing = $firestoreService->first(
+                'users',
+                [['email', '=', $email]]
+            );
 
             if (! $existing) {
 
@@ -458,7 +457,7 @@ class AuthController extends Controller
                     'createdAt' => now()->timestamp,
                 ];
 
-                $this->firestore->setDocument(
+                $firestoreService->createWithId(
                     'users',
                     $uid,
                     $userData
