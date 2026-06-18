@@ -440,7 +440,7 @@ class AuthController extends Controller
 
             $existing = $firestoreService->first(
                 'users',
-                [['email', '=', $email]]
+                [['field' => 'email', 'op' => '=', 'value' => $email]]
             );
 
             if (! $existing) {
