@@ -75,6 +75,16 @@ class BookingController extends Controller
 
         $slots = [];
 
+        if (
+            empty($workingDays) ||
+            empty($workingHours) ||
+            count($workingHours) < 2
+        ) {
+            return redirect()
+                ->back()
+                ->with('error', 'This doctor has not set their availability yet. Please check back later.');
+        }
+
         $startTime = $workingHours[0]; // "09:00"
         $endTime = $workingHours[1];   // "17:00"
 
@@ -298,8 +308,8 @@ class BookingController extends Controller
                 } catch (\Throwable $e) {
                     Log::error('new-appointment-patient-email-failed', [
                         'appointment' => $bookingId,
-                        'email'       => $patientEmail,
-                        'error'       => $e->getMessage(),
+                        'email' => $patientEmail,
+                        'error' => $e->getMessage(),
                     ]);
                 }
             }
@@ -313,8 +323,8 @@ class BookingController extends Controller
                 } catch (\Throwable $e) {
                     Log::error('new-appointment-doctor-email-failed', [
                         'appointment' => $bookingId,
-                        'email'       => $doctorEmail,
-                        'error'       => $e->getMessage(),
+                        'email' => $doctorEmail,
+                        'error' => $e->getMessage(),
                     ]);
                 }
             }

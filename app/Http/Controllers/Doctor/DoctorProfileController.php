@@ -113,6 +113,7 @@ class DoctorProfileController extends Controller
             'workingDays' => 'required|array',
             'workingHours' => 'required|array',
             'breaks' => 'nullable|string',
+            'slotDuration' => 'required|numeric',
         ]);
 
         $uid = current_user()['uid'];
@@ -123,6 +124,14 @@ class DoctorProfileController extends Controller
             'email',
             'gender',
             'dob',
+            'license_number',
+            'qualification',
+            'experience',
+            'specializations',
+            'consultationFee',
+            'workingDays',
+            'workingHours',
+            'slotDuration',
         ])->toArray();
 
         // ✅ Handle Image Upload

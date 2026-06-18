@@ -18,15 +18,19 @@
                                     class="img-fluid" alt="User Image">
                             </div>
                             <div class="doc-info-cont">
-                                <span class="badge doc-avail-badge">
-                                    @if (($doctor['available'] ?? false) === true)
+                                @if (($doctor['available'] ?? false) === true)
+                                    <span class="badge doc-avail-badge">
                                         <i class="fa-solid fa-circle fs-5 me-1"></i>
                                         Available
-                                    @else
+
+                                    </span>
+                                @else
+                                    <span
+                                        class="badge doc-avail-badge bg-danger bg-danger-light d-inline-flex align-items-center">
                                         <i class="fa-solid fa-circle fs-5 me-1"></i>
                                         Not Available
-                                    @endif
-                                </span>
+                                    </span>
+                                @endif
                                 <h4 class="doc-name">{{ $doctor['name'] }} <img
                                         src="{{ URL::asset('build/img/icons/badge-check.svg') }}" alt="Img">
                                     @foreach ($doctor['specializations'] as $specialization)
@@ -67,7 +71,7 @@
                         </div>
                         <div class="doc-info-right">
                             <ul class="doctors-activities">
-                                <li>
+                                {{-- <li>
                                     <div class="hospital-info">
                                         <span class="list-icon"><img
                                                 src="{{ URL::asset('build/img/icons/watch-icon.svg') }}"
@@ -75,7 +79,7 @@
                                         <p>Full Time, Online Therapy Available</p>
                                     </div>
 
-                                </li>
+                                </li> --}}
                                 <li>
                                     <div class="hospital-info">
                                         <span class="list-icon"><img
@@ -86,12 +90,12 @@
                                 </li>
                                 <li>
 
-                                    @if($hasAppointment)
-                                    <ul class="contact-doctors">
-                                        <li><a href="{{ route('conversation.create', $doctor['uid']) }}"><span><img
-                                                        src="{{ URL::asset('build/img/icons/device-message2.svg') }}"
-                                                        alt="Img"></span>Contact Doctor</a></li>
-                                    </ul>
+                                    @if ($hasAppointment)
+                                        <ul class="contact-doctors">
+                                            <li><a href="{{ route('conversation.create', $doctor['uid']) }}"><span><img
+                                                            src="{{ URL::asset('build/img/icons/device-message2.svg') }}"
+                                                            alt="Img"></span>Contact Doctor</a></li>
+                                        </ul>
                                     @endif
                                 </li>
                             </ul>
@@ -444,7 +448,19 @@
 
         function handleBookingClick() {
 
+            const doctor = @json($doctor);
             const user = @json(current_user());
+
+            if (!doctor.available) {
+                showAlert('This doctor is not available yet plz check back later');
+                return;
+            }
+
+            if (!doctor.workingDays || doctor.workingDays.length === 0 || !doctor.workingHours || doctor.workingHours
+                .length <= 1) {
+                showAlert('This doctor has not set their availability yet. Please check back later.');
+                return;
+            }
 
             const consentAgreed = user?.consentAgreed;
             const consentAgreedAt = user?.consentAgreedAt;

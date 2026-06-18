@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Services\FirestoreService;
 use App\Services\FirebaseAuthService;
+use App\Services\FirestoreService;
+use Carbon\Carbon;
 use Google\Cloud\Firestore\FirestoreClient;
-use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Kreait\Firebase\Contract\Storage;
+use Kreait\Firebase\Exception\Auth\UserNotFound;
 
 class AuthController extends Controller
 {
@@ -19,6 +21,7 @@ class AuthController extends Controller
             'keyFilePath' => storage_path('app/firebase/firebase_credentials.json'),
         ]);
     }
+
     public function login(Request $request)
     {
         $idToken = $request->token;
@@ -46,14 +49,14 @@ class AuthController extends Controller
             if (($doctor['isActive'] ?? false) === false) {
 
                 return response()->json([
-                    'error' => 'Your account has been deactivated. Please contact administrator.'
+                    'error' => 'Your account has been deactivated. Please contact administrator.',
                 ], 403);
             }
 
             if (($doctor['isVerified'] ?? false) === false) {
                 return response()->json([
-                    'error' => !empty($doctor['rejectionReason']) ? $doctor['rejectionReason']
-                        : 'Your account is currently pending verification.'
+                    'error' => ! empty($doctor['rejectionReason']) ? $doctor['rejectionReason']
+                        : 'Your account is currently pending verification by our team.',
                 ], 403);
             }
 
@@ -71,7 +74,7 @@ class AuthController extends Controller
             ]);
 
             $userData = [
-                'email' => $email
+                'email' => $email,
             ];
         }
 
@@ -85,14 +88,14 @@ class AuthController extends Controller
             'auth_user' => [
                 'name' => $name,
                 'email' => $email,
-            ]
+            ],
         ]);
 
         $request->session()->save();
 
         return response()->json([
             'message' => 'Login successful',
-            'role' => $role
+            'role' => $role,
         ]);
     }
 
@@ -100,7 +103,7 @@ class AuthController extends Controller
     {
         $user = current_user();
 
-        if (!$user) {
+        if (! $user) {
             return redirect('/login');
         }
 
@@ -119,15 +122,15 @@ class AuthController extends Controller
     {
         $user = current_user();
 
-        if(!$user){
+        if (! $user) {
             return redirect('/login');
         }
         $role = session('auth_role');
-        if($role === 'patient'){
+        if ($role === 'patient') {
             return redirect('/patient/profile');
-        }elseif($role === 'doctor'){
+        } elseif ($role === 'doctor') {
             return redirect('/doctors/profile');
-        }else{
+        } else {
             return redirect('/login');
         }
     }
@@ -148,7 +151,7 @@ class AuthController extends Controller
 
         try {
             app(FirebaseAuthService::class)->sendPasswordResetLink($request->email);
-        } catch (\Kreait\Firebase\Exception\Auth\UserNotFound $e) {
+        } catch (UserNotFound $e) {
             // Keep the response generic so the form does not reveal registered emails.
         } catch (\Throwable $e) {
             report($e);
@@ -165,6 +168,7 @@ class AuthController extends Controller
         $firestore = app(FirestoreService::class);
 
         $specializations = $firestore->get('categories');
+
         return view('doctor.register', compact('specializations'));
     }
 
@@ -195,11 +199,11 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => $request->password,
             'claims' => [
-                'role' => 'doctor'
-            ]
+                'role' => 'doctor',
+            ],
         ]);
 
-        if (!$firebaseUser['success']) {
+        if (! $firebaseUser['success']) {
 
             return response()->json([
                 'message' => $firebaseUser['message'],
@@ -216,14 +220,14 @@ class AuthController extends Controller
                 'medical_license',
                 'degree_certificate',
                 'id_proof',
-                'clinic_registration'
+                'clinic_registration',
             ]);
 
             if ($request->hasFile('medical_license')) {
                 $medical_license = $request->file('medical_license');
                 $filePath = "doctor_documents/{$uid}/medical_license.{$medical_license->getClientOriginalExtension()}";
 
-                /** @var \Kreait\Firebase\Contract\Storage $storage */
+                /** @var Storage $storage */
                 $storage = app('firebase.storage');
                 $bucket = $storage->getBucket();
 
@@ -235,14 +239,14 @@ class AuthController extends Controller
                     ]
                 );
 
-                $data['documentUrls']['medical_license'] = "https://storage.googleapis.com/" . $bucket->name() . "/" . $filePath;
+                $data['documentUrls']['medical_license'] = 'https://storage.googleapis.com/'.$bucket->name().'/'.$filePath;
             }
 
             if ($request->hasFile('degree_certificate')) {
                 $degree_certificate = $request->file('degree_certificate');
                 $filePath = "doctor_documents/{$uid}/degree_certificate.{$degree_certificate->getClientOriginalExtension()}";
 
-                /** @var \Kreait\Firebase\Contract\Storage $storage */
+                /** @var Storage $storage */
                 $storage = app('firebase.storage');
                 $bucket = $storage->getBucket();
 
@@ -254,14 +258,14 @@ class AuthController extends Controller
                     ]
                 );
 
-                $data['documentUrls']['degree_certificate'] = "https://storage.googleapis.com/" . $bucket->name() . "/" . $filePath;
+                $data['documentUrls']['degree_certificate'] = 'https://storage.googleapis.com/'.$bucket->name().'/'.$filePath;
             }
 
             if ($request->hasFile('id_proof')) {
                 $id_proof = $request->file('id_proof');
                 $filePath = "doctor_documents/{$uid}/id_proof.{$id_proof->getClientOriginalExtension()}";
 
-                /** @var \Kreait\Firebase\Contract\Storage $storage */
+                /** @var Storage $storage */
                 $storage = app('firebase.storage');
                 $bucket = $storage->getBucket();
 
@@ -273,14 +277,14 @@ class AuthController extends Controller
                     ]
                 );
 
-                $data['documentUrls']['id_proof'] = "https://storage.googleapis.com/" . $bucket->name() . "/" . $filePath;
+                $data['documentUrls']['id_proof'] = 'https://storage.googleapis.com/'.$bucket->name().'/'.$filePath;
             }
 
             if ($request->hasFile('clinic_registration')) {
                 $clinic_registration = $request->file('clinic_registration');
                 $filePath = "doctor_documents/{$uid}/clinic_registration.{$clinic_registration->getClientOriginalExtension()}";
 
-                /** @var \Kreait\Firebase\Contract\Storage $storage */
+                /** @var Storage $storage */
                 $storage = app('firebase.storage');
                 $bucket = $storage->getBucket();
 
@@ -292,7 +296,7 @@ class AuthController extends Controller
                     ]
                 );
 
-                $data['documentUrls']['clinic_registration'] = "https://storage.googleapis.com/" . $bucket->name() . "/" . $filePath;
+                $data['documentUrls']['clinic_registration'] = 'https://storage.googleapis.com/'.$bucket->name().'/'.$filePath;
             }
 
             $data['password'] = bcrypt($request->password);
@@ -310,7 +314,7 @@ class AuthController extends Controller
             $data['isVerified'] = false; // Default fee, can be updated by doctor later
             $data['practiceCountry'] = $request->practiceCountry; // Default fee, can be updated by doctor later
             $data['rating'] = 0; // Default fee, can be updated by doctor later
-            $data['rejectionReason'] = ""; // Default fee, can be updated by doctor later
+            $data['rejectionReason'] = ''; // Default fee, can be updated by doctor later
             $data['slotDuration'] = 30; // Default fee, can be updated by doctor later
             $data['status'] = 'pending'; // Default fee, can be updated by doctor later
             $data['timezone'] = $request->timezone ?? 'UTC'; // Default fee, can be updated by doctor later
@@ -363,11 +367,11 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => $request->password,
             'claims' => [
-                'role' => 'patient'
-            ]
+                'role' => 'patient',
+            ],
         ]);
 
-        if (!$firebaseUser['success']) {
+        if (! $firebaseUser['success']) {
 
             return response()->json([
                 'message' => $firebaseUser['message'],
@@ -379,7 +383,6 @@ class AuthController extends Controller
 
         $uid = $firebaseUser['uid'];
 
-       
         $data['password'] = bcrypt($request->password);
 
         $data['uid'] = $uid;
@@ -394,13 +397,13 @@ class AuthController extends Controller
         $data['isEmailVerified'] = false; // Default fee, can be updated by doctor later
         $data['timezone'] = $request->timezone ?? 'UTC'; // Default fee, can be updated by doctor later
         $data['updatedAt'] = now(); // Default fee, can be updated by doctor later
-        $data['medicalConditions'] = ""; // Default fee, can be updated by doctor later
+        $data['medicalConditions'] = ''; // Default fee, can be updated by doctor later
         $data['photoUrl'] = null; // Default fee, can be updated by doctor later
-        $data['bloodGroup'] = "Not Set"; // Default fee, can be updated by doctor later
-        $data['allergies'] = "None"; // Default fee, can be updated by doctor later
-        $data['height'] = ""; // Default fee, can be updated by doctor later
-        $data['weight'] = ""; // Default fee, can be updated by doctor later
-        $data['age'] = $request->dob ? \Carbon\Carbon::parse($request->dob)->age : null; // Default fee, can be updated by doctor later
+        $data['bloodGroup'] = 'Not Set'; // Default fee, can be updated by doctor later
+        $data['allergies'] = 'None'; // Default fee, can be updated by doctor later
+        $data['height'] = ''; // Default fee, can be updated by doctor later
+        $data['weight'] = ''; // Default fee, can be updated by doctor later
+        $data['age'] = $request->dob ? Carbon::parse($request->dob)->age : null; // Default fee, can be updated by doctor later
 
         $firestore->createWithId('patients', $uid, $data);
 
@@ -441,7 +444,7 @@ class AuthController extends Controller
                         $email
                     );
 
-            if (!$existing) {
+            if (! $existing) {
 
                 $userData = [
                     'uid' => $uid,
@@ -465,19 +468,18 @@ class AuthController extends Controller
             }
 
             session([
-                'firebase_user' => $existing
+                'firebase_user' => $existing,
             ]);
 
             return response()->json([
                 'success' => true,
-                'redirect' => '/patient/dashboard'
+                'redirect' => '/patient/dashboard',
             ]);
 
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
 
             return response()->json([
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], 500);
         }
     }
@@ -495,7 +497,7 @@ class AuthController extends Controller
             ]);
 
             // Optional custom claims
-            if (!empty($data['claims'])) {
+            if (! empty($data['claims'])) {
                 $this->auth->setCustomUserClaims(
                     $user->uid,
                     $data['claims']
@@ -523,6 +525,7 @@ class AuthController extends Controller
 
         try {
             $authService->sendEmailVerification($request->email);
+
             return response()->json([
                 'success' => true,
             ]);

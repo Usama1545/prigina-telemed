@@ -38,7 +38,8 @@
                             <h2>Waiting Patients</h2>
                             <strong>{{ $waitingAppointments }}</strong>
                             <p>{{ $waitingAppointments ? 'Patients in queue' : 'No patients waiting' }}</p>
-                            <img class="stat-graph stat-line" src="{{ asset('build/img/doc-home/doc-logo-2-1.jpeg') }}" alt="">
+                            <img class="stat-graph stat-line" src="{{ asset('build/img/doc-home/doc-logo-2-1.jpeg') }}"
+                                alt="">
                         </article>
 
                         <article class="doctor-home-stat stat-green">
@@ -46,7 +47,8 @@
                             <h2>Total Earnings</h2>
                             <strong>${{ number_format($totalEarnings, 0) }}</strong>
                             <p>This month</p>
-                            <img class="stat-graph" src="{{ asset('build/img/doc-home/doc-logo-3-1.jpg') }}" alt="">
+                            <img class="stat-graph" src="{{ asset('build/img/doc-home/doc-logo-3-1.jpg') }}"
+                                alt="">
                         </article>
 
                         <article class="doctor-home-stat stat-purple">
@@ -54,7 +56,7 @@
                             <h2>Average Rating</h2>
                             <strong>{{ number_format($rating, 1) }}</strong>
                             <div class="doctor-home-stars" aria-label="Rating {{ number_format($rating, 1) }} out of 5">
-                                @for($i = 1; $i <= 5; $i++)
+                                @for ($i = 1; $i <= 5; $i++)
                                     <i class="fa-solid fa-star {{ $rating >= $i ? 'active' : '' }}"></i>
                                 @endfor
                             </div>
@@ -69,7 +71,7 @@
                                 <span>{{ now()->format('M d, Y') }}</span>
                             </div>
 
-                            @if($todayAppointments->isEmpty())
+                            @if ($todayAppointments->isEmpty())
                                 <div class="doctor-home-empty">
                                     <div class="empty-icon blue-soft">
                                         <i class="isax isax-calendar-tick"></i>
@@ -79,11 +81,11 @@
                                 </div>
                             @else
                                 <div class="doctor-home-list">
-                                    @foreach($todayAppointments->take(3) as $appointment)
+                                    @foreach ($todayAppointments->take(3) as $appointment)
                                         <a href="{{ route('doctor.appointments') }}" class="doctor-home-list-item">
                                             <span>
                                                 <strong>{{ $appointment['patientName'] ?? 'Patient' }}</strong>
-                                                {{ $appointment['patientLocalTime'] ?? (($appointment['startTime'] ?? '') . ' - ' . ($appointment['endTime'] ?? '')) }}
+                                                {{ $appointment['patientLocalTime'] ?? ($appointment['startTime'] ?? '') . ' - ' . ($appointment['endTime'] ?? '') }}
                                             </span>
                                             <i class="isax isax-arrow-right-3"></i>
                                         </a>
@@ -91,7 +93,8 @@
                                 </div>
                             @endif
 
-                            <a href="{{ route('doctor.appointments') }}" class="doctor-home-outline-btn">View Full Schedule</a>
+                            <a href="{{ route('doctor.appointments') }}" class="doctor-home-outline-btn">View Full
+                                Schedule</a>
                         </article>
 
                         <article class="doctor-home-panel next-panel">
@@ -102,13 +105,14 @@
                                 </a>
                             </div>
 
-                            @if($nextAppointment)
+                            @if ($nextAppointment)
                                 <div class="doctor-home-empty">
                                     <div class="empty-icon green-soft">
                                         <i class="isax isax-calendar-tick"></i>
                                     </div>
                                     <h3>{{ $nextAppointment['patientName'] ?? 'Upcoming patient' }}</h3>
-                                    <p>{{ $nextAppointment['patientLocalTime'] ?? (($nextAppointment['startTime'] ?? '') . ' - ' . ($nextAppointment['endTime'] ?? '')) }}</p>
+                                    <p>{{ $nextAppointment['patientLocalTime'] ?? ($nextAppointment['startTime'] ?? '') . ' - ' . ($nextAppointment['endTime'] ?? '') }}
+                                    </p>
                                 </div>
                             @else
                                 <div class="doctor-home-empty">
@@ -128,7 +132,7 @@
                             <a href="#">View All</a>
                         </div>
 
-                        @if(empty($notifications))
+                        @if (empty($notifications))
                             <div class="doctor-home-activity-empty">
                                 <div class="empty-icon clock-soft">
                                     <i class="isax isax-clock"></i>
@@ -140,7 +144,7 @@
                             </div>
                         @else
                             <div class="doctor-home-activity-list">
-                                @foreach(array_slice($notifications, 0, 3) as $notification)
+                                @foreach (array_slice($notifications, 0, 3) as $notification)
                                     <div class="doctor-home-activity-row">
                                         <div class="empty-icon clock-soft">
                                             <i class="fa-solid fa-bell"></i>
@@ -158,7 +162,7 @@
                     <section class="doctor-home-quick">
                         <h2>Quick Actions</h2>
                         <div class="doctor-home-actions">
-                            <a href="{{ route('doctor.available-timings') }}" class="doctor-home-action">
+                            <a href="{{ route('doctor.payout') }}" class="doctor-home-action">
                                 <i class="isax isax-calendar-search"></i>
                                 <span>
                                     <strong>View Payout</strong>
@@ -246,9 +250,10 @@
                 radial-gradient(circle at 78% 20%, rgba(37, 99, 235, .18), transparent 34%);
             box-shadow: 0 18px 45px rgba(15, 43, 92, .08);
         }
-         .doctor-home-trust {
-                margin-bottom: 25px
-            }
+
+        .doctor-home-trust {
+            margin-bottom: 25px
+        }
 
         .doctor-home-hero::after {
             content: "\f0f1";
@@ -327,7 +332,7 @@
             font-size: 16px;
         }
 
-        .doctor-home-meta span + span::before {
+        .doctor-home-meta span+span::before {
             content: "";
             display: inline-block;
             width: 5px;
@@ -399,7 +404,7 @@
             overflow: hidden;
         }
 
-        .doctor-home-stat > img:first-child {
+        .doctor-home-stat>img:first-child {
             width: 52px;
             height: 52px;
             object-fit: cover;
@@ -731,7 +736,7 @@
             min-width: 0;
         }
 
-        .doctor-home-trust div + div {
+        .doctor-home-trust div+div {
             border-left: 1px solid #e4ecf8;
             padding-left: 20px;
         }
@@ -866,7 +871,7 @@
                 min-height: 96px;
             }
 
-            .doctor-home-trust div + div {
+            .doctor-home-trust div+div {
                 border-left: 0;
                 border-top: 1px solid #e4ecf8;
                 padding-left: 0;
@@ -892,7 +897,7 @@
                 width: 100%;
             }
 
-            .doctor-home-meta span + span::before {
+            .doctor-home-meta span+span::before {
                 display: none;
             }
 

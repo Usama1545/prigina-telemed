@@ -133,7 +133,8 @@
                                                 {{ number_format((float) ($doctor['rating'] ?? 0), 1) }}
                                                 <span>({{ $doctor['totalReviews'] ?? 0 }})</span>
                                             </div>
-                                            <div class="doctor-availability">
+                                            <div
+                                                class="doctor-availability {{ $doctor['available'] ?? false ? 'text-success' : 'text-danger' }}">
                                                 <i class="fa-solid fa-circle-check"></i>
                                                 {{ $doctor['available'] ?? false ? 'Available' : 'Not Available' }}
                                             </div>
