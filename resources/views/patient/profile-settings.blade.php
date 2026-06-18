@@ -58,14 +58,14 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Phone Number <span
                                                         class="text-danger">*</span></label>
-                                                <input type="text" name="phone" value="{{ $patient['phone'] }}" class="form-control">
+                                                <input type="text" name="phone" value="{{ $patient['phone'] ?? '' }}" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label">Email Address <span
                                                         class="text-danger">*</span></label>
-                                                <input type="email"  name="email" value="{{ $patient['email'] }}" class="form-control">
+                                                <input type="email"  name="email" value="{{ $patient['email'] ?? '' }}" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-md-6">
@@ -73,7 +73,7 @@
                                                 <label class="form-label">Date of Birth <span
                                                         class="text-danger">*</span></label>
                                                 <div class="form-icon">
-                                                    <input type="date" class="form-control" name="dob" value="{{ $patient['dob'] }}">
+                                                    <input type="date" class="form-control" name="dob" value="{{ $patient['dob'] ?? '' }}">
                                                 </div>
                                             </div>
                                         </div>
@@ -88,6 +88,7 @@
                             </form>
                         </div>
                     </div>
+                    @if(($patient['provider'] ?? 'email') !== 'google')
                     <div class="card">
                         <div class="card-body">
                             <div class="border-bottom pb-3 mb-3">
@@ -132,6 +133,7 @@
                             </form>
                         </div>
                     </div>
+                    @endif
                 </div>
 
             </div>
