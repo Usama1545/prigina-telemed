@@ -215,13 +215,13 @@
                                                             <input type="text" class="form-control" name="symptoms">
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-12 col-md-12">
+                                                    {{-- <div class="col-lg-12 col-md-12">
                                                         <div class="mb-3">
                                                             <label class="form-label">Files (Optional)</label>
                                                             <input type="file" name="files[]" class="form-control"
                                                                 name="symptoms" multiple>
                                                         </div>
-                                                    </div>
+                                                    </div> --}}
                                                     <div class="col-lg-12">
                                                         <div class="mb-3">
                                                             <label class="form-label">Explain your problem
