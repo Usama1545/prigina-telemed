@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col-xl-4 col-md-7">
                         <div class="footer-widget">
-                            <img src="{{ asset('build/img/logo.webp') }}" alt="logo" class="img-fluid"
+                            <img src="{{ asset('build/logo-2.png') }}" alt="logo" class="img-fluid"
                                 style="max-width: 300px;">
                             <div class="social-icon">
                                 <h6 class="mb-3 footer-title text-white">Connect With Us</h6>

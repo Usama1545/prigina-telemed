@@ -3,14 +3,14 @@
 @section('content')
 
     <!-- ========================
-                    Start Page Content
-                ========================= -->
+                        Start Page Content
+                    ========================= -->
 
     <div class="login-wrapper">
         <div class="container">
             <div class="loginbox">
                 <div class="login-left">
-                    <img class="img-fluid" src="{{ asset('build/img/logo.webp') }}" alt="Logo">
+                    <img class="img-fluid" src="{{ asset('build/logo-2.png') }}" alt="Logo">
                 </div>
                 <div class="login-right">
                     <div class="login-right-wrap">
@@ -80,8 +80,8 @@
     </div>
 
     <!-- ========================
-                    End Page Content
-                ========================= -->
+                        End Page Content
+                    ========================= -->
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
