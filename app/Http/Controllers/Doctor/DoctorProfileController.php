@@ -9,6 +9,7 @@ use App\Mail\AppointmentRejected;
 use App\Services\FirestoreService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -907,6 +908,8 @@ class DoctorProfileController extends Controller
         $this->firestore->update('doctors', $uid, [
             'available' => $validated['isAvailable'] ? true : false,
         ]);
+
+        Cache::forget('home.doctors');
 
         return response()->json(['success' => true, 'isAvailable' => $validated['isAvailable']]);
     }

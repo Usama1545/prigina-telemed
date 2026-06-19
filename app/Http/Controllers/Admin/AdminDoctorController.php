@@ -19,9 +19,9 @@ class AdminDoctorController extends Controller
         $result = $this->doctorsPage();
 
         return view('admin.doctor-list', [
-            'doctors'    => $result['documents'],
+            'doctors' => $result['documents'],
             'nextCursor' => $result['nextCursor'],
-            'hasMore'    => $result['hasMore'],
+            'hasMore' => $result['hasMore'],
         ]);
     }
 
@@ -47,7 +47,7 @@ class AdminDoctorController extends Controller
 
         // Fetch top 25 appointments for this doctor. No Firestore orderBy to avoid
         // requiring a composite index — PHP sorts by date after the query.
-        $apptResult   = $this->firestore->query(
+        $apptResult = $this->firestore->query(
             'appointments',
             [['field' => 'doctorId', 'op' => '=', 'value' => $doctorId]],
             25,
@@ -73,12 +73,13 @@ class AdminDoctorController extends Controller
         }
 
         $this->firestore->update('doctors', $doctorId, [
-            'isActive'  => (bool) $data['isActive'],
+            'available' => (bool) $data['isActive'],
             'updatedAt' => now()->toDateTimeString(),
             'updatedBy' => session('auth_uid'),
         ]);
 
         Cache::forget('admin:stats');
+        Cache::forget('home.doctors');
 
         return response()->json(['success' => true]);
     }
@@ -93,9 +94,12 @@ class AdminDoctorController extends Controller
 
         $this->firestore->update('doctors', $doctorId, [
             'isTopDoctor' => (bool) $data['isTopDoctor'],
-            'updatedAt'   => now()->toDateTimeString(),
-            'updatedBy'   => session('auth_uid'),
+            'updatedAt' => now()->toDateTimeString(),
+            'updatedBy' => session('auth_uid'),
         ]);
+
+        Cache::forget('admin:stats');
+        Cache::forget('home.doctors');
 
         return response()->json(['success' => true]);
     }
@@ -108,7 +112,7 @@ class AdminDoctorController extends Controller
 
         $this->firestore->update('doctors', $doctorId, [
             'isVerified' => true,
-            'isActive'   => true,
+            'isActive' => true,
             'verifiedAt' => now()->toDateTimeString(),
             'verifiedBy' => session('auth_uid'),
         ]);
@@ -125,11 +129,11 @@ class AdminDoctorController extends Controller
         }
 
         $this->firestore->update('doctors', $doctorId, [
-            'isVerified'      => false,
-            'isActive'        => false,
+            'isVerified' => false,
+            'isActive' => false,
             'rejectionReason' => $request->input('reason', 'Not specified'),
-            'rejectedAt'      => now()->toDateTimeString(),
-            'rejectedBy'      => session('auth_uid'),
+            'rejectedAt' => now()->toDateTimeString(),
+            'rejectedBy' => session('auth_uid'),
         ]);
 
         Cache::forget('admin:stats');
@@ -140,15 +144,15 @@ class AdminDoctorController extends Controller
     protected function doctorsPage(string $search = '', int $offset = 0): array
     {
         $chunkSize = 500;
-        $maxFetch  = 5000; // safety cap: stops after 5,000 doctors
-        $all       = collect();
-        $cursor    = null;
-        $fetched   = 0;
+        $maxFetch = 5000; // safety cap: stops after 5,000 doctors
+        $all = collect();
+        $cursor = null;
+        $fetched = 0;
 
         while ($fetched < $maxFetch) {
-            $result   = $this->firestore->getCursorPage('doctors', $chunkSize, $cursor, 'createdAt', 'DESC');
-            $chunk    = collect($result['documents'])->map(fn ($doc) => $this->normalize($doc));
-            $all      = $all->merge($chunk);
+            $result = $this->firestore->getCursorPage('doctors', $chunkSize, $cursor, 'createdAt', 'DESC');
+            $chunk = collect($result['documents'])->map(fn ($doc) => $this->normalize($doc));
+            $all = $all->merge($chunk);
             $fetched += count($result['documents']);
 
             if (! $result['hasMore']) {
@@ -159,18 +163,17 @@ class AdminDoctorController extends Controller
 
         if ($search !== '') {
             $term = strtolower(trim($search));
-            $all  = $all->filter(fn ($doc) =>
-                str_contains(strtolower($doc['name'] ?? $doc['displayName'] ?? ''), $term)
+            $all = $all->filter(fn ($doc) => str_contains(strtolower($doc['name'] ?? $doc['displayName'] ?? ''), $term)
             )->values();
         }
 
-        $paged   = $all->slice($offset, $this->pageSize)->values()->all();
+        $paged = $all->slice($offset, $this->pageSize)->values()->all();
         $hasMore = ($offset + $this->pageSize) < $all->count();
 
         return [
-            'documents'  => $paged,
+            'documents' => $paged,
             'nextCursor' => $hasMore ? $offset + $this->pageSize : null,
-            'hasMore'    => $hasMore,
+            'hasMore' => $hasMore,
         ];
     }
 
