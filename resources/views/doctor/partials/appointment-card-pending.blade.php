@@ -9,10 +9,7 @@
     }
 @endphp
 
-<div
-    class="col-xl-4 col-lg-6 col-md-12 d-flex appointment-card"
-    id="appointment-{{ $appointment['id'] }}"
->
+<div class="col-xl-4 col-lg-6 col-md-12 d-flex appointment-card" id="appointment-{{ $appointment['id'] }}">
 
     <div class="appointment-wrap appointment-grid-wrap w-100">
 
@@ -26,47 +23,35 @@
 
                         <a href="#" class="me-2">
 
-                            @if(!empty($appointment['patientImage']))
-
-                                <img
-                                    src="{{ $appointment['patientImage'] }}"
-                                    alt=""
-                                    class="rounded-circle"
+                            @if (!empty($appointment['patientImage']))
+                                <img src="{{ $appointment['patientImage'] }}" alt="" class="rounded-circle"
                                     style="
                                         width: 50px;
                                         height: 50px;
                                         object-fit: cover;
-                                    "
-                                >
-
+                                    ">
                             @else
-
-                                <div
-                                    class="rounded-circle d-flex align-items-center justify-content-center"
+                                <div class="rounded-circle d-flex align-items-center justify-content-center"
                                     style="
                                         width: 50px;
                                         height: 50px;
                                         background: #e9f2ff;
-                                    "
-                                >
+                                    ">
 
-                                    <i
-                                        class="fa-solid fa-user"
+                                    <i class="fa-solid fa-user"
                                         style="
                                             color: #0d6efd;
                                             font-size: 20px;
-                                        "
-                                    ></i>
+                                        "></i>
 
                                 </div>
-
                             @endif
 
                         </a>
 
                         <div class="patient-info">
 
-                            
+
 
                             <div class="d-flex align-items-center gap-2 flex-wrap">
 
@@ -78,31 +63,22 @@
 
                                 </h6>
 
-                                <a
-                                    href="{{ route('doctor.conversation.create', ['patient_id' => $appointment['patientId']]) }}"
-                                    class="btn btn-xs btn-outline-primary rounded-pill px-2 py-1"
-                                    title="Chat"
-                                >
+                                <a href="{{ route('doctor.conversation.create', ['patient_id' => $appointment['patientId']]) }}"
+                                    class="btn btn-xs btn-outline-primary rounded-pill px-2 py-1" title="Chat">
 
                                     <i class="isax isax-messages-25"></i>
 
                                 </a>
 
-                                <a
-                                    href="{{ route('doctor.appointment-video-call', $appointment['id']) }}"
-                                    class="btn btn-xs btn-outline-success rounded-pill px-2 py-1"
-                                    title="Video Call"
-                                >
+                                <a href="{{ route('doctor.appointment-video-call', $appointment['id']) }}"
+                                    class="btn btn-xs btn-outline-success rounded-pill px-2 py-1" title="Video Call">
 
                                     <i class="fa-solid fa-video"></i>
 
                                 </a>
 
-                                <a
-                                    href="{{ route('doctor.appointment-audio-call', $appointment['id']) }}"
-                                    class="btn btn-xs btn-outline-primary rounded-pill px-2 py-1"
-                                    title="Audio Call"
-                                >
+                                <a href="{{ route('doctor.appointment-audio-call', $appointment['id']) }}"
+                                    class="btn btn-xs btn-outline-primary rounded-pill px-2 py-1" title="Audio Call">
 
                                     <i class="fa-solid fa-phone"></i>
 
@@ -112,16 +88,13 @@
 
                             <span
                                 class="badge mt-2
-                                @if(($appointment['status'] ?? '') === 'confirmed')
-                                    bg-success
+                                @if (($appointment['status'] ?? '') === 'confirmed') bg-success
                                 @elseif(($appointment['status'] ?? '') === 'pending')
                                     bg-warning
                                 @elseif(($appointment['status'] ?? '') === 'cancelled')
                                     bg-danger
                                 @else
-                                    bg-secondary
-                                @endif"
-                            >
+                                    bg-secondary @endif">
 
                                 {{ ucfirst($appointment['status'] ?? 'Pending') }}
 
@@ -137,24 +110,19 @@
                             ${{ number_format($appointment['amount'] ?? 0, 2) }}
                         </h6>
 
-                        <button
-                            type="button"
+                        <button type="button"
                             class="btn btn-xs btn-outline-info rounded-pill px-2 py-1 view-appointment-btn"
-                            title="View Details"
-                            data-id="{{ $appointment['id'] }}"
+                            title="View Details" data-id="{{ $appointment['id'] }}"
                             data-patient-name="{{ $appointment['patientName'] ?? 'Patient' }}"
                             data-patient-image="{{ $appointment['patientImage'] ?? '' }}"
                             data-appointment-number="{{ $appointment['appointmentNumber'] ?? $appointment['id'] }}"
-                            data-status="{{ $appointment['status'] ?? '' }}"
-                            data-date="{{ $datePending ?? '' }}"
+                            data-status="{{ $appointment['status'] ?? '' }}" data-date="{{ $datePending ?? '' }}"
                             data-start="{{ $appointment['startTime'] ?? '--' }}"
                             data-end="{{ $appointment['endTime'] ?? '--' }}"
                             data-amount="{{ number_format($appointment['amount'] ?? 0, 2) }}"
                             data-symptoms="{{ $appointment['symptoms'] ?? '' }}"
-                            data-notes="{{ $appointment['notes'] ?? '' }}"
-                            data-bs-toggle="modal"
-                            data-bs-target="#appointmentDetailModal"
-                        >
+                            data-notes="{{ $appointment['notes'] ?? '' }}" data-bs-toggle="modal"
+                            data-bs-target="#appointmentDetailModal">
                             <i class="fa-solid fa-eye"></i>
                         </button>
 
@@ -190,82 +158,69 @@
 
                 </div>
 
-                @if(!empty($appointment['symptoms']))
-
+                @if (!empty($appointment['symptoms']))
                     <div class="mt-3">
 
                         <label class="fw-bold mb-1">
                             Symptoms
                         </label>
 
-                        <p
-                            class="mb-0 text-muted"
+                        <p class="mb-0 text-muted"
                             style="
                                 display: -webkit-box;
                                 -webkit-line-clamp: 2;
                                 -webkit-box-orient: vertical;
                                 overflow: hidden;
-                            "
-                        >
+                            ">
 
                             {{ $appointment['symptoms'] }}
 
                         </p>
 
                     </div>
-
                 @endif
 
             </li>
 
             <li class="appointment-action">
 
-            @if(($appointment['paymentStatus'] ?? '') === 'completed')
+                @if (($appointment['paymentStatus'] ?? '') === 'completed')
+                    <div class="d-flex gap-2">
 
-                <div class="d-flex gap-2">
+                        <a class="btn btn-sm btn-success accept-appointment-btn" data-id="{{ $appointment['id'] }}"
+                            href="{{ route('doctor.accept-appointment', $appointment['id']) }}">
+                            <i class="fa-solid fa-check me-1"></i>
+                            Accept
+                        </a>
 
-                    <a
-                        class="btn btn-sm btn-success accept-appointment-btn"
-                        data-id="{{ $appointment['id'] }}"
-                        href="{{ route('doctor.accept-appointment', $appointment['id']) }}"
-                    >
-                        <i class="fa-solid fa-check me-1"></i>
-                        Accept
-                    </a>
+                        <a class="btn btn-sm btn-danger cancel-appointment-btn" data-id="{{ $appointment['id'] }}"
+                            href="{{ route('doctor.cancel-appointment', $appointment['id']) }}">
+                            <i class="fa-solid fa-xmark me-1"></i>
+                            Cancel
+                        </a>
 
-                    <a
-                        class="btn btn-sm btn-danger cancel-appointment-btn"
-                        data-id="{{ $appointment['id'] }}"
-                        href="{{ route('doctor.cancel-appointment', $appointment['id']) }}"
-                    >
-                        <i class="fa-solid fa-xmark me-1"></i>
-                        Cancel
-                    </a>
+                    </div>
+                @else
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
 
-                </div>
+                        <span class="badge bg-danger text-white px-3 py-3">
+                            <i class="fa-solid fa-clock me-1"></i>
+                            Payment not received
+                        </span>
 
-            @else
+                        <form method="POST" action="{{ route('doctor.appointment-delete', $appointment['id']) }}"
+                            onsubmit="return confirm('Delete this unpaid appointment?')">
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                <i class="fa-solid fa-trash me-1"></i>
+                                Delete
+                            </button>
+                        </form>
 
-                <div class="d-flex align-items-center gap-2 flex-wrap">
+                    </div>
+                @endif
 
-                    <span class="badge bg-warning text-dark px-3 py-2">
-                        <i class="fa-solid fa-clock me-1"></i>
-                        Payment not received
-                    </span>
-
-                    <form method="POST" action="{{ route('doctor.appointment-delete', $appointment['id']) }}" onsubmit="return confirm('Delete this unpaid appointment?')">
-                        @csrf
-                        <button type="submit" class="btn btn-sm btn-outline-danger">
-                            <i class="fa-solid fa-trash me-1"></i>
-                            Delete
-                        </button>
-                    </form>
-
-                </div>
-
-            @endif
-
-        </li>
+            </li>
 
         </ul>
 
