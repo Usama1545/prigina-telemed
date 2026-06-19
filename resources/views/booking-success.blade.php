@@ -1,7 +1,11 @@
 <?php $page = 'booking-success'; ?>
 @extends('layouts.mainlayout')
 @section('content')
-    @component('components.breadcrumb', ['title' => 'Bookings', 'li_1' => 'Booking Success', 'li_2' => 'Booking Success'])
+    @component('components.breadcrumb', [
+        'title' => 'Bookings',
+        'li_1' => 'Booking Success',
+        'li_2' => 'Booking Success',
+    ])
     @endcomponent
 
     <!-- Page Content -->
@@ -17,9 +21,12 @@
                             <div class="success-cont">
                                 <i class="fas fa-check"></i>
                                 <h3>Appointment booked Successfully!</h3>
-                                <p>Appointment booked with <strong>{{ $appointment['doctorName'] }}</strong><br> on <strong>{{ $appointment['date'] }}</strong> at <strong>
-                                    {{ $appointment['patientLocalTime'] }}</strong></p>
-                                <a href="{{route('patient.appointments')}}" class="btn btn-primary view-inv-btn">View Appointments</a>
+                                <p>Appointment booked with <strong>{{ $appointment['doctorName'] }}</strong><br>
+                                    on<strong>{{ \Carbon\Carbon::parse($appointment['date'])->format('M d, Y') }}</strong>
+                                    at <strong>
+                                        {{ $appointment['patientLocalTime'] }}</strong></p>
+                                <a href="{{ route('patient.appointments') }}" class="btn btn-primary view-inv-btn">View
+                                    Appointments</a>
                             </div>
                         </div>
                     </div>

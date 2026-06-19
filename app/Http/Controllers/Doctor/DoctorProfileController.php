@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Mail\AppointmentCompleted;
 use App\Mail\AppointmentConfirmed;
 use App\Mail\AppointmentRejected;
+use App\Mail\AppointmentRescheduled;
+use App\Mail\AppointmentRescheduledDoctor;
 use App\Services\FirestoreService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -936,11 +938,46 @@ class DoctorProfileController extends Controller
             'endTime' => $validated['endTime'],
         ]);
 
-        return response()->json([
-            'success' => true,
-            'formattedDate' => $formattedDate,
+        $updatedAppointment = array_merge($appointment, [
+            'date'      => $validated['date'],
             'startTime' => $validated['startTime'],
-            'endTime' => $validated['endTime'],
+            'endTime'   => $validated['endTime'],
+        ]);
+
+        // Notify patient
+        $patient = $this->firestore->find('patients', $appointment['patientId'] ?? '');
+        $patientEmail = $patient['email'] ?? null;
+        if ($patientEmail) {
+            try {
+                Mail::to($patientEmail)->send(new AppointmentRescheduled($updatedAppointment));
+            } catch (\Throwable $e) {
+                Log::error('appointment-rescheduled-patient-email-failed', [
+                    'appointment' => $id,
+                    'email'       => $patientEmail,
+                    'error'       => $e->getMessage(),
+                ]);
+            }
+        }
+
+        // Notify doctor (current user)
+        $doctorEmail = current_user()['email'] ?? null;
+        if ($doctorEmail) {
+            try {
+                Mail::to($doctorEmail)->send(new AppointmentRescheduledDoctor($updatedAppointment));
+            } catch (\Throwable $e) {
+                Log::error('appointment-rescheduled-doctor-email-failed', [
+                    'appointment' => $id,
+                    'email'       => $doctorEmail,
+                    'error'       => $e->getMessage(),
+                ]);
+            }
+        }
+
+        return response()->json([
+            'success'       => true,
+            'formattedDate' => $formattedDate,
+            'startTime'     => $validated['startTime'],
+            'endTime'       => $validated['endTime'],
         ]);
     }
 }

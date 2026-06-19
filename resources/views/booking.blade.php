@@ -305,7 +305,7 @@
                                                                     </label>
                                                                 </div>
                                                             </div>
-                                                            <div class="gateway-option">
+                                                            {{-- <div class="gateway-option">
                                                                 <div class="form-check">
                                                                     <input class="form-check-input gateway-radio"
                                                                         type="radio" name="gateway"
@@ -322,7 +322,7 @@
                                                                         </div>
                                                                     </label>
                                                                 </div>
-                                                            </div>
+                                                            </div> --}}
                                                         </div>
                                                     </div>
                                                 </div>
