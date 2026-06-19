@@ -944,17 +944,28 @@ class DoctorProfileController extends Controller
         }
 
         $formattedDate = Carbon::parse($validated['date'])->format('d M Y');
+        $startTimeFormatted = date('h:i A', $validated['startTime']);
+        $endTimeFormatted = date('h:i A', $validated['endTime']);
 
+        // Create DateTime objects for start and end times with the selected date
+        $startDateTime = Carbon::parse($validated['date'].' '.date('H:i:s', $validated['startTime']), $doctor['timezone'] ?? 'UTC');
+        $endDateTime = Carbon::parse($validated['date'].' '.date('H:i:s', $validated['endTime']), $doctor['timezone'] ?? 'UTC');
+
+        // Convert to UTC for storage
+        $startTimeUTC = $startDateTime->copy()->setTimezone('UTC');
+        $endTimeUTC = $endDateTime->copy()->setTimezone('UTC');
         $this->firestore->update('appointments', $id, [
-            'date' => $validated['date'],
-            'startTime' => $validated['startTime'],
-            'endTime' => $validated['endTime'],
+            'date' => $startDateTime,
+            'startTime' => $startTimeFormatted,
+            'endTime' => $endTimeFormatted,
+            'startTimeUTC' => $startTimeUTC,
+            'endTimeUTC' => $endTimeUTC,
         ]);
 
         $updatedAppointment = array_merge($appointment, [
-            'date'      => $validated['date'],
+            'date' => $validated['date'],
             'startTime' => $validated['startTime'],
-            'endTime'   => $validated['endTime'],
+            'endTime' => $validated['endTime'],
         ]);
 
         // Notify patient
@@ -966,8 +977,8 @@ class DoctorProfileController extends Controller
             } catch (\Throwable $e) {
                 Log::error('appointment-rescheduled-patient-email-failed', [
                     'appointment' => $id,
-                    'email'       => $patientEmail,
-                    'error'       => $e->getMessage(),
+                    'email' => $patientEmail,
+                    'error' => $e->getMessage(),
                 ]);
             }
         }
@@ -980,17 +991,17 @@ class DoctorProfileController extends Controller
             } catch (\Throwable $e) {
                 Log::error('appointment-rescheduled-doctor-email-failed', [
                     'appointment' => $id,
-                    'email'       => $doctorEmail,
-                    'error'       => $e->getMessage(),
+                    'email' => $doctorEmail,
+                    'error' => $e->getMessage(),
                 ]);
             }
         }
 
         return response()->json([
-            'success'       => true,
+            'success' => true,
             'formattedDate' => $formattedDate,
-            'startTime'     => $validated['startTime'],
-            'endTime'       => $validated['endTime'],
+            'startTime' => $validated['startTime'],
+            'endTime' => $validated['endTime'],
         ]);
     }
 }
