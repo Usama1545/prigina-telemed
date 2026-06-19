@@ -1,3 +1,14 @@
+@php
+    $datePending = '';
+    if (!empty($appointment['date'])) {
+        if (is_numeric($appointment['date'])) {
+            $datePending = \Carbon\Carbon::createFromTimestamp($appointment['date'])->format('d M Y');
+        } else {
+            $datePending = \Carbon\Carbon::parse($appointment['date'])->format('d M Y');
+        }
+    }
+@endphp
+
 <div
     class="col-xl-4 col-lg-6 col-md-12 d-flex appointment-card"
     id="appointment-{{ $appointment['id'] }}"
@@ -120,11 +131,32 @@
 
                     </div>
 
-                    <div>
+                    <div class="d-flex align-items-center gap-2">
 
                         <h6 class="text-primary fw-bold mb-0">
                             ${{ number_format($appointment['amount'] ?? 0, 2) }}
                         </h6>
+
+                        <button
+                            type="button"
+                            class="btn btn-xs btn-outline-info rounded-pill px-2 py-1 view-appointment-btn"
+                            title="View Details"
+                            data-id="{{ $appointment['id'] }}"
+                            data-patient-name="{{ $appointment['patientName'] ?? 'Patient' }}"
+                            data-patient-image="{{ $appointment['patientImage'] ?? '' }}"
+                            data-appointment-number="{{ $appointment['appointmentNumber'] ?? $appointment['id'] }}"
+                            data-status="{{ $appointment['status'] ?? '' }}"
+                            data-date="{{ $datePending ?? '' }}"
+                            data-start="{{ $appointment['startTime'] ?? '--' }}"
+                            data-end="{{ $appointment['endTime'] ?? '--' }}"
+                            data-amount="{{ number_format($appointment['amount'] ?? 0, 2) }}"
+                            data-symptoms="{{ $appointment['symptoms'] ?? '' }}"
+                            data-notes="{{ $appointment['notes'] ?? '' }}"
+                            data-bs-toggle="modal"
+                            data-bs-target="#appointmentDetailModal"
+                        >
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
 
                     </div>
 
@@ -134,36 +166,12 @@
 
             <li class="appointment-info mb-3">
 
-                @php
-
-                    $date = '';
-
-                    if (!empty($appointment['date'])) {
-
-                        if (is_numeric($appointment['date'])) {
-
-                            $date =
-                                \Carbon\Carbon::createFromTimestamp(
-                                    $appointment['date']
-                                )->format('d M Y');
-
-                        } else {
-
-                            $date =
-                                \Carbon\Carbon::parse(
-                                    $appointment['date']
-                                )->format('d M Y');
-                        }
-                    }
-
-                @endphp
-
                 <div class="mb-2 d-flex align-items-center">
 
                     <i class="isax isax-calendar-1 me-2 text-primary"></i>
 
                     <span>
-                        {{ $date }}
+                        {{ $datePending }}
                     </span>
 
                 </div>
