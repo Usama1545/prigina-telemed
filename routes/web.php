@@ -49,6 +49,8 @@ Route::middleware(['firebase.auth'])->group(function () {
         Route::POST('conversation/{id}/mark-read', 'markRead')->name('patient.conversations.mark-read');
         Route::post('conversation/{id}/delete', 'deleteConversation')->name('patient.conversation.delete');
         Route::post('agree/consent', 'agreeToConsent')->name('consent.agree');
+        Route::post('/appointment/{id}/delete', 'deleteAppointment')->name('patient.appointment-delete');
+        Route::post('/appointment/{id}/pay', 'initiatePayment')->name('patient.appointment-pay');
     });
 
     Route::prefix('doctor')->controller(DoctorReportController::class)->group(function () {
@@ -94,6 +96,7 @@ Route::middleware(['firebase.auth'])->group(function () {
         Route::get('/setup-complete', 'payoutComplete')->name('doctor.payout.complete');
         Route::post('/toggle-availability', 'toggleAvailability')->name('doctor.toggle-availability');
         Route::post('/appointment/{id}/reschedule', 'rescheduleAppointment')->name('doctor.reschedule-appointment');
+        Route::post('/appointment/{id}/delete', 'deleteAppointment')->name('doctor.appointment-delete');
     });
 
 });

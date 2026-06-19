@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Contract\Storage;
+use Stripe\Checkout\Session as StripeSession;
+use Stripe\Stripe;
 
 class PatientController extends Controller
 {
@@ -623,6 +625,75 @@ class PatientController extends Controller
         }
 
         return redirect()->back()->with('success', 'Appointment cancelled successfully.');
+    }
+
+    public function deleteAppointment($id)
+    {
+        $appointment = $this->firestore->find('appointments', $id);
+
+        if (! $appointment || ($appointment['patientId'] ?? '') !== current_user()['uid']) {
+            return redirect()->back()->with('error', 'Appointment not found.');
+        }
+
+        $this->firestore->delete('appointments', $id);
+
+        return redirect()->back()->with('success', 'Appointment deleted.');
+    }
+
+    public function initiatePayment($id)
+    {
+        $appointment = $this->firestore->find('appointments', $id);
+
+        if (! $appointment || ($appointment['patientId'] ?? '') !== current_user()['uid']) {
+            return redirect()->back()->with('error', 'Appointment not found.');
+        }
+
+        if (($appointment['paymentStatus'] ?? '') === 'completed') {
+            return redirect()->back()->with('error', 'This appointment is already paid.');
+        }
+
+        // Check if the doctor still has this slot available (no confirmed appointment at same date+time)
+        $conflicts = $this->firestore->query('appointments', [
+            ['field' => 'doctorId', 'op' => '=', 'value' => $appointment['doctorId']],
+            ['field' => 'startTime', 'op' => '=', 'value' => $appointment['startTime']],
+            ['field' => 'status', 'op' => '=', 'value' => 'confirmed'],
+        ]);
+
+        $hasConflict = collect($conflicts['documents'] ?? [])
+            ->filter(function ($a) use ($appointment, $id) {
+                return ($a['id'] ?? '') !== $id
+                    && ($a['date'] ?? '') === ($appointment['date'] ?? '');
+            })
+            ->isNotEmpty();
+
+        if ($hasConflict) {
+            return redirect()->back()->with('error', 'This time slot is no longer available. Please book a new appointment.');
+        }
+
+        Stripe::setApiKey(config('services.stripe.secret'));
+
+        $checkoutSession = StripeSession::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'usd',
+                    'product_data' => [
+                        'name' => 'Doctor Consultation',
+                        'description' => 'Appointment with Dr. '.$appointment['doctorName'],
+                    ],
+                    'unit_amount' => (int) round(($appointment['amount'] ?? 0) * 100),
+                ],
+                'quantity' => 1,
+            ]],
+            'mode' => 'payment',
+            'success_url' => route('booking.success').'?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('patient.appointments'),
+            'metadata' => [
+                'booking_id' => $appointment['id'],
+            ],
+        ]);
+
+        return redirect($checkoutSession->url);
     }
 
     public function appointmentDetails($id)

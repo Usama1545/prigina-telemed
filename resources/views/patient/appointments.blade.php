@@ -256,6 +256,8 @@
                                             : null;
                                         $dateLabel = $apptDate ? $apptDate->format('d M Y') : '';
                                         $canCancel = $apptDate && $apptDate->gt(now()->addHours(24));
+                                        $isPaid = ($appointment['paymentStatus'] ?? '') === 'completed';
+                                        $canPay = !$isPaid && $apptDate && $apptDate->gt(now()->addDays(3));
                                     @endphp
                                     <div class="col-xl-4 col-lg-6 col-md-12 d-flex appointment-card">
                                         <div class="appointment-wrap appointment-grid-wrap w-100">
@@ -278,7 +280,7 @@
                                                                             {{ $appointment['doctorName'] ?? 'Doctor' }}
                                                                         </a>
                                                                     </h6>
-                                                                    @if (!empty($appointment['doctorId']))
+                                                                    @if ($isPaid && !empty($appointment['doctorId']))
                                                                         <a href="{{ route('conversation.create', ['doctor_id' => $appointment['doctorId']]) }}"
                                                                             class="btn btn-xs btn-outline-primary rounded-pill px-2 py-1"
                                                                             title="Chat">
@@ -286,8 +288,14 @@
                                                                         </a>
                                                                     @endif
                                                                 </div>
-                                                                <span
-                                                                    class="badge bg-warning text-dark mt-2">Pending</span>
+                                                                @if ($isPaid)
+                                                                    <span class="badge bg-warning text-dark mt-2">Pending</span>
+                                                                @else
+                                                                    <span class="badge bg-danger mt-2">
+                                                                        <i class="fa-solid fa-circle-exclamation me-1"></i>
+                                                                        Not Paid
+                                                                    </span>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                         @if (!empty($appointment['amount']))
@@ -316,13 +324,29 @@
                                                         </div>
                                                     @endif
                                                 </li>
-                                                <li class="appointment-action d-flex gap-2">
-
-                                                    @if ($canCancel)
-                                                        <a href="{{ route('patient.cancel-appointment', $appointment['id']) }}"
-                                                            class="btn btn-outline-danger w-100">
-                                                            <i class="fa-solid fa-xmark me-1"></i>Cancel
-                                                        </a>
+                                                <li class="appointment-action d-flex gap-2 flex-wrap">
+                                                    @if ($isPaid)
+                                                        @if ($canCancel)
+                                                            <a href="{{ route('patient.cancel-appointment', $appointment['id']) }}"
+                                                                class="btn btn-outline-danger w-100">
+                                                                <i class="fa-solid fa-xmark me-1"></i>Cancel
+                                                            </a>
+                                                        @endif
+                                                    @else
+                                                        @if ($canPay)
+                                                            <form method="POST" action="{{ route('patient.appointment-pay', $appointment['id']) }}" class="flex-grow-1">
+                                                                @csrf
+                                                                <button type="submit" class="btn btn-success w-100">
+                                                                    <i class="fa-solid fa-credit-card me-1"></i>Pay & Confirm
+                                                                </button>
+                                                            </form>
+                                                        @endif
+                                                        <form method="POST" action="{{ route('patient.appointment-delete', $appointment['id']) }}" onsubmit="return confirm('Delete this appointment?')">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-outline-danger">
+                                                                <i class="fa-solid fa-trash me-1"></i>Delete
+                                                            </button>
+                                                        </form>
                                                     @endif
                                                 </li>
                                             </ul>

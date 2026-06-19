@@ -220,27 +220,50 @@
 
             <li class="appointment-action">
 
-            <div class="d-flex gap-2">
+            @if(($appointment['paymentStatus'] ?? '') === 'completed')
 
-                <a
-                    class="btn btn-sm btn-success accept-appointment-btn"
-                    data-id="{{ $appointment['id'] }}"
-                    href="{{ route('doctor.accept-appointment', $appointment['id']) }}"
-                >
-                    <i class="fa-solid fa-check me-1"></i>
-                    Accept
-                </a>
+                <div class="d-flex gap-2">
 
-                <a
-                    class="btn btn-sm btn-danger cancel-appointment-btn"
-                    data-id="{{ $appointment['id'] }}"
-                    href="{{ route('doctor.cancel-appointment', $appointment['id']) }}"
-                >
-                    <i class="fa-solid fa-xmark me-1"></i>
-                    Cancel
-                </a>
+                    <a
+                        class="btn btn-sm btn-success accept-appointment-btn"
+                        data-id="{{ $appointment['id'] }}"
+                        href="{{ route('doctor.accept-appointment', $appointment['id']) }}"
+                    >
+                        <i class="fa-solid fa-check me-1"></i>
+                        Accept
+                    </a>
 
-            </div>
+                    <a
+                        class="btn btn-sm btn-danger cancel-appointment-btn"
+                        data-id="{{ $appointment['id'] }}"
+                        href="{{ route('doctor.cancel-appointment', $appointment['id']) }}"
+                    >
+                        <i class="fa-solid fa-xmark me-1"></i>
+                        Cancel
+                    </a>
+
+                </div>
+
+            @else
+
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+
+                    <span class="badge bg-warning text-dark px-3 py-2">
+                        <i class="fa-solid fa-clock me-1"></i>
+                        Payment not received
+                    </span>
+
+                    <form method="POST" action="{{ route('doctor.appointment-delete', $appointment['id']) }}" onsubmit="return confirm('Delete this unpaid appointment?')">
+                        @csrf
+                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                            <i class="fa-solid fa-trash me-1"></i>
+                            Delete
+                        </button>
+                    </form>
+
+                </div>
+
+            @endif
 
         </li>
 

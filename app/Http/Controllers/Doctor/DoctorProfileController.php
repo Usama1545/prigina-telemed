@@ -436,6 +436,19 @@ class DoctorProfileController extends Controller
         return redirect()->back()->with('success', 'Appointment cancelled successfully.');
     }
 
+    public function deleteAppointment($id)
+    {
+        $appointment = $this->firestore->find('appointments', $id);
+
+        if (! $appointment || ($appointment['doctorId'] ?? '') !== current_user()['uid']) {
+            return redirect()->back()->with('error', 'Appointment not found.');
+        }
+
+        $this->firestore->delete('appointments', $id);
+
+        return redirect()->back()->with('success', 'Appointment deleted.');
+    }
+
     public function appointmentDetails($id)
     {
         $appointment = $this->firestore->find('appointments', $id);
