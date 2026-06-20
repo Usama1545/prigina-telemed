@@ -106,8 +106,6 @@ class SendReviewReminders extends Command
             ['field' => 'completedAt', 'op' => '>=', 'value' => $since->toDateTimeString()],
         ];
 
-        $this->info("Review reminders sent: {$since->toDateTimeString()}");
-
         $a = $this->firestore->paginatedQuery(
             collection: 'appointments',
             filters: array_merge($filters, [['field' => 'status', 'op' => '=', 'value' => 'completed']]),
@@ -116,6 +114,8 @@ class SendReviewReminders extends Command
             orderByDirection: 'DESC'
         )['documents'] ?? [];
 
+        Log::info('Completed', ['completed' => $a]);
+
         $b = $this->firestore->paginatedQuery(
             collection: 'appointments',
             filters: array_merge($filters, [['field' => 'status', 'op' => '=', 'value' => 'completedPaid']]),
@@ -123,6 +123,7 @@ class SendReviewReminders extends Command
             orderByField: 'completedAt',
             orderByDirection: 'DESC'
         )['documents'] ?? [];
+        Log::info('completedPaid', ['completed' => $a]);
 
         return array_merge($a, $b);
     }
