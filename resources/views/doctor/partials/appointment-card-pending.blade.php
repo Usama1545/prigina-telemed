@@ -121,7 +121,9 @@
                             data-end="{{ $appointment['endTime'] ?? '--' }}"
                             data-amount="{{ number_format($appointment['amount'] ?? 0, 2) }}"
                             data-symptoms="{{ $appointment['symptoms'] ?? '' }}"
-                            data-notes="{{ $appointment['notes'] ?? '' }}" data-bs-toggle="modal"
+                            data-notes="{{ $appointment['notes'] ?? '' }}"
+                            data-document-urls="{{ json_encode($appointment['documentUrls'] ?? []) }}"
+                            data-bs-toggle="modal"
                             data-bs-target="#appointmentDetailModal">
                             <i class="fa-solid fa-eye"></i>
                         </button>

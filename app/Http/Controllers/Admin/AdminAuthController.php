@@ -82,7 +82,6 @@ class AdminAuthController extends Controller
             ]);
 
             // Log successful login
-            Log::info("Admin login successful: {$email}");
 
             return redirect('/admin/index')->with('success', 'Welcome back!');
 
@@ -174,10 +173,10 @@ class AdminAuthController extends Controller
     {
         $request->validate([
             'current_password' => 'required|string',
-            'password'         => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
-        $uid   = session('auth_uid');
+        $uid = session('auth_uid');
         $email = session('auth_email');
 
         if (! $uid || ! $email) {
@@ -191,7 +190,8 @@ class AdminAuthController extends Controller
         try {
             $this->firebaseAuth->updatePassword($uid, $request->password);
         } catch (\Throwable $e) {
-            Log::error('Admin password change failed: ' . $e->getMessage());
+            Log::error('Admin password change failed: '.$e->getMessage());
+
             return back()->withErrors(['password' => 'Failed to update password. Please try again.']);
         }
 

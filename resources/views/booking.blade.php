@@ -232,8 +232,12 @@
                                                     <div class="col-lg-12">
                                                         <div class="mb-3">
                                                             <label class="form-label">Documents (Optional)</label>
-                                                            <input type="file" name="documents[]" class="form-control" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
-                                                            <div class="form-text text-muted">You can upload multiple files (PDF, Word, Images). Max 10MB each.</div>
+                                                            <input type="file" id="documentInput" name="documents[]" class="d-none" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                                                            <div id="docPreviews" class="d-flex flex-wrap gap-2 mb-2"></div>
+                                                            <button type="button" class="btn btn-outline-secondary btn-sm" id="addDocBtn">
+                                                                <i class="fa-solid fa-plus me-1"></i> Add Files
+                                                            </button>
+                                                            <div class="form-text text-muted mt-1">PDF, Word, Images — max 10MB each.</div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -668,5 +672,124 @@
         .form-wizard-steps li {
             list-style: none;
         }
+
+        /* Document upload previews */
+        .doc-preview {
+            position: relative;
+            width: 80px;
+            flex-shrink: 0;
+        }
+        .doc-preview .preview-thumb {
+            width: 80px;
+            height: 80px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            object-fit: cover;
+            display: block;
+        }
+        .doc-preview .preview-icon {
+            width: 80px;
+            height: 80px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            font-size: 11px;
+            color: #6c757d;
+            text-align: center;
+            padding: 4px;
+            word-break: break-all;
+            overflow: hidden;
+        }
+        .doc-preview .preview-icon i {
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+        .doc-preview .remove-doc {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #dc3545;
+            color: #fff;
+            border: none;
+            font-size: 11px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 0;
+        }
     </style>
+
+    <script>
+        (function () {
+            const input = document.getElementById('documentInput');
+            const addBtn = document.getElementById('addDocBtn');
+            const previewContainer = document.getElementById('docPreviews');
+            let fileMap = new Map(); // uid -> File
+            let uidCounter = 0;
+
+            addBtn.addEventListener('click', () => input.click());
+
+            input.addEventListener('change', function () {
+                Array.from(this.files).forEach(file => {
+                    const uid = ++uidCounter;
+                    fileMap.set(uid, file);
+                    renderPreview(uid, file);
+                });
+                this.value = ''; // reset so same file can be re-added if removed
+                syncInput();
+            });
+
+            function renderPreview(uid, file) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'doc-preview';
+                wrapper.dataset.uid = uid;
+
+                if (file.type.startsWith('image/')) {
+                    const img = document.createElement('img');
+                    img.className = 'preview-thumb';
+                    img.src = URL.createObjectURL(file);
+                    img.onload = () => URL.revokeObjectURL(img.src);
+                    wrapper.appendChild(img);
+                } else {
+                    const icon = document.createElement('div');
+                    icon.className = 'preview-icon';
+                    const ext = file.name.split('.').pop().toUpperCase();
+                    icon.innerHTML = `<i class="fa-solid fa-file-lines"></i><span>${ext}</span><span style="font-size:9px;margin-top:2px">${truncate(file.name, 10)}</span>`;
+                    wrapper.appendChild(icon);
+                }
+
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.className = 'remove-doc';
+                removeBtn.innerHTML = '&times;';
+                removeBtn.addEventListener('click', () => {
+                    fileMap.delete(uid);
+                    wrapper.remove();
+                    syncInput();
+                });
+
+                wrapper.appendChild(removeBtn);
+                previewContainer.appendChild(wrapper);
+            }
+
+            function syncInput() {
+                const dt = new DataTransfer();
+                fileMap.forEach(file => dt.items.add(file));
+                input.files = dt.files;
+            }
+
+            function truncate(str, n) {
+                return str.length > n ? str.slice(0, n) + '…' : str;
+            }
+        })();
+    </script>
 @endpush

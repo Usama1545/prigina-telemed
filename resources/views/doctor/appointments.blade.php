@@ -275,6 +275,18 @@
                         </div>
                     </div>
 
+                    {{-- Documents --}}
+                    <div id="appt-detail-docs-section" class="mt-3 d-none">
+                        <div class="p-3 rounded-3" style="background:#f8fafc; border:1px solid #e2e8f0;">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <i class="fa-solid fa-paperclip text-primary" style="font-size:14px;"></i>
+                                <span class="fw-semibold"
+                                    style="font-size:13px; text-transform:uppercase; letter-spacing:.5px; color:#475569;">Patient Documents</span>
+                            </div>
+                            <div id="appt-detail-docs" class="d-flex flex-wrap gap-2"></div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="modal-footer border-0 pt-0 px-4 pb-4">
@@ -608,6 +620,33 @@
                     notesSec.classList.remove('d-none');
                 } else {
                     notesSec.classList.add('d-none');
+                }
+
+                // Documents
+                const docsSec = document.getElementById('appt-detail-docs-section');
+                const docsContainer = document.getElementById('appt-detail-docs');
+                docsContainer.innerHTML = '';
+                let urls = [];
+                try { urls = JSON.parse(d.documentUrls || '[]'); } catch (_) {}
+                if (urls.length) {
+                    urls.forEach(url => {
+                        const isImage = /\.(jpg|jpeg|png|gif|webp)(\?|$)/i.test(url);
+                        const item = document.createElement('a');
+                        item.href = url;
+                        item.target = '_blank';
+                        item.rel = 'noopener';
+                        item.className = 'text-decoration-none';
+                        if (isImage) {
+                            item.innerHTML = `<img src="${url}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #dee2e6;" alt="document">`;
+                        } else {
+                            const ext = url.split('.').pop().split('?')[0].toUpperCase().slice(0, 4);
+                            item.innerHTML = `<div style="width:80px;height:80px;border:1px solid #dee2e6;border-radius:8px;background:#f8f9fa;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;color:#6c757d;text-align:center;padding:4px;"><i class="fa-solid fa-file-lines" style="font-size:22px;margin-bottom:4px;"></i><span>${ext}</span></div>`;
+                        }
+                        docsContainer.appendChild(item);
+                    });
+                    docsSec.classList.remove('d-none');
+                } else {
+                    docsSec.classList.add('d-none');
                 }
             });
 

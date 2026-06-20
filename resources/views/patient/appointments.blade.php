@@ -110,10 +110,18 @@
                                                                     class="badge bg-success mt-2">{{ ucfirst($appointment['status'] ?? 'Confirmed') }}</span>
                                                             </div>
                                                         </div>
-                                                        @if (!empty($appointment['amount']))
-                                                            <h6 class="text-primary fw-bold mb-0">
-                                                                ${{ number_format($appointment['amount'], 2) }}</h6>
-                                                        @endif
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            @if (!empty($appointment['amount']))
+                                                                <h6 class="text-primary fw-bold mb-0">
+                                                                    ${{ number_format($appointment['amount'], 2) }}</h6>
+                                                            @endif
+                                                            <button type="button"
+                                                                class="btn btn-xs btn-outline-info rounded-pill px-2 py-1 view-appointment"
+                                                                data-id="{{ $appointment['id'] }}"
+                                                                title="View Details">
+                                                                <i class="fa-solid fa-eye"></i>
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </li>
                                                 <li class="appointment-info mb-3">
@@ -197,10 +205,18 @@
                                                                 <span class="badge bg-danger mt-2">Cancelled</span>
                                                             </div>
                                                         </div>
-                                                        @if (!empty($appointment['amount']))
-                                                            <h6 class="text-primary fw-bold mb-0">
-                                                                ${{ number_format($appointment['amount'], 2) }}</h6>
-                                                        @endif
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            @if (!empty($appointment['amount']))
+                                                                <h6 class="text-primary fw-bold mb-0">
+                                                                    ${{ number_format($appointment['amount'], 2) }}</h6>
+                                                            @endif
+                                                            <button type="button"
+                                                                class="btn btn-xs btn-outline-info rounded-pill px-2 py-1 view-appointment"
+                                                                data-id="{{ $appointment['id'] }}"
+                                                                title="View Details">
+                                                                <i class="fa-solid fa-eye"></i>
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </li>
                                                 <li class="appointment-info mb-3">
@@ -298,10 +314,18 @@
                                                                 @endif
                                                             </div>
                                                         </div>
-                                                        @if (!empty($appointment['amount']))
-                                                            <h6 class="text-primary fw-bold mb-0">
-                                                                ${{ number_format($appointment['amount'], 2) }}</h6>
-                                                        @endif
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            @if (!empty($appointment['amount']))
+                                                                <h6 class="text-primary fw-bold mb-0">
+                                                                    ${{ number_format($appointment['amount'], 2) }}</h6>
+                                                            @endif
+                                                            <button type="button"
+                                                                class="btn btn-xs btn-outline-info rounded-pill px-2 py-1 view-appointment"
+                                                                data-id="{{ $appointment['id'] }}"
+                                                                title="View Details">
+                                                                <i class="fa-solid fa-eye"></i>
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </li>
                                                 <li class="appointment-info mb-3">
@@ -413,10 +437,18 @@
                                                                 <span class="badge bg-success mt-2">Completed</span>
                                                             </div>
                                                         </div>
-                                                        @if (!empty($appointment['amount']))
-                                                            <h6 class="text-primary fw-bold mb-0">
-                                                                ${{ number_format($appointment['amount'], 2) }}</h6>
-                                                        @endif
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            @if (!empty($appointment['amount']))
+                                                                <h6 class="text-primary fw-bold mb-0">
+                                                                    ${{ number_format($appointment['amount'], 2) }}</h6>
+                                                            @endif
+                                                            <button type="button"
+                                                                class="btn btn-xs btn-outline-info rounded-pill px-2 py-1 view-appointment"
+                                                                data-id="{{ $appointment['id'] }}"
+                                                                title="View Details">
+                                                                <i class="fa-solid fa-eye"></i>
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </li>
                                                 <li class="appointment-info mb-3">
@@ -556,6 +588,12 @@
                             <p id="notes"></p>
                         </div>
 
+                        <!-- Documents -->
+                        <div class="appoint-wrap" id="patient-modal-docs-wrap" style="display:none;">
+                            <h5>Documents</h5>
+                            <div id="patient-modal-docs" class="d-flex flex-wrap gap-2 mt-2"></div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -605,7 +643,33 @@
                         new Date(data.createdAt).toLocaleString();
 
                     document.getElementById('symptoms').innerText = data.symptoms ?? '-';
-                    document.getElementById('notes').innerText = data.note ?? '-';
+                    document.getElementById('notes').innerText = data.notes ?? '-';
+
+                    // Documents
+                    const docsWrap = document.getElementById('patient-modal-docs-wrap');
+                    const docsContainer = document.getElementById('patient-modal-docs');
+                    docsContainer.innerHTML = '';
+                    const urls = Array.isArray(data.documentUrls) ? data.documentUrls : [];
+                    if (urls.length) {
+                        urls.forEach(url => {
+                            const isImage = /\.(jpg|jpeg|png|gif|webp)(\?|$)/i.test(url);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.target = '_blank';
+                            a.rel = 'noopener';
+                            a.className = 'text-decoration-none';
+                            if (isImage) {
+                                a.innerHTML = `<img src="${url}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #dee2e6;" alt="document">`;
+                            } else {
+                                const ext = url.split('.').pop().split('?')[0].toUpperCase().slice(0, 4);
+                                a.innerHTML = `<div style="width:80px;height:80px;border:1px solid #dee2e6;border-radius:8px;background:#f8f9fa;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;color:#6c757d;text-align:center;padding:4px;"><i class="fa-solid fa-file-lines" style="font-size:22px;margin-bottom:4px;"></i><span>${ext}</span></div>`;
+                            }
+                            docsContainer.appendChild(a);
+                        });
+                        docsWrap.style.display = '';
+                    } else {
+                        docsWrap.style.display = 'none';
+                    }
 
                     new bootstrap.Modal(document.getElementById('viewAppointmentModal')).show();
                 });
