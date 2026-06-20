@@ -260,80 +260,198 @@
                                             <option value="">Select Timezone</option>
                                             <!-- Americas -->
                                             <optgroup label="Americas">
-                                                <option value="America/New_York" {{ (current_user()['timezone'] ?? '') == 'America/New_York' ? 'selected' : '' }}>Eastern Time (US & Canada)</option>
-                                                <option value="America/Chicago" {{ (current_user()['timezone'] ?? '') == 'America/Chicago' ? 'selected' : '' }}>Central Time (US & Canada)</option>
-                                                <option value="America/Denver" {{ (current_user()['timezone'] ?? '') == 'America/Denver' ? 'selected' : '' }}>Mountain Time (US & Canada)</option>
-                                                <option value="America/Los_Angeles" {{ (current_user()['timezone'] ?? '') == 'America/Los_Angeles' ? 'selected' : '' }}>Pacific Time (US & Canada)</option>
-                                                <option value="America/Anchorage" {{ (current_user()['timezone'] ?? '') == 'America/Anchorage' ? 'selected' : '' }}>Alaska</option>
-                                                <option value="Pacific/Honolulu" {{ (current_user()['timezone'] ?? '') == 'Pacific/Honolulu' ? 'selected' : '' }}>Hawaii</option>
-                                                <option value="America/Toronto" {{ (current_user()['timezone'] ?? '') == 'America/Toronto' ? 'selected' : '' }}>Toronto</option>
-                                                <option value="America/Mexico_City" {{ (current_user()['timezone'] ?? '') == 'America/Mexico_City' ? 'selected' : '' }}>Mexico City</option>
-                                                <option value="America/Bogota" {{ (current_user()['timezone'] ?? '') == 'America/Bogota' ? 'selected' : '' }}>Colombia</option>
-                                                <option value="America/Caracas" {{ (current_user()['timezone'] ?? '') == 'America/Caracas' ? 'selected' : '' }}>Venezuela</option>
-                                                <option value="America/Sao_Paulo" {{ (current_user()['timezone'] ?? '') == 'America/Sao_Paulo' ? 'selected' : '' }}>São Paulo</option>
-                                                <option value="America/Buenos_Aires" {{ (current_user()['timezone'] ?? '') == 'America/Buenos_Aires' ? 'selected' : '' }}>Buenos Aires</option>
-                                                <option value="America/Santiago" {{ (current_user()['timezone'] ?? '') == 'America/Santiago' ? 'selected' : '' }}>Santiago</option>
+                                                <option value="America/New_York"
+                                                    {{ (current_user()['timezone'] ?? '') == 'America/New_York' ? 'selected' : '' }}>
+                                                    Eastern Time (US & Canada)</option>
+                                                <option value="America/Chicago"
+                                                    {{ (current_user()['timezone'] ?? '') == 'America/Chicago' ? 'selected' : '' }}>
+                                                    Central Time (US & Canada)</option>
+                                                <option value="America/Denver"
+                                                    {{ (current_user()['timezone'] ?? '') == 'America/Denver' ? 'selected' : '' }}>
+                                                    Mountain Time (US & Canada)</option>
+                                                <option value="America/Los_Angeles"
+                                                    {{ (current_user()['timezone'] ?? '') == 'America/Los_Angeles' ? 'selected' : '' }}>
+                                                    Pacific Time (US & Canada)</option>
+                                                <option value="America/Anchorage"
+                                                    {{ (current_user()['timezone'] ?? '') == 'America/Anchorage' ? 'selected' : '' }}>
+                                                    Alaska</option>
+                                                <option value="Pacific/Honolulu"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Pacific/Honolulu' ? 'selected' : '' }}>
+                                                    Hawaii</option>
+                                                <option value="America/Toronto"
+                                                    {{ (current_user()['timezone'] ?? '') == 'America/Toronto' ? 'selected' : '' }}>
+                                                    Toronto</option>
+                                                <option value="America/Mexico_City"
+                                                    {{ (current_user()['timezone'] ?? '') == 'America/Mexico_City' ? 'selected' : '' }}>
+                                                    Mexico City</option>
+                                                <option value="America/Bogota"
+                                                    {{ (current_user()['timezone'] ?? '') == 'America/Bogota' ? 'selected' : '' }}>
+                                                    Colombia</option>
+                                                <option value="America/Caracas"
+                                                    {{ (current_user()['timezone'] ?? '') == 'America/Caracas' ? 'selected' : '' }}>
+                                                    Venezuela</option>
+                                                <option value="America/Sao_Paulo"
+                                                    {{ (current_user()['timezone'] ?? '') == 'America/Sao_Paulo' ? 'selected' : '' }}>
+                                                    São Paulo</option>
+                                                <option value="America/Buenos_Aires"
+                                                    {{ (current_user()['timezone'] ?? '') == 'America/Buenos_Aires' ? 'selected' : '' }}>
+                                                    Buenos Aires</option>
+                                                <option value="America/Santiago"
+                                                    {{ (current_user()['timezone'] ?? '') == 'America/Santiago' ? 'selected' : '' }}>
+                                                    Santiago</option>
                                             </optgroup>
                                             <!-- Europe -->
                                             <optgroup label="Europe">
-                                                <option value="Europe/London" {{ (current_user()['timezone'] ?? '') == 'Europe/London' ? 'selected' : '' }}>London (GMT/BST)</option>
-                                                <option value="Europe/Paris" {{ (current_user()['timezone'] ?? '') == 'Europe/Paris' ? 'selected' : '' }}>Central European Time</option>
-                                                <option value="Europe/Berlin" {{ (current_user()['timezone'] ?? '') == 'Europe/Berlin' ? 'selected' : '' }}>Berlin</option>
-                                                <option value="Europe/Amsterdam" {{ (current_user()['timezone'] ?? '') == 'Europe/Amsterdam' ? 'selected' : '' }}>Amsterdam</option>
-                                                <option value="Europe/Madrid" {{ (current_user()['timezone'] ?? '') == 'Europe/Madrid' ? 'selected' : '' }}>Madrid</option>
-                                                <option value="Europe/Rome" {{ (current_user()['timezone'] ?? '') == 'Europe/Rome' ? 'selected' : '' }}>Rome</option>
-                                                <option value="Europe/Vienna" {{ (current_user()['timezone'] ?? '') == 'Europe/Vienna' ? 'selected' : '' }}>Vienna</option>
-                                                <option value="Europe/Prague" {{ (current_user()['timezone'] ?? '') == 'Europe/Prague' ? 'selected' : '' }}>Prague</option>
-                                                <option value="Europe/Budapest" {{ (current_user()['timezone'] ?? '') == 'Europe/Budapest' ? 'selected' : '' }}>Budapest</option>
-                                                <option value="Europe/Warsaw" {{ (current_user()['timezone'] ?? '') == 'Europe/Warsaw' ? 'selected' : '' }}>Warsaw</option>
-                                                <option value="Europe/Stockholm" {{ (current_user()['timezone'] ?? '') == 'Europe/Stockholm' ? 'selected' : '' }}>Stockholm</option>
-                                                <option value="Europe/Oslo" {{ (current_user()['timezone'] ?? '') == 'Europe/Oslo' ? 'selected' : '' }}>Oslo</option>
-                                                <option value="Europe/Copenhagen" {{ (current_user()['timezone'] ?? '') == 'Europe/Copenhagen' ? 'selected' : '' }}>Copenhagen</option>
-                                                <option value="Europe/Dublin" {{ (current_user()['timezone'] ?? '') == 'Europe/Dublin' ? 'selected' : '' }}>Dublin</option>
-                                                <option value="Europe/Lisbon" {{ (current_user()['timezone'] ?? '') == 'Europe/Lisbon' ? 'selected' : '' }}>Lisbon</option>
-                                                <option value="Europe/Moscow" {{ (current_user()['timezone'] ?? '') == 'Europe/Moscow' ? 'selected' : '' }}>Moscow</option>
-                                                <option value="Europe/Istanbul" {{ (current_user()['timezone'] ?? '') == 'Europe/Istanbul' ? 'selected' : '' }}>Istanbul</option>
-                                                <option value="Europe/Athens" {{ (current_user()['timezone'] ?? '') == 'Europe/Athens' ? 'selected' : '' }}>Athens</option>
-                                                <option value="Europe/Helsinki" {{ (current_user()['timezone'] ?? '') == 'Europe/Helsinki' ? 'selected' : '' }}>Helsinki</option>
+                                                <option value="Europe/London"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Europe/London' ? 'selected' : '' }}>
+                                                    London (GMT/BST)</option>
+                                                <option value="Europe/Paris"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Europe/Paris' ? 'selected' : '' }}>
+                                                    Central European Time</option>
+                                                <option value="Europe/Berlin"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Europe/Berlin' ? 'selected' : '' }}>
+                                                    Berlin</option>
+                                                <option value="Europe/Amsterdam"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Europe/Amsterdam' ? 'selected' : '' }}>
+                                                    Amsterdam</option>
+                                                <option value="Europe/Madrid"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Europe/Madrid' ? 'selected' : '' }}>
+                                                    Madrid</option>
+                                                <option value="Europe/Rome"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Europe/Rome' ? 'selected' : '' }}>
+                                                    Rome</option>
+                                                <option value="Europe/Vienna"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Europe/Vienna' ? 'selected' : '' }}>
+                                                    Vienna</option>
+                                                <option value="Europe/Prague"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Europe/Prague' ? 'selected' : '' }}>
+                                                    Prague</option>
+                                                <option value="Europe/Budapest"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Europe/Budapest' ? 'selected' : '' }}>
+                                                    Budapest</option>
+                                                <option value="Europe/Warsaw"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Europe/Warsaw' ? 'selected' : '' }}>
+                                                    Warsaw</option>
+                                                <option value="Europe/Stockholm"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Europe/Stockholm' ? 'selected' : '' }}>
+                                                    Stockholm</option>
+                                                <option value="Europe/Oslo"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Europe/Oslo' ? 'selected' : '' }}>
+                                                    Oslo</option>
+                                                <option value="Europe/Copenhagen"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Europe/Copenhagen' ? 'selected' : '' }}>
+                                                    Copenhagen</option>
+                                                <option value="Europe/Dublin"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Europe/Dublin' ? 'selected' : '' }}>
+                                                    Dublin</option>
+                                                <option value="Europe/Lisbon"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Europe/Lisbon' ? 'selected' : '' }}>
+                                                    Lisbon</option>
+                                                <option value="Europe/Moscow"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Europe/Moscow' ? 'selected' : '' }}>
+                                                    Moscow</option>
+                                                <option value="Europe/Istanbul"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Europe/Istanbul' ? 'selected' : '' }}>
+                                                    Istanbul</option>
+                                                <option value="Europe/Athens"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Europe/Athens' ? 'selected' : '' }}>
+                                                    Athens</option>
+                                                <option value="Europe/Helsinki"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Europe/Helsinki' ? 'selected' : '' }}>
+                                                    Helsinki</option>
                                             </optgroup>
                                             <!-- Africa -->
                                             <optgroup label="Africa">
-                                                <option value="Africa/Cairo" {{ (current_user()['timezone'] ?? '') == 'Africa/Cairo' ? 'selected' : '' }}>Cairo</option>
-                                                <option value="Africa/Johannesburg" {{ (current_user()['timezone'] ?? '') == 'Africa/Johannesburg' ? 'selected' : '' }}>Johannesburg</option>
-                                                <option value="Africa/Lagos" {{ (current_user()['timezone'] ?? '') == 'Africa/Lagos' ? 'selected' : '' }}>Lagos</option>
-                                                <option value="Africa/Nairobi" {{ (current_user()['timezone'] ?? '') == 'Africa/Nairobi' ? 'selected' : '' }}>Nairobi</option>
-                                                <option value="Africa/Casablanca" {{ (current_user()['timezone'] ?? '') == 'Africa/Casablanca' ? 'selected' : '' }}>Casablanca</option>
+                                                <option value="Africa/Cairo"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Africa/Cairo' ? 'selected' : '' }}>
+                                                    Cairo</option>
+                                                <option value="Africa/Johannesburg"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Africa/Johannesburg' ? 'selected' : '' }}>
+                                                    Johannesburg</option>
+                                                <option value="Africa/Lagos"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Africa/Lagos' ? 'selected' : '' }}>
+                                                    Lagos</option>
+                                                <option value="Africa/Nairobi"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Africa/Nairobi' ? 'selected' : '' }}>
+                                                    Nairobi</option>
+                                                <option value="Africa/Casablanca"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Africa/Casablanca' ? 'selected' : '' }}>
+                                                    Casablanca</option>
                                             </optgroup>
                                             <!-- Middle East -->
                                             <optgroup label="Middle East">
-                                                <option value="Asia/Dubai" {{ (current_user()['timezone'] ?? '') == 'Asia/Dubai' ? 'selected' : '' }}>Dubai (Gulf Standard Time)</option>
-                                                <option value="Asia/Baghdad" {{ (current_user()['timezone'] ?? '') == 'Asia/Baghdad' ? 'selected' : '' }}>Baghdad</option>
-                                                <option value="Asia/Jerusalem" {{ (current_user()['timezone'] ?? '') == 'Asia/Jerusalem' ? 'selected' : '' }}>Jerusalem</option>
-                                                <option value="Asia/Tehran" {{ (current_user()['timezone'] ?? '') == 'Asia/Tehran' ? 'selected' : '' }}>Tehran</option>
+                                                <option value="Asia/Dubai"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Asia/Dubai' ? 'selected' : '' }}>
+                                                    Dubai (Gulf Standard Time)</option>
+                                                <option value="Asia/Baghdad"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Asia/Baghdad' ? 'selected' : '' }}>
+                                                    Baghdad</option>
+                                                <option value="Asia/Jerusalem"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Asia/Jerusalem' ? 'selected' : '' }}>
+                                                    Jerusalem</option>
+                                                <option value="Asia/Tehran"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Asia/Tehran' ? 'selected' : '' }}>
+                                                    Tehran</option>
                                             </optgroup>
                                             <!-- Asia -->
                                             <optgroup label="Asia">
-                                                <option value="Asia/Kolkata" {{ (current_user()['timezone'] ?? '') == 'Asia/Kolkata' ? 'selected' : '' }}>India Standard Time</option>
-                                                <option value="Asia/Bangkok" {{ (current_user()['timezone'] ?? '') == 'Asia/Bangkok' ? 'selected' : '' }}>Indochina Time</option>
-                                                <option value="Asia/Ho_Chi_Minh" {{ (current_user()['timezone'] ?? '') == 'Asia/Ho_Chi_Minh' ? 'selected' : '' }}>Ho Chi Minh City</option>
-                                                <option value="Asia/Hong_Kong" {{ (current_user()['timezone'] ?? '') == 'Asia/Hong_Kong' ? 'selected' : '' }}>Hong Kong</option>
-                                                <option value="Asia/Singapore" {{ (current_user()['timezone'] ?? '') == 'Asia/Singapore' ? 'selected' : '' }}>Singapore</option>
-                                                <option value="Asia/Tokyo" {{ (current_user()['timezone'] ?? '') == 'Asia/Tokyo' ? 'selected' : '' }}>Tokyo</option>
-                                                <option value="Asia/Seoul" {{ (current_user()['timezone'] ?? '') == 'Asia/Seoul' ? 'selected' : '' }}>Seoul</option>
-                                                <option value="Asia/Shanghai" {{ (current_user()['timezone'] ?? '') == 'Asia/Shanghai' ? 'selected' : '' }}>Shanghai</option>
-                                                <option value="Asia/Manila" {{ (current_user()['timezone'] ?? '') == 'Asia/Manila' ? 'selected' : '' }}>Manila</option>
-                                                <option value="Asia/Kuala_Lumpur" {{ (current_user()['timezone'] ?? '') == 'Asia/Kuala_Lumpur' ? 'selected' : '' }}>Kuala Lumpur</option>
-                                                <option value="Asia/Karachi" {{ (current_user()['timezone'] ?? '') == 'Asia/Karachi' ? 'selected' : '' }}>Karachi</option>
-                                                <option value="Asia/Kathmandu" {{ (current_user()['timezone'] ?? '') == 'Asia/Kathmandu' ? 'selected' : '' }}>Kathmandu</option>
+                                                <option value="Asia/Kolkata"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Asia/Kolkata' ? 'selected' : '' }}>
+                                                    India Standard Time</option>
+                                                <option value="Asia/Bangkok"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Asia/Bangkok' ? 'selected' : '' }}>
+                                                    Indochina Time</option>
+                                                <option value="Asia/Ho_Chi_Minh"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Asia/Ho_Chi_Minh' ? 'selected' : '' }}>
+                                                    Ho Chi Minh City</option>
+                                                <option value="Asia/Hong_Kong"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Asia/Hong_Kong' ? 'selected' : '' }}>
+                                                    Hong Kong</option>
+                                                <option value="Asia/Singapore"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Asia/Singapore' ? 'selected' : '' }}>
+                                                    Singapore</option>
+                                                <option value="Asia/Tokyo"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Asia/Tokyo' ? 'selected' : '' }}>
+                                                    Tokyo</option>
+                                                <option value="Asia/Seoul"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Asia/Seoul' ? 'selected' : '' }}>
+                                                    Seoul</option>
+                                                <option value="Asia/Shanghai"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Asia/Shanghai' ? 'selected' : '' }}>
+                                                    Shanghai</option>
+                                                <option value="Asia/Manila"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Asia/Manila' ? 'selected' : '' }}>
+                                                    Manila</option>
+                                                <option value="Asia/Kuala_Lumpur"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Asia/Kuala_Lumpur' ? 'selected' : '' }}>
+                                                    Kuala Lumpur</option>
+                                                <option value="Asia/Karachi"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Asia/Karachi' ? 'selected' : '' }}>
+                                                    Karachi</option>
+                                                <option value="Asia/Kathmandu"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Asia/Kathmandu' ? 'selected' : '' }}>
+                                                    Kathmandu</option>
                                             </optgroup>
                                             <!-- Oceania -->
                                             <optgroup label="Oceania">
-                                                <option value="Australia/Sydney" {{ (current_user()['timezone'] ?? '') == 'Australia/Sydney' ? 'selected' : '' }}>Sydney</option>
-                                                <option value="Australia/Melbourne" {{ (current_user()['timezone'] ?? '') == 'Australia/Melbourne' ? 'selected' : '' }}>Melbourne</option>
-                                                <option value="Australia/Brisbane" {{ (current_user()['timezone'] ?? '') == 'Australia/Brisbane' ? 'selected' : '' }}>Brisbane</option>
-                                                <option value="Australia/Perth" {{ (current_user()['timezone'] ?? '') == 'Australia/Perth' ? 'selected' : '' }}>Perth</option>
-                                                <option value="Pacific/Auckland" {{ (current_user()['timezone'] ?? '') == 'Pacific/Auckland' ? 'selected' : '' }}>New Zealand</option>
-                                                <option value="Pacific/Fiji" {{ (current_user()['timezone'] ?? '') == 'Pacific/Fiji' ? 'selected' : '' }}>Fiji</option>
+                                                <option value="Australia/Sydney"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Australia/Sydney' ? 'selected' : '' }}>
+                                                    Sydney</option>
+                                                <option value="Australia/Melbourne"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Australia/Melbourne' ? 'selected' : '' }}>
+                                                    Melbourne</option>
+                                                <option value="Australia/Brisbane"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Australia/Brisbane' ? 'selected' : '' }}>
+                                                    Brisbane</option>
+                                                <option value="Australia/Perth"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Australia/Perth' ? 'selected' : '' }}>
+                                                    Perth</option>
+                                                <option value="Pacific/Auckland"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Pacific/Auckland' ? 'selected' : '' }}>
+                                                    New Zealand</option>
+                                                <option value="Pacific/Fiji"
+                                                    {{ (current_user()['timezone'] ?? '') == 'Pacific/Fiji' ? 'selected' : '' }}>
+                                                    Fiji</option>
                                             </optgroup>
                                         </select>
                                     </div>
