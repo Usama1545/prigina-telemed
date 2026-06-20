@@ -98,6 +98,22 @@ class AdminPaymentController extends Controller
                 'updatedBy' => session('auth_uid'),
             ]);
 
+            $totalAmountCents = (int) round($totalAmount * 100);
+            $platformFeeCents = $totalAmountCents - $transferAmount;
+
+            $this->firestore->create('doctor_revenue', [
+                'doctorId' => $doctorId,
+                'appointmentId' => $appointmentId,
+                'amount' => $totalAmountCents,
+                'platformFee' => $platformFeeCents,
+                'netAmount' => $transferAmount,
+                'platformFeePercent' => $commission,
+                'stripeTransferId' => $transfer->id,
+                'status' => 'paid',
+                'releasedAt' => now(),
+                'createdAt' => now(),
+            ]);
+
             Cache::forget('admin:stats');
 
             return back()->with('success', 'Payment released to doctor successfully.');

@@ -43,7 +43,7 @@
                         </ul>
                     </div>
                     <div class="booking-widget multistep-form mb-5">
-                        <form id="bookingForm" action="{{ route('booking.process') }}" method="POST">
+                        <form id="bookingForm" action="{{ route('booking.process') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="doctor_id" value="{{ $doctor['uid'] ?? '' }}">
                             <input type="hidden" name="doctor_name" value="{{ $doctor['name'] ?? '' }}">
@@ -227,6 +227,13 @@
                                                             <label class="form-label">Explain your problem
                                                                 (Optional)</label>
                                                             <textarea class="form-control" rows="3" name="problem"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Documents (Optional)</label>
+                                                            <input type="file" name="documents[]" class="form-control" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                                                            <div class="form-text text-muted">You can upload multiple files (PDF, Word, Images). Max 10MB each.</div>
                                                         </div>
                                                     </div>
                                                 </div>

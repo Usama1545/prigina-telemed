@@ -79,8 +79,14 @@ class DoctorProfileController extends Controller
                 : false;
         });
 
-        $totalEarnings = $pastAppointments->sum(function ($appointment) {
-            return $appointment['amount'] ?? 0;
+        $revenueRecords = app(FirestoreService::class)
+            ->query('doctor_revenue', [
+                ['field' => 'doctorId', 'op' => '=', 'value' => $uid],
+                ['field' => 'status', 'op' => '=', 'value' => 'paid'],
+            ], null, null, 'createdAt', 'DESC')['documents'] ?? [];
+
+        $totalEarnings = collect($revenueRecords)->sum(function ($record) {
+            return ($record['netAmount'] ?? 0) / 100;
         });
 
         $notifications = app(FirestoreService::class)

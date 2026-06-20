@@ -13,6 +13,7 @@ use Flutterwave\Flutterwave;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Kreait\Firebase\Contract\Storage;
 use Stripe\Checkout\Session as StripeSession;
 use Stripe\Stripe;
 
@@ -152,7 +153,8 @@ class BookingController extends Controller
             'amount' => 'required|numeric',
             'payment_gateway' => 'required|in:stripe,flutterwave',
             'symptoms' => 'nullable|string',
-            'files' => 'nullable|array',
+            'documents' => 'nullable|array',
+            'documents.*' => 'nullable|file|max:10240',
             'problem' => 'nullable|string',
         ]);
 
@@ -181,6 +183,29 @@ class BookingController extends Controller
         // Convert to UTC for storage
         $startTimeUTC = $startDateTime->copy()->setTimezone('UTC');
         $endTimeUTC = $endDateTime->copy()->setTimezone('UTC');
+        $documentUrls = [];
+
+        if ($request->hasFile('documents')) {
+            /** @var Storage $storage */
+            $storage = app('firebase.storage');
+            $bucket = $storage->getBucket();
+
+            foreach ($request->file('documents') as $file) {
+                $fileName = time().'_'.uniqid().'_'.$file->getClientOriginalName();
+                $filePath = "appointment_documents/{$documentId}/{$fileName}";
+
+                $bucket->upload(
+                    fopen($file->getRealPath(), 'r'),
+                    [
+                        'name' => $filePath,
+                        'predefinedAcl' => 'publicRead',
+                    ]
+                );
+
+                $documentUrls[] = 'https://storage.googleapis.com/'.$bucket->name().'/'.$filePath;
+            }
+        }
+
         $appointmentData = [
             'id' => $documentId,
             'doctorId' => $validated['doctor_id'],
@@ -200,6 +225,7 @@ class BookingController extends Controller
             'paymentMethod' => $validated['payment_gateway'] === 'stripe' ? 'Debit Card' : 'Flutterwave',
             'symptoms' => $validated['symptoms'],
             'notes' => $validated['problem'],
+            'documentUrls' => $documentUrls,
             'status' => 'pending',
             'patientLocalTime' => $startTimeFormatted.' - '.$endTimeFormatted,
             'doctorLocalTime' => $startDateTime->format('h:i A').' - '.$endDateTime->format('h:i A'),

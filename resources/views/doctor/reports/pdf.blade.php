@@ -469,7 +469,7 @@
                     </div>
                     <div class="field">
                         <label>Country</label>
-                        <span>{{ $report['report_information']['country_of_practice'] ?? '—' }}</span>
+                        <span>{{ $report['report_information']['country'] ?? '—' }}</span>
                     </div>
                 </div>
             </div>

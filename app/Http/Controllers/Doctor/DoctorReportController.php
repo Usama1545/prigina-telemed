@@ -164,7 +164,8 @@ class DoctorReportController extends Controller
                 'case_id' => $appointment['id'],
                 'physician_name' => $doctor['name'] ?? '',
                 'specialty' => $doctor['specializations'][0] ?? '',
-                'country_of_practice' => $doctor['country'] ?? '',
+                'country_of_practice' => $doctor['practiceCountry'] ?? '',
+                'country' => $doctor['country_code'] ?? '',
             ],
 
             'patient_information' => [

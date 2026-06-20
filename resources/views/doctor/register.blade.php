@@ -71,6 +71,21 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6">
+                                    <label class="form-label">Country of Practice</label>
+
+                                    <select name="practiceCountry" id="practiceCountry"
+                                        class="form-control @error('practiceCountry') is-invalid @enderror" required>
+                                        <option value="">Select Country</option>
+                                    </select>
+
+                                    @error('practiceCountry')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3 col-md-6">
                                     <label class="form-label">Medical License Number</label>
 
                                     <input type="text" name="license_number"
@@ -307,6 +322,21 @@
 
             document.getElementById('timezone').value =
                 Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+            // Populate practice country dropdown using intlTelInput data
+            const practiceCountrySelect = document.getElementById('practiceCountry');
+            const allCountries = window.intlTelInputGlobals.getCountryData();
+            const oldPracticeCountry = "{{ old('practiceCountry') }}";
+
+            allCountries.forEach(country => {
+                const option = document.createElement('option');
+                option.value = country.iso2.toUpperCase();
+                option.text = country.name;
+                if (oldPracticeCountry && oldPracticeCountry === country.iso2.toUpperCase()) {
+                    option.selected = true;
+                }
+                practiceCountrySelect.appendChild(option);
+            });
         });
     </script>
     <script>
@@ -434,12 +464,10 @@
                 const formData = new FormData(this);
                 const countryData = iti.getSelectedCountryData();
 
-                formData.append(
-                    'practiceCountry',
-                    countryData?.iso2 ?
-                    countryData.iso2.toUpperCase() :
-                    'US'
-                );
+                // Set country_code from phone input
+                if (countryData && countryData.dialCode) {
+                    document.getElementById('country_code').value = countryData.dialCode;
+                }
 
                 firebaseDoctorRegister(formData);
             });

@@ -77,6 +77,92 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Timezone <span
+                                                        class="text-danger">*</span></label>
+                                                <select name="timezone" class="form-control" required>
+                                                    <option value="">Select Timezone</option>
+                                                    <!-- Americas -->
+                                                    <optgroup label="Americas">
+                                                        <option value="America/New_York" {{ ($patient['timezone'] ?? '') == 'America/New_York' ? 'selected' : '' }}>Eastern Time (US & Canada)</option>
+                                                        <option value="America/Chicago" {{ ($patient['timezone'] ?? '') == 'America/Chicago' ? 'selected' : '' }}>Central Time (US & Canada)</option>
+                                                        <option value="America/Denver" {{ ($patient['timezone'] ?? '') == 'America/Denver' ? 'selected' : '' }}>Mountain Time (US & Canada)</option>
+                                                        <option value="America/Los_Angeles" {{ ($patient['timezone'] ?? '') == 'America/Los_Angeles' ? 'selected' : '' }}>Pacific Time (US & Canada)</option>
+                                                        <option value="America/Anchorage" {{ ($patient['timezone'] ?? '') == 'America/Anchorage' ? 'selected' : '' }}>Alaska</option>
+                                                        <option value="Pacific/Honolulu" {{ ($patient['timezone'] ?? '') == 'Pacific/Honolulu' ? 'selected' : '' }}>Hawaii</option>
+                                                        <option value="America/Toronto" {{ ($patient['timezone'] ?? '') == 'America/Toronto' ? 'selected' : '' }}>Toronto</option>
+                                                        <option value="America/Mexico_City" {{ ($patient['timezone'] ?? '') == 'America/Mexico_City' ? 'selected' : '' }}>Mexico City</option>
+                                                        <option value="America/Bogota" {{ ($patient['timezone'] ?? '') == 'America/Bogota' ? 'selected' : '' }}>Colombia</option>
+                                                        <option value="America/Caracas" {{ ($patient['timezone'] ?? '') == 'America/Caracas' ? 'selected' : '' }}>Venezuela</option>
+                                                        <option value="America/Sao_Paulo" {{ ($patient['timezone'] ?? '') == 'America/Sao_Paulo' ? 'selected' : '' }}>São Paulo</option>
+                                                        <option value="America/Buenos_Aires" {{ ($patient['timezone'] ?? '') == 'America/Buenos_Aires' ? 'selected' : '' }}>Buenos Aires</option>
+                                                        <option value="America/Santiago" {{ ($patient['timezone'] ?? '') == 'America/Santiago' ? 'selected' : '' }}>Santiago</option>
+                                                    </optgroup>
+                                                    <!-- Europe -->
+                                                    <optgroup label="Europe">
+                                                        <option value="Europe/London" {{ ($patient['timezone'] ?? '') == 'Europe/London' ? 'selected' : '' }}>London (GMT/BST)</option>
+                                                        <option value="Europe/Paris" {{ ($patient['timezone'] ?? '') == 'Europe/Paris' ? 'selected' : '' }}>Central European Time</option>
+                                                        <option value="Europe/Berlin" {{ ($patient['timezone'] ?? '') == 'Europe/Berlin' ? 'selected' : '' }}>Berlin</option>
+                                                        <option value="Europe/Amsterdam" {{ ($patient['timezone'] ?? '') == 'Europe/Amsterdam' ? 'selected' : '' }}>Amsterdam</option>
+                                                        <option value="Europe/Madrid" {{ ($patient['timezone'] ?? '') == 'Europe/Madrid' ? 'selected' : '' }}>Madrid</option>
+                                                        <option value="Europe/Rome" {{ ($patient['timezone'] ?? '') == 'Europe/Rome' ? 'selected' : '' }}>Rome</option>
+                                                        <option value="Europe/Vienna" {{ ($patient['timezone'] ?? '') == 'Europe/Vienna' ? 'selected' : '' }}>Vienna</option>
+                                                        <option value="Europe/Prague" {{ ($patient['timezone'] ?? '') == 'Europe/Prague' ? 'selected' : '' }}>Prague</option>
+                                                        <option value="Europe/Budapest" {{ ($patient['timezone'] ?? '') == 'Europe/Budapest' ? 'selected' : '' }}>Budapest</option>
+                                                        <option value="Europe/Warsaw" {{ ($patient['timezone'] ?? '') == 'Europe/Warsaw' ? 'selected' : '' }}>Warsaw</option>
+                                                        <option value="Europe/Stockholm" {{ ($patient['timezone'] ?? '') == 'Europe/Stockholm' ? 'selected' : '' }}>Stockholm</option>
+                                                        <option value="Europe/Oslo" {{ ($patient['timezone'] ?? '') == 'Europe/Oslo' ? 'selected' : '' }}>Oslo</option>
+                                                        <option value="Europe/Copenhagen" {{ ($patient['timezone'] ?? '') == 'Europe/Copenhagen' ? 'selected' : '' }}>Copenhagen</option>
+                                                        <option value="Europe/Dublin" {{ ($patient['timezone'] ?? '') == 'Europe/Dublin' ? 'selected' : '' }}>Dublin</option>
+                                                        <option value="Europe/Lisbon" {{ ($patient['timezone'] ?? '') == 'Europe/Lisbon' ? 'selected' : '' }}>Lisbon</option>
+                                                        <option value="Europe/Moscow" {{ ($patient['timezone'] ?? '') == 'Europe/Moscow' ? 'selected' : '' }}>Moscow</option>
+                                                        <option value="Europe/Istanbul" {{ ($patient['timezone'] ?? '') == 'Europe/Istanbul' ? 'selected' : '' }}>Istanbul</option>
+                                                        <option value="Europe/Athens" {{ ($patient['timezone'] ?? '') == 'Europe/Athens' ? 'selected' : '' }}>Athens</option>
+                                                        <option value="Europe/Helsinki" {{ ($patient['timezone'] ?? '') == 'Europe/Helsinki' ? 'selected' : '' }}>Helsinki</option>
+                                                    </optgroup>
+                                                    <!-- Africa -->
+                                                    <optgroup label="Africa">
+                                                        <option value="Africa/Cairo" {{ ($patient['timezone'] ?? '') == 'Africa/Cairo' ? 'selected' : '' }}>Cairo</option>
+                                                        <option value="Africa/Johannesburg" {{ ($patient['timezone'] ?? '') == 'Africa/Johannesburg' ? 'selected' : '' }}>Johannesburg</option>
+                                                        <option value="Africa/Lagos" {{ ($patient['timezone'] ?? '') == 'Africa/Lagos' ? 'selected' : '' }}>Lagos</option>
+                                                        <option value="Africa/Nairobi" {{ ($patient['timezone'] ?? '') == 'Africa/Nairobi' ? 'selected' : '' }}>Nairobi</option>
+                                                        <option value="Africa/Casablanca" {{ ($patient['timezone'] ?? '') == 'Africa/Casablanca' ? 'selected' : '' }}>Casablanca</option>
+                                                    </optgroup>
+                                                    <!-- Middle East -->
+                                                    <optgroup label="Middle East">
+                                                        <option value="Asia/Dubai" {{ ($patient['timezone'] ?? '') == 'Asia/Dubai' ? 'selected' : '' }}>Dubai (Gulf Standard Time)</option>
+                                                        <option value="Asia/Baghdad" {{ ($patient['timezone'] ?? '') == 'Asia/Baghdad' ? 'selected' : '' }}>Baghdad</option>
+                                                        <option value="Asia/Jerusalem" {{ ($patient['timezone'] ?? '') == 'Asia/Jerusalem' ? 'selected' : '' }}>Jerusalem</option>
+                                                        <option value="Asia/Tehran" {{ ($patient['timezone'] ?? '') == 'Asia/Tehran' ? 'selected' : '' }}>Tehran</option>
+                                                    </optgroup>
+                                                    <!-- Asia -->
+                                                    <optgroup label="Asia">
+                                                        <option value="Asia/Kolkata" {{ ($patient['timezone'] ?? '') == 'Asia/Kolkata' ? 'selected' : '' }}>India Standard Time</option>
+                                                        <option value="Asia/Bangkok" {{ ($patient['timezone'] ?? '') == 'Asia/Bangkok' ? 'selected' : '' }}>Indochina Time</option>
+                                                        <option value="Asia/Ho_Chi_Minh" {{ ($patient['timezone'] ?? '') == 'Asia/Ho_Chi_Minh' ? 'selected' : '' }}>Ho Chi Minh City</option>
+                                                        <option value="Asia/Hong_Kong" {{ ($patient['timezone'] ?? '') == 'Asia/Hong_Kong' ? 'selected' : '' }}>Hong Kong</option>
+                                                        <option value="Asia/Singapore" {{ ($patient['timezone'] ?? '') == 'Asia/Singapore' ? 'selected' : '' }}>Singapore</option>
+                                                        <option value="Asia/Tokyo" {{ ($patient['timezone'] ?? '') == 'Asia/Tokyo' ? 'selected' : '' }}>Tokyo</option>
+                                                        <option value="Asia/Seoul" {{ ($patient['timezone'] ?? '') == 'Asia/Seoul' ? 'selected' : '' }}>Seoul</option>
+                                                        <option value="Asia/Shanghai" {{ ($patient['timezone'] ?? '') == 'Asia/Shanghai' ? 'selected' : '' }}>Shanghai</option>
+                                                        <option value="Asia/Manila" {{ ($patient['timezone'] ?? '') == 'Asia/Manila' ? 'selected' : '' }}>Manila</option>
+                                                        <option value="Asia/Kuala_Lumpur" {{ ($patient['timezone'] ?? '') == 'Asia/Kuala_Lumpur' ? 'selected' : '' }}>Kuala Lumpur</option>
+                                                        <option value="Asia/Karachi" {{ ($patient['timezone'] ?? '') == 'Asia/Karachi' ? 'selected' : '' }}>Karachi</option>
+                                                        <option value="Asia/Kathmandu" {{ ($patient['timezone'] ?? '') == 'Asia/Kathmandu' ? 'selected' : '' }}>Kathmandu</option>
+                                                    </optgroup>
+                                                    <!-- Oceania -->
+                                                    <optgroup label="Oceania">
+                                                        <option value="Australia/Sydney" {{ ($patient['timezone'] ?? '') == 'Australia/Sydney' ? 'selected' : '' }}>Sydney</option>
+                                                        <option value="Australia/Melbourne" {{ ($patient['timezone'] ?? '') == 'Australia/Melbourne' ? 'selected' : '' }}>Melbourne</option>
+                                                        <option value="Australia/Brisbane" {{ ($patient['timezone'] ?? '') == 'Australia/Brisbane' ? 'selected' : '' }}>Brisbane</option>
+                                                        <option value="Australia/Perth" {{ ($patient['timezone'] ?? '') == 'Australia/Perth' ? 'selected' : '' }}>Perth</option>
+                                                        <option value="Pacific/Auckland" {{ ($patient['timezone'] ?? '') == 'Pacific/Auckland' ? 'selected' : '' }}>New Zealand</option>
+                                                        <option value="Pacific/Fiji" {{ ($patient['timezone'] ?? '') == 'Pacific/Fiji' ? 'selected' : '' }}>Fiji</option>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                
