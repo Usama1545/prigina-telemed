@@ -109,6 +109,16 @@ class AppointmentEmailController extends Controller
         // Send patient email
         try {
             Mail::to($patientEmail)->send(new $mailClass($appointment));
+            if (
+                \in_array($status, ['completed', 'completedPaid'])
+                && empty($appointment['reviewReminderCount'])
+            ) {
+                $this->firestore->update('appointments', $id, [
+                    'reviewReminderCount' => 1,
+                    'lastReviewEmailAt' => now()->toDateTimeString(),
+                    'updatedAt' => now()->toDateTimeString(),
+                ]);
+            }
             $sent[] = "patient ({$patientEmail})";
         } catch (\Throwable $e) {
             Log::error('appointment-status-email-failed', [

@@ -89,10 +89,13 @@
             </ul>
         </div>
 
-        <p style="font-size:14px; color:#475569;">
-            You will receive a separate email shortly asking you to leave a review.
-            Your feedback helps us improve our services and assists other patients.
-        </p>
+        <div style="background:#f0fdf4; border:1px solid #86efac; border-radius:10px; padding:22px 24px; margin:24px 0; text-align:center;">
+            <p style="font-size:20px; letter-spacing:4px; margin:0 0 8px;">⭐⭐⭐⭐⭐</p>
+            <p style="font-size:15px; font-weight:700; color:#14532d; margin:0 0 6px;">How was your consultation?</p>
+            <p style="font-size:13px; color:#166534; margin:0 0 18px;">Your feedback helps other patients find the right doctor and helps us improve our service.</p>
+            <a href="{{ $reviewUrl }}" style="background:linear-gradient(135deg,#10b981,#059669); color:#fff; text-decoration:none; padding:12px 32px; border-radius:8px; font-weight:700; font-size:15px; display:inline-block;">Leave a Review</a>
+            <p style="font-size:12px; color:#4ade80; margin:10px 0 0;">Or copy this link: <a href="{{ $reviewUrl }}" style="color:#0284c7; word-break:break-all;">{{ $reviewUrl }}</a></p>
+        </div>
 
         <div class="cta">
             <a href="{{ url('/patient/appointments') }}">View My Appointments</a>

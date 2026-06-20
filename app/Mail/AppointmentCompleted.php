@@ -12,7 +12,12 @@ class AppointmentCompleted extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public array $appointment) {}
+    public string $reviewUrl;
+
+    public function __construct(public array $appointment)
+    {
+        $this->reviewUrl = url('/'.($appointment['id'] ?? '')  .'/review');
+    }
 
     public function envelope(): Envelope
     {

@@ -872,6 +872,13 @@ class DoctorProfileController extends Controller
             if ($email) {
                 try {
                     Mail::to($email)->send(new AppointmentCompleted($appointment));
+                    if (empty($appointment['reviewReminderCount'])) {
+                        $this->firestore->update('appointments', $id, [
+                            'reviewReminderCount' => 1,
+                            'lastReviewEmailAt' => now()->toDateTimeString(),
+                            'updatedAt' => now()->toDateTimeString(),
+                        ]);
+                    }
                 } catch (\Throwable $e) {
                     Log::error('appointment-completed-email-failed', [
                         'appointment' => $id,
