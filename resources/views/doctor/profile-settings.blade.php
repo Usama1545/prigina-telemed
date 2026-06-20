@@ -231,27 +231,27 @@
 
                         <div class="setting-card bg-white">
                             <div class="row">
-                                <div class="mb-4">
-                                    <label class="form-label fw-semibold">
-                                        Consultation Fee <span class="text-danger">*</span>
-                                    </label>
+                                <div class="row mb-4">
+                                    <div class="col-lg-6 col-md-6 ">
+                                        <label class="form-label fw-semibold">
+                                            Consultation Fee <span class="text-danger">*</span>
+                                        </label>
 
-                                    <div class="input-group">
+                                        <div class="input-group">
 
-                                        <span class="input-group-text">
-                                            $
-                                        </span>
+                                            <span class="input-group-text">
+                                                $
+                                            </span>
 
-                                        <input type="number" name="consultationFee" class="form-control"
-                                            value="{{ current_user()['consultationFee'] ?? '' }}" min="0"
-                                            step="0.01" required>
+                                            <input type="number" name="consultationFee" class="form-control"
+                                                value="{{ current_user()['consultationFee'] ?? '' }}" min="0"
+                                                step="0.01" required>
 
+                                        </div>
                                     </div>
-                                </div>
 
-                                <!-- Timezone -->
-                                <div class="col-lg-6 col-md-6">
-                                    <div class="mb-4">
+                                    <!-- Timezone -->
+                                    <div class="col-lg-6 col-md-6">
                                         <label class="form-label fw-semibold">
                                             Timezone <span class="text-danger">*</span>
                                         </label>
