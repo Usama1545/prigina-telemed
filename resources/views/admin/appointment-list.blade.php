@@ -2,6 +2,29 @@
 @extends('admin.layout.mainlayout')
 @section('content')
 
+    {{-- ── Flash toasts ─────────────────────────────────────────── --}}
+    @if ($errors->has('payment'))
+        <div id="apptToast" class="toast align-items-center text-bg-danger border-0 position-fixed bottom-0 end-0 m-3 show"
+            role="alert" aria-live="assertive" style="z-index:1090;min-width:280px">
+            <div class="d-flex">
+                <div class="toast-body fw-semibold">
+                    <i class="fe fe-alert-circle me-2"></i>{{ $errors->first('payment') }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    @elseif (session('success'))
+        <div id="apptToast" class="toast align-items-center text-bg-success border-0 position-fixed bottom-0 end-0 m-3 show"
+            role="alert" aria-live="polite" style="z-index:1090;min-width:280px">
+            <div class="d-flex">
+                <div class="toast-body fw-semibold">
+                    <i class="fe fe-check-circle me-2"></i>{{ session('success') }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    @endif
+
     <div class="page-wrapper">
         <div class="content container-fluid">
 
@@ -586,6 +609,15 @@
         syncButtons();
         updatePageInfo();
         highlightStatCard('', ''); // start with Total highlighted
+
+        // Auto-dismiss flash toast after 5 s
+        const apptToast = document.getElementById('apptToast');
+        if (apptToast) {
+            setTimeout(() => {
+                const bsToast = bootstrap.Toast.getOrCreateInstance(apptToast);
+                bsToast.hide();
+            }, 5000);
+        }
     </script>
 
 @endsection
