@@ -115,6 +115,7 @@ class AdminPaymentController extends Controller
             ]);
 
             Cache::forget('admin:stats');
+            Log::info('Payout for appointment '.$appointmentId.' released to doctor.');
 
             return back()->with('success', 'Payment released to doctor successfully.');
 
