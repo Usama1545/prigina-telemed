@@ -7779,6 +7779,26 @@ button.bg-danger:hover {
     gap: 18px;
     padding: 0;
 }
+@media (max-width: 1199px) {
+    .header .header-nav .main-nav {
+        gap: 10px !important;
+    }
+    .header .header-nav .logo {
+        margin-right: 10px !important;
+        width: 100px  !important;
+    }
+}
+
+/* Smaller tablets */
+@media (max-width: 1024px) {
+    .header .header-nav .main-nav {
+        gap: 8px !important;
+    }
+     .header .header-nav .logo {
+        margin-right: 8px !important;
+        width: 100px  !important;
+    }
+}
 
 /* Large desktop */
 @media (min-width: 1400px) {

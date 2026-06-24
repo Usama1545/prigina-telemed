@@ -29,8 +29,8 @@
                         @endif
                         <div class="dropdown" style="position:relative;">
                             <a href="#" data-bs-toggle="dropdown" aria-label="Language"
-                                style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid #e1e8f5;border-radius:50%;background:#fff;box-shadow:0 4px 12px rgba(15,43,92,.08);font-size:16px;text-decoration:none;">
-                                {{ $langFlags[$currentLang] ?? '🇺🇸' }}
+                                style="display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--primary);border-radius:50px;padding:7px;background:#fff;box-shadow:0 4px 12px rgba(15,43,92,.08);font-size:12px;text-decoration:none; color: var(--primary);">
+                                {{ __('language') }}<i class="fa fa-caret-down"></i>
                             </a>
                             <div class="dropdown-menu mt-1" style="z-index:1100;">
                                 <a class="dropdown-item {{ $currentLang === 'en' ? 'active' : '' }}"
@@ -112,9 +112,9 @@
 
                     {{-- Language switcher --}}
                     <li class="dropdown has-arrow logged-item">
-                        <a href="#" data-bs-toggle="dropdown">
-                            <span>{{ $langFlags[$currentLang] ?? '🇺🇸' }}
-                                {{ $langCodes[$currentLang] ?? 'EN' }}</span>
+                        <a href="#" data-bs-toggle="dropdown"
+                            style="align-items:center;justify-content:center;border:1px solid var(--primary);border-radius:50px;padding:7px;font-size:14px;text-decoration:none; color: var(--primary);">
+                            <span>{{ __('language') }}<i class="fa fa-caret-down"></i></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end">
                             <a class="dropdown-item {{ $currentLang === 'en' ? 'active' : '' }}"
@@ -195,6 +195,7 @@
     <style>
         .header-nav {
             min-height: 80px;
+            flex-wrap: nowrap !important;
         }
 
         .bottom-nav {
@@ -217,8 +218,9 @@
         }
 
         .header-navbar-rht {
-            margin-left: auto;
+            margin-left: 4px;
             flex-shrink: 0;
+            gap: 4px;
         }
 
         .header-navbar-rht .btn {
@@ -254,12 +256,28 @@
         }
 
         @media (max-width: 1199px) {
-
             .main-nav>li>a {
                 font-size: 14px;
                 padding: 10px 8px !important;
             }
+        }
 
+        @media (min-width: 992px) and (max-width: 1200px) {
+            .main-nav {
+                gap: 0;
+            }
+            .main-nav>li>a {
+                font-size: 13px;
+                padding: 10px 5px !important;
+            }
+            .navbar-brand.logo img {
+                max-width: 120px;
+            }
+            .header-navbar-rht .dropdown>a,
+            .header-navbar-rht .logged-item>a {
+                padding: 5px 8px !important;
+                font-size: 12px !important;
+            }
         }
 
         @media (max-width: 991px) {
