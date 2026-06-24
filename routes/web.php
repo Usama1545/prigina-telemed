@@ -13,6 +13,27 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/auth/login', [AuthController::class, 'login']);
 
+Route::get('/lang/{locale}', function (string $locale) {
+    $supported = ['en', 'fr', 'es'];
+    if (! in_array($locale, $supported, true)) {
+        $locale = 'en';
+    }
+    session(['locale' => $locale]);
+
+    if (session('auth_uid')) {
+        $uid        = session('auth_uid');
+        $collection = session('auth_role') === 'doctor' ? 'doctors' : 'patients';
+        try {
+            app(\App\Services\FirestoreService::class)->update($collection, $uid, ['lang' => $locale]);
+        } catch (\Exception) {
+            // non-critical — locale is already stored in session
+        }
+        session(['user_lang' => $locale]);
+    }
+
+    return redirect()->back();
+})->name('lang.switch');
+
 Route::get('/', [IndexController::class, 'index'])->name('index');
 Route::get('/index', [IndexController::class, 'index'])->name('index-page');
 
@@ -141,7 +162,7 @@ Route::post('/contact-us', function (\Illuminate\Http\Request $request) {
     \Illuminate\Support\Facades\Mail::to('info@priginaglobaltelemed.com')
         ->send(new \App\Mail\ContactMail($data));
 
-    return back()->with('success', 'Your message has been sent. We will get back to you shortly.');
+    return back()->with('success', __('app.contact.success'));
 })->name('contact-us.send');
 
 Route::get('/patient-faqs', function () {

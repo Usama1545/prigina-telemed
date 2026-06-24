@@ -8,16 +8,14 @@
 
                 <!-- LEFT -->
                 <div class="col-lg-6 mb-4 mb-md-0">
-                    <h6 class="text-secondary">FOR PATIENTS</h6>
+                    <h6 class="text-secondary">{{ __('app.for_patients.label') }}</h6>
 
                     <h1 class="fw-bold mb-3">
-                        Expert Second Opinions.<br>
-                        Greater Clarity. Better Decisions.
+                        {{ __('app.for_patients.headline') }}
                     </h1>
 
                     <p class="text-muted">
-                        PriGina Global Telemed helps you connect with leading physicians worldwide
-                        for comprehensive second medical opinions—so you can feel confident about your next steps.
+                        {{ __('app.for_patients.desc') }}
                     </p>
 
                     <!-- FEATURES -->
@@ -29,9 +27,8 @@
                                 <div class="icon-circle-soft mx-auto">
                                     <i class="fi fi-rr-globe" style="font-size: 2.5rem; margin-top: 10px;"></i>
                                 </div>
-                                <p class=" fw-bold mt-2 mb-2 text-black">Global Expertise</p>
-                                <p class="small"> Access top specialists accross the world, no matter where you are.</p>
-
+                                <p class=" fw-bold mt-2 mb-2 text-black">{{ __('app.for_patients.global_expertise') }}</p>
+                                <p class="small">{{ __('app.for_patients.global_expertise_desc') }}</p>
                             </div>
                         </div>
 
@@ -41,8 +38,8 @@
                                 <div class="icon-circle-soft mx-auto">
                                     <i class="fi fi-rr-bulb" style="font-size: 2.5rem; margin-top: 10px;"></i>
                                 </div>
-                                <p class="fw-bold mt-2 mb-2 text-black">Independent Opinions</p>
-                                <p class="small">Recieve unbiased expert insights focused on your case.</p>
+                                <p class="fw-bold mt-2 mb-2 text-black">{{ __('app.for_patients.independent_opinions') }}</p>
+                                <p class="small">{{ __('app.for_patients.independent_opinions_desc') }}</p>
                             </div>
                         </div>
 
@@ -52,9 +49,8 @@
                                 <div class="icon-circle-primary mx-auto ">
                                     <i class="fi fi-rr-lock" style="font-size: 2.5rem; margin-top: 10px;"></i>
                                 </div>
-                                <p class="fw-bold mt-2 mb-2 text-black">Secure & Confidential</p>
-                                <p class="small">Your health information is protected with advanced security and privacy.
-                                </p>
+                                <p class="fw-bold mt-2 mb-2 text-black">{{ __('app.for_patients.secure_confidential') }}</p>
+                                <p class="small">{{ __('app.for_patients.secure_confidential_desc') }}</p>
                             </div>
                         </div>
 
@@ -66,16 +62,13 @@
                 <div class="col-lg-6 position-relative text-center hero-image">
                     <img src="{{ asset('build/img/for-patient.jpeg') }}" class="img-fluid">
 
-
                     <!-- TESTIMONIAL -->
                     <div class="testimonial-box text-start">
                         <p class="mb-2">
-                            <span class="quote-mark">“</span>
-                            Getting a second opinion gave us the clarity
-                            we needed and the confidence to move
-                            forward with the right treatment plan.
+                            <span class="quote-mark">"</span>
+                            {{ __('app.for_patients.testimonial') }}
                         </p>
-                        <small class="text-secondary">— PriGina Patient</small>
+                        <small class="text-secondary">{{ __('app.for_patients.testimonial_author') }}</small>
                     </div>
                 </div>
 
@@ -90,35 +83,33 @@
             @php
                 $steps = [
                     [
-                        'icon' => 'upload',
-                        'title' => 'Sign up and Submit Your Case',
-                        'desc' => 'Upload your medical records and share details about your confition securely.',
+                        'icon'  => 'upload',
+                        'title' => __('app.for_patients.step1_title'),
+                        'desc'  => __('app.for_patients.step1_desc'),
                     ],
                     [
-                        'icon' => 'user-md',
-                        'title' => 'Schedule Appointment with an Expert',
-                        'desc' => 'We match your case with an experienced physician in the relevant specialty.',
+                        'icon'  => 'user-md',
+                        'title' => __('app.for_patients.step2_title'),
+                        'desc'  => __('app.for_patients.step2_desc'),
                     ],
                     [
-                        'icon' => 'folder',
-                        'title' => 'Case Review',
-                        'desc' => 'The physician reviews your case and prepares a detailed second opinion.',
+                        'icon'  => 'folder',
+                        'title' => __('app.for_patients.step3_title'),
+                        'desc'  => __('app.for_patients.step3_desc'),
                     ],
                     [
-                        'icon' => 'file',
-                        'title' => 'Receive Report',
-                        'desc' =>
-                            'You receive a comprehensive second opinion report with expert Insight and recommendations.',
+                        'icon'  => 'file',
+                        'title' => __('app.for_patients.step4_title'),
+                        'desc'  => __('app.for_patients.step4_desc'),
                     ],
                     [
-                        'icon' => 'video-camera',
-                        'title' => 'Discuss (Optional)',
-                        'desc' =>
-                            'Schedule an optional video discussion with the physician to ask questions and get further clarity.',
+                        'icon'  => 'video-camera',
+                        'title' => __('app.for_patients.step5_title'),
+                        'desc'  => __('app.for_patients.step5_desc'),
                     ],
                 ];
             @endphp
-            <h2 class="fw-bold mb-4 text-center text-primary">How It Works for Patients</h2>
+            <h2 class="fw-bold mb-4 text-center text-primary">{{ __('app.for_patients.how_works_headline') }}</h2>
 
             <div class="row g-4 justify-content-center position-relative">
 
@@ -161,11 +152,8 @@
             <div class="disclaimer d-flex align-items-center mx-5">
                 <i class="fi fi-rr-info text-secondary"></i>
                 <p class="mb-0 ms-3 text-primary">
-                    Our service provides a second medical opinion for informational and educational purposes only. </br>
-                    It does not replace your primary doctor. and not a substitute for medical consultation, diagnosis,
-                    treatment or prescription.
+                    {{ __('app.for_patients.disclaimer') }}
                 </p>
-
             </div>
         </div>
     </section>
@@ -175,41 +163,38 @@
     <section class="py-5 text-center">
         <div class="container">
 
-            <h2 class="fw-bold mb-5 text-primary">Why Patients Choose PriGina Global Telemed</h2>
+            <h2 class="fw-bold mb-5 text-primary">{{ __('app.for_patients.why_headline') }}</h2>
 
             <div class="d-flex flex-wrap justify-content-center gap-2 md-gap-4 ">
 
                 <div class="text-center border rounded p-3 bg-white shadow-sm" style="width: 200px;">
                     <i class="fi fi-rr-users text-secondary fs-3 mb-2 d-block"></i>
-                    <h6 class="fw-semibold mb-1">Top Specialists</h6>
-                    <p class="small text-muted mb-0">Contact with board-certified physicians and leading experts across a
-                        wide range of specialties.</p>
+                    <h6 class="fw-semibold mb-1">{{ __('app.for_patients.top_specialists') }}</h6>
+                    <p class="small text-muted mb-0">{{ __('app.for_patients.top_specialists_desc') }}</p>
                 </div>
 
                 <div class="text-center border rounded p-3 bg-white shadow-sm" style="width: 200px;">
                     <i class="fi fi-rr-clock text-secondary fs-3 mb-2 d-block"></i>
-                    <h6 class="fw-semibold mb-1">Convenient</h6>
-                    <p class="small text-muted mb-0">No travel. No long waits. Get expert opinions from the comfort of your
-                        home.</p>
+                    <h6 class="fw-semibold mb-1">{{ __('app.for_patients.convenient') }}</h6>
+                    <p class="small text-muted mb-0">{{ __('app.for_patients.convenient_desc') }}</p>
                 </div>
 
                 <div class="text-center border rounded p-3 bg-white shadow-sm" style="width: 200px;">
                     <i class="fi fi-rr-heart text-secondary fs-3 mb-2 d-block"></i>
-                    <h6 class="fw-semibold mb-1">Better Decisions</h6>
-                    <p class="small text-muted mb-0">Gain clarity and confidence with expert insights to guide your
-                        Healthcare choices.</p>
+                    <h6 class="fw-semibold mb-1">{{ __('app.for_patients.better_decisions') }}</h6>
+                    <p class="small text-muted mb-0">{{ __('app.for_patients.better_decisions_desc') }}</p>
                 </div>
 
                 <div class="text-center border rounded p-3 bg-white shadow-sm" style="width: 200px;">
                     <i class="fi fi-rr-globe text-secondary fs-3 mb-2 d-block"></i>
-                    <h6 class="fw-semibold mb-1">Worldwide</h6>
-                    <p class="small text-muted mb-0">Our services are available to patients anywhere in the world.</p>
+                    <h6 class="fw-semibold mb-1">{{ __('app.for_patients.worldwide') }}</h6>
+                    <p class="small text-muted mb-0">{{ __('app.for_patients.worldwide_desc') }}</p>
                 </div>
 
                 <div class="text-center border rounded p-3 bg-white shadow-sm" style="width: 200px;">
                     <i class="fi fi-rr-shield-check text-secondary fs-3 mb-2 d-block"></i>
-                    <h6 class="fw-semibold mb-1">Privacy</h6>
-                    <p class="small text-muted mb-0">We follow strict security standards to keep your information safe.</p>
+                    <h6 class="fw-semibold mb-1">{{ __('app.for_patients.privacy') }}</h6>
+                    <p class="small text-muted mb-0">{{ __('app.for_patients.privacy_desc') }}</p>
                 </div>
 
             </div>
@@ -224,13 +209,13 @@
             <div class="contact-info">
                 <div class="info-col">
                     <div class="wow fadeInUp" data-wow-duration="1s">
-                        <h3 class="info-title">Take the Next Step Toward Clarity.</h3>
-                        <p class="mb-0 text-white">A second opinion can make all the difference.</p>
-                        <p class="mb-0 text-white">We're here to help you make informed decisions about your health.</p>
+                        <h3 class="info-title">{{ __('app.for_patients.info_headline') }}</h3>
+                        <p class="mb-0 text-white">{{ __('app.for_patients.info_desc1') }}</p>
+                        <p class="mb-0 text-white">{{ __('app.for_patients.info_desc2') }}</p>
                     </div>
                     <div class="support-info wow fadeInUp" data-wow-duration="1s">
                         <a href="{{ check() ? route('doctors') : route('login') }}" class="btn btn-light px-4 mt-3 mt-md-0">
-                            Get a Second Opinion →
+                            {{ __('app.for_patients.info_cta') }}
                         </a>
                     </div>
                 </div>

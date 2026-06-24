@@ -13,7 +13,7 @@
             <div class="col-lg-8 col-xl-9">
 
                 <div class="dashboard-header d-flex align-items-center justify-content-between mb-3">
-                    <h3>Second Opinion Reports</h3>
+                    <h3>{{ __('app.reports.title') }}</h3>
                 </div>
 
                 @if(session('success'))

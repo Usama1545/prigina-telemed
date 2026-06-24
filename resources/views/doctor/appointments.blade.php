@@ -25,7 +25,7 @@
 
                     <div class="dashboard-header">
 
-                        <h3>Appointments</h3>
+                        <h3>{{ __('app.appointments.title') }}</h3>
 
                     </div>
 
@@ -39,7 +39,7 @@
 
                                     <button class="nav-link active" id="pills-upcoming-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-upcoming" type="button">
-                                        Upcoming
+                                        {{ __('app.appointments.upcoming') }}
                                         <span id="upcoming-count">
                                             {{ count($appointments['upcoming']) }}
                                         </span>
@@ -51,7 +51,7 @@
 
                                     <button class="nav-link" id="pills-pending-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-pending" type="button">
-                                        Pending
+                                        {{ __('app.common.pending') }}
                                         <span id="pending-count">
                                             {{ count($appointments['pending']) }}
                                         </span>
@@ -63,7 +63,7 @@
 
                                     <button class="nav-link" id="pills-cancelled-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-cancelled" type="button">
-                                        Cancelled
+                                        {{ __('app.common.cancelled') }}
                                         <span id="cancelled-count">
                                             {{ count($appointments['cancelled']) }}
                                         </span>

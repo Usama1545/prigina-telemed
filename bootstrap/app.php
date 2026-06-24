@@ -19,6 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->web(append: [
+            \App\Http\Middleware\SetLocale::class,
+        ]);
         $middleware->alias([
             'firebase.auth' => \App\Http\Middleware\FirebaseAuthMiddleware::class,
             'admin.auth' => \App\Http\Middleware\AdminAuthMiddleware::class,

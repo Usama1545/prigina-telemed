@@ -9,39 +9,38 @@
 
                 <div class="col-lg-5 order-2 order-lg-1">
                     <h1 class="fw-bold text-primary display-5">
-                        When the Diagnosis Matters,<br>
-                        <span class="text-secondary">Get a Second Opinion.</span>
+                        {{ __('app.home.hero_headline') }}<br>
+                        <span class="text-secondary">{{ __('app.home.hero_headline_2') }}</span>
                     </h1>
 
                     <p class="text-muted mt-3">
-                        Access experienced physicians worldwide for independent medical insights —
-                        giving you clarity, confidence, and control over your health decisions.
+                        {{ __('app.home.hero_desc') }}
                     </p>
 
                     <div class="d-flex align-items-center gap-3 mt-4 trust-badges">
                         <div class="d-flex align-items-center gap-2">
                             <i class="fi fi-rr-shield-check trust-badge-icon text-secondary"></i>
                             <div>
-                                <p class="mb-0 fw-bold small lh-sm">USA-Registered</p>
-                                <p class="mb-0 text-muted small lh-sm">Telemedicine Company</p>
+                                <p class="mb-0 fw-bold small lh-sm">{{ __('app.home.badge_usa') }}</p>
+                                <p class="mb-0 text-muted small lh-sm">{{ __('app.home.badge_telecom') }}</p>
                             </div>
                         </div>
                         <div class="trust-divider"></div>
                         <div class="d-flex align-items-center gap-2">
                             <i class="fi fi-rr-globe trust-badge-icon text-secondary"></i>
                             <div>
-                                <p class="mb-0 fw-bold small lh-sm">Healthcare</p>
-                                <p class="mb-0 text-muted small lh-sm">Without Borders</p>
+                                <p class="mb-0 fw-bold small lh-sm">{{ __('app.home.badge_healthcare') }}</p>
+                                <p class="mb-0 text-muted small lh-sm">{{ __('app.home.badge_borders') }}</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="mt-4 d-flex gap-3">
                         <a href="{{ check() ? route('doctors') : route('login') }}" class="btn btn-primary px-4 py-2">
-                            Get a Second Opinion
+                            {{ __('app.home.get_second_opinion') }}
                         </a>
                         <a href="{{ route('how-it-works') }}" class="btn btn-outline-secondary px-4 py-2">
-                            How It Works
+                            {{ __('app.home.how_it_works_btn') }}
                         </a>
                     </div>
 
@@ -54,8 +53,8 @@
                                         <i class="fa fa-globe" style="color:#2e6dc8;"></i>
                                     </div>
                                     <div>
-                                        <p class="fw-bold mb-1 small">Global Physician Network</p>
-                                        <p class="text-muted mb-0 small">Connect with specialists worldwide.</p>
+                                        <p class="fw-bold mb-1 small">{{ __('app.home.global_physician') }}</p>
+                                        <p class="text-muted mb-0 small">{{ __('app.home.global_physician_desc') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -65,9 +64,8 @@
                                         <i class="fa fa-shield-alt" style="color:#1a9e87;"></i>
                                     </div>
                                     <div>
-                                        <p class="fw-bold mb-1 small">Private & Secure</p>
-                                        <p class="text-muted mb-0 small">Your data and health information are always
-                                            protected.</p>
+                                        <p class="fw-bold mb-1 small">{{ __('app.home.private_secure') }}</p>
+                                        <p class="text-muted mb-0 small">{{ __('app.home.private_secure_desc') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -82,8 +80,8 @@
                                         <i class="fa fa-file-alt" style="color:#7c4dbd;"></i>
                                     </div>
                                     <div>
-                                        <p class="fw-bold mb-1 small">Detailed Expert Review</p>
-                                        <p class="text-muted mb-0 small">Comprehensive, evidence-based second opinions.</p>
+                                        <p class="fw-bold mb-1 small">{{ __('app.home.detailed_expert') }}</p>
+                                        <p class="text-muted mb-0 small">{{ __('app.home.detailed_expert_desc') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -93,9 +91,8 @@
                                         <i class="fa fa-clock" style="color:#e07b28;"></i>
                                     </div>
                                     <div>
-                                        <p class="fw-bold mb-1 small">Fast Turnaround</p>
-                                        <p class="text-muted mb-0 small">Timely insights so you can make confident decisions
-                                            sooner.</p>
+                                        <p class="fw-bold mb-1 small">{{ __('app.home.fast_turnaround') }}</p>
+                                        <p class="text-muted mb-0 small">{{ __('app.home.fast_turnaround_desc') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -107,7 +104,7 @@
                                     <i class="fa-solid fa-lock text-primary"></i>
                                 </div>
 
-                                <span>Specialist profiles become visible after account creation.</span>
+                                <span>{{ __('app.home.specialist_note') }}</span>
 
                             </div>
                         </div>
@@ -137,12 +134,11 @@
                                 style="font-size:2.2rem;margin-top:6px;"></i>
                         </div>
                         <div class="flex-grow-1">
-                            <h5 class="fw-bold mb-1">Learn More About PriGina</h5>
-                            <p class="text-muted mb-2 small">Download our patient brochure to learn more about how we can
-                                help you.</p>
+                            <h5 class="fw-bold mb-1">{{ __('app.home.brochure_title') }}</h5>
+                            <p class="text-muted mb-2 small">{{ __('app.home.brochure_desc') }}</p>
                             <a href="{{ asset('build/file.pdf') }}" download
                                 class="fw-semibold text-primary text-decoration-none">
-                                Download Brochure <i class="fi fi-rr-download ms-1"></i>
+                                {{ __('app.home.download_brochure') }} <i class="fi fi-rr-download ms-1"></i>
                             </a>
                         </div>
                     </div>
@@ -154,8 +150,8 @@
 
     <section class="py-5 text-center how-works">
         <div class="container">
-            <h6 class="text-muted">HOW IT WORKS</h6>
-            <h2 class="fw-bold mb-5">Simple. Structured. Expert-Driven.</h2>
+            <h6 class="text-muted">{{ __('app.home.how_works_label') }}</h6>
+            <h2 class="fw-bold mb-5">{{ __('app.home.how_works_headline') }}</h2>
 
             <div class="row align-items-stretch position-relative">
 
@@ -169,9 +165,9 @@
                             <img src="{{ asset('build/img/home-icon-1.png') }}" alt="Submit your case">
                         </div>
 
-                        <h5>Sign up and submit your case</h5>
+                        <h5>{{ __('app.home.step1_title') }}</h5>
                         <p class="text-muted mb-0">
-                            Upload your medical records and describe your condition.
+                            {{ __('app.home.step1_desc') }}
                         </p>
                     </div>
 
@@ -191,9 +187,9 @@
                             <img src="{{ asset('build/img/home-icon-2.png') }}" alt="Get matched with an expert">
                         </div>
 
-                        <h5>Schedule Appointment with an Expert</h5>
+                        <h5>{{ __('app.home.step2_title') }}</h5>
                         <p class="text-muted mb-0">
-                            We connect you with a qualified specialist best suited to your case.
+                            {{ __('app.home.step2_desc') }}
                         </p>
                     </div>
 
@@ -213,23 +209,23 @@
                             <img src="{{ asset('build/img/icon-3.webp') }}" alt="Receive your second opinion">
                         </div>
 
-                        <h5>Receive Your Second Opinion</h5>
+                        <h5>{{ __('app.home.step3_title') }}</h5>
                         <p class="text-muted mb-0">
-                            Get a detailed expert review and personalized recommendations.
+                            {{ __('app.home.step3_desc') }}
                         </p>
                     </div>
                 </div>
 
             </div>
 
-            <a href="{{ route('patient.dashboard') }}" class="btn btn-secondary mt-5 px-4">Start Your Review</a>
+            <a href="{{ route('patient.dashboard') }}" class="btn btn-secondary mt-5 px-4">{{ __('app.home.start_review') }}</a>
         </div>
     </section>
 
     <section class="py-5 bg-light text-center">
         <div class="container">
-            <h6 class="text-secondary">WHY PRIGINA?</h6>
-            <h2 class="fw-bold mb-5">Built for Better Medical Decisions</h2>
+            <h6 class="text-secondary">{{ __('app.home.why_label') }}</h6>
+            <h2 class="fw-bold mb-5">{{ __('app.home.why_headline') }}</h2>
 
             <div class="row align-items-stretch">
 
@@ -244,9 +240,9 @@
                             </div>
                         </div>
 
-                        <h5>Independent Expert Insight</h5>
+                        <h5>{{ __('app.home.independent_expert') }}</h5>
                         <p class="mx-4 text-muted mb-0">
-                            Unbiased medical opinions focused on your case — not institutional constraints.
+                            {{ __('app.home.independent_expert_desc') }}
                         </p>
                     </div>
                 </div>
@@ -264,9 +260,9 @@
                             </div>
                         </div>
 
-                        <h5>Global Access</h5>
+                        <h5>{{ __('app.home.global_access') }}</h5>
                         <p class="mx-4 text-muted mb-0">
-                            Connect with top specialists across borders, without travel or long wait times.
+                            {{ __('app.home.global_access_desc') }}
                         </p>
 
                     </div>
@@ -283,9 +279,9 @@
                             </div>
                         </div>
 
-                        <h5>Secure & Confidential</h5>
+                        <h5>{{ __('app.home.secure_confidential') }}</h5>
                         <p class="mx-4 text-muted mb-0">
-                            Your medical data is handled with strict privacy and security standards.
+                            {{ __('app.home.secure_confidential_desc') }}
                         </p>
                     </div>
                 </div>
@@ -301,12 +297,12 @@
             <div class="container">
                 <div class="position-relative mb-5">
                     <div class="text-center">
-                        <h6 class="text-secondary">FEATURED SPECIALISTS</h6>
-                        <h2 class="fw-bold mb-0">Experienced Physicians. Trusted Insights.</h2>
+                        <h6 class="text-secondary">{{ __('app.home.featured_label') }}</h6>
+                        <h2 class="fw-bold mb-0">{{ __('app.home.featured_headline') }}</h2>
                     </div>
                     <a href="{{ route('doctors') }}"
                         class="view-specialists-link text-primary fw-semibold text-decoration-none d-inline-flex align-items-center mt-3 mt-md-0">
-                        View All Specialists <i class="fa-solid fa-arrow-right ms-2"></i>
+                        {{ __('app.home.view_all_specialists') }} <i class="fa-solid fa-arrow-right ms-2"></i>
                     </a>
                 </div>
 
@@ -334,12 +330,12 @@
                                         @if (($doctor['available'] ?? false) === true)
                                             <span class="badge bg-success-light d-inline-flex align-items-center">
                                                 <i class="fa-solid fa-circle fs-5 me-1"></i>
-                                                Available
+                                                {{ __('app.home.available') }}
                                             </span>
                                         @else
                                             <span class="badge bg-danger-light d-inline-flex align-items-center">
                                                 <i class="fa-solid fa-circle fs-5 me-1"></i>
-                                                Not Available
+                                                {{ __('app.home.not_available') }}
                                             </span>
                                         @endif
                                     </div>
@@ -349,7 +345,7 @@
                                                     href="{{ route('doctor-details', $doctor['id']) }}">{{ $doctor['name'] }}</a>
                                             </h3>
                                             <div class="doctor-location">
-                                                <p class="location-title"></i><span class="fw-medium">Experience:
+                                                <p class="location-title"><span class="fw-medium">{{ __('app.home.experience') }}
                                                         {{ $doctor['experience'] }}</span>
                                                 </p>
                                             </div>
@@ -369,7 +365,7 @@
 
                                         <div class="doctor-footer">
                                             <div>
-                                                <p class="mb-1">Consultation Fees</p>
+                                                <p class="mb-1">{{ __('app.home.consultation_fees') }}</p>
                                                 <div class="price">{{ $doctor['consultationFee'] }}</div>
                                             </div>
                                             <a href="{{ url('doctor-details', $doctor['id']) }}"
@@ -392,88 +388,28 @@
         <section class="py-5 leftpadding">
             <div class="container">
                 <div class="text-center mb-5">
-                    <h6 class="text-secondary fw-semibold">GLOBAL MEDICAL SPECIALTIES</h6>
-                    <h2 class="fw-bold">Access Expert Second Opinions<br>Across Multiple Specialties</h2>
+                    <h6 class="text-secondary fw-semibold">{{ __('app.home.specialties_label') }}</h6>
+                    <h2 class="fw-bold">{{ __('app.home.specialties_headline') }}</h2>
                     <p class="text-muted mx-auto" style="max-width:480px;">
-                        Connect with experienced physicians across a wide range of medical specialties worldwide.
+                        {{ __('app.home.specialties_desc') }}
                     </p>
                 </div>
 
                 <div class="row g-3 justify-content-center">
                     @php
                         $specialties = [
-                            [
-                                'name' => 'Cardiology',
-                                'icon' => 'fa-solid fa-heart-pulse',
-                                'color' => '#e74c3c',
-                                'bg' => '#fdecea',
-                            ],
-                            [
-                                'name' => 'Neurology',
-                                'icon' => 'fa-solid fa-brain',
-                                'color' => '#8e44ad',
-                                'bg' => '#f3eafd',
-                            ],
-                            [
-                                'name' => 'Orthopedics',
-                                'icon' => 'fa-solid fa-bone',
-                                'color' => '#2980b9',
-                                'bg' => '#eaf4fd',
-                            ],
-                            [
-                                'name' => 'Pulmonology',
-                                'icon' => 'fa-solid fa-lungs',
-                                'color' => '#16a085',
-                                'bg' => '#e8f8f5',
-                            ],
-                            [
-                                'name' => 'Pediatrics',
-                                'icon' => 'fa-solid fa-baby',
-                                'color' => '#e67e22',
-                                'bg' => '#fef5ec',
-                            ],
-                            [
-                                'name' => "Women's Health",
-                                'icon' => 'fa-solid fa-venus',
-                                'color' => '#e91e8c',
-                                'bg' => '#fde8f4',
-                            ],
-                            [
-                                'name' => 'Internal Medicine',
-                                'icon' => 'fa-solid fa-stethoscope',
-                                'color' => '#1abc9c',
-                                'bg' => '#e8faf6',
-                            ],
-                            [
-                                'name' => 'Oncology',
-                                'icon' => 'fa-solid fa-ribbon',
-                                'color' => '#9b59b6',
-                                'bg' => '#f5eefa',
-                            ],
-                            [
-                                'name' => 'Endocrinology',
-                                'icon' => 'fa-solid fa-dna',
-                                'color' => '#5b6abf',
-                                'bg' => '#edeffe',
-                            ],
-                            [
-                                'name' => 'Family Medicine',
-                                'icon' => 'fa-solid fa-people-group',
-                                'color' => '#27ae60',
-                                'bg' => '#eafaf1',
-                            ],
-                            [
-                                'name' => 'ENT',
-                                'icon' => 'fa-solid fa-ear-listen',
-                                'color' => '#f39c12',
-                                'bg' => '#fef9ec',
-                            ],
-                            [
-                                'name' => 'Dermatology',
-                                'icon' => 'fa-solid fa-hand-dots',
-                                'color' => '#00b4d8',
-                                'bg' => '#e8f8fc',
-                            ],
+                            ['name' => 'Cardiology',       'icon' => 'fa-solid fa-heart-pulse',    'color' => '#e74c3c', 'bg' => '#fdecea'],
+                            ['name' => 'Neurology',        'icon' => 'fa-solid fa-brain',           'color' => '#8e44ad', 'bg' => '#f3eafd'],
+                            ['name' => 'Orthopedics',      'icon' => 'fa-solid fa-bone',            'color' => '#2980b9', 'bg' => '#eaf4fd'],
+                            ['name' => 'Pulmonology',      'icon' => 'fa-solid fa-lungs',           'color' => '#16a085', 'bg' => '#e8f8f5'],
+                            ['name' => 'Pediatrics',       'icon' => 'fa-solid fa-baby',            'color' => '#e67e22', 'bg' => '#fef5ec'],
+                            ['name' => "Women's Health",   'icon' => 'fa-solid fa-venus',           'color' => '#e91e8c', 'bg' => '#fde8f4'],
+                            ['name' => 'Internal Medicine','icon' => 'fa-solid fa-stethoscope',     'color' => '#1abc9c', 'bg' => '#e8faf6'],
+                            ['name' => 'Oncology',         'icon' => 'fa-solid fa-ribbon',          'color' => '#9b59b6', 'bg' => '#f5eefa'],
+                            ['name' => 'Endocrinology',    'icon' => 'fa-solid fa-dna',             'color' => '#5b6abf', 'bg' => '#edeffe'],
+                            ['name' => 'Family Medicine',  'icon' => 'fa-solid fa-people-group',    'color' => '#27ae60', 'bg' => '#eafaf1'],
+                            ['name' => 'ENT',              'icon' => 'fa-solid fa-ear-listen',      'color' => '#f39c12', 'bg' => '#fef9ec'],
+                            ['name' => 'Dermatology',      'icon' => 'fa-solid fa-hand-dots',       'color' => '#00b4d8', 'bg' => '#e8f8fc'],
                         ];
                     @endphp
 
@@ -495,8 +431,8 @@
                         <i class="fa-solid fa-shield-halved"></i>
                     </div>
                     <div>
-                        <p class="mb-0 fw-bold">And many more specialties available.</p>
-                        <p class="mb-0 text-muted small">Specialist profiles become visible after account creation.</p>
+                        <p class="mb-0 fw-bold">{{ __('app.home.and_more') }}</p>
+                        <p class="mb-0 text-muted small">{{ __('app.home.specialist_note') }}</p>
                     </div>
                 </div>
             </div>
@@ -508,37 +444,37 @@
             <div class="row align-items-center">
 
                 <div class="col-lg-3">
-                    <h6 class="text-secondary text-start">WHAT YOU RECEIVE</h6>
+                    <h6 class="text-secondary text-start">{{ __('app.home.what_receive_label') }}</h6>
 
-                    <h2>Your Second Opinion Includes:</h2>
+                    <h2>{{ __('app.home.what_receive_headline') }}</h2>
 
                     <ul class="mt-4 list-check">
                         <li>
                             <span class="check-icon">
                                 <i class="fi fi-rr-check"></i>
                             </span>
-                            Detailed medical case review by a qualified specialist
+                            {{ __('app.home.bullet1') }}
                         </li>
 
                         <li>
                             <span class="check-icon">
                                 <i class="fi fi-rr-check"></i>
                             </span>
-                            Expert-written opinion report with clear insights
+                            {{ __('app.home.bullet2') }}
                         </li>
 
                         <li>
                             <span class="check-icon">
                                 <i class="fi fi-rr-check"></i>
                             </span>
-                            Personalized recommendations and next-step guidance
+                            {{ __('app.home.bullet3') }}
                         </li>
 
                         <li>
                             <span class="check-icon">
                                 <i class="fi fi-rr-check"></i>
                             </span>
-                            Optional follow-up discussion with your physician
+                            {{ __('app.home.bullet4') }}
                         </li>
                     </ul>
                 </div>
@@ -565,13 +501,11 @@
                 <!-- TEXT -->
                 <div class="ms-md-3 text-center text-md-start">
                     <h6 class="mb-1 mt-2 fw-bold text-primary">
-                        PriGina Global Telemed provides structured second medical opinions to support your healthcare
-                        decisions.
+                        {{ __('app.home.disclaimer_title') }}
                     </h6>
 
                     <p class="text-muted small mb-0">
-                        This service does not replace your primary physician and does not provide diagnosis, treatment, or
-                        prescriptions.
+                        {{ __('app.home.disclaimer_desc') }}
                     </p>
                 </div>
 
@@ -585,13 +519,13 @@
             <div class="contact-info">
                 <div class="info-col">
                     <div class="wow fadeInUp" data-wow-duration="1s">
-                        <h3 class="info-title">Get the Clarity You Deserve.</h3>
-                        <p class="mb-0 text-white">Make informed medical decisions with confidence.</p>
+                        <h3 class="info-title">{{ __('app.home.info_headline') }}</h3>
+                        <p class="mb-0 text-white">{{ __('app.home.info_desc') }}</p>
                     </div>
                     <div class="support-info wow fadeInUp" data-wow-duration="1s">
                         <a href="{{ check() ? route('doctors') : route('login') }}"
                             class="btn btn-light px-4 mt-3 mt-md-0">
-                            Request Your Second Opinion →
+                            {{ __('app.home.info_cta') }}
                         </a>
                     </div>
                 </div>
@@ -609,8 +543,8 @@
                         <div class="app-content d-flex flex-column justify-content-center">
 
                             <div class="section-header section-header-one wow fadeInUp" data-wow-duration="1s">
-                                <p class="mt-0 mb-0">Working for Your Better Health.</p>
-                                <h2 class="section-title"> Download the PriGina Global Telemed App today! </h2>
+                                <p class="mt-0 mb-0">{{ __('app.home.app_working') }}</p>
+                                <h2 class="section-title">{{ __('app.home.app_headline') }}</h2>
                             </div>
                             <div class="google-imgs wow fadeInUp" data-wow-duration="1s">
                                 <a href="#"><img src="{{ URL::asset('build/img/icons/app-store.svg') }}"

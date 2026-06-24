@@ -43,37 +43,37 @@
                         <ul class="main-nav">
 
                             <li class="megamenu {{ request()->is('/') ? 'active' : '' }}">
-                                <a href="{{ url('/') }}" class="main-menu">Home</a>
+                                <a href="{{ url('/') }}" class="main-menu">{{ __('app.nav.home') }}</a>
                             </li>
 
                             <li class="megamenu {{ request()->is('how-it-works') ? 'active' : '' }}">
-                                <a href="{{ url('how-it-works') }}" class="main-menu">How It Works</a>
+                                <a href="{{ url('how-it-works') }}" class="main-menu">{{ __('app.nav.how_it_works') }}</a>
                             </li>
 
                             <li class="megamenu {{ request()->is('doctors') ? 'active' : '' }}">
-                                <a href="{{ url('doctors') }}" class="main-menu">Specialists</a>
+                                <a href="{{ url('doctors') }}" class="main-menu">{{ __('app.nav.specialists') }}</a>
                             </li>
 
                             <li class="megamenu {{ request()->is('for-patients') ? 'active' : '' }}">
-                                <a href="{{ url('for-patients') }}" class="main-menu">For Patients</a>
+                                <a href="{{ url('for-patients') }}" class="main-menu">{{ __('app.nav.for_patients') }}</a>
                             </li>
 
                             <li class="megamenu {{ request()->is('for-doctors') ? 'active' : '' }}">
-                                <a href="{{ url('for-doctors') }}" class="main-menu">For Doctors</a>
+                                <a href="{{ url('for-doctors') }}" class="main-menu">{{ __('app.nav.for_doctors') }}</a>
                             </li>
 
                             <li class="megamenu {{ request()->is('about-us') ? 'active' : '' }}">
-                                <a href="{{ url('about-us') }}" class="main-menu">About Us</a>
+                                <a href="{{ url('about-us') }}" class="main-menu">{{ __('app.nav.about_us') }}</a>
                             </li>
 
                             <li class="megamenu {{ request()->is('contact-us') ? 'active' : '' }}">
-                                <a href="{{ url('contact-us') }}" class="main-menu">Contact Us</a>
+                                <a href="{{ url('contact-us') }}" class="main-menu">{{ __('app.nav.contact_us') }}</a>
                             </li>
                             @if (!check())
                                 {{-- ❌ Guest --}}
                                 <li class="megamenu d-block d-lg-none">
                                     <a href="{{ url('login') }}" class="btn btn-md btn-primary">
-                                        <span>Get a Second Opinion</span>
+                                        <span>{{ __('app.nav.get_second_opinion') }}</span>
                                     </a>
                                 </li>
                             @endif
@@ -84,6 +84,42 @@
                 </div>
 
                 <ul class="nav header-navbar-rht">
+
+                    {{-- Language switcher --}}
+                    @php
+                        $currentLang = app()->getLocale();
+                        $langFlags   = ['en' => '🇺🇸', 'fr' => '🇫🇷', 'es' => '🇪🇸'];
+                        $langCodes   = ['en' => 'EN', 'fr' => 'FR', 'es' => 'ES'];
+                    @endphp
+                    <li class="dropdown lang-switcher-item">
+                        <a href="#" class="lang-switcher-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+                           title="{{ __('app.lang.label') }}">
+                            <span class="lang-flag">{{ $langFlags[$currentLang] ?? '🇺🇸' }}</span>
+                            <span class="lang-code">{{ $langCodes[$currentLang] ?? 'EN' }}</span>
+                            <i class="fa-solid fa-chevron-down lang-chevron"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end lang-dropdown">
+                            <li>
+                                <a class="dropdown-item {{ $currentLang === 'en' ? 'active' : '' }}"
+                                   href="{{ route('lang.switch', 'en') }}">
+                                    🇺🇸 {{ __('app.lang.en') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item {{ $currentLang === 'fr' ? 'active' : '' }}"
+                                   href="{{ route('lang.switch', 'fr') }}">
+                                    🇫🇷 {{ __('app.lang.fr') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item {{ $currentLang === 'es' ? 'active' : '' }}"
+                                   href="{{ route('lang.switch', 'es') }}">
+                                    🇪🇸 {{ __('app.lang.es') }}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
                     @if (check())
                         <li class="dropdown has-arrow logged-item">
                             <a href="#" data-bs-toggle="dropdown">
@@ -105,16 +141,16 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
 
-                                <a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a>
+                                <a class="dropdown-item" href="{{ route('dashboard') }}">{{ __('app.nav.dashboard') }}</a>
 
-                                <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
+                                <a class="dropdown-item" href="{{ route('logout') }}">{{ __('app.nav.logout') }}</a>
                             </div>
                         </li>
                     @else
                         {{-- ❌ Guest --}}
                         <li>
                             <a href="{{ url('login') }}" class="btn btn-md btn-primary">
-                                <i class="isax isax-lock-1 me-2"></i><span>Get a Second Opinion</span>
+                                <i class="isax isax-lock-1 me-2"></i><span>{{ __('app.nav.get_second_opinion') }}</span>
                             </a>
                         </li>
                     @endif
@@ -232,6 +268,79 @@
             z-index: 999;
             background: #fff;
             box-shadow: 0 2px 20px rgba(0, 0, 0, .04);
+        }
+
+        /* Language switcher */
+        .lang-switcher-item {
+            list-style: none;
+        }
+
+        .lang-switcher-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            color: #374151;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background .15s;
+        }
+
+        .lang-switcher-toggle:hover {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .lang-flag {
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        .lang-code {
+            font-size: 12px;
+            letter-spacing: .5px;
+        }
+
+        .lang-chevron {
+            font-size: 9px;
+            opacity: .6;
+        }
+
+        .lang-dropdown {
+            min-width: 140px;
+            display: none;
+            flex-direction: column !important;
+            padding: 6px 0;
+        }
+
+        .lang-dropdown.show {
+            display: block !important;
+        }
+
+        .lang-dropdown li {
+            display: block !important;
+            float: none !important;
+            width: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .lang-dropdown .dropdown-item {
+            font-size: 13px;
+            font-weight: 500;
+            display: flex !important;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            padding: 8px 16px;
+        }
+
+        .lang-dropdown .dropdown-item.active {
+            background: #eef2ff;
+            color: #4338ca;
         }
     </style>
     <!-- /Header -->

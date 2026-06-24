@@ -27,13 +27,13 @@
                                 </div>
 
                                 <h2 class="mb-0 fw-bold">
-                                    Sign In
+                                    {{ __('app.login.sign_in') }}
                                 </h2>
 
                             </div>
 
                             <p class="text-muted mb-0">
-                                Access your PriGina Global Telemed account
+                                {{ __('app.login.account_desc') }}
                             </p>
 
                         </div>
@@ -44,7 +44,7 @@
                             <div class="mb-3">
 
                                 <label class="form-label">
-                                    E-mail
+                                    {{ __('app.login.email') }}
                                 </label>
 
                                 <input type="text" id="email" class="form-control">
@@ -56,11 +56,11 @@
                                 <div class="form-group-flex">
 
                                     <label class="form-label">
-                                        Password
+                                        {{ __('app.login.password') }}
                                     </label>
 
                                     <a href="{{ route('forgot-password') }}" class="forgot-link">
-                                        Forgot password?
+                                        {{ __('app.login.forgot_password') }}
                                     </a>
 
                                 </div>
@@ -84,7 +84,7 @@
                                         <input class="form-check-input" type="checkbox" id="remember" checked>
 
                                         <label class="form-check-label" for="remember">
-                                            Remember Me
+                                            {{ __('app.login.remember_me') }}
                                         </label>
 
                                     </div>
@@ -96,7 +96,7 @@
                             <button id="loginBtn" class="btn btn-primary-gradient w-100" type="submit">
 
                                 <span id="btnText">
-                                    Sign in
+                                    {{ __('app.login.sign_in_btn') }}
                                 </span>
 
                                 <span id="btnSpinner" class="spinner-border spinner-border-sm ms-2 d-none"></span>
@@ -108,7 +108,7 @@
                                 <span class="or-line"></span>
 
                                 <span class="span-or">
-                                    or
+                                    {{ __('app.login.or') }}
                                 </span>
 
                             </div>
@@ -119,7 +119,7 @@
 
                                     <img src="{{ URL::asset('build/img/icons/google-icon.svg') }}" alt="google-icon">
 
-                                    Sign in With Google
+                                    {{ __('app.login.sign_in_google') }}
 
                                 </a>
 
@@ -128,9 +128,9 @@
                             <div class="account-signup">
 
                                 <p>
-                                    Don't have an account ?
+                                    {{ __('app.login.no_account') }}
                                     <a href="{{ url('register') }}">
-                                        Sign up
+                                        {{ __('app.login.sign_up') }}
                                     </a>
                                 </p>
 
@@ -204,7 +204,7 @@
 
             spinner.classList.remove('d-none');
 
-            text.innerText = 'Signing in...';
+            text.innerText = '{{ __('app.login.signing_in') }}';
 
             const email =
                 document.getElementById('email').value;
@@ -251,7 +251,7 @@
 
                 spinner.classList.add('d-none');
 
-                text.innerText = 'Sign in';
+                text.innerText = '{{ __('app.login.sign_in_btn') }}';
             }
         }
 

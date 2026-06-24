@@ -19,7 +19,7 @@
 
                 <div class="col-lg-8 col-xl-9">
                     <div class="dashboard-header">
-                        <h3>Appointments</h3>
+                        <h3>{{ __('app.appointments.title') }}</h3>
 
                     </div>
                     <div class="appointment-tab-head">
@@ -29,25 +29,25 @@
                                     <button class="nav-link active" id="pills-upcoming-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-upcoming" type="button" role="tab"
                                         aria-controls="pills-upcoming"
-                                        aria-selected="false">Upcoming<span>{{ count($appointments['upcoming']) }}</span></button>
+                                        aria-selected="false">{{ __('app.appointments.upcoming') }}<span>{{ count($appointments['upcoming']) }}</span></button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link" id="pills-cancel-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-cancel" type="button" role="tab"
                                         aria-controls="pills-cancel"
-                                        aria-selected="true">Cancelled<span>{{ count($appointments['cancelled']) }}</span></button>
+                                        aria-selected="true">{{ __('app.common.cancelled') }}<span>{{ count($appointments['cancelled']) }}</span></button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link" id="pills-pending-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-pending" type="button" role="tab"
                                         aria-controls="pills-pending"
-                                        aria-selected="false">Pending<span>{{ count($appointments['pending']) }}</span></button>
+                                        aria-selected="false">{{ __('app.common.pending') }}<span>{{ count($appointments['pending']) }}</span></button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link" id="pills-complete-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-complete" type="button" role="tab"
                                         aria-controls="pills-complete"
-                                        aria-selected="true">Completed<span>{{ count($appointments['completed']) }}</span></button>
+                                        aria-selected="true">{{ __('app.common.completed') }}<span>{{ count($appointments['completed']) }}</span></button>
                                 </li>
                             </ul>
                         </div>

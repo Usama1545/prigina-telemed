@@ -50,45 +50,42 @@
                 <li class="{{ route('patient.dashboard') === url()->current() ? 'active' : '' }}">
                     <a href="{{ route('patient.dashboard') }}">
                         <i class="isax isax-category-2"></i>
-                        <span>Dashboard</span>
+                        <span>{{ __('app.patient_sidebar.dashboard') }}</span>
                     </a>
                 </li>
 
                 <li class="{{ route('patient.appointments') === url()->current() ? 'active' : '' }}">
                     <a href="{{ route('patient.appointments') }}">
                         <i class="isax isax-calendar-1"></i>
-                        <span>My Appointments</span>
+                        <span>{{ __('app.patient_sidebar.my_appointments') }}</span>
                     </a>
                 </li>
 
                 <li class="{{ Request::is('patient/reports*') ? 'active' : '' }}">
                     <a href="{{ route('patient.reports') }}">
                         <i class="isax isax-document-text"></i>
-                        <span>Medical Reports</span>
+                        <span>{{ __('app.patient_sidebar.medical_reports') }}</span>
                     </a>
                 </li>
 
                 <li class="{{ route('patient.conversations') === url()->current() ? 'active' : '' }}">
                     <a href="{{ route('patient.conversations') }}">
                         <i class="isax isax-messages-1"></i>
-
-                        <span>Messages</span>
-
-
+                        <span>{{ __('app.patient_sidebar.messages') }}</span>
                     </a>
                 </li>
 
                 <li class="{{ route('patient.settings') === url()->current() ? 'active' : '' }}">
                     <a href="{{ route('patient.settings') }}">
                         <i class="isax isax-setting-2"></i>
-                        <span>Settings</span>
+                        <span>{{ __('app.patient_sidebar.settings') }}</span>
                     </a>
                 </li>
 
                 <li>
                     <a href="{{ route('logout') }}">
                         <i class="isax isax-logout"></i>
-                        <span>Logout</span>
+                        <span>{{ __('app.patient_sidebar.logout') }}</span>
                     </a>
                 </li>
 
@@ -107,7 +104,7 @@
         class="{{ route('patient.dashboard') === url()->current() ? 'active' : '' }}">
 
         <i class="isax isax-category-2"></i>
-        <span>Home</span>
+        <span>{{ __('app.patient_sidebar.home') }}</span>
 
     </a>
 
@@ -115,7 +112,7 @@
         class="{{ route('patient.conversations') === url()->current() ? 'active' : '' }}">
 
         <i class="isax isax-messages-1"></i>
-        <span>Chat</span>
+        <span>{{ __('app.patient_sidebar.chat') }}</span>
 
     </a>
 
@@ -123,7 +120,7 @@
         class="{{ route('patient.appointments') === url()->current() ? 'active' : '' }}">
 
         <i class="isax isax-calendar-1"></i>
-        <span>Appointments</span>
+        <span>{{ __('app.patient_sidebar.appointments') }}</span>
 
     </a>
 
@@ -131,7 +128,7 @@
         class="{{ route('patient.reports') === url()->current() ? 'active' : '' }}">
 
         <i class="isax isax-document-text"></i>
-        <span>Reports</span>
+        <span>{{ __('app.patient_sidebar.reports') }}</span>
 
     </a>
 
@@ -139,7 +136,7 @@
         class="{{ route('patient.settings') === url()->current() ? 'active' : '' }}">
 
         <i class="isax isax-setting-2"></i>
-        <span>Profile</span>
+        <span>{{ __('app.patient_sidebar.profile') }}</span>
 
     </a>
 

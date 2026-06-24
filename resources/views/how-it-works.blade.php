@@ -4,10 +4,9 @@
     <!-- HEADER -->
     <section class="py-5 text-center bg-light">
         <div class="container">
-            <h1 class="fw-bold mb-3 text-primary">How It Works</h1>
+            <h1 class="fw-bold mb-3 text-primary">{{ __('app.how_it_works.headline') }}</h1>
             <p class="text-muted">
-                PriGina Global Telemed makes it simple to get an expert second medical opinion
-                from trusted specialists around the world.
+                {{ __('app.how_it_works.desc') }}
             </p>
         </div>
     </section>
@@ -27,9 +26,9 @@
                             <i class="fi fi-rr-upload"></i>
                         </div>
 
-                        <h6 class="fw-semibold mt-3">Sign up and submit your case</h6>
+                        <h6 class="fw-semibold mt-3">{{ __('app.how_it_works.step1_title') }}</h6>
                         <p class="text-muted small">
-                            Share your medical information securely by uploading your records.
+                            {{ __('app.how_it_works.step1_desc') }}
                         </p>
                     </div>
                 </div>
@@ -44,10 +43,10 @@
                         </div>
 
                         <h6 class="fw-semibold mt-3">
-                            Choose or Get Matched with a Specialist
+                            {{ __('app.how_it_works.step2_title') }}
                         </h6>
                         <p class="text-muted small">
-                            Select a physician or let us match you automatically.
+                            {{ __('app.how_it_works.step2_desc') }}
                         </p>
                     </div>
                 </div>
@@ -61,9 +60,9 @@
                             <i class="fi fi-rr-file-medical"></i>
                         </div>
 
-                        <h6 class="fw-semibold mt-3">Receive Second Opinion</h6>
+                        <h6 class="fw-semibold mt-3">{{ __('app.how_it_works.step3_title') }}</h6>
                         <p class="text-muted small">
-                            Get a detailed expert review with recommendations.
+                            {{ __('app.how_it_works.step3_desc') }}
                         </p>
                     </div>
                 </div>
@@ -77,9 +76,9 @@
                             <i class="fi fi-rr-video-camera"></i>
                         </div>
 
-                        <h6 class="fw-semibold mt-3">Optional Video Discussion</h6>
+                        <h6 class="fw-semibold mt-3">{{ __('app.how_it_works.step4_title') }}</h6>
                         <p class="text-muted small">
-                            Schedule a video call for further clarity.
+                            {{ __('app.how_it_works.step4_desc') }}
                         </p>
                     </div>
                 </div>
@@ -93,9 +92,9 @@
                             <i class="fi fi-rr-heart"></i>
                         </div>
 
-                        <h6 class="fw-semibold mt-3">Make Informed Decisions</h6>
+                        <h6 class="fw-semibold mt-3">{{ __('app.how_it_works.step5_title') }}</h6>
                         <p class="text-muted small">
-                            Use expert advice to plan your next steps.
+                            {{ __('app.how_it_works.step5_desc') }}
                         </p>
                     </div>
                 </div>
@@ -113,32 +112,32 @@
                 <div class="col-md-3">
                     <div class="feature-box">
                         <i class="fi fi-rr-shield-check"></i>
-                        <h6>Secure & Confidential</h6>
-                        <p class="text-muted small">Your data privacy is our top priority.</p>
+                        <h6>{{ __('app.how_it_works.secure') }}</h6>
+                        <p class="text-muted small">{{ __('app.how_it_works.secure_desc') }}</p>
                     </div>
                 </div>
 
                 <div class="col-md-3">
                     <div class="feature-box">
                         <i class="fi fi-rr-globe"></i>
-                        <h6>Global Access</h6>
-                        <p class="text-muted small">Connect with specialists worldwide.</p>
+                        <h6>{{ __('app.how_it_works.global_access') }}</h6>
+                        <p class="text-muted small">{{ __('app.how_it_works.global_access_desc') }}</p>
                     </div>
                 </div>
 
                 <div class="col-md-3">
                     <div class="feature-box">
                         <i class="fi fi-rr-award"></i>
-                        <h6>Trusted Specialists</h6>
-                        <p class="text-muted small">Board-certified experienced doctors.</p>
+                        <h6>{{ __('app.how_it_works.trusted') }}</h6>
+                        <p class="text-muted small">{{ __('app.how_it_works.trusted_desc') }}</p>
                     </div>
                 </div>
 
                 <div class="col-md-3">
                     <div class="feature-box">
                         <i class="fi fi-rr-clock"></i>
-                        <h6>Convenient & Easy</h6>
-                        <p class="text-muted small">Simple process designed for you.</p>
+                        <h6>{{ __('app.how_it_works.convenient') }}</h6>
+                        <p class="text-muted small">{{ __('app.how_it_works.convenient_desc') }}</p>
                     </div>
                 </div>
 
@@ -153,8 +152,7 @@
             <div class="disclaimer d-flex align-items-center mx-5">
                 <i class="fi fi-rr-info"></i>
                 <p class="mb-0 ms-3 small">
-                    PriGina Global Telemed provides second medical opinions for informational
-                    purposes only and does not replace your primary physician.
+                    {{ __('app.how_it_works.disclaimer') }}
                 </p>
             </div>
         </div>

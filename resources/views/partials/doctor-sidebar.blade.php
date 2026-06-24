@@ -33,15 +33,15 @@
     <div class="doctor-availability-card">
 
         <label class="form-label">
-            Availability
+            {{ __('app.doctor_sidebar.availability') }}
         </label>
 
         @php $isAvailable = current_user()['available'] ?? true; @endphp
 
         <select id="availability-select" class="form-select modern-select"
             data-url="{{ route('doctor.toggle-availability') }}" data-token="{{ csrf_token() }}">
-            <option value="1" {{ $isAvailable ? 'selected' : '' }}>I am Available Now</option>
-            <option value="0" {{ !$isAvailable ? 'selected' : '' }}>Not Available</option>
+            <option value="1" {{ $isAvailable ? 'selected' : '' }}>{{ __('app.doctor_sidebar.available_now') }}</option>
+            <option value="0" {{ !$isAvailable ? 'selected' : '' }}>{{ __('app.doctor_sidebar.not_available') }}</option>
         </select>
 
     </div>
@@ -53,13 +53,13 @@
                 <li class="{{ route('doctor.dashboard') === url()->current() ? 'active' : '' }}">
                     <a href="{{ route('doctor.dashboard') }}">
                         <i class="isax isax-category-2"></i>
-                        <span>Dashboard</span>
+                        <span>{{ __('app.doctor_sidebar.dashboard') }}</span>
                     </a>
                 </li>
                 <li class="{{ route('doctor.appointments') === url()->current() ? 'active' : '' }}">
                     <a href="{{ route('doctor.appointments') }}">
                         <i class="isax isax-calendar-1"></i>
-                        <span>Appointments</span>
+                        <span>{{ __('app.doctor_sidebar.appointments') }}</span>
                     </a>
                 </li>
                 {{-- <li class="{{ route('doctor.available-timings') === url()->current() ? 'active' : '' }}">
@@ -77,33 +77,32 @@
                 <li class="{{ Request::is('doctor/reports*') ? 'active' : '' }}">
                     <a href="{{ route('doctor.reports') }}">
                         <i class="isax isax-document-text"></i>
-                        <span>Reports</span>
+                        <span>{{ __('app.doctor_sidebar.reports') }}</span>
                     </a>
                 </li>
                 <li class="{{ route('doctor.payout') === url()->current() ? 'active' : '' }}">
                     <a href="{{ route('doctor.payout') }}">
                         <i class="fa-solid fa-money-bill-1"></i>
-                        <span>Payout Settings</span>
+                        <span>{{ __('app.doctor_sidebar.payout_settings') }}</span>
                     </a>
                 </li>
                 <li class="{{ route('doctor.conversations') === url()->current() ? 'active' : '' }}">
                     <a href="{{ route('doctor.conversations') }}">
                         <i class="isax isax-messages-1"></i>
-                        <span>Message</span>
+                        <span>{{ __('app.doctor_sidebar.message') }}</span>
                     </a>
                 </li>
                 <li class="{{ route('doctor.settings') === url()->current() ? 'active' : '' }}">
                     <a href="{{ route('doctor.settings') }}">
                         <i class="isax isax-setting-2"></i>
-                        <span>Profile Settings</span>
+                        <span>{{ __('app.doctor_sidebar.profile_settings') }}</span>
                     </a>
                 </li>
-
 
                 <li>
                     <a href="{{ route('login') }}">
                         <i class="isax isax-logout"></i>
-                        <span>Logout</span>
+                        <span>{{ __('app.doctor_sidebar.logout') }}</span>
                     </a>
                 </li>
             </ul>
@@ -119,7 +118,7 @@
         class="{{ route('doctor.dashboard') === url()->current() ? 'active' : '' }}">
 
         <i class="isax isax-category-2"></i>
-        <span>Home</span>
+        <span>{{ __('app.doctor_sidebar.home') }}</span>
 
     </a>
 
@@ -127,7 +126,7 @@
         class="{{ route('doctor.appointments') === url()->current() ? 'active' : '' }}">
 
         <i class="isax isax-calendar-1"></i>
-        <span>Appointments</span>
+        <span>{{ __('app.doctor_sidebar.appointments') }}</span>
 
     </a>
 
@@ -135,7 +134,7 @@
         class="{{ route('doctor.conversations') === url()->current() ? 'active' : '' }}">
 
         <i class="isax isax-messages-1"></i>
-        <span>Chat</span>
+        <span>{{ __('app.doctor_sidebar.chat') }}</span>
 
     </a>
 
@@ -143,14 +142,14 @@
         class="{{ route('doctor.reports') === url()->current() ? 'active' : '' }}">
 
         <i class="isax isax-document-text"></i>
-        <span>Reports</span>
+        <span>{{ __('app.doctor_sidebar.reports') }}</span>
 
     </a>
 
     <a href="{{ route('doctor.payout') }}" class="{{ route('doctor.payout') === url()->current() ? 'active' : '' }}">
 
         <i class="isax isax-money"></i>
-        <span>Payout</span>
+        <span>{{ __('app.doctor_sidebar.payout') }}</span>
 
     </a>
 
@@ -158,7 +157,7 @@
         class="{{ route('doctor.settings') === url()->current() ? 'active' : '' }}">
 
         <i class="isax isax-setting-2"></i>
-        <span>Profile</span>
+        <span>{{ __('app.doctor_sidebar.profile') }}</span>
 
     </a>
 

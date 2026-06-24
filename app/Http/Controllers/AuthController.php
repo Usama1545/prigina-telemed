@@ -80,6 +80,12 @@ class AuthController extends Controller
 
         $authService->setCustomClaims($uid, ['role' => $role]);
 
+        $supported = ['en', 'fr', 'es'];
+        $userLang = $userData['lang'] ?? null;
+        if (! in_array($userLang, $supported, true)) {
+            $userLang = null;
+        }
+
         session([
             'firebase_token' => $idToken,
             'firebase_refresh_token' => $refreshToken,
@@ -89,6 +95,8 @@ class AuthController extends Controller
                 'name' => $name,
                 'email' => $email,
             ],
+            'user_lang' => $userLang,
+            'locale' => $userLang ?? session('locale'),
         ]);
 
         $request->session()->save();
@@ -137,6 +145,7 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        $request->session()->forget(['locale', 'user_lang']);
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
@@ -450,7 +459,7 @@ class AuthController extends Controller
                     'name' => $name,
                     'email' => $email,
                     'phone' => $phone,
-                    'photo' => $photo,
+                    'photoUrl' => $photo,
                     'role' => 'patient',
                     'provider' => 'google',
                     'status' => 'active',

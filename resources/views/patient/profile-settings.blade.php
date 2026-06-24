@@ -19,14 +19,14 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="border-bottom pb-3 mb-3">
-                                <h5>Profile Settings</h5>
+                                <h5>{{ __('app.profile.title') }}</h5>
                             </div>
                             <form action="{{ route('patient.settings.update') }}" method="POST"
                                 enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
                                 <div class="setting-card">
-                                    <label class="form-label mb-2">Profile Photo</label>
+                                    <label class="form-label mb-2">{{ __('app.profile.photo') }}</label>
                                     <div class="change-avatar img-upload">
                                         <div class="profile-img">
                                             <i class="fa-solid fa-file-image"></i>
@@ -49,7 +49,7 @@
                                     <div class="row">
                                         <div class="col-lg-6 col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">Full Name <span
+                                                <label class="form-label">{{ __('app.profile.name') }} <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" name="name" value="{{ $patient['name'] ?? '' }}"
                                                     class="form-control">
@@ -57,7 +57,7 @@
                                         </div>
                                         <div class="col-lg-6 col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">Phone Number <span
+                                                <label class="form-label">{{ __('app.profile.phone') }} <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" name="phone" value="{{ $patient['phone'] ?? '' }}"
                                                     class="form-control">
@@ -65,7 +65,7 @@
                                         </div>
                                         <div class="col-lg-6 col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">Email Address <span
+                                                <label class="form-label">{{ __('app.profile.email') }} <span
                                                         class="text-danger">*</span></label>
                                                 <input type="email" name="email" value="{{ $patient['email'] ?? '' }}"
                                                     class="form-control">
@@ -73,7 +73,7 @@
                                         </div>
                                         <div class="col-lg-6 col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">Date of Birth <span
+                                                <label class="form-label">{{ __('app.profile.dob') }} <span
                                                         class="text-danger">*</span></label>
                                                 <div class="form-icon">
                                                     <input type="date" class="form-control" name="dob"
@@ -289,9 +289,8 @@
                                 </div>
 
                                 <div class="modal-btn text-end">
-                                    <a href="#" class="btn btn-md btn-light rounded-pill">Cancel</a>
-                                    <button type="submit" class="btn btn-md btn-primary-gradient rounded-pill">Save
-                                        Changes</button>
+                                    <a href="#" class="btn btn-md btn-light rounded-pill">{{ __('app.common.cancel') }}</a>
+                                    <button type="submit" class="btn btn-md btn-primary-gradient rounded-pill">{{ __('app.profile.save_changes') }}</button>
                                 </div>
                             </form>
                         </div>
@@ -300,7 +299,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="border-bottom pb-3 mb-3">
-                                    <h5>Change Password</h5>
+                                    <h5>{{ __('app.profile.change_password') }}</h5>
                                 </div>
                                 <form action="{{ route('patient.settings.changepassword') }}" method="post">
                                     @csrf
@@ -308,7 +307,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="mb-3">
-                                                <label class="form-label">Current Password <span
+                                                <label class="form-label">{{ __('app.profile.current_password') }} <span
                                                         class="text-danger">*</span></label>
                                                 <div class="pass-group">
                                                     <input type="password" name="current_password"
@@ -317,7 +316,7 @@
                                                 </div>
                                             </div>
                                             <div class="mb-3">
-                                                <label class="form-label">New Password <span
+                                                <label class="form-label">{{ __('app.profile.new_password') }} <span
                                                         class="text-danger">*</span></label>
                                                 <div class="pass-group">
                                                     <input type="password" name="password"
@@ -326,7 +325,7 @@
                                                 </div>
                                             </div>
                                             <div class="mb-3">
-                                                <label class="form-label">Confirm Password <span
+                                                <label class="form-label">{{ __('app.profile.confirm_password') }} <span
                                                         class="text-danger">*</span></label>
                                                 <div class="pass-group">
                                                     <input type="password" name="password_confirmation"
@@ -337,9 +336,8 @@
                                         </div>
                                     </div>
                                     <div class="modal-btn border-top pt-3 text-end">
-                                        <a href="#" class="btn btn-md btn-light rounded-pill">Cancel</a>
-                                        <button type="submit" class="btn btn-md btn-primary-gradient rounded-pill">Save
-                                            Changes</button>
+                                        <a href="#" class="btn btn-md btn-light rounded-pill">{{ __('app.common.cancel') }}</a>
+                                        <button type="submit" class="btn btn-md btn-primary-gradient rounded-pill">{{ __('app.profile.save_changes') }}</button>
                                     </div>
                                 </form>
                             </div>

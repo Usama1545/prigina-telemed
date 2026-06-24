@@ -9,16 +9,14 @@
 
             <!-- LEFT -->
             <div class="col-lg-5">
-                <h6 class="text-secondary">FOR DOCTORS</h6>
+                <h6 class="text-secondary">{{ __('app.for_doctors.label') }}</h6>
 
                 <h1 class="fw-bold mb-3 text-primary">
-                    Join a Global Network <br>
-                    of Trusted Physicians
+                    {{ __('app.for_doctors.headline') }}
                 </h1>
 
                 <p class="text-muted">
-                    PriGina Global Telemed connects experienced physicians with patients worldwide.
-                    Share your knowledge, impact lives, and practice on your terms.
+                    {{ __('app.for_doctors.desc') }}
                 </p>
 
                 <!-- FEATURES -->
@@ -32,11 +30,11 @@
                             </div>
 
                             <p class="fw-bold mt-3 mb-1 text-black">
-                                Make a Difference
+                                {{ __('app.for_doctors.make_difference') }}
                             </p>
 
                             <p class="small text-muted">
-                                Help patients gain clarity and confidence in their healthcare decisions.
+                                {{ __('app.for_doctors.make_difference_desc') }}
                             </p>
                         </div>
                     </div>
@@ -49,11 +47,11 @@
                             </div>
 
                             <p class="fw-bold mt-3 mb-1 text-black">
-                                Work from Anywhere
+                                {{ __('app.for_doctors.work_anywhere') }}
                             </p>
 
                             <p class="small text-muted">
-                                Provide expert opinions 100% online on a schedule that works for you.
+                                {{ __('app.for_doctors.work_anywhere_desc') }}
                             </p>
                         </div>
                     </div>
@@ -66,11 +64,11 @@
                             </div>
 
                             <p class="fw-bold mt-3 mb-1 text-black">
-                                Secure & Compliant
+                                {{ __('app.for_doctors.secure_compliant') }}
                             </p>
 
                             <p class="small text-muted">
-                                Our platform ensures privacy, security, and HIPAA compliance.
+                                {{ __('app.for_doctors.secure_compliant_desc') }}
                             </p>
                         </div>
                     </div>
@@ -85,11 +83,10 @@
                 <!-- TESTIMONIAL -->
                 <div class="testimonial-box bg-primary text-white">
                     <p class="mb-2 small text-white">
-                        <span class="quote-mark text-secondary">“</span>
-                        Being part of PriGina allows me to contribute beyond borders
-                        and help patients when it matters most.
+                        <span class="quote-mark text-secondary">"</span>
+                        {{ __('app.for_doctors.testimonial') }}
                     </p>
-                    <small>— PriGina Physician</small>
+                    <small>{{ __('app.for_doctors.testimonial_author') }}</small>
                 </div>
             </div>
 
@@ -102,38 +99,38 @@
 <section class="py-5 text-center">
     <div class="container">
 
-        <h2 class="fw-bold mb-5 text-primary">Why Join PriGina Global Telemed?</h2>
+        <h2 class="fw-bold mb-5 text-primary">{{ __('app.for_doctors.why_headline') }}</h2>
 
         <div class="d-flex flex-wrap justify-content-center gap-4">
 
             <div class="feature-card bg-light">
                 <i class="fi fi-rr-globe"></i>
-                <h6>Global Impact</h6>
-                <p class="mt-2">Reach patients around the world and make a difference.</p>
+                <h6>{{ __('app.for_doctors.global_impact') }}</h6>
+                <p class="mt-2">{{ __('app.for_doctors.global_impact_desc') }}</p>
             </div>
 
             <div class="feature-card bg-light">
                 <i class="fi fi-rr-calendar"></i>
-                <h6>Flexible Schedule</h6>
-                <p class="mt-2">Choose the number of cases you want to review and set your availability.</p>
+                <h6>{{ __('app.for_doctors.flexible_schedule') }}</h6>
+                <p class="mt-2">{{ __('app.for_doctors.flexible_schedule_desc') }}</p>
             </div>
 
             <div class="feature-card bg-light">
                 <i class="fi fi-rr-dollar"></i>
-                <h6>Competitive Pay</h6>
-                <p class="mt-2">Enjoy fair and transparent compensation for your expertise.</p>
+                <h6>{{ __('app.for_doctors.competitive_pay') }}</h6>
+                <p class="mt-2">{{ __('app.for_doctors.competitive_pay_desc') }}</p>
             </div>
 
             <div class="feature-card bg-light">
                 <i class="fi fi-rr-graduation-cap"></i>
-                <h6>Professional Growth</h6>
-                <p class="mt-2">Collaborate with a diverse network of physicians accross specialties.</p>
+                <h6>{{ __('app.for_doctors.professional_growth') }}</h6>
+                <p class="mt-2">{{ __('app.for_doctors.professional_growth_desc') }}</p>
             </div>
 
             <div class="feature-card bg-light">
                 <i class="fi fi-rr-shield-check"></i>
-                <h6>Secure Platform</h6>
-                <p class="mt-2">HIPAA-compliant platform with industry-leading security standards.</p>
+                <h6>{{ __('app.for_doctors.secure_platform') }}</h6>
+                <p class="mt-2">{{ __('app.for_doctors.secure_platform_desc') }}</p>
             </div>
 
         </div>
@@ -146,15 +143,15 @@
 <section class="py-5 text-center bg-light">
     <div class="container">
 
-        <h2 class="fw-bold mb-5">How It Works for Doctors</h2>
+        <h2 class="fw-bold mb-5">{{ __('app.for_doctors.how_works_headline') }}</h2>
 
         @php
             $steps = [
-                ['icon'=>'user','title'=>'Apply','desc'=>'Submit your application and professional credentials'],
-                ['icon'=>'shield-check','title'=>'Verification','desc'=>'Our team reviews and verifies your credentials and experience'],
-                ['icon'=>'settings','title'=>'Onboard','desc'=>'Complete onboarding and set your availability'],
-                ['icon'=>'file','title'=>'Review Cases','desc'=>'Receive cases that match your specialties and provide your expert opinion'],
-                ['icon'=>'dollar','title'=>'Get Paid','desc'=>'Earn competitive compensation for every completed case'],
+                ['icon' => 'user',         'title' => __('app.for_doctors.step1_title'), 'desc' => __('app.for_doctors.step1_desc')],
+                ['icon' => 'shield-check', 'title' => __('app.for_doctors.step2_title'), 'desc' => __('app.for_doctors.step2_desc')],
+                ['icon' => 'settings',     'title' => __('app.for_doctors.step3_title'), 'desc' => __('app.for_doctors.step3_desc')],
+                ['icon' => 'file',         'title' => __('app.for_doctors.step4_title'), 'desc' => __('app.for_doctors.step4_desc')],
+                ['icon' => 'dollar',       'title' => __('app.for_doctors.step5_title'), 'desc' => __('app.for_doctors.step5_desc')],
             ];
         @endphp
 
@@ -201,12 +198,12 @@
                 <!-- LEFT SIDE -->
                 <div class="col-lg-5">
                     <div class="wow fadeInUp" data-wow-duration="1s">
-                        <h3 class="info-title text-white">Ready to share your expertise ?</h3>
+                        <h3 class="info-title text-white">{{ __('app.for_doctors.cta_headline') }}</h3>
                         <p class="mb-0 text-white">
-                            Join Prigina Global Telemed and be part of a mission to make expert opinions accessible worldwide.
+                            {{ __('app.for_doctors.cta_desc') }}
                         </p>
                         <a href="{{ route('doctor-register') }}" class="btn btn-light px-4 mt-3">
-                            Apply Now
+                            {{ __('app.for_doctors.apply_now') }}
                         </a>
                     </div>
                 </div>
@@ -221,42 +218,38 @@
                                         <i class="fi fi-rr-globe text-secondary" style="font-size: 3rem; margin-top: 10px;"></i>
                                     </div>
                                     <p class="fw-bold mt-1 mb-1 text-white">
-                                        Global Reach
+                                        {{ __('app.for_doctors.global_reach') }}
                                     </p>
                                     <p class="small text-white">
-                                        Connect with patients accross the world.
+                                        {{ __('app.for_doctors.global_reach_desc') }}
                                     </p>
                                 </div>
                             </div>
 
-                            <!-- ITEM 1 -->
                             <div class="col-md-4 border-start border-end">
                                 <div class="h-100">
                                     <div class="mx-auto">
                                         <i class="fi fi-rr-hand-holding-heart text-secondary" style="font-size: 3rem; margin-top: 10px;"></i>
                                     </div>
                                     <p class="fw-bold mt-1 mb-1 text-white">
-                                        Rewarding Work
+                                        {{ __('app.for_doctors.rewarding_work') }}
                                     </p>
                                     <p class="small text-white">
-                                        Your expertise can change lives.
+                                        {{ __('app.for_doctors.rewarding_work_desc') }}
                                     </p>
                                 </div>
                             </div>
 
-                            <!-- ITEM 2 -->
-                           
-                            <!-- ITEM 3 -->
                             <div class="col-md-4">
                                 <div class="h-100">
                                     <div class=" mx-auto">
                                         <i class="fi fi-rr-clock text-secondary" style="font-size: 3rem; margin-top: 10px;"></i>
                                     </div>
                                     <p class="fw-bold mt-1 mb-1 text-white">
-                                        Work on Your Terms
+                                        {{ __('app.for_doctors.work_on_terms') }}
                                     </p>
                                     <p class="small text-white">
-                                        Maintain flexibility and  work-life balance.
+                                        {{ __('app.for_doctors.work_on_terms_desc') }}
                                     </p>
                                 </div>
                             </div>

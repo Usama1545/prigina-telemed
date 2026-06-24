@@ -13,7 +13,7 @@
             <div class="col-lg-8 col-xl-9">
 
                 <div class="dashboard-header mb-3">
-                    <h3>My Medical Reports</h3>
+                    <h3>{{ __('app.reports.my_reports') }}</h3>
                 </div>
 
                 @if(empty($reports))

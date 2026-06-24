@@ -8,7 +8,7 @@
                             <img src="{{ asset('build/logo-2.png') }}" alt="logo" class="img-fluid"
                                 style="max-width: 300px;">
                             <div class="social-icon">
-                                <h6 class="mb-3 footer-title text-white">Connect With Us</h6>
+                                <h6 class="mb-3 footer-title text-white">{{ __('app.footer.connect_with_us') }}</h6>
                                 <ul>
                                     <li>
                                         <a
@@ -38,50 +38,42 @@
                         <div class="row">
                             <div class="col-lg-3 col-md-3 col-sm-6">
                                 <div class="footer-widget footer-menu text-white">
-                                    <h6 class="footer-title text-white">For Patients</h6>
+                                    <h6 class="footer-title text-white">{{ __('app.footer.for_patients') }}</h6>
                                     <ul>
-                                        <li><a class="text-white" href="{{ route('for-patients') }}">How It Works</a>
-                                        </li>
-                                        <li><a class="text-white" href="{{ route('patient-faqs') }}">Faqs</a></li>
-                                        <li><a class="text-white" href="{{ route('patient-reviews') }}">Patient
-                                                Stories</a></li>
+                                        <li><a class="text-white" href="{{ route('for-patients') }}">{{ __('app.footer.how_it_works') }}</a></li>
+                                        <li><a class="text-white" href="{{ route('patient-faqs') }}">{{ __('app.footer.faqs') }}</a></li>
+                                        <li><a class="text-white" href="{{ route('patient-reviews') }}">{{ __('app.footer.patient_stories') }}</a></li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6">
                                 <div class="footer-widget footer-menu text-white">
-                                    <h6 class="footer-title text-white">For Doctors</h6>
+                                    <h6 class="footer-title text-white">{{ __('app.footer.for_doctors') }}</h6>
                                     <ul>
-                                        <li><a class="text-white" href="{{ route('for-doctors') }}">Join Our Network</a>
-                                        </li>
-                                        <li><a class="text-white" href="{{ route('doctor-faqs') }}">FAQs</a></li>
-                                        <li><a class="text-white" href="{{ route('doctor-reviews') }}">Doctor
-                                                Stories</a></li>
+                                        <li><a class="text-white" href="{{ route('for-doctors') }}">{{ __('app.footer.join_our_network') }}</a></li>
+                                        <li><a class="text-white" href="{{ route('doctor-faqs') }}">{{ __('app.footer.faqs') }}</a></li>
+                                        <li><a class="text-white" href="{{ route('doctor-reviews') }}">{{ __('app.footer.doctor_stories') }}</a></li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6">
                                 <div class="footer-widget footer-menu text-white">
-                                    <h6 class="footer-title text-white">Company</h6>
+                                    <h6 class="footer-title text-white">{{ __('app.footer.company') }}</h6>
                                     <ul>
-                                        <li><a class="text-white" href="{{ route('about-us') }}">About Us</a></li>
-                                        <li><a class="text-white" href="{{ route('our-mission') }}">Our Mission</a></li>
-                                        <li><a class="text-white" href="{{ route('contact-us') }}">Contact Us</a></li>
-                                        <li><a class="text-white" href="{{ route('admin.login') }}">Admin Login</a>
-                                        </li>
+                                        <li><a class="text-white" href="{{ route('about-us') }}">{{ __('app.footer.about_us') }}</a></li>
+                                        <li><a class="text-white" href="{{ route('our-mission') }}">{{ __('app.footer.our_mission') }}</a></li>
+                                        <li><a class="text-white" href="{{ route('contact-us') }}">{{ __('app.footer.contact_us') }}</a></li>
+                                        <li><a class="text-white" href="{{ route('admin.login') }}">{{ __('app.footer.admin_login') }}</a></li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6">
                                 <div class="footer-widget footer-menu text-white">
-                                    <h6 class="footer-title text-white">Legal</h6>
+                                    <h6 class="footer-title text-white">{{ __('app.footer.legal') }}</h6>
                                     <ul>
-                                        <li><a class="text-white" href="{{ route('privacy-policy') }}">Privacy
-                                                Policy</a></li>
-                                        <li><a class="text-white" href="{{ route('terms-conditions') }}">Terms &
-                                                Conditions</a></li>
-                                        <li><a class="text-white" href="{{ route('risk-disclaimer') }}">Risk
-                                                Disclaimer</a></li>
+                                        <li><a class="text-white" href="{{ route('privacy-policy') }}">{{ __('app.footer.privacy_policy') }}</a></li>
+                                        <li><a class="text-white" href="{{ route('terms-conditions') }}">{{ __('app.footer.terms_conditions') }}</a></li>
+                                        <li><a class="text-white" href="{{ route('risk-disclaimer') }}">{{ __('app.footer.risk_disclaimer') }}</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -98,14 +90,13 @@
                 <!-- Copyright -->
                 <div class="copyright">
                     <div class="copyright-text mb-0">
-                        <p class="mb-0 ">PriGina Global Telemed LLC: Registered in the United States ©️ 2026 All Rights
-                            Reserved</p>
+                        <p class="mb-0 ">{{ __('app.footer.copyright') }}</p>
                     </div>
                     <!-- Copyright Menu -->
                     <div class="copyright-menu">
                         <ul class="policy-menu mb-0">
-                            <li><a href="{{ route('legal-notice') }}">Legal Notice</a></li>
-                            <li><a href="{{ url('privacy-policy') }}">Privacy Policy</a></li>
+                            <li><a href="{{ route('legal-notice') }}">{{ __('app.footer.legal_notice') }}</a></li>
+                            <li><a href="{{ url('privacy-policy') }}">{{ __('app.footer.privacy_policy') }}</a></li>
                         </ul>
                     </div>
 
