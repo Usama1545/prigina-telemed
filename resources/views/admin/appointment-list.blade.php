@@ -4,7 +4,7 @@
 
     {{-- ── Flash toasts ─────────────────────────────────────────── --}}
     @if ($errors->has('payment'))
-        <div id="apptToast" class="toast align-items-center text-bg-danger border-0 position-fixed bottom-0 end-0 m-3 show"
+        <div id="apptToast" class="toast align-items-center text-bg-danger border-0 position-fixed top-0 end-0 m-3 show"
             role="alert" aria-live="assertive" style="z-index:1090;min-width:280px">
             <div class="d-flex">
                 <div class="toast-body fw-semibold">
@@ -14,7 +14,7 @@
             </div>
         </div>
     @elseif (session('success'))
-        <div id="apptToast" class="toast align-items-center text-bg-success border-0 position-fixed bottom-0 end-0 m-3 show"
+        <div id="apptToast" class="toast align-items-center text-bg-success border-0 position-fixed top-0 end-0 m-3 show"
             role="alert" aria-live="polite" style="z-index:1090;min-width:280px">
             <div class="d-flex">
                 <div class="toast-body fw-semibold">
