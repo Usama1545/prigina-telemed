@@ -1,3 +1,9 @@
+    @php
+        $currentLang = app()->getLocale();
+        $langFlags   = ['en' => '🇺🇸', 'fr' => '🇫🇷', 'es' => '🇪🇸'];
+        $langCodes   = ['en' => 'EN', 'fr' => 'FR', 'es' => 'ES'];
+    @endphp
+
     {{-- <div class="header-theme header-theme-two">
         <button type="button" id="dark-mode-toggle" class="theme-toggle moon">
             <i class="isax isax-moon5"></i>
@@ -20,6 +26,20 @@
                             <a href="{{ route('dashboard') }}" aria-label="Dashboard">
                                 <i class="isax isax-category-2"></i>
                             </a>
+                            <div class="dropdown">
+                                <a href="#" data-bs-toggle="dropdown" aria-label="Language"
+                                   style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid #e1e8f5;border-radius:50%;background:#fff;box-shadow:0 4px 12px rgba(15,43,92,.08);font-size:16px;text-decoration:none;">
+                                    {{ $langFlags[$currentLang] ?? '🇺🇸' }}
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a class="dropdown-item {{ $currentLang === 'en' ? 'active' : '' }}"
+                                       href="{{ route('lang.switch', 'en') }}">🇺🇸 {{ __('app.lang.en') }}</a>
+                                    <a class="dropdown-item {{ $currentLang === 'fr' ? 'active' : '' }}"
+                                       href="{{ route('lang.switch', 'fr') }}">🇫🇷 {{ __('app.lang.fr') }}</a>
+                                    <a class="dropdown-item {{ $currentLang === 'es' ? 'active' : '' }}"
+                                       href="{{ route('lang.switch', 'es') }}">🇪🇸 {{ __('app.lang.es') }}</a>
+                                </div>
+                            </div>
                             <a href="{{ route('logout') }}" aria-label="Logout" class="logout">
                                 <i class="isax isax-logout"></i>
                             </a>
@@ -86,11 +106,6 @@
                 <ul class="nav header-navbar-rht">
 
                     {{-- Language switcher --}}
-                    @php
-                        $currentLang = app()->getLocale();
-                        $langFlags   = ['en' => '🇺🇸', 'fr' => '🇫🇷', 'es' => '🇪🇸'];
-                        $langCodes   = ['en' => 'EN', 'fr' => 'FR', 'es' => 'ES'];
-                    @endphp
                     <li class="dropdown has-arrow logged-item">
                         <a href="#" data-bs-toggle="dropdown">
                             <span>{{ $langFlags[$currentLang] ?? '🇺🇸' }} {{ $langCodes[$currentLang] ?? 'EN' }}</span>
