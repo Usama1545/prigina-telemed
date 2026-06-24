@@ -12686,11 +12686,11 @@ header .header-nav .navbar-header .dropdown .dropdown-toggle i {
     color: var(--gray-900);
 }
 
-@media (max-width: 1399.98px) {
+/* @media (max-width: 1399.98px) {
     header .header-nav .navbar-header .dropdown {
         display: none;
     }
-}
+} */
 
 header .header-nav .header-menu {
     display: inline-flex;
