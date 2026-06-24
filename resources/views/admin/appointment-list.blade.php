@@ -138,6 +138,7 @@
                                 <table class="table table-hover table-center mb-0">
                                     <thead>
                                         <tr>
+                                            <th>ID</th>
                                             <th>Doctor</th>
                                             <th>Patient</th>
                                             <th>Date / Time</th>
@@ -177,6 +178,9 @@
                                                     !in_array($payoutSt, ['released', 'refunded']);
                                             @endphp
                                             <tr>
+                                                <td>
+                                                    {{ $apptId }}
+                                                </td>
                                                 <td>
                                                     <h2 class="table-avatar">
                                                         <a href="{{ url('admin/profile') }}" class="avatar avatar-sm me-2">
