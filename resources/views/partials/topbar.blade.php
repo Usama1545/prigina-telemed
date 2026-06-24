@@ -27,12 +27,12 @@
                                 <i class="isax isax-category-2"></i>
                             </a>
                         @endif
-                        <div class="dropdown">
+                        <div class="dropdown" style="position:relative;">
                             <a href="#" data-bs-toggle="dropdown" aria-label="Language"
                                style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid #e1e8f5;border-radius:50%;background:#fff;box-shadow:0 4px 12px rgba(15,43,92,.08);font-size:16px;text-decoration:none;">
                                 {{ $langFlags[$currentLang] ?? '🇺🇸' }}
                             </a>
-                            <div class="dropdown-menu dropdown-menu-end">
+                            <div class="dropdown-menu mt-1" style="z-index:1100;">
                                 <a class="dropdown-item {{ $currentLang === 'en' ? 'active' : '' }}"
                                    href="{{ route('lang.switch', 'en') }}">🇺🇸 {{ __('app.lang.en') }}</a>
                                 <a class="dropdown-item {{ $currentLang === 'fr' ? 'active' : '' }}"
