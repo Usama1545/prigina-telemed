@@ -91,33 +91,18 @@
                         $langFlags   = ['en' => '🇺🇸', 'fr' => '🇫🇷', 'es' => '🇪🇸'];
                         $langCodes   = ['en' => 'EN', 'fr' => 'FR', 'es' => 'ES'];
                     @endphp
-                    <li class="dropdown lang-switcher-item">
-                        <a href="#" class="lang-switcher-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false"
-                           title="{{ __('app.lang.label') }}">
-                            <span class="lang-flag">{{ $langFlags[$currentLang] ?? '🇺🇸' }}</span>
-                            <span class="lang-code">{{ $langCodes[$currentLang] ?? 'EN' }}</span>
-                            <i class="fa-solid fa-chevron-down lang-chevron"></i>
+                    <li class="dropdown has-arrow logged-item">
+                        <a href="#" data-bs-toggle="dropdown">
+                            <span>{{ $langFlags[$currentLang] ?? '🇺🇸' }} {{ $langCodes[$currentLang] ?? 'EN' }}</span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end lang-dropdown">
-                            <li>
-                                <a class="dropdown-item {{ $currentLang === 'en' ? 'active' : '' }}"
-                                   href="{{ route('lang.switch', 'en') }}">
-                                    🇺🇸 {{ __('app.lang.en') }}
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item {{ $currentLang === 'fr' ? 'active' : '' }}"
-                                   href="{{ route('lang.switch', 'fr') }}">
-                                    🇫🇷 {{ __('app.lang.fr') }}
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item {{ $currentLang === 'es' ? 'active' : '' }}"
-                                   href="{{ route('lang.switch', 'es') }}">
-                                    🇪🇸 {{ __('app.lang.es') }}
-                                </a>
-                            </li>
-                        </ul>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item {{ $currentLang === 'en' ? 'active' : '' }}"
+                               href="{{ route('lang.switch', 'en') }}">🇺🇸 {{ __('app.lang.en') }}</a>
+                            <a class="dropdown-item {{ $currentLang === 'fr' ? 'active' : '' }}"
+                               href="{{ route('lang.switch', 'fr') }}">🇫🇷 {{ __('app.lang.fr') }}</a>
+                            <a class="dropdown-item {{ $currentLang === 'es' ? 'active' : '' }}"
+                               href="{{ route('lang.switch', 'es') }}">🇪🇸 {{ __('app.lang.es') }}</a>
+                        </div>
                     </li>
 
                     @if (check())
@@ -270,77 +255,5 @@
             box-shadow: 0 2px 20px rgba(0, 0, 0, .04);
         }
 
-        /* Language switcher */
-        .lang-switcher-item {
-            list-style: none;
-        }
-
-        .lang-switcher-toggle {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 6px 10px;
-            border-radius: 8px;
-            border: 1px solid #e5e7eb;
-            color: #374151;
-            font-size: 13px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: background .15s;
-        }
-
-        .lang-switcher-toggle:hover {
-            background: #f3f4f6;
-            color: #374151;
-        }
-
-        .lang-flag {
-            font-size: 16px;
-            line-height: 1;
-        }
-
-        .lang-code {
-            font-size: 12px;
-            letter-spacing: .5px;
-        }
-
-        .lang-chevron {
-            font-size: 9px;
-            opacity: .6;
-        }
-
-        .lang-dropdown {
-            min-width: 140px;
-            display: none;
-            flex-direction: column !important;
-            padding: 6px 0;
-        }
-
-        .lang-dropdown.show {
-            display: block !important;
-        }
-
-        .lang-dropdown li {
-            display: block !important;
-            float: none !important;
-            width: 100% !important;
-            padding: 0 !important;
-            margin: 0 !important;
-        }
-
-        .lang-dropdown .dropdown-item {
-            font-size: 13px;
-            font-weight: 500;
-            display: flex !important;
-            align-items: center;
-            gap: 8px;
-            width: 100%;
-            padding: 8px 16px;
-        }
-
-        .lang-dropdown .dropdown-item.active {
-            background: #eef2ff;
-            color: #4338ca;
-        }
     </style>
     <!-- /Header -->
