@@ -92,7 +92,7 @@
                         $langCodes   = ['en' => 'EN', 'fr' => 'FR', 'es' => 'ES'];
                     @endphp
                     <li class="dropdown lang-switcher-item">
-                        <a href="#" class="lang-switcher-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+                        <a href="#" class="lang-switcher-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false"
                            title="{{ __('app.lang.label') }}">
                             <span class="lang-flag">{{ $langFlags[$currentLang] ?? '🇺🇸' }}</span>
                             <span class="lang-code">{{ $langCodes[$currentLang] ?? 'EN' }}</span>
