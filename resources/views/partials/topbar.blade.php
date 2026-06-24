@@ -21,30 +21,32 @@
                     <a id="mobile_btn" href="#">
                         <i class="fa-solid fa-bars"></i>
                     </a>
-                    @if (check())
-                        <div class="mobile-header-actions d-lg-none">
+                    <div class="mobile-header-actions d-lg-none">
+                        @if (check())
                             <a href="{{ route('dashboard') }}" aria-label="Dashboard">
                                 <i class="isax isax-category-2"></i>
                             </a>
-                            <div class="dropdown">
-                                <a href="#" data-bs-toggle="dropdown" aria-label="Language"
-                                   style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid #e1e8f5;border-radius:50%;background:#fff;box-shadow:0 4px 12px rgba(15,43,92,.08);font-size:16px;text-decoration:none;">
-                                    {{ $langFlags[$currentLang] ?? '🇺🇸' }}
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    <a class="dropdown-item {{ $currentLang === 'en' ? 'active' : '' }}"
-                                       href="{{ route('lang.switch', 'en') }}">🇺🇸 {{ __('app.lang.en') }}</a>
-                                    <a class="dropdown-item {{ $currentLang === 'fr' ? 'active' : '' }}"
-                                       href="{{ route('lang.switch', 'fr') }}">🇫🇷 {{ __('app.lang.fr') }}</a>
-                                    <a class="dropdown-item {{ $currentLang === 'es' ? 'active' : '' }}"
-                                       href="{{ route('lang.switch', 'es') }}">🇪🇸 {{ __('app.lang.es') }}</a>
-                                </div>
+                        @endif
+                        <div class="dropdown">
+                            <a href="#" data-bs-toggle="dropdown" aria-label="Language"
+                               style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid #e1e8f5;border-radius:50%;background:#fff;box-shadow:0 4px 12px rgba(15,43,92,.08);font-size:16px;text-decoration:none;">
+                                {{ $langFlags[$currentLang] ?? '🇺🇸' }}
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item {{ $currentLang === 'en' ? 'active' : '' }}"
+                                   href="{{ route('lang.switch', 'en') }}">🇺🇸 {{ __('app.lang.en') }}</a>
+                                <a class="dropdown-item {{ $currentLang === 'fr' ? 'active' : '' }}"
+                                   href="{{ route('lang.switch', 'fr') }}">🇫🇷 {{ __('app.lang.fr') }}</a>
+                                <a class="dropdown-item {{ $currentLang === 'es' ? 'active' : '' }}"
+                                   href="{{ route('lang.switch', 'es') }}">🇪🇸 {{ __('app.lang.es') }}</a>
                             </div>
+                        </div>
+                        @if (check())
                             <a href="{{ route('logout') }}" aria-label="Logout" class="logout">
                                 <i class="isax isax-logout"></i>
                             </a>
-                        </div>
-                    @endif
+                        @endif
+                    </div>
 
                     <a href="{{ url('index') }}" class="navbar-brand logo">
                         <img src="{{ asset('build/img/logo.webp') }}" class="img-fluid" alt="Logo">
