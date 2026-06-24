@@ -55,12 +55,16 @@ class AdminPaymentController extends Controller
         $doctorId = $appointment['doctorId'] ?? null;
 
         if (! $doctorId) {
+            Log::error('Appointment '.$appointmentId.' has no associated doctor.');
+
             return back()->withErrors(['payment' => 'Appointment has no associated doctor.']);
         }
 
         $doctor = $this->firestore->find('doctors', $doctorId);
 
         if (! $doctor) {
+            Log::error('Doctor '.$doctorId.' not found.');
+
             return back()->withErrors(['payment' => 'Doctor not found.']);
         }
 
@@ -68,6 +72,8 @@ class AdminPaymentController extends Controller
         $payoutsEnabled = $doctor['payoutsEnabled'] ?? $doctor['stripeOnboardingComplete'] ?? false;
 
         if (! $stripeAccountId || ! $payoutsEnabled) {
+            Log::error('Doctor '.$doctorId.' has not completed Stripe payout setup.');
+
             return back()->withErrors(['payment' => 'Doctor has not completed Stripe payout setup.']);
         }
 
@@ -77,6 +83,8 @@ class AdminPaymentController extends Controller
         $transferAmount = (int) round($totalAmount * (1 - $commission / 100) * 100); // cents
 
         if ($transferAmount <= 0) {
+            Log::error('Transfer amount is zero after commission for appointment '.$appointmentId);
+
             return back()->withErrors(['payment' => 'Transfer amount is zero after commission.']);
         }
 
