@@ -1,7 +1,7 @@
     @php
         $currentLang = app()->getLocale();
-        $langFlags   = ['en' => '🇺🇸', 'fr' => '🇫🇷', 'es' => '🇪🇸'];
-        $langCodes   = ['en' => 'EN', 'fr' => 'FR', 'es' => 'ES'];
+        $langFlags = ['en' => '🇺🇸', 'fr' => '🇫🇷', 'es' => '🇪🇸'];
+        $langCodes = ['en' => 'EN', 'fr' => 'FR', 'es' => 'ES'];
     @endphp
 
     {{-- <div class="header-theme header-theme-two">
@@ -23,26 +23,26 @@
                     </a>
                     <div class="mobile-header-actions d-lg-none">
                         @if (check())
-                            <a href="{{ route('dashboard') }}" aria-label="Dashboard">
+                            <a href="{{ route('dashboard') }}" aria-label="Dashboard" class="mobile-header-actions-a">
                                 <i class="isax isax-category-2"></i>
                             </a>
                         @endif
                         <div class="dropdown" style="position:relative;">
                             <a href="#" data-bs-toggle="dropdown" aria-label="Language"
-                               style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid #e1e8f5;border-radius:50%;background:#fff;box-shadow:0 4px 12px rgba(15,43,92,.08);font-size:16px;text-decoration:none;">
+                                style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid #e1e8f5;border-radius:50%;background:#fff;box-shadow:0 4px 12px rgba(15,43,92,.08);font-size:16px;text-decoration:none;">
                                 {{ $langFlags[$currentLang] ?? '🇺🇸' }}
                             </a>
                             <div class="dropdown-menu mt-1" style="z-index:1100;">
                                 <a class="dropdown-item {{ $currentLang === 'en' ? 'active' : '' }}"
-                                   href="{{ route('lang.switch', 'en') }}">🇺🇸 {{ __('app.lang.en') }}</a>
+                                    href="{{ route('lang.switch', 'en') }}">🇺🇸 {{ __('app.lang.en') }}</a>
                                 <a class="dropdown-item {{ $currentLang === 'fr' ? 'active' : '' }}"
-                                   href="{{ route('lang.switch', 'fr') }}">🇫🇷 {{ __('app.lang.fr') }}</a>
+                                    href="{{ route('lang.switch', 'fr') }}">🇫🇷 {{ __('app.lang.fr') }}</a>
                                 <a class="dropdown-item {{ $currentLang === 'es' ? 'active' : '' }}"
-                                   href="{{ route('lang.switch', 'es') }}">🇪🇸 {{ __('app.lang.es') }}</a>
+                                    href="{{ route('lang.switch', 'es') }}">🇪🇸 {{ __('app.lang.es') }}</a>
                             </div>
                         </div>
                         @if (check())
-                            <a href="{{ route('logout') }}" aria-label="Logout" class="logout">
+                            <a href="{{ route('logout') }}" aria-label="Logout" class="logout mobile-header-actions-a">
                                 <i class="isax isax-logout"></i>
                             </a>
                         @endif
@@ -69,7 +69,8 @@
                             </li>
 
                             <li class="megamenu {{ request()->is('how-it-works') ? 'active' : '' }}">
-                                <a href="{{ url('how-it-works') }}" class="main-menu">{{ __('app.nav.how_it_works') }}</a>
+                                <a href="{{ url('how-it-works') }}"
+                                    class="main-menu">{{ __('app.nav.how_it_works') }}</a>
                             </li>
 
                             <li class="megamenu {{ request()->is('doctors') ? 'active' : '' }}">
@@ -77,11 +78,13 @@
                             </li>
 
                             <li class="megamenu {{ request()->is('for-patients') ? 'active' : '' }}">
-                                <a href="{{ url('for-patients') }}" class="main-menu">{{ __('app.nav.for_patients') }}</a>
+                                <a href="{{ url('for-patients') }}"
+                                    class="main-menu">{{ __('app.nav.for_patients') }}</a>
                             </li>
 
                             <li class="megamenu {{ request()->is('for-doctors') ? 'active' : '' }}">
-                                <a href="{{ url('for-doctors') }}" class="main-menu">{{ __('app.nav.for_doctors') }}</a>
+                                <a href="{{ url('for-doctors') }}"
+                                    class="main-menu">{{ __('app.nav.for_doctors') }}</a>
                             </li>
 
                             <li class="megamenu {{ request()->is('about-us') ? 'active' : '' }}">
@@ -110,15 +113,16 @@
                     {{-- Language switcher --}}
                     <li class="dropdown has-arrow logged-item">
                         <a href="#" data-bs-toggle="dropdown">
-                            <span>{{ $langFlags[$currentLang] ?? '🇺🇸' }} {{ $langCodes[$currentLang] ?? 'EN' }}</span>
+                            <span>{{ $langFlags[$currentLang] ?? '🇺🇸' }}
+                                {{ $langCodes[$currentLang] ?? 'EN' }}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end">
                             <a class="dropdown-item {{ $currentLang === 'en' ? 'active' : '' }}"
-                               href="{{ route('lang.switch', 'en') }}">🇺🇸 {{ __('app.lang.en') }}</a>
+                                href="{{ route('lang.switch', 'en') }}">🇺🇸 {{ __('app.lang.en') }}</a>
                             <a class="dropdown-item {{ $currentLang === 'fr' ? 'active' : '' }}"
-                               href="{{ route('lang.switch', 'fr') }}">🇫🇷 {{ __('app.lang.fr') }}</a>
+                                href="{{ route('lang.switch', 'fr') }}">🇫🇷 {{ __('app.lang.fr') }}</a>
                             <a class="dropdown-item {{ $currentLang === 'es' ? 'active' : '' }}"
-                               href="{{ route('lang.switch', 'es') }}">🇪🇸 {{ __('app.lang.es') }}</a>
+                                href="{{ route('lang.switch', 'es') }}">🇪🇸 {{ __('app.lang.es') }}</a>
                         </div>
                     </li>
 
@@ -143,7 +147,8 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
 
-                                <a class="dropdown-item" href="{{ route('dashboard') }}">{{ __('app.nav.dashboard') }}</a>
+                                <a class="dropdown-item"
+                                    href="{{ route('dashboard') }}">{{ __('app.nav.dashboard') }}</a>
 
                                 <a class="dropdown-item" href="{{ route('logout') }}">{{ __('app.nav.logout') }}</a>
                             </div>
@@ -152,7 +157,8 @@
                         {{-- ❌ Guest --}}
                         <li>
                             <a href="{{ url('login') }}" class="btn btn-md btn-primary">
-                                <i class="isax isax-lock-1 me-2"></i><span>{{ __('app.nav.get_second_opinion') }}</span>
+                                <i
+                                    class="isax isax-lock-1 me-2"></i><span>{{ __('app.nav.get_second_opinion') }}</span>
                             </a>
                         </li>
                     @endif
@@ -226,7 +232,7 @@
             margin-left: 10px;
         }
 
-        .mobile-header-actions a {
+        .mobile-header-actions-a {
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -243,7 +249,7 @@
             color: #ff0202 !important;
         }
 
-        .mobile-header-actions a i {
+        .mobile-header-actions-a i {
             font-size: 18px;
         }
 
@@ -272,5 +278,8 @@
             box-shadow: 0 2px 20px rgba(0, 0, 0, .04);
         }
 
+        .dropdown-item:active {
+            background-color: var(--primary) !important;
+        }
     </style>
     <!-- /Header -->
