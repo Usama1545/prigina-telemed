@@ -38,9 +38,19 @@ class FirebaseAuthService
         $this->auth->sendPasswordResetLink($email);
     }
 
+    public function getPasswordResetLink(string $email): string
+    {
+        return $this->auth->getPasswordResetLink($email);
+    }
+
     public function sendEmailVerification(string $email): void
     {
         $this->auth->sendEmailVerificationLink($email);
+    }
+
+    public function getEmailVerificationLink(string $email): string
+    {
+        return $this->auth->getEmailVerificationLink($email);
     }
 
     public function refreshIdToken($refreshToken)

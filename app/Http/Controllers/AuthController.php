@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\EmailVerification;
+use App\Mail\PasswordReset;
 use App\Services\FirebaseAuthService;
 use App\Services\FirestoreService;
 use Carbon\Carbon;
 use Google\Cloud\Firestore\FirestoreClient;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Kreait\Firebase\Contract\Storage;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 
@@ -159,7 +162,12 @@ class AuthController extends Controller
         ]);
 
         try {
-            app(FirebaseAuthService::class)->sendPasswordResetLink($request->email);
+            $link = app(FirebaseAuthService::class)
+                ->getPasswordResetLink($request->email);
+
+            Mail::to($request->email)
+                ->send(new PasswordReset($link));
+
         } catch (UserNotFound $e) {
             // Keep the response generic so the form does not reveal registered emails.
         } catch (\Throwable $e) {
@@ -529,10 +537,12 @@ class AuthController extends Controller
 
     public function resendVerificationEmail(Request $request)
     {
-        $authService = app(FirebaseAuthService::class);
-
         try {
-            $authService->sendEmailVerification($request->email);
+            $link = app(FirebaseAuthService::class)
+                ->getEmailVerificationLink($request->email);
+
+            Mail::to($request->email)
+                ->send(new EmailVerification($link));
 
             return response()->json([
                 'success' => true,

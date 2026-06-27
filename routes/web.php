@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/auth/login', [AuthController::class, 'login']);
 
 Route::get('/lang/{locale}', function (string $locale) {
-    $supported = ['en', 'fr', 'es'];
+    $supported = ['en', 'fr', 'es', 'ar'];
     if (! in_array($locale, $supported, true)) {
         $locale = 'en';
     }

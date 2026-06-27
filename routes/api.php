@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Api\AppointmentEmailController;
+use App\Http\Controllers\Api\AuthEmailController;
 use App\Http\Controllers\ChatWebhookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -17,6 +18,10 @@ Route::post('/chat/webhook/new_appointment', [ChatWebhookController::class, 'app
 // =============================
 // Admin API Routes
 // =============================
+
+// Auth email actions (custom branded emails via Firebase link generation)
+Route::post('/auth/send-verification-email', [AuthEmailController::class, 'sendVerificationEmail']);
+Route::post('/auth/send-password-reset', [AuthEmailController::class, 'sendPasswordResetEmail']);
 
 // Appointment email actions
 Route::post('/appointments/{id}/send-reminder', [AppointmentEmailController::class, 'sendReminder']);

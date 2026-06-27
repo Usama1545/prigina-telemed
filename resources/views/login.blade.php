@@ -348,8 +348,14 @@
 
                 btn.innerText = 'Sending...';
 
-                await pendingVerificationUser
-                    .sendEmailVerification();
+                await fetch('/api/auth/send-verification-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({ email: pendingVerificationUser.email })
+                });
 
                 showAlert(
                     'Verification email sent successfully',

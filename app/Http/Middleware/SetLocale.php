@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\App;
 
 class SetLocale
 {
-    protected array $supported = ['en', 'fr', 'es'];
+    protected array $supported = ['en', 'fr', 'es', 'ar'];
 
     public function handle(Request $request, Closure $next)
     {

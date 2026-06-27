@@ -429,8 +429,15 @@
                     data.password
                 );
 
-                // SEND FIREBASE EMAIL
-                await userCredential.user.sendEmailVerification();
+                // SEND CUSTOM BRANDED VERIFICATION EMAIL
+                await fetch('/api/auth/send-verification-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({ email: data.email })
+                });
 
                 // LOGOUT AFTER EMAIL SENT
                 await auth.signOut();
