@@ -187,6 +187,21 @@
     <script>
         let pendingVerificationUser = null;
 
+        function firebaseErrorMessage(error) {
+            const messages = {
+                'auth/user-not-found':       'No account found with this email address.',
+                'auth/wrong-password':        'Incorrect password. Please try again.',
+                'auth/invalid-credential':    'Invalid email or password.',
+                'auth/invalid-email':         'Please enter a valid email address.',
+                'auth/user-disabled':         'This account has been disabled. Please contact support.',
+                'auth/too-many-requests':     'Too many failed attempts. Please try again later.',
+                'auth/network-request-failed':'Network error. Please check your connection.',
+                'auth/popup-closed-by-user':  'Sign-in popup was closed before completing.',
+                'auth/cancelled-popup-request': 'Sign-in was cancelled.',
+            };
+            return messages[error.code] || 'Login failed. Please try again.';
+        }
+
         async function handleLogin(e) {
 
             e.preventDefault();
@@ -244,7 +259,7 @@
             } catch (error) {
 
                 showAlert(
-                    error.message || 'Login failed'
+                    firebaseErrorMessage(error)
                 );
 
                 btn.disabled = false;
@@ -471,7 +486,7 @@
             } catch (error) {
 
                 showAlert(
-                    error.message || 'Google login failed'
+                    firebaseErrorMessage(error)
                 );
             }
         }
