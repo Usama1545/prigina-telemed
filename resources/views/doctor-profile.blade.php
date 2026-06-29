@@ -85,7 +85,7 @@
                                         <span class="list-icon"><img
                                                 src="{{ URL::asset('build/img/icons/thumb-icon.svg') }}"
                                                 alt="Img"></span>
-                                        <p><b>{{ $recommendationPercentage }} </b> Recommended</p>
+                                        <p><b>{{ $recommendationPercentage }} %</b> Recommended</p>
                                     </div>
                                 </li>
                                 <li>
