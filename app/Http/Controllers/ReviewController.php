@@ -100,7 +100,7 @@ class ReviewController extends Controller
             );
 
             $this->firestore->update('doctors', $doctorId, [
-                'averageRating' => $averageRating,
+                'rating' => $averageRating,
                 'totalReviews' => $totalReviews,
                 'updatedAt' => now()->toDateTimeString(),
             ]);

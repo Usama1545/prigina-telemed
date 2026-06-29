@@ -106,15 +106,15 @@ class AdminPaymentController extends Controller
                 'updatedBy' => session('auth_uid'),
             ]);
 
-            $totalAmountCents = (int) round($totalAmount * 100);
-            $platformFeeCents = $totalAmountCents - $transferAmount;
+            $netAmount = round($transferAmount / 100, 2);
+            $platformFee = round($totalAmount - $netAmount, 2);
 
             $this->firestore->create('doctor_revenue', [
                 'doctorId' => $doctorId,
                 'appointmentId' => $appointmentId,
-                'amount' => $totalAmountCents,
-                'platformFee' => $platformFeeCents,
-                'netAmount' => $transferAmount,
+                'amount' => $totalAmount,
+                'platformFee' => $platformFee,
+                'netAmount' => $netAmount,
                 'platformFeePercent' => $commission,
                 'stripeTransferId' => $transfer->id,
                 'status' => 'paid',
