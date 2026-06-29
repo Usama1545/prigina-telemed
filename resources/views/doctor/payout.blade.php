@@ -20,11 +20,10 @@
                     <div class="payout-wrap">
 
                         <div class="payout-title mb-4">
-                            <h4>Payout Settings</h4>
+                            <h4>{{ __('app.payout.title') }}</h4>
 
                             <p class="text-white">
-                                Connect your Stripe account to securely receive payouts for completed appointments.
-                                Follow the setup steps provided by Stripe to finish onboarding.
+                                {{ __('app.payout.desc') }}
                             </p>
                         </div>
 
@@ -43,16 +42,16 @@
 
                                         <h5 class="mb-2 d-flex align-items-center gap-2">
 
-                                            Stripe Payouts
+                                            {{ __('app.payout.stripe_payouts') }}
 
                                             @if ($stripeSetupComplete)
                                                 <span class="badge bg-success">
                                                     <i class="fa-solid fa-circle-check me-1"></i>
-                                                    Connected
+                                                    {{ __('app.payout.connected') }}
                                                 </span>
                                             @else
                                                 <span class="badge bg-warning text-dark">
-                                                    Pending Setup
+                                                    {{ __('app.payout.pending_setup') }}
                                                 </span>
                                             @endif
 
@@ -61,9 +60,9 @@
                                         <p class="mb-0 text-muted">
 
                                             @if ($stripeSetupComplete)
-                                                Your Stripe account is connected and ready to receive payouts.
+                                                {{ __('app.payout.account_ready') }}
                                             @else
-                                                Click the button to connect your Stripe account and complete onboarding.
+                                                {{ __('app.payout.click_connect') }}
                                             @endif
 
                                         </p>
@@ -76,7 +75,7 @@
 
                                     <a href="{{ route('doctor.payout-setup') }}" class="btn btn-primary px-4">
 
-                                        {{ $stripeSetupComplete ? 'Manage Account' : 'Connect Account' }}
+                                        {{ $stripeSetupComplete ? __('app.payout.manage_account') : __('app.payout.connect_account') }}
 
                                     </a>
 

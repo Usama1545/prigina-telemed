@@ -164,7 +164,7 @@
                     <div class="mt-3">
 
                         <label class="fw-bold mb-1">
-                            Symptoms
+                            {{ __('app.appointments.symptoms') }}
                         </label>
 
                         <p class="mb-0 text-muted"
@@ -192,13 +192,13 @@
                         <a class="btn btn-sm btn-success accept-appointment-btn" data-id="{{ $appointment['id'] }}"
                             href="{{ route('doctor.accept-appointment', $appointment['id']) }}">
                             <i class="fa-solid fa-check me-1"></i>
-                            Accept
+                            {{ __('app.appointments.accept') }}
                         </a>
 
                         <a class="btn btn-sm btn-danger cancel-appointment-btn" data-id="{{ $appointment['id'] }}"
                             href="{{ route('doctor.cancel-appointment', $appointment['id']) }}">
                             <i class="fa-solid fa-xmark me-1"></i>
-                            Cancel
+                            {{ __('app.common.cancel') }}
                         </a>
 
                     </div>
@@ -207,15 +207,15 @@
 
                         <span class="badge bg-danger text-white px-3 py-3">
                             <i class="fa-solid fa-clock me-1"></i>
-                            Payment not received
+                            {{ __('app.appointments.payment_not_received') }}
                         </span>
 
                         <form method="POST" action="{{ route('doctor.appointment-delete', $appointment['id']) }}"
-                            onsubmit="return confirm('Delete this unpaid appointment?')">
+                            onsubmit="return confirm('{{ __('app.appointments.delete_unpaid_confirm') }}')">
                             @csrf
                             <button type="submit" class="btn btn-sm btn-outline-danger">
                                 <i class="fa-solid fa-trash me-1"></i>
-                                Delete
+                                {{ __('app.common.delete') }}
                             </button>
                         </form>
 

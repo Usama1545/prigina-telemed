@@ -27,47 +27,47 @@
                     <section class="doctor-home-stats">
                         <article class="doctor-home-stat stat-blue">
                             <img src="{{ asset('build/img/doc-home/doc-logo-1.jpeg') }}" alt="">
-                            <h2>Today's Appointments</h2>
+                            <h2>{{ __('app.doctor_dashboard.todays_appointments') }}</h2>
                             <strong>{{ $todayCount }}</strong>
-                            <p>{{ $todayCount ? 'Scheduled today' : 'No appointments today' }}</p>
+                            <p>{{ $todayCount ? __('app.doctor_dashboard.scheduled_today') : __('app.doctor_dashboard.no_appointments_today') }}</p>
                             <img class="stat-graph" src="{{ asset('build/img/doc-home/doc-home-1-1') }}" alt="">
                         </article>
 
                         <article class="doctor-home-stat stat-orange">
                             <img src="{{ asset('build/img/doc-home/doc-logo-4.jpeg') }}" alt="">
-                            <h2>Waiting Patients</h2>
+                            <h2>{{ __('app.doctor_dashboard.waiting_patients') }}</h2>
                             <strong>{{ $waitingAppointments }}</strong>
-                            <p>{{ $waitingAppointments ? 'Patients in queue' : 'No patients waiting' }}</p>
+                            <p>{{ $waitingAppointments ? __('app.doctor_dashboard.patients_in_queue') : __('app.doctor_dashboard.no_patients_waiting') }}</p>
                             <img class="stat-graph stat-line" src="{{ asset('build/img/doc-home/doc-logo-2-1.jpeg') }}"
                                 alt="">
                         </article>
 
                         <article class="doctor-home-stat stat-green">
                             <img src="{{ asset('build/img/doc-home/doc-logo-3.jpeg') }}" alt="">
-                            <h2>Total Earnings</h2>
+                            <h2>{{ __('app.doctor_dashboard.total_earnings') }}</h2>
                             <strong>${{ number_format($totalEarnings, 0) }}</strong>
-                            <p>This month</p>
+                            <p>{{ __('app.doctor_dashboard.this_month') }}</p>
                             <img class="stat-graph" src="{{ asset('build/img/doc-home/doc-logo-3-1.jpg') }}"
                                 alt="">
                         </article>
 
                         <article class="doctor-home-stat stat-purple">
                             <img src="{{ asset('build/img/doc-home/doc-logo-2.jpeg') }}" alt="">
-                            <h2>Average Rating</h2>
+                            <h2>{{ __('app.doctor_dashboard.average_rating') }}</h2>
                             <strong>{{ number_format($rating, 1) }}</strong>
                             <div class="doctor-home-stars" aria-label="Rating {{ number_format($rating, 1) }} out of 5">
                                 @for ($i = 1; $i <= 5; $i++)
                                     <i class="fa-solid fa-star {{ $rating >= $i ? 'active' : '' }}"></i>
                                 @endfor
                             </div>
-                            <p>{{ $totalReviews ? $totalReviews . ' reviews' : 'No reviews yet' }}</p>
+                            <p>{{ $totalReviews ? __('app.doctor_dashboard.reviews', ['count' => $totalReviews]) : __('app.doctor_dashboard.no_reviews_yet') }}</p>
                         </article>
                     </section>
 
                     <section class="doctor-home-panels">
                         <article class="doctor-home-panel schedule-panel">
                             <div class="doctor-home-panel-head">
-                                <h2>Today's Schedule</h2>
+                                <h2>{{ __('app.doctor_dashboard.todays_schedule') }}</h2>
                                 <span>{{ now()->format('M d, Y') }}</span>
                             </div>
 
@@ -76,8 +76,8 @@
                                     <div class="empty-icon blue-soft">
                                         <i class="isax isax-calendar-tick"></i>
                                     </div>
-                                    <h3>No appointments today</h3>
-                                    <p>Enjoy your day off!</p>
+                                    <h3>{{ __('app.doctor_dashboard.no_appointments_today') }}</h3>
+                                    <p>{{ __('app.doctor_dashboard.enjoy_day_off') }}</p>
                                 </div>
                             @else
                                 <div class="doctor-home-list">
@@ -93,13 +93,12 @@
                                 </div>
                             @endif
 
-                            <a href="{{ route('doctor.appointments') }}" class="doctor-home-outline-btn">View Full
-                                Schedule</a>
+                            <a href="{{ route('doctor.appointments') }}" class="doctor-home-outline-btn">{{ __('app.doctor_dashboard.view_full_schedule') }}</a>
                         </article>
 
                         <article class="doctor-home-panel next-panel">
                             <div class="doctor-home-panel-head">
-                                <h2>Next Up</h2>
+                                <h2>{{ __('app.doctor_dashboard.next_up') }}</h2>
                                 <a href="{{ route('doctor.appointments') }}" aria-label="View appointments">
                                     <i class="isax isax-arrow-right-3"></i>
                                 </a>
@@ -119,8 +118,8 @@
                                     <div class="empty-icon green-soft">
                                         <i class="isax isax-calendar-tick"></i>
                                     </div>
-                                    <h3>No upcoming patients</h3>
-                                    <p>Your next appointment will appear here.</p>
+                                    <h3>{{ __('app.doctor_dashboard.no_upcoming_patients') }}</h3>
+                                    <p>{{ __('app.doctor_dashboard.next_appointment_here') }}</p>
                                 </div>
                             @endif
                         </article>
@@ -128,8 +127,8 @@
 
                     <section class="doctor-home-activity">
                         <div class="doctor-home-panel-head">
-                            <h2>Recent Activities</h2>
-                            <a href="#">View All</a>
+                            <h2>{{ __('app.doctor_dashboard.recent_activities') }}</h2>
+                            <a href="#">{{ __('app.doctor_dashboard.view_all') }}</a>
                         </div>
 
                         @if (empty($notifications))
@@ -138,8 +137,8 @@
                                     <i class="isax isax-clock"></i>
                                 </div>
                                 <span>
-                                    <strong>No recent activities</strong>
-                                    Your activities will appear here
+                                    <strong>{{ __('app.doctor_dashboard.no_recent_activities') }}</strong>
+                                    {{ __('app.doctor_dashboard.activities_appear_here') }}
                                 </span>
                             </div>
                         @else
@@ -160,34 +159,34 @@
                     </section>
 
                     <section class="doctor-home-quick">
-                        <h2>Quick Actions</h2>
+                        <h2>{{ __('app.doctor_dashboard.quick_actions') }}</h2>
                         <div class="doctor-home-actions">
                             <a href="{{ route('doctor.payout') }}" class="doctor-home-action">
                                 <i class="isax isax-calendar-search"></i>
                                 <span>
-                                    <strong>View Payout</strong>
-                                    Manage your connected payout methods
+                                    <strong>{{ __('app.doctor_dashboard.view_payout') }}</strong>
+                                    {{ __('app.doctor_dashboard.manage_payout_methods') }}
                                 </span>
                             </a>
                             <a href="{{ route('doctor.appointments') }}" class="doctor-home-action orange-action">
                                 <i class="fa-solid fa-users"></i>
                                 <span>
-                                    <strong>Waiting Patients</strong>
-                                    See patients in queue
+                                    <strong>{{ __('app.doctor_dashboard.waiting_patients_short') }}</strong>
+                                    {{ __('app.doctor_dashboard.see_patients_queue') }}
                                 </span>
                             </a>
                             <a href="{{ route('doctor.conversations') }}" class="doctor-home-action purple-action">
                                 <i class="isax isax-message-text"></i>
                                 <span>
-                                    <strong>New Message</strong>
-                                    Check your messages
+                                    <strong>{{ __('app.doctor_dashboard.new_message') }}</strong>
+                                    {{ __('app.doctor_dashboard.check_messages') }}
                                 </span>
                             </a>
                             <a href="{{ route('doctor.settings') }}" class="doctor-home-action blue-action">
                                 <i class="isax isax-document-text"></i>
                                 <span>
-                                    <strong>My Profile</strong>
-                                    Update your details
+                                    <strong>{{ __('app.doctor_dashboard.my_profile') }}</strong>
+                                    {{ __('app.doctor_dashboard.update_details') }}
                                 </span>
                             </a>
                         </div>
@@ -197,22 +196,22 @@
                         <div>
                             <i class="isax isax-shield-tick"></i>
                             <span>
-                                <strong>HIPAA Secure</strong>
-                                Your data is encrypted and protected
+                                <strong>{{ __('app.doctor_dashboard.hipaa_secure') }}</strong>
+                                {{ __('app.doctor_dashboard.hipaa_desc') }}
                             </span>
                         </div>
                         <div>
                             <i class="isax isax-medal-star"></i>
                             <span>
-                                <strong>Verified Profile</strong>
-                                Your license is verified and active
+                                <strong>{{ __('app.doctor_dashboard.verified_profile') }}</strong>
+                                {{ __('app.doctor_dashboard.verified_desc') }}
                             </span>
                         </div>
                         <div>
                             <i class="isax isax-24-support"></i>
                             <span>
-                                <strong>Support 24/7</strong>
-                                We're here to help you anytime
+                                <strong>{{ __('app.doctor_dashboard.support_247') }}</strong>
+                                {{ __('app.doctor_dashboard.support_desc') }}
                             </span>
                         </div>
                     </section>

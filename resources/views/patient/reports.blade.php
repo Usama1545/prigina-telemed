@@ -22,8 +22,8 @@
                             <div style="width:72px;height:72px;border-radius:20px;background:#eef2ff;display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px;">
                                 <i class="isax isax-document-text" style="font-size:32px;color:#4338ca;"></i>
                             </div>
-                            <h5 class="fw-bold mb-2">No Reports Yet</h5>
-                            <p class="text-muted mb-0">Your second opinion reports will appear here once they are published by your doctor.</p>
+                            <h5 class="fw-bold mb-2">{{ __('app.reports.no_reports_yet') }}</h5>
+                            <p class="text-muted mb-0">{{ __('app.reports.no_reports_patient_desc') }}</p>
                         </div>
                     </div>
                 @else
@@ -42,27 +42,27 @@
                                                     <h6 class="mb-0 fw-bold" style="color:#111827;">
                                                         {{ $report['report_number'] ?? 'Report' }}
                                                     </h6>
-                                                    <span class="badge bg-success-subtle text-success">Published</span>
+                                                    <span class="badge bg-success-subtle text-success">{{ __('app.reports.published') }}</span>
                                                 </div>
                                                 <p class="mb-1 text-muted small">
-                                                    Doctor: <strong>Dr. {{ $report['certification']['physician_name'] ?? '—' }}</strong>
+                                                    {{ __('app.reports.doctor_label') }}: <strong>Dr. {{ $report['certification']['physician_name'] ?? '—' }}</strong>
                                                     @if(!empty($report['certification']['specialty']))
                                                         · {{ $report['certification']['specialty'] }}
                                                     @endif
                                                 </p>
                                                 <p class="mb-0 text-muted small">
-                                                    Published: {{ isset($report['published_at']) ? \Carbon\Carbon::parse($report['published_at'])->format('M d, Y') : '—' }}
+                                                    {{ __('app.reports.published_label') }}: {{ isset($report['published_at']) ? \Carbon\Carbon::parse($report['published_at'])->format('M d, Y') : '—' }}
                                                 </p>
                                             </div>
                                         </div>
                                         <div class="d-flex flex-column gap-2 flex-shrink-0">
                                             <a href="{{ route('patient.reports.show', $report['id']) }}"
                                                class="btn btn-sm btn-primary">
-                                                <i class="isax isax-eye me-1"></i> View
+                                                <i class="isax isax-eye me-1"></i> {{ __('app.common.view') }}
                                             </a>
                                             <a href="{{ route('patient.reports.pdf', $report['id']) }}" target="_blank"
                                                class="btn btn-sm btn-outline-primary">
-                                                <i class="isax isax-document-download me-1"></i> Download
+                                                <i class="isax isax-document-download me-1"></i> {{ __('app.common.download') }}
                                             </a>
                                         </div>
                                     </div>

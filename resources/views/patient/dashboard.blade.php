@@ -30,7 +30,7 @@
 
                     <form class="patient-search-card" action="{{ route('doctors') }}" method="GET">
                         <i class="isax isax-search-normal-1"></i>
-                        <input type="search" name="search" placeholder="Search doctors, specialities, symptoms...">
+                        <input type="search" name="search" placeholder="{{ __('app.patient_dashboard.search_placeholder') }}">
                         <button type="submit" aria-label="Search filters">
                             <i class="isax isax-setting-4"></i>
                         </button>
@@ -38,8 +38,8 @@
 
                     <section class="patient-section">
                         <div class="patient-section-head">
-                            <h2>Categories</h2>
-                            <a href="{{ route('doctors') }}">View All</a>
+                            <h2>{{ __('app.patient_dashboard.categories') }}</h2>
+                            <a href="{{ route('doctors') }}">{{ __('app.patient_dashboard.view_all') }}</a>
                         </div>
                         <div class="patient-category-grid">
                             @forelse($categories as $index => $category)
@@ -77,8 +77,8 @@
 
                     <section class="patient-section">
                         <div class="patient-section-head">
-                            <h2>Upcoming Appointments</h2>
-                            <a href="{{ route('patient.appointments') }}">View All</a>
+                            <h2>{{ __('app.patient_dashboard.upcoming_appointments') }}</h2>
+                            <a href="{{ route('patient.appointments') }}">{{ __('app.patient_dashboard.view_all') }}</a>
                         </div>
 
                         <article class="patient-appointment-card">
@@ -90,13 +90,13 @@
                                     <h3>Dr. {{ $nextAppointment['doctorName'] ?? 'Doctor' }}</h3>
                                     <p>{{ $nextAppointment['patientLocalTime'] ?? ($nextAppointment['startTime'] ?? '') . ' - ' . ($nextAppointment['endTime'] ?? '') }}
                                     </p>
-                                    <a href="{{ route('patient.appointments') }}">View Appointment</a>
+                                    <a href="{{ route('patient.appointments') }}">{{ __('app.patient_dashboard.view_appointment') }}</a>
                                 </div>
                             @else
                                 <div class="appointment-copy">
-                                    <h3>No upcoming appointments</h3>
-                                    <p>Book your first appointment with a doctor and take charge of your health.</p>
-                                    <a href="{{ route('doctors') }}">Book Now</a>
+                                    <h3>{{ __('app.patient_dashboard.no_upcoming') }}</h3>
+                                    <p>{{ __('app.patient_dashboard.book_first') }}</p>
+                                    <a href="{{ route('doctors') }}">{{ __('app.patient_dashboard.book_now') }}</a>
                                 </div>
                             @endif
                             <div class="appointment-illustration">
@@ -108,8 +108,8 @@
 
                     <section class="patient-section">
                         <div class="patient-section-head">
-                            <h2>Top Doctors</h2>
-                            <a href="{{ route('doctors') }}">View All</a>
+                            <h2>{{ __('app.patient_dashboard.top_doctors') }}</h2>
+                            <a href="{{ route('doctors') }}">{{ __('app.patient_dashboard.view_all') }}</a>
                         </div>
 
                         <div class="patient-doctor-row">
@@ -127,7 +127,7 @@
                                                 <i class="fa-solid fa-circle-check"></i>
                                             </h3>
                                             <p>{{ $doctor['specializations'][0] ?? 'Specialist' }}</p>
-                                            <small>{{ $doctor['experience'] ?? 'Experienced' }} experience</small>
+                                            <small>{{ $doctor['experience'] ?? 'Experienced' }} {{ __('app.patient_dashboard.experience_suffix') }}</small>
                                             <div class="doctor-rating">
                                                 <i class="fa-solid fa-star"></i>
                                                 {{ number_format((float) ($doctor['rating'] ?? 0), 1) }}
@@ -136,14 +136,13 @@
                                             <div
                                                 class="doctor-availability {{ $doctor['available'] ?? false ? 'text-success' : 'text-danger' }}">
                                                 <i class="fa-solid fa-circle-check"></i>
-                                                {{ $doctor['available'] ?? false ? 'Available' : 'Not Available' }}
+                                                {{ $doctor['available'] ?? false ? __('app.patient_dashboard.available') : __('app.patient_dashboard.not_available') }}
                                             </div>
                                         </div>
                                     </div>
                                     <div class="doctor-card-bottom">
                                         <strong>${{ number_format((float) ($doctor['consultationFee'] ?? 0), 0) }}</strong>
-                                        <a href="{{ $doctorId ? route('doctor-details', $doctorId) : route('doctors') }}">Book
-                                            Now</a>
+                                        <a href="{{ $doctorId ? route('doctor-details', $doctorId) : route('doctors') }}">{{ __('app.patient_dashboard.book_now') }}</a>
                                     </div>
                                 </article>
                             @empty
@@ -151,18 +150,18 @@
                                     <div class="doctor-card-top">
                                         <img src="{{ asset('build/img/doctor-grid/doctor-grid-01.jpg') }}" alt="Doctor">
                                         <div>
-                                            <h3>Find a Specialist <i class="fa-solid fa-circle-check"></i></h3>
-                                            <p>Second opinion care</p>
-                                            <small>Global physicians</small>
+                                            <h3>{{ __('app.patient_dashboard.find_specialist') }} <i class="fa-solid fa-circle-check"></i></h3>
+                                            <p>{{ __('app.patient_dashboard.second_opinion_care') }}</p>
+                                            <small>{{ __('app.patient_dashboard.global_physicians') }}</small>
                                             <div class="doctor-rating"><i class="fa-solid fa-star"></i> 5.0 <span>(0)</span>
                                             </div>
                                             <div class="doctor-availability"><i class="fa-solid fa-circle-check"></i>
-                                                Available</div>
+                                                {{ __('app.patient_dashboard.available') }}</div>
                                         </div>
                                     </div>
                                     <div class="doctor-card-bottom">
                                         <strong>$0</strong>
-                                        <a href="{{ route('doctors') }}">Book Now</a>
+                                        <a href="{{ route('doctors') }}">{{ __('app.patient_dashboard.book_now') }}</a>
                                     </div>
                                 </article>
                             @endforelse
@@ -170,7 +169,7 @@
                     </section>
 
                     <section class="patient-section patient-tips-section">
-                        <h2>Health Tips for You</h2>
+                        <h2>{{ __('app.patient_dashboard.health_tips') }}</h2>
                         <div class="patient-tips-list">
                             @forelse($tips as $tip)
                                 <article class="patient-tip-card">
@@ -178,12 +177,12 @@
                                         <i class="isax isax-shield-tick"></i>
                                     </div>
                                     <div>
-                                        <span>{{ $tip['category'] ?? ($tip['type'] ?? 'Wellness') }}</span>
+                                        <span>{{ $tip['category'] ?? ($tip['type'] ?? __('app.patient_dashboard.wellness')) }}</span>
                                         <h3>{{ $tip['title'] ?? 'Stay protected' }}</h3>
                                         <p class="tip-description">
                                             {{ $tip['description'] ?? ($tip['content'] ?? 'Small daily habits can support better long-term health.') }}
                                         </p>
-                                        <button type="button" class="tip-read-more">Read More <i
+                                        <button type="button" class="tip-read-more">{{ __('app.patient_dashboard.read_more') }} <i
                                                 class="isax isax-arrow-down-1"></i></button>
                                     </div>
                                 </article>
@@ -193,11 +192,10 @@
                                         <i class="isax isax-shield-tick"></i>
                                     </div>
                                     <div>
-                                        <span>Wellness</span>
-                                        <h3>Protect Your Health</h3>
-                                        <p class="tip-description">Keep your records updated, follow doctor guidance, and
-                                            schedule care when symptoms change.</p>
-                                        <button type="button" class="tip-read-more">Read More <i
+                                        <span>{{ __('app.patient_dashboard.wellness') }}</span>
+                                        <h3>{{ __('app.patient_dashboard.protect_health') }}</h3>
+                                        <p class="tip-description">{{ __('app.patient_dashboard.protect_health_desc') }}</p>
+                                        <button type="button" class="tip-read-more">{{ __('app.patient_dashboard.read_more') }} <i
                                                 class="isax isax-arrow-down-1"></i></button>
                                     </div>
                                 </article>
@@ -1053,8 +1051,8 @@
                     const expanded = card.classList.toggle('is-expanded');
 
                     button.innerHTML = expanded ?
-                        'Show Less <i class="isax isax-arrow-up-2"></i>' :
-                        'Read More <i class="isax isax-arrow-down-1"></i>';
+                        '{{ __('app.patient_dashboard.show_less') }} <i class="isax isax-arrow-up-2"></i>' :
+                        '{{ __('app.patient_dashboard.read_more') }} <i class="isax isax-arrow-down-1"></i>';
                 });
             });
         });

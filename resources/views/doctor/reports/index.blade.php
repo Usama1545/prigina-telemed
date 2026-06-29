@@ -34,22 +34,22 @@
                         <ul class="nav nav-pills inner-tab" id="reportTabs" role="tablist">
                             <li class="nav-item">
                                 <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-draft" type="button">
-                                    Drafts <span>{{ $grouped['draft']->count() }}</span>
+                                    {{ __('app.reports.drafts') }} <span>{{ $grouped['draft']->count() }}</span>
                                 </button>
                             </li>
                             <li class="nav-item">
                                 <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-submitted" type="button">
-                                    Awaiting Review <span>{{ $grouped['submitted']->count() }}</span>
+                                    {{ __('app.reports.awaiting_review') }} <span>{{ $grouped['submitted']->count() }}</span>
                                 </button>
                             </li>
                             <li class="nav-item">
                                 <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-revision" type="button">
-                                    Revision Requested <span>{{ $grouped['revision_requested']->count() }}</span>
+                                    {{ __('app.reports.revision_requested') }} <span>{{ $grouped['revision_requested']->count() }}</span>
                                 </button>
                             </li>
                             <li class="nav-item">
                                 <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-published" type="button">
-                                    Published <span>{{ $grouped['published']->count() }}</span>
+                                    {{ __('app.reports.published') }} <span>{{ $grouped['published']->count() }}</span>
                                 </button>
                             </li>
                         </ul>
@@ -63,7 +63,7 @@
                         @forelse($grouped['draft'] as $report)
                             @include('doctor.reports.partials.report-card', ['report' => $report, 'statusColor' => 'secondary'])
                         @empty
-                            <div class="text-center py-5 text-muted">No draft reports.</div>
+                            <div class="text-center py-5 text-muted">{{ __('app.reports.no_draft_reports') }}</div>
                         @endforelse
                     </div>
 
@@ -72,7 +72,7 @@
                         @forelse($grouped['submitted'] as $report)
                             @include('doctor.reports.partials.report-card', ['report' => $report, 'statusColor' => 'warning'])
                         @empty
-                            <div class="text-center py-5 text-muted">No reports awaiting review.</div>
+                            <div class="text-center py-5 text-muted">{{ __('app.reports.no_awaiting_review') }}</div>
                         @endforelse
                     </div>
 
@@ -81,7 +81,7 @@
                         @forelse($grouped['revision_requested'] as $report)
                             @include('doctor.reports.partials.report-card', ['report' => $report, 'statusColor' => 'danger'])
                         @empty
-                            <div class="text-center py-5 text-muted">No reports requiring revision.</div>
+                            <div class="text-center py-5 text-muted">{{ __('app.reports.no_revision_reports') }}</div>
                         @endforelse
                     </div>
 
@@ -90,7 +90,7 @@
                         @forelse($grouped['published'] as $report)
                             @include('doctor.reports.partials.report-card', ['report' => $report, 'statusColor' => 'success'])
                         @empty
-                            <div class="text-center py-5 text-muted">No published reports.</div>
+                            <div class="text-center py-5 text-muted">{{ __('app.reports.no_published_reports') }}</div>
                         @endforelse
                     </div>
 

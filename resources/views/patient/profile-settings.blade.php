@@ -34,16 +34,16 @@
                                         <div class="upload-img">
                                             <div class="imgs-load d-flex align-items-center">
                                                 <div class="change-photo">
-                                                    Upload New
+                                                    {{ __('app.profile.upload_new') }}
                                                     <input type="file" name="image" class="upload">
                                                 </div>
                                             </div>
-                                            <p>Your Image should Below 4 MB, Accepted format jpg,png,svg</p>
+                                            <p>{{ __('app.profile.image_limit') }}</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="setting-title">
-                                    <h6>Information</h6>
+                                    <h6>{{ __('app.profile.information') }}</h6>
                                 </div>
                                 <div class="setting-card">
                                     <div class="row">
@@ -83,10 +83,10 @@
                                         </div>
                                         <div class="col-lg-6 col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">Timezone <span
+                                                <label class="form-label">{{ __('app.profile.timezone') }} <span
                                                         class="text-danger">*</span></label>
                                                 <select name="timezone" class="form-control" required>
-                                                    <option value="">Select Timezone</option>
+                                                    <option value="">{{ __('app.profile.select_timezone') }}</option>
                                                     <!-- Americas -->
                                                     <optgroup label="Americas">
                                                         <option value="America/New_York"

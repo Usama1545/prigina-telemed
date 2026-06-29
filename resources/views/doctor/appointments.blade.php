@@ -75,7 +75,7 @@
 
                                     <button class="nav-link" id="pills-completed-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-completed" type="button">
-                                        Completed
+                                        {{ __('app.common.completed') }}
                                         <span id="completed-count">
                                             {{ count($appointments['completed']) }}
                                         </span>
@@ -207,7 +207,7 @@
                                 <div class="d-flex align-items-center gap-2 mb-1">
                                     <i class="isax isax-calendar-1 text-primary" style="font-size:16px;"></i>
                                     <span class="text-muted"
-                                        style="font-size:11px; text-transform:uppercase; letter-spacing:.5px;">Date</span>
+                                        style="font-size:11px; text-transform:uppercase; letter-spacing:.5px;">{{ __('app.common.date') }}</span>
                                 </div>
                                 <p class="mb-0 fw-semibold" id="appt-detail-date" style="font-size:14px;"></p>
                             </div>
@@ -218,7 +218,7 @@
                                 <div class="d-flex align-items-center gap-2 mb-1">
                                     <i class="isax isax-clock5 text-success" style="font-size:16px;"></i>
                                     <span class="text-muted"
-                                        style="font-size:11px; text-transform:uppercase; letter-spacing:.5px;">Time</span>
+                                        style="font-size:11px; text-transform:uppercase; letter-spacing:.5px;">{{ __('app.common.time') }}</span>
                                 </div>
                                 <p class="mb-0 fw-semibold" id="appt-detail-time" style="font-size:14px;"></p>
                             </div>
@@ -229,7 +229,7 @@
                                 <div class="d-flex align-items-center gap-2 mb-1">
                                     <i class="fa-solid fa-dollar-sign text-warning" style="font-size:14px;"></i>
                                     <span class="text-muted"
-                                        style="font-size:11px; text-transform:uppercase; letter-spacing:.5px;">Amount</span>
+                                        style="font-size:11px; text-transform:uppercase; letter-spacing:.5px;">{{ __('app.appointments.amount') }}</span>
                                 </div>
                                 <p class="mb-0 fw-semibold text-warning" id="appt-detail-amount" style="font-size:14px;">
                                 </p>
@@ -241,9 +241,9 @@
                                 <div class="d-flex align-items-center gap-2 mb-1">
                                     <i class="fa-solid fa-video text-purple" style="font-size:14px; color:#9333ea;"></i>
                                     <span class="text-muted"
-                                        style="font-size:11px; text-transform:uppercase; letter-spacing:.5px;">Type</span>
+                                        style="font-size:11px; text-transform:uppercase; letter-spacing:.5px;">{{ __('app.appointments.type') }}</span>
                                 </div>
-                                <p class="mb-0 fw-semibold" style="font-size:14px; color:#9333ea;">Video Call</p>
+                                <p class="mb-0 fw-semibold" style="font-size:14px; color:#9333ea;">{{ __('app.appointments.video_call_type') }}</p>
                             </div>
                         </div>
 
@@ -255,7 +255,7 @@
                             <div class="d-flex align-items-center gap-2 mb-2">
                                 <i class="fa-solid fa-notes-medical text-danger" style="font-size:14px;"></i>
                                 <span class="fw-semibold"
-                                    style="font-size:13px; text-transform:uppercase; letter-spacing:.5px; color:#475569;">Symptoms</span>
+                                    style="font-size:13px; text-transform:uppercase; letter-spacing:.5px; color:#475569;">{{ __('app.appointments.symptoms') }}</span>
                             </div>
                             <p class="mb-0 text-secondary" id="appt-detail-symptoms"
                                 style="font-size:14px; line-height:1.6;"></p>
@@ -268,7 +268,7 @@
                             <div class="d-flex align-items-center gap-2 mb-2">
                                 <i class="fa-solid fa-clipboard text-info" style="font-size:14px;"></i>
                                 <span class="fw-semibold"
-                                    style="font-size:13px; text-transform:uppercase; letter-spacing:.5px; color:#475569;">Notes</span>
+                                    style="font-size:13px; text-transform:uppercase; letter-spacing:.5px; color:#475569;">{{ __('app.appointments.notes') }}</span>
                             </div>
                             <p class="mb-0 text-secondary" id="appt-detail-notes"
                                 style="font-size:14px; line-height:1.6;"></p>
@@ -281,7 +281,7 @@
                             <div class="d-flex align-items-center gap-2 mb-3">
                                 <i class="fa-solid fa-paperclip text-primary" style="font-size:14px;"></i>
                                 <span class="fw-semibold"
-                                    style="font-size:13px; text-transform:uppercase; letter-spacing:.5px; color:#475569;">Patient Documents</span>
+                                    style="font-size:13px; text-transform:uppercase; letter-spacing:.5px; color:#475569;">{{ __('app.appointments.patient_documents') }}</span>
                             </div>
                             <div id="appt-detail-docs" class="d-flex flex-wrap gap-2"></div>
                         </div>
@@ -290,7 +290,7 @@
                 </div>
 
                 <div class="modal-footer border-0 pt-0 px-4 pb-4">
-                    <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">{{ __('app.common.close') }}</button>
                 </div>
 
             </div>
@@ -304,7 +304,7 @@
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="rescheduleModalLabel">Reschedule Appointment</h5>
+                    <h5 class="modal-title" id="rescheduleModalLabel">{{ __('app.appointments.reschedule_title') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
@@ -313,17 +313,17 @@
                     <input type="hidden" id="reschedule-appointment-id">
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">New Date</label>
+                        <label class="form-label fw-semibold">{{ __('app.appointments.new_date') }}</label>
                         <input type="date" id="reschedule-date" class="form-control" min="{{ date('Y-m-d') }}">
                     </div>
 
                     <div class="row g-3">
                         <div class="col-6">
-                            <label class="form-label fw-semibold">Start Time</label>
+                            <label class="form-label fw-semibold">{{ __('app.appointments.start_time') }}</label>
                             <input type="time" id="reschedule-start" class="form-control">
                         </div>
                         <div class="col-6">
-                            <label class="form-label fw-semibold">End Time</label>
+                            <label class="form-label fw-semibold">{{ __('app.appointments.end_time') }}</label>
                             <input type="time" id="reschedule-end" class="form-control">
                         </div>
                     </div>
@@ -333,10 +333,10 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('app.common.cancel') }}</button>
                     <button type="button" class="btn btn-primary" id="reschedule-save-btn">
                         <span id="reschedule-spinner" class="spinner-border spinner-border-sm me-1 d-none"></span>
-                        Save Changes
+                        {{ __('app.appointments.save_changes') }}
                     </button>
                 </div>
 
@@ -697,13 +697,13 @@
                 errorEl.classList.add('d-none');
 
                 if (!date || !startTime || !endTime) {
-                    errorEl.textContent = 'Please fill in all fields.';
+                    errorEl.textContent = '{{ __('app.appointments.error_fill_fields') }}';
                     errorEl.classList.remove('d-none');
                     return;
                 }
 
                 if (endTime <= startTime) {
-                    errorEl.textContent = 'End time must be after start time.';
+                    errorEl.textContent = '{{ __('app.appointments.error_end_time') }}';
                     errorEl.classList.remove('d-none');
                     return;
                 }
@@ -756,7 +756,7 @@
                         }
                     })
                     .catch(() => {
-                        errorEl.textContent = 'Network error. Please try again.';
+                        errorEl.textContent = '{{ __('app.appointments.error_network') }}';
                         errorEl.classList.remove('d-none');
                     })
                     .finally(() => {

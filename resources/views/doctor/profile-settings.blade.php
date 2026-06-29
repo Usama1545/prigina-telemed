@@ -18,13 +18,13 @@
 
                     <!-- Profile Settings -->
                     <div class="dashboard-header">
-                        <h3>Profile Settings</h3>
+                        <h3>{{ __('app.profile.title') }}</h3>
                     </div>
 
 
 
                     <div class="setting-title">
-                        <h5>Profile</h5>
+                        <h5>{{ __('app.profile.photo') }}</h5>
                     </div>
 
                     <form action="{{ route('doctor.settings.update') }}" method="POST" enctype="multipart/form-data">
@@ -34,7 +34,7 @@
                         <input type="hidden" name="timezone" id="timezone">
                         <!-- Profile Image -->
                         <div class="setting-card bg-white">
-                            <label class="form-label mb-2">Profile Photo</label>
+                            <label class="form-label mb-2">{{ __('app.profile.photo') }}</label>
                             <div class="change-avatar img-upload">
                                 <div class="profile-img">
                                     <i class="fa-solid fa-file-image"></i>
@@ -42,19 +42,19 @@
                                 <div class="upload-img">
                                     <div class="imgs-load d-flex align-items-center">
                                         <div class="change-photo">
-                                            Upload New
+                                            {{ __('app.profile.upload_new') }}
                                             <input type="file" name="image" class="upload"
                                                 accept=".jpg,.jpeg,.png,.webp">
                                         </div>
                                     </div>
-                                    <p>Your Image should Below 4 MB, Accepted format jpg,png,jpeg,webp</p>
+                                    <p>{{ __('app.profile.image_limit') }}</p>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Information -->
                         <div class="setting-title">
-                            <h5>Information</h5>
+                            <h5>{{ __('app.profile.information') }}</h5>
                         </div>
 
                         <div class="setting-card bg-white">
@@ -66,7 +66,7 @@
                                     <div class="form-wrap">
 
                                         <label class="form-label">
-                                            Full Name <span class="text-danger">*</span>
+                                            {{ __('app.profile.name') }} <span class="text-danger">*</span>
                                         </label>
 
                                         <input type="text" name="name" class="form-control"
@@ -80,7 +80,7 @@
                                     <div class="form-wrap">
 
                                         <label class="form-label">
-                                            Email Address <span class="text-danger">*</span>
+                                            {{ __('app.profile.email_address') }} <span class="text-danger">*</span>
                                         </label>
 
                                         <input type="email" name="email" class="form-control"
@@ -94,7 +94,7 @@
                                     <div class="form-wrap">
 
                                         <label class="form-label">
-                                            Phone Number <span class="text-danger">*</span>
+                                            {{ __('app.profile.phone') }} <span class="text-danger">*</span>
                                         </label>
 
                                         <input type="text" name="phone" class="form-control"
@@ -108,7 +108,7 @@
                                     <div class="form-wrap">
 
                                         <label class="form-label">
-                                            Medical License Number
+                                            {{ __('app.profile.license_number') }}
                                             <span class="text-danger">*</span>
                                         </label>
 
@@ -124,13 +124,13 @@
                                     <div class="form-wrap">
 
                                         <label class="form-label">
-                                            Qualification <span class="text-danger">*</span>
+                                            {{ __('app.profile.qualification') }} <span class="text-danger">*</span>
                                         </label>
 
                                         <select name="qualification" class="form-control" required>
 
                                             <option value="">
-                                                Select Qualification
+                                                {{ __('app.profile.select_qualification') }}
                                             </option>
 
                                             @foreach (['MBBS', 'MD', 'MS', 'DM', 'MCH', 'DNB', 'PHD'] as $qualification)
@@ -150,14 +150,14 @@
                                     <div class="form-wrap">
 
                                         <label class="form-label">
-                                            Years of Experience
+                                            {{ __('app.profile.years_experience') }}
                                             <span class="text-danger">*</span>
                                         </label>
 
                                         <select name="experience" class="form-control" required>
 
                                             <option value="">
-                                                Select Experience
+                                                {{ __('app.profile.select_experience') }}
                                             </option>
 
                                             @foreach (['0-2 years', '3-5 years', '6-10 years', '11-15 years', '15+ years'] as $experience)
@@ -178,7 +178,7 @@
                                     <div class="form-wrap">
 
                                         <label class="form-label">
-                                            Specializations
+                                            {{ __('app.profile.specializations') }}
                                             <span class="text-danger">*</span>
                                         </label>
 
@@ -203,7 +203,7 @@
                                     <div class="form-wrap">
 
                                         <label class="form-label">
-                                            Languages Spoken
+                                            {{ __('app.profile.languages_spoken') }}
                                             <span class="text-danger">*</span>
                                         </label>
 
@@ -226,7 +226,7 @@
                             </div>
                         </div>
                         <div class="setting-title">
-                            <h5>Availability Timing</h5>
+                            <h5>{{ __('app.profile.availability_timing') }}</h5>
                         </div>
 
                         <div class="setting-card bg-white">
@@ -234,7 +234,7 @@
                                 <div class="row mb-4">
                                     <div class="col-lg-6 col-md-6 ">
                                         <label class="form-label fw-semibold">
-                                            Consultation Fee <span class="text-danger">*</span>
+                                            {{ __('app.profile.consultation_fee') }} <span class="text-danger">*</span>
                                         </label>
 
                                         <div class="input-group">
@@ -253,11 +253,11 @@
                                     <!-- Timezone -->
                                     <div class="col-lg-6 col-md-6">
                                         <label class="form-label fw-semibold">
-                                            Timezone <span class="text-danger">*</span>
+                                            {{ __('app.profile.timezone') }} <span class="text-danger">*</span>
                                         </label>
 
                                         <select name="timezone_select" class="form-control" required>
-                                            <option value="">Select Timezone</option>
+                                            <option value="">{{ __('app.profile.select_timezone') }}</option>
                                             <!-- Americas -->
                                             <optgroup label="Americas">
                                                 <option value="America/New_York"
@@ -460,7 +460,7 @@
                                 <!-- Working Days -->
                                 <div class="mb-4">
                                     <label class="form-label fw-semibold">
-                                        Working Days <span class="text-danger">*</span>
+                                        {{ __('app.profile.working_days') }} <span class="text-danger">*</span>
                                     </label>
                                     <select name="workingDays[]" class="form-control select2" multiple required>
                                         @foreach (['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day)
@@ -475,7 +475,7 @@
 
                                 <div class="mb-4">
                                     <label class="form-label fw-semibold">
-                                        Appointment Duration <span class="text-danger">*</span>
+                                        {{ __('app.profile.appointment_duration') }} <span class="text-danger">*</span>
                                     </label>
 
                                     <select name="slotDuration" class="form-control" required>
@@ -521,11 +521,11 @@
                                     <div class="col-md-6">
                                         <div class="mb-4">
                                             <label class="form-label fw-semibold">
-                                                Start Time <span class="text-danger">*</span>
+                                                {{ __('app.profile.start_time') }} <span class="text-danger">*</span>
                                             </label>
 
                                             <select name="workingHours[]" class="form-control" required>
-                                                <option value="">Select start time</option>
+                                                <option value="">{{ __('app.profile.select_timezone') }}</option>
                                                 @php
                                                     $startTimes = [];
                                                     for ($i = 0; $i < 24; $i++) {
@@ -549,11 +549,11 @@
                                     <div class="col-md-6">
                                         <div class="mb-4">
                                             <label class="form-label fw-semibold">
-                                                End Time <span class="text-danger">*</span>
+                                                {{ __('app.profile.end_time') }} <span class="text-danger">*</span>
                                             </label>
 
                                             <select name="workingHours[]" class="form-control" required>
-                                                <option value="">Select end time</option>
+                                                <option value="">{{ __('app.profile.select_timezone') }}</option>
                                                 @php
                                                     $endTimes = [];
                                                     for ($i = 0; $i < 24; $i++) {
@@ -736,11 +736,11 @@
                 <div class="modal-btn text-end">
 
                     <a href="#" class="btn btn-gray">
-                        Cancel
+                        {{ __('app.common.cancel') }}
                     </a>
 
                     <button type="submit" class="btn btn-primary prime-btn">
-                        Save Changes
+                        {{ __('app.profile.save_changes') }}
                     </button>
 
                 </div>

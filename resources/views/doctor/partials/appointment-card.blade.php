@@ -196,7 +196,7 @@
                     <div class="mt-3">
 
                         <label class="fw-bold mb-1">
-                            Symptoms
+                            {{ __('app.appointments.symptoms') }}
                         </label>
 
                         <p
@@ -227,7 +227,7 @@
 
                         <i class="fa-solid fa-check me-1"></i>
 
-                        Mark as Complete
+                        {{ __('app.appointments.mark_complete') }}
 
                     </a>
 
@@ -250,7 +250,7 @@
 
                             <i class="isax isax-calendar-edit me-1"></i>
 
-                            Reschedule
+                            {{ __('app.appointments.reschedule') }}
 
                         </button>
 

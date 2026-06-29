@@ -14,16 +14,16 @@
     $questions   = $report['questions_for_physician'] ?? [];
 
     $sections = [
-        ['id' => 'patient-info',    'label' => 'Patient Information'],
-        ['id' => 'docs-reviewed',   'label' => 'Documents Reviewed'],
-        ['id' => 'clinical',        'label' => 'Clinical Summary'],
-        ['id' => 'assessment',      'label' => 'Second Opinion Assessment'],
-        ['id' => 'findings',        'label' => 'Key Findings'],
-        ['id' => 'diagnostic',      'label' => 'Diagnostic Considerations'],
-        ['id' => 'recommendations', 'label' => 'Recommendations'],
-        ['id' => 'questions',       'label' => 'Questions for Physician'],
-        ['id' => 'patient-summary', 'label' => 'Patient-Friendly Summary'],
-        ['id' => 'certification',   'label' => 'Certification'],
+        ['id' => 'patient-info',    'label' => __('app.reports.section_patient_info')],
+        ['id' => 'docs-reviewed',   'label' => __('app.reports.section_docs_reviewed')],
+        ['id' => 'clinical',        'label' => __('app.reports.section_clinical')],
+        ['id' => 'assessment',      'label' => __('app.reports.section_assessment')],
+        ['id' => 'findings',        'label' => __('app.reports.section_findings')],
+        ['id' => 'diagnostic',      'label' => __('app.reports.section_diagnostic')],
+        ['id' => 'recommendations', 'label' => __('app.reports.section_recommendations')],
+        ['id' => 'questions',       'label' => __('app.reports.section_questions')],
+        ['id' => 'patient-summary', 'label' => __('app.reports.section_patient_summary')],
+        ['id' => 'certification',   'label' => __('app.reports.section_certification')],
     ];
 @endphp
 
@@ -43,10 +43,10 @@
                 <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3 pt-3">
                     <div>
                         <a href="{{ route('doctor.reports') }}" class="btn btn-sm btn-light me-2">
-                            <i class="isax isax-arrow-left me-1"></i> Back to Reports
+                            <i class="isax isax-arrow-left me-1"></i> {{ __('app.reports.back_to_reports') }}
                         </a>
                         <span class="fw-bold text-dark" style="font-size:18px;">
-                            {{ $editable ? 'Write Second Opinion Report' : 'View Report' }}
+                            {{ $editable ? __('app.reports.write_report') : __('app.reports.view_report') }}
                         </span>
                         <span class="badge ms-2 text-capitalize
                             {{ $report['status'] === 'published' ? 'bg-success' :
@@ -58,19 +58,19 @@
                     @if($editable)
                     <div class="d-flex gap-2 flex-wrap">
                         <button type="button" id="btnSaveDraft" class="btn btn-outline-secondary btn-sm">
-                            <i class="isax isax-save-2 me-1"></i> Save Draft
+                            <i class="isax isax-save-2 me-1"></i> {{ __('app.reports.save_draft') }}
                         </button>
                         <a href="{{ route('doctor.reports.pdf', $report['id']) }}" target="_blank" class="btn btn-outline-primary btn-sm">
-                            <i class="isax isax-document-download me-1"></i> Preview PDF
+                            <i class="isax isax-document-download me-1"></i> {{ __('app.reports.preview_pdf') }}
                         </a>
                         <button type="button" id="btnSubmit" class="btn btn-primary btn-sm">
-                            <i class="isax isax-send-2 me-1"></i> Submit for Review
+                            <i class="isax isax-send-2 me-1"></i> {{ __('app.reports.submit_for_review') }}
                         </button>
                     </div>
                     @else
                     <div class="d-flex gap-2">
                         <a href="{{ route('doctor.reports.pdf', $report['id']) }}" target="_blank" class="btn btn-outline-primary btn-sm">
-                            <i class="isax isax-document-download me-1"></i> Preview PDF
+                            <i class="isax isax-document-download me-1"></i> {{ __('app.reports.preview_pdf') }}
                         </a>
                     </div>
                     @endif
@@ -83,7 +83,7 @@
                 @endif
                 @if($report['status'] === 'revision_requested' && !empty($report['rejection_reason']))
                     <div class="alert alert-warning" role="alert">
-                        <strong><i class="isax isax-info-circle me-1"></i>Revision Requested:</strong>
+                        <strong><i class="isax isax-info-circle me-1"></i>{{ __('app.reports.revision_requested_alert') }}:</strong>
                         {{ $report['rejection_reason'] }}
                     </div>
                 @endif
@@ -100,38 +100,38 @@
                         <div class="card-body p-4">
                             <div class="section-header d-flex align-items-center gap-2 mb-4">
                                 <div class="section-num">1</div>
-                                <h5 class="mb-0">Patient Information</h5>
+                                <h5 class="mb-0">{{ __('app.reports.section_patient_info') }}</h5>
                             </div>
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                    <label class="form-label">Patient Name</label>
+                                    <label class="form-label">{{ __('app.reports.patient_name') }}</label>
                                     <input type="text" class="form-control" name="patient_information[patient_name]"
                                         value="{{ $patient['patient_name'] ?? '' }}" {{ $editable ? '' : 'readonly' }}>
                                 </div>
                                 <div class="col-md-3">
-                                    <label class="form-label">Age</label>
+                                    <label class="form-label">{{ __('app.reports.age') }}</label>
                                     <input type="text" class="form-control" name="patient_information[age]"
                                         value="{{ $patient['age'] ?? '' }}" {{ $editable ? '' : 'readonly' }}>
                                 </div>
                                 <div class="col-md-3">
-                                    <label class="form-label">Gender</label>
+                                    <label class="form-label">{{ __('app.reports.gender') }}</label>
                                     <select class="form-select" name="patient_information[gender]" {{ $editable ? '' : 'disabled' }}>
-                                        <option value="">Select</option>
-                                        @foreach(['Male','Female','Other'] as $g)
-                                        <option value="{{ $g }}" {{ ($patient['gender'] ?? '') === $g ? 'selected' : '' }}>{{ $g }}</option>
+                                        <option value="">{{ __('app.common.select') }}</option>
+                                        @foreach([['val'=>'Male','key'=>'gender_male'],['val'=>'Female','key'=>'gender_female'],['val'=>'Other','key'=>'gender_other']] as $g)
+                                        <option value="{{ $g['val'] }}" {{ ($patient['gender'] ?? '') === $g['val'] ? 'selected' : '' }}>{{ __('app.reports.'.$g['key']) }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Case ID</label>
+                                    <label class="form-label">{{ __('app.reports.case_id') }}</label>
                                     <input type="text" class="form-control" value="{{ $info['case_id'] ?? '' }}" readonly>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Consultation Date</label>
+                                    <label class="form-label">{{ __('app.reports.consultation_date') }}</label>
                                     <input type="text" class="form-control" value="{{ isset($info['report_date']) ? \Carbon\Carbon::parse($info['report_date'])->format('M d, Y') : '' }}" readonly>
                                 </div>
                                 <div class="col-12">
-                                    <label class="form-label">Primary Concern / Diagnosis Under Review</label>
+                                    <label class="form-label">{{ __('app.reports.primary_concern') }}</label>
                                     <textarea class="form-control" name="patient_information[primary_concern]" rows="3"
                                         {{ $editable ? '' : 'readonly' }}>{{ $patient['primary_concern'] ?? '' }}</textarea>
                                 </div>
@@ -144,17 +144,17 @@
                         <div class="card-body p-4">
                             <div class="section-header d-flex align-items-center gap-2 mb-4">
                                 <div class="section-num">2</div>
-                                <h5 class="mb-0">Documents Reviewed</h5>
+                                <h5 class="mb-0">{{ __('app.reports.section_docs_reviewed') }}</h5>
                             </div>
                             <div class="row g-3">
                                 @php
                                     $docFields = [
-                                        'medical_records'    => 'Medical Records',
-                                        'laboratory_results' => 'Lab Results',
-                                        'imaging_studies'    => 'Imaging Studies',
-                                        'pathology_reports'  => 'Pathology Reports',
-                                        'operative_reports'  => 'Operative Reports',
-                                        'consultation_notes' => 'Consultation Notes',
+                                        'medical_records'    => __('app.reports.doc_medical_records'),
+                                        'laboratory_results' => __('app.reports.doc_lab_results'),
+                                        'imaging_studies'    => __('app.reports.doc_imaging'),
+                                        'pathology_reports'  => __('app.reports.doc_pathology'),
+                                        'operative_reports'  => __('app.reports.doc_operative'),
+                                        'consultation_notes' => __('app.reports.doc_consultation'),
                                     ];
                                 @endphp
                                 @foreach($docFields as $key => $label)
@@ -174,9 +174,9 @@
                                 </div>
                                 @endforeach
                                 <div class="col-12">
-                                    <label class="form-label">Other (please specify)</label>
+                                    <label class="form-label">{{ __('app.reports.other_specify') }}</label>
                                     <input type="text" class="form-control" name="documents_reviewed[other]"
-                                        value="{{ $docs['other'] ?? '' }}" placeholder="Type here (optional)"
+                                        value="{{ $docs['other'] ?? '' }}" placeholder="{{ __('app.reports.type_here_optional') }}"
                                         {{ $editable ? '' : 'readonly' }}>
                                 </div>
                             </div>
@@ -188,7 +188,7 @@
                         <div class="card-body p-4">
                             <div class="section-header d-flex align-items-center gap-2 mb-4">
                                 <div class="section-num">3</div>
-                                <h5 class="mb-0">Clinical Summary</h5>
+                                <h5 class="mb-0">{{ __('app.reports.section_clinical') }}</h5>
                             </div>
                             @if($editable)
                                 <div id="editor-clinical" class="quill-editor" style="min-height:180px;">{!! $report['clinical_summary'] ?? '' !!}</div>
@@ -204,7 +204,7 @@
                         <div class="card-body p-4">
                             <div class="section-header d-flex align-items-center gap-2 mb-4">
                                 <div class="section-num">4</div>
-                                <h5 class="mb-0">Second Opinion Assessment</h5>
+                                <h5 class="mb-0">{{ __('app.reports.section_assessment') }}</h5>
                             </div>
                             @if($editable)
                                 <div id="editor-assessment" class="quill-editor" style="min-height:180px;">{!! $report['second_opinion_assessment'] ?? '' !!}</div>
@@ -220,7 +220,7 @@
                         <div class="card-body p-4">
                             <div class="section-header d-flex align-items-center gap-2 mb-4">
                                 <div class="section-num">5</div>
-                                <h5 class="mb-0">Key Findings</h5>
+                                <h5 class="mb-0">{{ __('app.reports.section_findings') }}</h5>
                             </div>
                             <div id="findings-list">
                                 @foreach($findings as $i => $finding)
@@ -249,7 +249,7 @@
                             </div>
                             @if($editable)
                             <button type="button" id="addFinding" class="btn btn-outline-primary btn-sm mt-2">
-                                <i class="isax isax-add-circle me-1"></i> Add Finding
+                                <i class="isax isax-add-circle me-1"></i> {{ __('app.reports.add_finding') }}
                             </button>
                             @endif
                         </div>
@@ -260,7 +260,7 @@
                         <div class="card-body p-4">
                             <div class="section-header d-flex align-items-center gap-2 mb-4">
                                 <div class="section-num">6</div>
-                                <h5 class="mb-0">Diagnostic Considerations</h5>
+                                <h5 class="mb-0">{{ __('app.reports.section_diagnostic') }}</h5>
                             </div>
                             @if($editable)
                                 <div id="editor-diagnostic" class="quill-editor" style="min-height:150px;">{!! $report['diagnostic_considerations'] ?? '' !!}</div>
@@ -276,19 +276,19 @@
                         <div class="card-body p-4">
                             <div class="section-header d-flex align-items-center gap-2 mb-4">
                                 <div class="section-num">7</div>
-                                <h5 class="mb-0">Recommendations</h5>
+                                <h5 class="mb-0">{{ __('app.reports.section_recommendations') }}</h5>
                             </div>
-                            <p class="text-muted small mb-3">Select all that apply</p>
+                            <p class="text-muted small mb-3">{{ __('app.reports.select_all_apply') }}</p>
                             @php
                                 $recFields = [
-                                    'additional_testing'      => 'Additional Testing',
-                                    'additional_imaging'      => 'Additional Imaging',
-                                    'specialist_referral'     => 'Specialist Referral',
-                                    'treatment_modification'  => 'Treatment Modification',
-                                    'monitoring'              => 'Monitoring / Observation',
-                                    'surgical_consultation'   => 'Surgical Consultation',
-                                    'lifestyle_modifications' => 'Lifestyle Modifications',
-                                    'other'                   => 'Other',
+                                    'additional_testing'      => __('app.reports.rec_additional_testing'),
+                                    'additional_imaging'      => __('app.reports.rec_additional_imaging'),
+                                    'specialist_referral'     => __('app.reports.rec_specialist_referral'),
+                                    'treatment_modification'  => __('app.reports.rec_treatment_modification'),
+                                    'monitoring'              => __('app.reports.rec_monitoring'),
+                                    'surgical_consultation'   => __('app.reports.rec_surgical'),
+                                    'lifestyle_modifications' => __('app.reports.rec_lifestyle'),
+                                    'other'                   => __('app.reports.gender_other'),
                                 ];
                             @endphp
                             <div class="row g-2 mb-3">
@@ -309,7 +309,7 @@
                                 </div>
                                 @endforeach
                             </div>
-                            <label class="form-label">Details / Recommendations</label>
+                            <label class="form-label">{{ __('app.reports.rec_details') }}</label>
                             <textarea class="form-control" name="recommendations[details]" rows="3"
                                 {{ $editable ? '' : 'readonly' }}>{{ $recs['details'] ?? '' }}</textarea>
                         </div>
@@ -320,7 +320,7 @@
                         <div class="card-body p-4">
                             <div class="section-header d-flex align-items-center gap-2 mb-4">
                                 <div class="section-num">8</div>
-                                <h5 class="mb-0">Questions to Discuss with Treating Physician <span class="text-muted small fw-normal">(Optional)</span></h5>
+                                <h5 class="mb-0">{{ __('app.reports.questions_title') }} <span class="text-muted small fw-normal">({{ __('app.reports.optional') }})</span></h5>
                             </div>
                             <div id="questions-list">
                                 @foreach($questions as $i => $question)
@@ -351,7 +351,7 @@
                             </div>
                             @if($editable)
                             <button type="button" id="addQuestion" class="btn btn-outline-primary btn-sm mt-2">
-                                <i class="isax isax-add-circle me-1"></i> Add Another Question
+                                <i class="isax isax-add-circle me-1"></i> {{ __('app.reports.add_question') }}
                             </button>
                             @endif
                         </div>
@@ -362,7 +362,7 @@
                         <div class="card-body p-4">
                             <div class="section-header d-flex align-items-center gap-2 mb-4">
                                 <div class="section-num">9</div>
-                                <h5 class="mb-0">Patient-Friendly Summary</h5>
+                                <h5 class="mb-0">{{ __('app.reports.section_patient_summary') }}</h5>
                             </div>
                             @if($editable)
                                 <div id="editor-patient-summary" class="quill-editor" style="min-height:150px;">{!! $report['patient_friendly_summary'] ?? '' !!}</div>
@@ -378,29 +378,29 @@
                         <div class="card-body p-4">
                             <div class="section-header d-flex align-items-center gap-2 mb-4">
                                 <div class="section-num">10</div>
-                                <h5 class="mb-0">Physician Certification</h5>
+                                <h5 class="mb-0">{{ __('app.reports.section_certification') }}</h5>
                             </div>
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                    <label class="form-label">Physician Name</label>
+                                    <label class="form-label">{{ __('app.reports.physician_name') }}</label>
                                     <input type="text" class="form-control" value="{{ $cert['physician_name'] ?? '' }}" readonly>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Specialty</label>
+                                    <label class="form-label">{{ __('app.reports.specialty') }}</label>
                                     <input type="text" class="form-control" value="{{ $cert['specialty'] ?? '' }}" readonly>
                                 </div>
                                 <div class="col-12">
                                     <div class="p-3 rounded-3" style="background:#f8fafc;border:1px dashed #cbd5e1;">
                                         <p class="mb-1 small text-muted">
-                                            By submitting this report, I certify that the information provided represents my professional second opinion based on the reviewed documents.
+                                            {{ __('app.reports.certify_text') }}
                                         </p>
                                         @if(!empty($cert['certified_at']))
                                         <p class="mb-0 small fw-semibold" style="color:#16a34a;">
                                             <i class="isax isax-tick-circle me-1"></i>
-                                            Certified on {{ \Carbon\Carbon::parse($cert['certified_at'])->format('M d, Y \a\t h:i A') }}
+                                            {{ __('app.reports.certified_on') }} {{ \Carbon\Carbon::parse($cert['certified_at'])->format('M d, Y \a\t h:i A') }}
                                         </p>
                                         @else
-                                        <p class="mb-0 small text-muted">Certification timestamp will be recorded on submission.</p>
+                                        <p class="mb-0 small text-muted">{{ __('app.reports.cert_pending') }}</p>
                                         @endif
                                     </div>
                                 </div>
@@ -412,13 +412,13 @@
                     {{-- Bottom Action Bar --}}
                     <div class="d-flex gap-2 justify-content-end mb-5 flex-wrap">
                         <button type="button" id="btnSaveDraft2" class="btn btn-outline-secondary">
-                            <i class="isax isax-save-2 me-1"></i> Save Draft
+                            <i class="isax isax-save-2 me-1"></i> {{ __('app.reports.save_draft') }}
                         </button>
                         <a href="{{ route('doctor.reports.pdf', $report['id']) }}" target="_blank" class="btn btn-outline-primary">
-                            <i class="isax isax-document-download me-1"></i> Preview PDF
+                            <i class="isax isax-document-download me-1"></i> {{ __('app.reports.preview_pdf') }}
                         </a>
                         <button type="button" id="btnSubmit2" class="btn btn-primary px-4">
-                            <i class="isax isax-send-2 me-1"></i> Submit for Review
+                            <i class="isax isax-send-2 me-1"></i> {{ __('app.reports.submit_for_review') }}
                         </button>
                     </div>
                     @endif
@@ -430,7 +430,7 @@
                     <div class="col-lg-4 d-none d-lg-block">
                         <div class="card border-0 shadow-sm sticky-top" style="top:80px;">
                             <div class="card-body p-3">
-                                <p class="text-muted small fw-semibold mb-2 text-uppercase" style="letter-spacing:.05em;">Report Progress</p>
+                                <p class="text-muted small fw-semibold mb-2 text-uppercase" style="letter-spacing:.05em;">{{ __('app.reports.report_progress') }}</p>
                                 <ul class="list-unstyled mb-0 stepper-nav" id="stepperNav">
                                     @foreach($sections as $i => $s)
                                     <li>
@@ -649,7 +649,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const text = document.getElementById('saveText');
         ind.style.display = 'block';
         icon.className = 'spinner-border spinner-border-sm text-primary';
-        text.textContent = 'Saving…';
+        text.textContent = '{{ __('app.reports.saving') }}';
     }
 
     function showSaved() {
@@ -657,7 +657,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const text = document.getElementById('saveText');
         icon.className = 'text-success';
         icon.innerHTML = '✓';
-        text.textContent = 'Saved';
+        text.textContent = '{{ __('app.reports.saved') }}';
         setTimeout(() => {
             document.getElementById('saveIndicator').style.display = 'none';
             icon.innerHTML = '';
@@ -670,7 +670,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const text = document.getElementById('saveText');
         icon.className = 'text-danger';
         icon.innerHTML = '✕';
-        text.textContent = 'Save failed';
+        text.textContent = '{{ __('app.reports.save_failed') }}';
         setTimeout(() => { document.getElementById('saveIndicator').style.display = 'none'; }, 3000);
     }
 
@@ -706,7 +706,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Submit
     async function submitReport() {
         await saveDraft();
-        if (confirm('Submit this report for admin review? You will not be able to edit it until the admin requests revisions.')) {
+        if (confirm('{{ __('app.reports.submit_confirm') }}')) {
             document.getElementById('submitForm').submit();
         }
     }

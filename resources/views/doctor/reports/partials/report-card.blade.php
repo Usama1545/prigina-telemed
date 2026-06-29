@@ -16,17 +16,17 @@
                         </span>
                     </div>
                     <p class="mb-1 text-muted small">
-                        Patient: <strong>{{ $report['patient_information']['patient_name'] ?? '—' }}</strong>
+                        {{ __('app.reports.patient_label') }}: <strong>{{ $report['patient_information']['patient_name'] ?? '—' }}</strong>
                     </p>
                     <p class="mb-0 text-muted small">
-                        Created: {{ isset($report['created_at']) ? \Carbon\Carbon::parse($report['created_at'])->format('M d, Y') : '—' }}
+                        {{ __('app.reports.created_label') }}: {{ isset($report['created_at']) ? \Carbon\Carbon::parse($report['created_at'])->format('M d, Y') : '—' }}
                         @if(!empty($report['submitted_at']))
-                            &nbsp;·&nbsp; Submitted: {{ \Carbon\Carbon::parse($report['submitted_at'])->format('M d, Y') }}
+                            &nbsp;·&nbsp; {{ __('app.reports.submitted_label') }}: {{ \Carbon\Carbon::parse($report['submitted_at'])->format('M d, Y') }}
                         @endif
                     </p>
                     @if($report['status'] === 'revision_requested' && !empty($report['rejection_reason']))
                         <div class="mt-2 p-2 rounded-3" style="background:#fff5f5;border:1px solid #fecaca;">
-                            <p class="mb-0 small" style="color:#dc2626;"><i class="isax isax-info-circle me-1"></i><strong>Revision note:</strong> {{ $report['rejection_reason'] }}</p>
+                            <p class="mb-0 small" style="color:#dc2626;"><i class="isax isax-info-circle me-1"></i><strong>{{ __('app.reports.revision_note') }}:</strong> {{ $report['rejection_reason'] }}</p>
                         </div>
                     @endif
                 </div>
@@ -36,18 +36,18 @@
                 @if(in_array($report['status'], ['draft', 'revision_requested']))
                     <a href="{{ route('doctor.reports.edit', $report['id']) }}"
                        class="btn btn-sm btn-primary">
-                        <i class="isax isax-edit me-1"></i> Edit
+                        <i class="isax isax-edit me-1"></i> {{ __('app.common.edit') }}
                     </a>
                 @endif
                 @if($report['status'] === 'submitted' || $report['status'] === 'approved' || $report['status'] === 'published')
                     <a href="{{ route('doctor.reports.edit', $report['id']) }}"
                        class="btn btn-sm btn-outline-secondary">
-                        <i class="isax isax-eye me-1"></i> View
+                        <i class="isax isax-eye me-1"></i> {{ __('app.common.view') }}
                     </a>
                 @endif
                 <a href="{{ route('doctor.reports.pdf', $report['id']) }}" target="_blank"
                    class="btn btn-sm btn-outline-primary">
-                    <i class="isax isax-document-download me-1"></i> PDF
+                    <i class="isax isax-document-download me-1"></i> {{ __('app.reports.preview_pdf') }}
                 </a>
             </div>
 

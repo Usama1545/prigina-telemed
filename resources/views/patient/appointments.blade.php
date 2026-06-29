@@ -546,9 +546,9 @@
                                 <!-- Appointment Meta -->
                                 <div class="col-md-6 text-md-end">
                                     <div class="invoice-info2">
-                                        <p><span>Date : </span><span id="appDate"></span></p>
-                                        <p><span>Time : </span><span id="appTime"></span></p>
-                                        <p><span>Status : </span>
+                                        <p><span>{{ __('app.common.date') }} : </span><span id="appDate"></span></p>
+                                        <p><span>{{ __('app.common.time') }} : </span><span id="appTime"></span></p>
+                                        <p><span>{{ __('app.common.status') }} : </span>
                                             <span id="appStatus"></span>
                                         </p>
                                     </div>
@@ -557,12 +557,12 @@
                                 <!-- Patient -->
                                 <div class="col-md-12">
                                     <div class="patient-id mt-3">
-                                        <h6>Patient Details</h6>
+                                        <h6>{{ __('app.appointments.patient_details') }}</h6>
                                         <div class="patient-det">
                                             <h6 id="patientName"></h6>
                                             <ul>
-                                                <li><strong>Appointment ID :</strong> <span id="appointmentId"></span></li>
-                                                <li><strong>Created At :</strong> <span id="createdAt"></span></li>
+                                                <li><strong>{{ __('app.appointments.appointment_id') }} :</strong> <span id="appointmentId"></span></li>
+                                                <li><strong>{{ __('app.appointments.created_at_label') }} :</strong> <span id="createdAt"></span></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -573,24 +573,24 @@
 
                         <!-- Notes Section -->
                         <div class="appointment-notes">
-                            <h3>Appointment Note</h3>
+                            <h3>{{ __('app.appointments.appointment_note') }}</h3>
                         </div>
 
                         <!-- Symptoms -->
                         <div class="appoint-wrap">
-                            <h5>Symptoms</h5>
+                            <h5>{{ __('app.appointments.symptoms') }}</h5>
                             <p id="symptoms"></p>
                         </div>
 
                         <!-- Notes -->
                         <div class="appoint-wrap">
-                            <h5>Notes</h5>
+                            <h5>{{ __('app.common.notes') }}</h5>
                             <p id="notes"></p>
                         </div>
 
                         <!-- Documents -->
                         <div class="appoint-wrap" id="patient-modal-docs-wrap" style="display:none;">
-                            <h5>Documents</h5>
+                            <h5>{{ __('app.appointments.patient_documents') }}</h5>
                             <div id="patient-modal-docs" class="d-flex flex-wrap gap-2 mt-2"></div>
                         </div>
 
