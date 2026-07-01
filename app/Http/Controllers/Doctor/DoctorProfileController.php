@@ -112,7 +112,7 @@ class DoctorProfileController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
-            'license_number' => 'required',
+            'licenseNumber' => 'required',
             'qualification' => 'required',
             'experience' => 'required|string',
             'specializations' => 'required|array|min:1',
@@ -133,7 +133,7 @@ class DoctorProfileController extends Controller
             'email',
             'gender',
             'dob',
-            'license_number',
+            'licenseNumber',
             'qualification',
             'experience',
             'specializations',

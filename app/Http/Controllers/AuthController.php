@@ -195,7 +195,7 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email',
             'phone' => 'required',
-            'license_number' => 'required',
+            'licenseNumber' => 'required',
             'qualification' => 'required',
             'experience' => 'required|string',
             'specializations' => 'required|array|min:1',

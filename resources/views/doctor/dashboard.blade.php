@@ -7,7 +7,7 @@
         $totalReviews = (int) ($doctor['totalReviews'] ?? 0);
         $profileImage = $doctor['profilePicture'] ?? URL::asset('build/img/doctors-dashboard/profile-06.jpg');
         $specialty = $doctor['specializations'][0] ?? ($doctor['qualification'] ?? 'Specialist');
-        $license = $doctor['license_number'] ?? 'Not Set';
+        $license = $doctor['licenseNumber'] ?? 'Not Set';
         $todayCount = $todayAppointments->count();
         $nextAppointment = $futureAppointments->first();
         $activityCount = count($notifications ?? []);
@@ -29,7 +29,8 @@
                             <img src="{{ asset('build/img/doc-home/doc-logo-1.jpeg') }}" alt="">
                             <h2>{{ __('app.doctor_dashboard.todays_appointments') }}</h2>
                             <strong>{{ $todayCount }}</strong>
-                            <p>{{ $todayCount ? __('app.doctor_dashboard.scheduled_today') : __('app.doctor_dashboard.no_appointments_today') }}</p>
+                            <p>{{ $todayCount ? __('app.doctor_dashboard.scheduled_today') : __('app.doctor_dashboard.no_appointments_today') }}
+                            </p>
                             <img class="stat-graph" src="{{ asset('build/img/doc-home/doc-home-1-1') }}" alt="">
                         </article>
 
@@ -37,7 +38,8 @@
                             <img src="{{ asset('build/img/doc-home/doc-logo-4.jpeg') }}" alt="">
                             <h2>{{ __('app.doctor_dashboard.waiting_patients') }}</h2>
                             <strong>{{ $waitingAppointments }}</strong>
-                            <p>{{ $waitingAppointments ? __('app.doctor_dashboard.patients_in_queue') : __('app.doctor_dashboard.no_patients_waiting') }}</p>
+                            <p>{{ $waitingAppointments ? __('app.doctor_dashboard.patients_in_queue') : __('app.doctor_dashboard.no_patients_waiting') }}
+                            </p>
                             <img class="stat-graph stat-line" src="{{ asset('build/img/doc-home/doc-logo-2-1.jpeg') }}"
                                 alt="">
                         </article>
@@ -60,7 +62,8 @@
                                     <i class="fa-solid fa-star {{ $rating >= $i ? 'active' : '' }}"></i>
                                 @endfor
                             </div>
-                            <p>{{ $totalReviews ? __('app.doctor_dashboard.reviews', ['count' => $totalReviews]) : __('app.doctor_dashboard.no_reviews_yet') }}</p>
+                            <p>{{ $totalReviews ? __('app.doctor_dashboard.reviews', ['count' => $totalReviews]) : __('app.doctor_dashboard.no_reviews_yet') }}
+                            </p>
                         </article>
                     </section>
 
@@ -93,7 +96,8 @@
                                 </div>
                             @endif
 
-                            <a href="{{ route('doctor.appointments') }}" class="doctor-home-outline-btn">{{ __('app.doctor_dashboard.view_full_schedule') }}</a>
+                            <a href="{{ route('doctor.appointments') }}"
+                                class="doctor-home-outline-btn">{{ __('app.doctor_dashboard.view_full_schedule') }}</a>
                         </article>
 
                         <article class="doctor-home-panel next-panel">

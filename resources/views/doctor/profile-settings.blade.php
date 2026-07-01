@@ -112,8 +112,8 @@
                                             <span class="text-danger">*</span>
                                         </label>
 
-                                        <input type="text" name="license_number" class="form-control"
-                                            value="{{ old('license_number', current_user()['license_number'] ?? '') }}"
+                                        <input type="text" name="licenseNumber" class="form-control"
+                                            value="{{ old('licenseNumber', current_user()['licenseNumbers'] ?? '') }}"
                                             required>
 
                                     </div>

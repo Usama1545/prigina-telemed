@@ -88,11 +88,11 @@
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Medical License Number</label>
 
-                                    <input type="text" name="license_number"
-                                        class="form-control @error('license_number') is-invalid @enderror"
-                                        value="{{ old('license_number') }}" required>
+                                    <input type="text" name="licenseNumber"
+                                        class="form-control @error('licenseNumber') is-invalid @enderror"
+                                        value="{{ old('licenseNumber') }}" required>
 
-                                    @error('license_number')
+                                    @error('licenseNumber')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
@@ -436,7 +436,9 @@
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
                     },
-                    body: JSON.stringify({ email: data.email })
+                    body: JSON.stringify({
+                        email: data.email
+                    })
                 });
 
                 // LOGOUT AFTER EMAIL SENT
