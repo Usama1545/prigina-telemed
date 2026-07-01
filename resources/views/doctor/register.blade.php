@@ -150,8 +150,8 @@
                                         class="form-control select2 @error('specializations') is-invalid @enderror" multiple
                                         required>
                                         @foreach ($specializations as $spec)
-                                            <option value="{{ $spec['id'] }}"
-                                                {{ collect(old('specializations'))->contains($spec['id']) ? 'selected' : '' }}>
+                                            <option value="{{ $spec['name'] }}"
+                                                {{ collect(old('specializations'))->contains($spec['name']) ? 'selected' : '' }}>
                                                 {{ $spec['name'] }}
                                             </option>
                                         @endforeach

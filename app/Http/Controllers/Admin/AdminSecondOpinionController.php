@@ -17,13 +17,21 @@ class AdminSecondOpinionController extends Controller
 
     public function index()
     {
-        $result = $this->firestore->query(
+        // paginatedQuery() merges the document data first, then appends the
+        // real Firestore document id as 'documentId' — unlike query(), that
+        // id can't be clobbered by a stray/stale 'id' field the app wrote
+        // into the document itself.
+        $result = $this->firestore->paginatedQuery(
             'second_opinion_reports',
             [],
             200, null, 'created_at', 'DESC'
         );
 
-        $reports = collect($result['documents'] ?? []);
+        $reports = collect($result['documents'] ?? [])->map(function ($report) {
+            $report['id'] = $report['documentId'];
+
+            return $report;
+        });
 
         $stats = [
             'total' => $reports->count(),
@@ -40,6 +48,8 @@ class AdminSecondOpinionController extends Controller
     public function show(string $id)
     {
         $report = $this->firestore->find('second_opinion_reports', $id);
+
+        $report['id'] = $report['documentId'];
 
         if (! $report) {
             abort(404);
