@@ -448,7 +448,7 @@
                     </div>
                     <div class="field">
                         <label>Case ID</label>
-                        <span>{{ $report['report_information']['case_id'] ?? '—' }}</span>
+                        <span>{{ $report['report_information']['case_id'] ?? ($report['appointment_id'] ?? '—') }}</span>
                     </div>
                     <div class="field">
                         <label>Country of Practice</label>
