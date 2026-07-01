@@ -46,18 +46,32 @@ class ReportService
                 ->take($limit)
                 ->values();
 
-            $commissionRate  = 0.15;
-            $totalRevenue    = $this->sumAmount($paid);
-            $totalCommission = round($totalRevenue * $commissionRate, 2);
+            $revenueByAppointment  = $this->doctorRevenueByAppointment();
+            $defaultCommissionRate = $this->defaultCommissionRate();
+            $totalRevenue          = $this->sumAmount($paid);
 
-            $docs = $paid->map(function ($a) use ($commissionRate) {
-                $amount     = (float) ($a['amount'] ?? 0);
-                $commission = round($amount * $commissionRate, 2);
+            $docs = $paid->map(function ($a) use ($revenueByAppointment, $defaultCommissionRate) {
+                $amount   = (float) ($a['amount'] ?? 0);
+                $revenue  = $revenueByAppointment->get($a['id'] ?? null);
+
+                // Prefer the actual figures frozen at payout time so historical
+                // rows stay correct even after the platform fee % is changed.
+                // Fall back to the current default rate for payouts not yet released.
+                if ($revenue) {
+                    $commission   = (float) ($revenue['platformFee'] ?? 0);
+                    $doctorAmount = (float) ($revenue['netAmount'] ?? round($amount - $commission, 2));
+                } else {
+                    $commission   = round($amount * $defaultCommissionRate, 2);
+                    $doctorAmount = round($amount - $commission, 2);
+                }
+
                 return array_merge($a, [
                     'platformCommission' => $commission,
-                    'doctorAmount'       => round($amount - $commission, 2),
+                    'doctorAmount'       => $doctorAmount,
                 ]);
             })->all();
+
+            $totalCommission = round(collect($docs)->sum('platformCommission'), 2);
 
             $pendingPayouts = $this->paid($all)
                 ->filter(fn ($a) => ! in_array($a['payoutStatus'] ?? 'pending', ['completed', 'released']))
@@ -217,6 +231,31 @@ class ReportService
             return $cache;
         }
 
+        return $cache = $this->fetchAllDocs('appointments');
+    }
+
+    protected function doctorRevenueByAppointment(): Collection
+    {
+        // Frozen per-payout figures (platformFee/netAmount/platformFeePercent
+        // at the time the payout was released), keyed by appointmentId so
+        // reports stay accurate even after the platform fee % changes later.
+        static $cache = null;
+        if ($cache !== null) {
+            return $cache;
+        }
+
+        return $cache = $this->fetchAllDocs('doctor_revenue')->keyBy('appointmentId');
+    }
+
+    protected function defaultCommissionRate(): float
+    {
+        $settings = $this->firestore->first('app_settings') ?? [];
+
+        return (float) ($settings['payment']['defaultPlatformFeePercent'] ?? 30) / 100;
+    }
+
+    protected function fetchAllDocs(string $collection): Collection
+    {
         $chunkSize = 500;
         $all       = collect();
         $cursor    = null;
@@ -224,7 +263,7 @@ class ReportService
 
         while ($fetched < $this->maxFetch) {
             $result   = $this->firestore->getCursorPage(
-                'appointments', $chunkSize, $cursor, 'createdAt', 'DESC'
+                $collection, $chunkSize, $cursor, 'createdAt', 'DESC'
             );
             $chunk    = collect($result['documents'])->map(fn ($doc) => $this->normalizeDoc($doc));
             $all      = $all->merge($chunk);
@@ -236,7 +275,7 @@ class ReportService
             $cursor = $result['nextCursor'];
         }
 
-        return $cache = $all;
+        return $all;
     }
 
     protected function normalizeDoc(array $doc): array
