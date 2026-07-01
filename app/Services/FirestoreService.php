@@ -119,6 +119,7 @@ class FirestoreService
                 }
 
                 $data = $snapshot->data();
+                $data['documentId'] = $snapshot->id();
 
                 foreach ($data as $key => $value) {
                     if ($value instanceof Timestamp) {
@@ -315,7 +316,7 @@ class FirestoreService
             return [
                 'documents' => $results,
                 'nextCursor' => $lastDocId,
-                'hasMore'    => count($results) === $limit,
+                'hasMore' => count($results) === $limit,
             ];
         } catch (Exception $e) {
             Log::error('Firestore paginatedQuery error: '.$e->getMessage());
@@ -458,9 +459,9 @@ class FirestoreService
             $query = $query->limit($limit);
 
             $documents = $query->documents();
-            $results   = [];
+            $results = [];
             $lastDocId = null;
-            $count     = 0;
+            $count = 0;
 
             foreach ($documents as $doc) {
                 $results[] = array_merge(['id' => $doc->id()], $doc->data());
@@ -469,9 +470,9 @@ class FirestoreService
             }
 
             return [
-                'documents'  => $results,
+                'documents' => $results,
                 'nextCursor' => $lastDocId,
-                'hasMore'    => $count === $limit,
+                'hasMore' => $count === $limit,
             ];
         } catch (Exception $e) {
             Log::error('Firestore getCursorPage error: '.$e->getMessage());
