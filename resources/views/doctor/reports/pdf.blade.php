@@ -428,7 +428,7 @@
                         Report Date:
                         {{ \Carbon\Carbon::parse($report['report_information']['report_date'])->format('M d, Y') }}<br>
                     @endif
-                    Case ID: {{ $report['report_information']['case_id'] ?? '—' }}
+                    Case ID: {{ $report['report_information']['case_id'] ?? ($report['appointment_id'] ?? '—') }}
                 </div>
             </div>
         </div>
@@ -469,7 +469,7 @@
                     </div>
                     <div class="field">
                         <label>Country</label>
-                        <span>{{ $report['report_information']['country'] ?? '—' }}</span>
+                        <span>{{ $report['report_information']['country'] ?? ($report['report_information']['country_of_practice'] ?? '—') }}</span>
                     </div>
                 </div>
             </div>
