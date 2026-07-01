@@ -91,6 +91,28 @@
                         </div>
                     </div>
 
+                    {{-- Platform Revenue vs Payout --}}
+                    <div class="row g-3 mb-4">
+                        <div class="col-xl-6 col-sm-6">
+                            @include('admin.partials.report-stat-card', [
+                                'title' => 'Total Platform Revenue',
+                                'value' => '$' . number_format($overview['totalPlatformRevenue'], 2),
+                                'icon' => 'fe-percent',
+                                'color' => 'primary',
+                                'sub' => 'commission from released payouts',
+                            ])
+                        </div>
+                        <div class="col-xl-6 col-sm-6">
+                            @include('admin.partials.report-stat-card', [
+                                'title' => 'Total Payout',
+                                'value' => '$' . number_format($overview['totalPayout'], 2),
+                                'icon' => 'fe-send',
+                                'color' => 'success',
+                                'sub' => 'paid out to doctors',
+                            ])
+                        </div>
+                    </div>
+
                     {{-- Charts --}}
                     <div class="row g-3 mb-4">
                         <div class="col-lg-8">
@@ -174,7 +196,7 @@
                                 'value' => '$' . number_format($transactions['totalCommission'], 2),
                                 'icon' => 'fe-percent',
                                 'color' => 'primary',
-                                'sub' => '15% of revenue',
+                                'sub' => 'Platform revenue',
                             ])
                         </div>
                         <div class="col-xl-3 col-sm-6">
@@ -204,11 +226,71 @@
                         </div>
                     </div>
 
-                    {{-- Transactions Table --}}
+                    {{-- Payouts Table --}}
+                    <div class="card mb-4">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <h5 class="card-title mb-0">Doctor Payouts</h5>
+                            <span class="badge bg-secondary">{{ count($transactions['payouts']) }} records</span>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Doctor</th>
+                                            <th>Patient</th>
+                                            <th>Appt Date</th>
+                                            <th>Released At</th>
+                                            <th class="text-end">Amount</th>
+                                            <th class="text-end">Commission</th>
+                                            <th class="text-end">Doctor Amt</th>
+                                            <th>Method</th>
+                                            <th>Transfer ID</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse($transactions['payouts'] as $payout)
+                                            @php
+                                                $pReleased = $payout['releasedAt'] ?? ($payout['createdAt'] ?? null);
+                                                $pDate = $payout['date'] ?? ($payout['appointmentDate'] ?? null);
+                                            @endphp
+                                            <tr>
+                                                <td>{{ $payout['doctorName'] ?? '-' }}</td>
+                                                <td>{{ $payout['patientName'] ?? '-' }}</td>
+                                                <td>{{ $pDate ? \Carbon\Carbon::parse($pDate)->format('d M Y') : '-' }}</td>
+                                                <td>{{ $pReleased ? \Carbon\Carbon::parse($pReleased)->format('d M Y, H:i') : '-' }}
+                                                </td>
+                                                <td class="text-end fw-semibold">
+                                                    ${{ number_format((float) ($payout['amount'] ?? 0), 2) }}
+                                                </td>
+                                                <td class="text-end text-muted">
+                                                    ${{ number_format((float) ($payout['platformFee'] ?? 0), 2) }}
+                                                </td>
+                                                <td class="text-end text-success">
+                                                    ${{ number_format((float) ($payout['netAmount'] ?? 0), 2) }}
+                                                </td>
+                                                <td>{{ $payout['paymentMethod'] ?? 'Stripe' }}</td>
+                                                <td class="text-muted small">{{ $payout['stripeTransferId'] ?? '-' }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="9" class="text-center text-muted py-5">
+                                                    <i class="fe fe-inbox d-block mb-2" style="font-size:2rem;"></i>
+                                                    No payouts released yet.
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Pending / Held Payouts Table --}}
                     <div class="card">
                         <div class="card-header d-flex align-items-center justify-content-between">
-                            <h5 class="card-title mb-0">Recent Transactions</h5>
-                            <span class="badge bg-secondary">{{ count($transactions['documents']) }} records</span>
+                            <h5 class="card-title mb-0">Pending &amp; Held Payouts</h5>
+                            <span class="badge bg-secondary">{{ count($transactions['pending']) }} records</span>
                         </div>
                         <div class="card-body p-0">
                             <div class="table-responsive">
@@ -220,14 +302,12 @@
                                             <th>Appt Date</th>
                                             <th>Payment Time</th>
                                             <th class="text-end">Amount</th>
-                                            <th class="text-end">Commission</th>
-                                            <th class="text-end">Doctor Amt</th>
                                             <th>Method</th>
-                                            <th>Payout</th>
+                                            <th>Payout Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse($transactions['documents'] as $txn)
+                                        @forelse($transactions['pending'] as $txn)
                                             @php
                                                 $tPayout = $txn['payoutStatus'] ?? 'pending';
                                                 $tPayTime = $txn['paymentCompletedAt'] ?? ($txn['createdAt'] ?? null);
@@ -242,17 +322,9 @@
                                                 <td class="text-end fw-semibold">
                                                     ${{ number_format((float) ($txn['amount'] ?? 0), 2) }}
                                                 </td>
-                                                <td class="text-end text-muted">
-                                                    ${{ number_format($txn['platformCommission'], 2) }}
-                                                </td>
-                                                <td class="text-end text-success">
-                                                    ${{ number_format($txn['doctorAmount'], 2) }}
-                                                </td>
                                                 <td>{{ $txn['paymentMethod'] ?? 'Stripe' }}</td>
                                                 <td>
-                                                    @if (in_array($tPayout, ['completed', 'released']))
-                                                        <span class="badge bg-success">Completed</span>
-                                                    @elseif($tPayout === 'refunded')
+                                                    @if ($tPayout === 'refunded')
                                                         <span class="badge bg-danger">Refunded</span>
                                                     @elseif($tPayout === 'held')
                                                         <span class="badge bg-info text-dark">Held</span>
@@ -263,9 +335,9 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="9" class="text-center text-muted py-5">
+                                                <td colspan="7" class="text-center text-muted py-5">
                                                     <i class="fe fe-inbox d-block mb-2" style="font-size:2rem;"></i>
-                                                    No completed transactions found.
+                                                    No pending or held payouts.
                                                 </td>
                                             </tr>
                                         @endforelse

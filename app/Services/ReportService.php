@@ -24,8 +24,12 @@ class ReportService
             $totalRevenue = $this->sumAmount($paid);
             $avgValue     = $paid->count() > 0 ? round($totalRevenue / $paid->count(), 2) : 0.0;
 
+            $releasedPayouts = $this->doctorRevenueByAppointment()->values();
+
             return [
-                'totalRevenue'      => $totalRevenue,
+                'totalRevenue'         => $totalRevenue,
+                'totalPlatformRevenue' => round($releasedPayouts->sum(fn ($r) => (float) ($r['platformFee'] ?? 0)), 2),
+                'totalPayout'          => round($releasedPayouts->sum(fn ($r) => (float) ($r['netAmount'] ?? 0)), 2),
                 'totalAppointments' => $all->count(),
                 'completed'         => $this->countByStatus($all, ['completed', 'completedPaid']),
                 'pending'           => $this->countByStatus($all, ['pending']),
@@ -41,48 +45,47 @@ class ReportService
     {
         return Cache::remember("admin:report:transactions:{$limit}", 300, function () use ($limit) {
             $all  = $this->allAppointments();
-            $paid = $this->paid($all)
+            $paid = $this->paid($all);
+
+            $appointmentsById = $all->keyBy('id');
+            $releasedPayouts  = $this->doctorRevenueByAppointment()->values();
+
+            // Payouts table: actual released transfers, sourced from doctor_revenue
+            // so figures stay correct even after the platform fee % changes later.
+            $payouts = $releasedPayouts
+                ->sortByDesc(fn ($r) => $r['releasedAt'] ?? $r['createdAt'] ?? '')
+                ->take($limit)
+                ->map(function ($r) use ($appointmentsById) {
+                    $appt = $appointmentsById->get($r['appointmentId'] ?? null, []);
+
+                    return array_merge($r, [
+                        'doctorName'    => $appt['doctorName'] ?? null,
+                        'patientName'   => $appt['patientName'] ?? null,
+                        'date'          => $appt['date'] ?? ($appt['appointmentDate'] ?? null),
+                        'paymentMethod' => $appt['paymentMethod'] ?? null,
+                    ]);
+                })
+                ->values()
+                ->all();
+
+            // Pending table: paid appointments whose payout hasn't been released yet
+            // (pending/held/refunded) — unpaid appointments never show up here.
+            $pending = $paid
+                ->filter(fn ($a) => ! in_array($a['payoutStatus'] ?? 'pending', ['completed', 'released']))
                 ->sortByDesc(fn ($a) => $a['paymentCompletedAt'] ?? $a['createdAt'] ?? '')
                 ->take($limit)
-                ->values();
+                ->values()
+                ->all();
 
-            $revenueByAppointment  = $this->doctorRevenueByAppointment();
-            $defaultCommissionRate = $this->defaultCommissionRate();
-            $totalRevenue          = $this->sumAmount($paid);
-
-            $docs = $paid->map(function ($a) use ($revenueByAppointment, $defaultCommissionRate) {
-                $amount   = (float) ($a['amount'] ?? 0);
-                $revenue  = $revenueByAppointment->get($a['id'] ?? null);
-
-                // Prefer the actual figures frozen at payout time so historical
-                // rows stay correct even after the platform fee % is changed.
-                // Fall back to the current default rate for payouts not yet released.
-                if ($revenue) {
-                    $commission   = (float) ($revenue['platformFee'] ?? 0);
-                    $doctorAmount = (float) ($revenue['netAmount'] ?? round($amount - $commission, 2));
-                } else {
-                    $commission   = round($amount * $defaultCommissionRate, 2);
-                    $doctorAmount = round($amount - $commission, 2);
-                }
-
-                return array_merge($a, [
-                    'platformCommission' => $commission,
-                    'doctorAmount'       => $doctorAmount,
-                ]);
-            })->all();
-
-            $totalCommission = round(collect($docs)->sum('platformCommission'), 2);
-
-            $pendingPayouts = $this->paid($all)
-                ->filter(fn ($a) => ! in_array($a['payoutStatus'] ?? 'pending', ['completed', 'released']))
-                ->count();
+            $totalRevenue = $this->sumAmount($paid);
 
             return [
-                'documents'       => $docs,
+                'payouts'         => $payouts,
+                'pending'         => $pending,
                 'totalRevenue'    => $totalRevenue,
-                'totalCommission' => $totalCommission,
-                'totalDoctor'     => round($totalRevenue - $totalCommission, 2),
-                'pendingPayouts'  => $pendingPayouts,
+                'totalCommission' => round($releasedPayouts->sum(fn ($r) => (float) ($r['platformFee'] ?? 0)), 2),
+                'totalDoctor'     => round($releasedPayouts->sum(fn ($r) => (float) ($r['netAmount'] ?? 0)), 2),
+                'pendingPayouts'  => count($pending),
                 'avgTxn'          => $paid->count() > 0
                     ? round($totalRevenue / $paid->count(), 2)
                     : 0.0,
@@ -245,13 +248,6 @@ class ReportService
         }
 
         return $cache = $this->fetchAllDocs('doctor_revenue')->keyBy('appointmentId');
-    }
-
-    protected function defaultCommissionRate(): float
-    {
-        $settings = $this->firestore->first('app_settings') ?? [];
-
-        return (float) ($settings['payment']['defaultPlatformFeePercent'] ?? 30) / 100;
     }
 
     protected function fetchAllDocs(string $collection): Collection
