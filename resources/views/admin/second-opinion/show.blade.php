@@ -163,8 +163,17 @@
                                 @foreach (['report_number' => 'Report Number', 'report_date' => 'Report Date', 'physician_name' => 'Physician', 'specialty' => 'Specialty', 'case_id' => 'Case ID', 'country_of_practice' => 'Country of Practice'] as $key => $label)
                                     <div class="col-md-6">
                                         <label class="form-label field-label">{{ $label }}</label>
+                                        <?php
+                                        $data = $info[$key] ?? '—';
+                                        if ($key === 'case_id') {
+                                            $data = $info[$key] ?? ($report['appointment_id'] ?? '—');
+                                        }
+                                        if ($key === 'report_number') {
+                                            $data = $info[$key] ?? ($report['report_number'] ?? '—');
+                                        }
+                                        ?>
                                         <input type="text" class="form-control form-control-sm field-input" readonly
-                                            value="{{ $info[$key] ?? '—' }}">
+                                            value="{{ $data }}">
                                     </div>
                                 @endforeach
                             </div>
