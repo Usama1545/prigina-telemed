@@ -157,6 +157,7 @@ class BookingController extends Controller
             'documents' => 'nullable|array',
             'documents.*' => 'nullable|file|max:10240',
             'problem' => 'nullable|string',
+            'amount' => 'required|numeric',
         ]);
 
         $user = current_user();
@@ -222,7 +223,7 @@ class BookingController extends Controller
             'endTime' => $endTimeFormatted,
             'startTimeUTC' => $startTimeUTC,
             'endTimeUTC' => $endTimeUTC,
-            'amount' => (float) $validated['amount'],
+            'amount' => (float) $validated['amount'] ?? $doctor['consultationFee'],
             'paymentMethod' => $validated['payment_gateway'] === 'stripe' ? 'Debit Card' : 'Flutterwave',
             'symptoms' => $validated['symptoms'],
             'notes' => $validated['problem'],
