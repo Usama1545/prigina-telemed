@@ -54341,7 +54341,7 @@ ul li {
 
 /****** UTILS ******/
 .service-item {
-    border: 1px solid var(--gray-200);
+    /* border: 1px solid var(--gray-200); */
     padding: 16px;
     border-radius: 10px;
     position: relative;
