@@ -43,7 +43,8 @@
                         </ul>
                     </div>
                     <div class="booking-widget multistep-form mb-5">
-                        <form id="bookingForm" action="{{ route('booking.process') }}" method="POST" enctype="multipart/form-data">
+                        <form id="bookingForm" action="{{ route('booking.process') }}" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="doctor_id" value="{{ $doctor['uid'] ?? '' }}">
                             <input type="hidden" name="doctor_name" value="{{ $doctor['name'] ?? '' }}">
@@ -232,12 +233,17 @@
                                                     <div class="col-lg-12">
                                                         <div class="mb-3">
                                                             <label class="form-label">Documents (Optional)</label>
-                                                            <input type="file" id="documentInput" name="documents[]" class="d-none" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
-                                                            <div id="docPreviews" class="d-flex flex-wrap gap-2 mb-2"></div>
-                                                            <button type="button" class="btn btn-outline-secondary btn-sm" id="addDocBtn">
+                                                            <input type="file" id="documentInput" name="documents[]"
+                                                                class="d-none" multiple
+                                                                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                                                            <div id="docPreviews" class="d-flex flex-wrap gap-2 mb-2">
+                                                            </div>
+                                                            <button type="button"
+                                                                class="btn btn-outline-secondary btn-sm" id="addDocBtn">
                                                                 <i class="fa-solid fa-plus me-1"></i> Add Files
                                                             </button>
-                                                            <div class="form-text text-muted mt-1">PDF, Word, Images — max 10MB each.</div>
+                                                            <div class="form-text text-muted mt-1">PDF, Word, Images — max
+                                                                10MB each.</div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -359,11 +365,21 @@
                                                                 <span
                                                                     class="fw-medium d-block">${{ number_format($doctor['consultationFee'] ?? 0, 2) }}</span>
                                                             </div>
+                                                            <div id="stripeFeeRow"
+                                                                class="d-flex align-items-center flex-wrap rpw-gap-2 justify-content-between mb-2"
+                                                                style="display: none;">
+                                                                <p class="mb-0">Stripe Payment Fee (4%)
+                                                                    <i class="fa-solid fa-circle-info text-muted ms-1"
+                                                                        title="Card payments processed by Stripe include a 4% processing fee, added to your total."></i>
+                                                                </p>
+                                                                <span class="fw-medium d-block"
+                                                                    id="summaryStripeFee">$0.00</span>
+                                                            </div>
                                                         </div>
                                                         <div
                                                             class="bg-primary d-flex align-items-center flex-wrap rpw-gap-2 justify-content-between p-3 rounded">
                                                             <h6 class="text-white">Total</h6>
-                                                            <h6 class="text-white">
+                                                            <h6 class="text-white" id="summaryTotal">
                                                                 ${{ number_format($doctor['consultationFee'] ?? 0, 2) }}
                                                             </h6>
                                                         </div>
@@ -597,10 +613,29 @@
         const paymentGatewayInput = document.getElementById('paymentGateway');
         const bookingForm = document.getElementById('bookingForm');
 
+        const consultationFeeAmount = {{ (float) ($doctor['consultationFee'] ?? 0) }};
+        const stripeFeePercent = 4;
+        const stripeFeeRow = document.getElementById('stripeFeeRow');
+        const summaryStripeFee = document.getElementById('summaryStripeFee');
+        const summaryTotal = document.getElementById('summaryTotal');
+
+        function updateSummaryTotals(gateway) {
+            if (gateway === 'stripe') {
+                const fee = consultationFeeAmount * (stripeFeePercent / 100);
+                stripeFeeRow.style.display = '';
+                summaryStripeFee.innerText = '$' + fee.toFixed(2);
+                summaryTotal.innerText = '$' + (consultationFeeAmount + fee).toFixed(2);
+            } else {
+                stripeFeeRow.style.display = 'none';
+                summaryTotal.innerText = '$' + consultationFeeAmount.toFixed(2);
+            }
+        }
+
         gatewayRadios.forEach(radio => {
             radio.addEventListener('change', function() {
                 paymentGatewayInput.value = this.value;
                 confirmPayBtn.disabled = false;
+                updateSummaryTotals(this.value);
             });
         });
 
@@ -679,6 +714,7 @@
             width: 80px;
             flex-shrink: 0;
         }
+
         .doc-preview .preview-thumb {
             width: 80px;
             height: 80px;
@@ -687,6 +723,7 @@
             object-fit: cover;
             display: block;
         }
+
         .doc-preview .preview-icon {
             width: 80px;
             height: 80px;
@@ -704,10 +741,12 @@
             word-break: break-all;
             overflow: hidden;
         }
+
         .doc-preview .preview-icon i {
             font-size: 22px;
             margin-bottom: 4px;
         }
+
         .doc-preview .remove-doc {
             position: absolute;
             top: -6px;
@@ -729,7 +768,7 @@
     </style>
 
     <script>
-        (function () {
+        (function() {
             const input = document.getElementById('documentInput');
             const addBtn = document.getElementById('addDocBtn');
             const previewContainer = document.getElementById('docPreviews');
@@ -738,7 +777,7 @@
 
             addBtn.addEventListener('click', () => input.click());
 
-            input.addEventListener('change', function () {
+            input.addEventListener('change', function() {
                 Array.from(this.files).forEach(file => {
                     const uid = ++uidCounter;
                     fileMap.set(uid, file);
@@ -763,7 +802,8 @@
                     const icon = document.createElement('div');
                     icon.className = 'preview-icon';
                     const ext = file.name.split('.').pop().toUpperCase();
-                    icon.innerHTML = `<i class="fa-solid fa-file-lines"></i><span>${ext}</span><span style="font-size:9px;margin-top:2px">${truncate(file.name, 10)}</span>`;
+                    icon.innerHTML =
+                        `<i class="fa-solid fa-file-lines"></i><span>${ext}</span><span style="font-size:9px;margin-top:2px">${truncate(file.name, 10)}</span>`;
                     wrapper.appendChild(icon);
                 }
 

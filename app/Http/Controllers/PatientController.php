@@ -672,19 +672,38 @@ class PatientController extends Controller
 
         Stripe::setApiKey(config('services.stripe.secret'));
 
-        $checkoutSession = StripeSession::create([
-            'payment_method_types' => ['card'],
-            'line_items' => [[
+        $consultationFee = (float) ($appointment['amount'] ?? 0);
+        $stripeFee = round($consultationFee * (BookingController::STRIPE_FEE_PERCENT / 100), 2);
+
+        $lineItems = [[
+            'price_data' => [
+                'currency' => 'usd',
+                'product_data' => [
+                    'name' => 'Doctor Consultation',
+                    'description' => 'Appointment with Dr. '.$appointment['doctorName'],
+                ],
+                'unit_amount' => (int) round($consultationFee * 100),
+            ],
+            'quantity' => 1,
+        ]];
+
+        if ($stripeFee > 0) {
+            $lineItems[] = [
                 'price_data' => [
                     'currency' => 'usd',
                     'product_data' => [
-                        'name' => 'Doctor Consultation',
-                        'description' => 'Appointment with Dr. '.$appointment['doctorName'],
+                        'name' => 'Stripe Payment Processing Fee',
+                        'description' => BookingController::STRIPE_FEE_PERCENT.'% card processing fee',
                     ],
-                    'unit_amount' => (int) round(($appointment['amount'] ?? 0) * 100),
+                    'unit_amount' => (int) round($stripeFee * 100),
                 ],
                 'quantity' => 1,
-            ]],
+            ];
+        }
+
+        $checkoutSession = StripeSession::create([
+            'payment_method_types' => ['card'],
+            'line_items' => $lineItems,
             'mode' => 'payment',
             'success_url' => route('booking.success').'?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => route('patient.appointments'),

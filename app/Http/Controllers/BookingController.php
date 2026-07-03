@@ -25,6 +25,8 @@ class BookingController extends Controller
 
     protected $appointments;
 
+    const STRIPE_FEE_PERCENT = 4;
+
     public function __construct(Doctor $doctors, AppSetting $appSetting, Appointment $appointments)
     {
         $this->doctors = $doctors;
@@ -150,7 +152,6 @@ class BookingController extends Controller
             'email' => 'required|email',
             'selected_slot' => 'required|string',
             'selected_date' => 'required|string',
-            'amount' => 'required|numeric',
             'payment_gateway' => 'required|in:stripe,flutterwave',
             'symptoms' => 'nullable|string',
             'documents' => 'nullable|array',
@@ -248,19 +249,38 @@ class BookingController extends Controller
     {
         Stripe::setApiKey(config('services.stripe.secret'));
 
-        $checkoutSession = StripeSession::create([
-            'payment_method_types' => ['card'],
-            'line_items' => [[
+        $consultationFee = (float) $bookingData['amount'];
+        $stripeFee = round($consultationFee * (self::STRIPE_FEE_PERCENT / 100), 2);
+
+        $lineItems = [[
+            'price_data' => [
+                'currency' => 'usd',
+                'product_data' => [
+                    'name' => 'Doctor Consultation',
+                    'description' => 'Appointment with Dr. '.$bookingData['doctorName'],
+                ],
+                'unit_amount' => (int) round($consultationFee * 100),
+            ],
+            'quantity' => 1,
+        ]];
+
+        if ($stripeFee > 0) {
+            $lineItems[] = [
                 'price_data' => [
                     'currency' => 'usd',
                     'product_data' => [
-                        'name' => 'Doctor Consultation',
-                        'description' => 'Appointment with Dr. '.$bookingData['doctorName'],
+                        'name' => 'Stripe Payment Processing Fee',
+                        'description' => self::STRIPE_FEE_PERCENT.'% card processing fee',
                     ],
-                    'unit_amount' => $bookingData['amount'] * 100, // Stripe uses cents
+                    'unit_amount' => (int) round($stripeFee * 100),
                 ],
                 'quantity' => 1,
-            ]],
+            ];
+        }
+
+        $checkoutSession = StripeSession::create([
+            'payment_method_types' => ['card'],
+            'line_items' => $lineItems,
             'mode' => 'payment',
             'success_url' => route('booking.success').'?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => route('booking.cancel'),
