@@ -295,6 +295,73 @@
                             </form>
                         </div>
                     </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="border-bottom pb-3 mb-3">
+                                <h5>{{ __('app.profile.medical_information') }}</h5>
+                            </div>
+                            <form action="{{ route('patient.settings.update') }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <div class="setting-card">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">{{ __('app.profile.blood_group') }}</label>
+                                                <select name="bloodGroup" class="form-control">
+                                                    <option value="">{{ __('app.profile.select_blood_group') }}</option>
+                                                    @foreach (['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] as $bloodGroup)
+                                                        <option value="{{ $bloodGroup }}"
+                                                            {{ ($patient['bloodGroup'] ?? '') == $bloodGroup ? 'selected' : '' }}>
+                                                            {{ $bloodGroup }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">{{ __('app.profile.height') }}</label>
+                                                <input type="text" name="height"
+                                                    value="{{ $patient['height'] ?? '' }}"
+                                                    placeholder="{{ __('app.profile.height_placeholder') }}"
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">{{ __('app.profile.weight') }}</label>
+                                                <input type="text" name="weight"
+                                                    value="{{ $patient['weight'] ?? '' }}"
+                                                    placeholder="{{ __('app.profile.weight_placeholder') }}"
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">{{ __('app.profile.allergies') }}</label>
+                                                <input type="text" name="allergies"
+                                                    value="{{ $patient['allergies'] ?? '' }}"
+                                                    placeholder="{{ __('app.profile.allergies_placeholder') }}"
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">{{ __('app.profile.medical_conditions') }}</label>
+                                                <textarea name="medicalConditions" rows="3"
+                                                    placeholder="{{ __('app.profile.medical_conditions_placeholder') }}"
+                                                    class="form-control">{{ $patient['medicalConditions'] ?? '' }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-btn text-end">
+                                    <button type="submit"
+                                        class="btn btn-md btn-primary-gradient rounded-pill">{{ __('app.profile.save_changes') }}</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                     @if (($patient['provider'] ?? 'email') !== 'google')
                         <div class="card">
                             <div class="card-body">

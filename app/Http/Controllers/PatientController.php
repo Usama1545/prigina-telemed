@@ -89,12 +89,17 @@ class PatientController extends Controller
     {
         // ✅ Validation
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
-            'email' => 'required|email|max:255',
+            'name' => 'sometimes|required|string|max:255',
+            'phone' => 'sometimes|required|string|max:20',
+            'email' => 'sometimes|required|email|max:255',
             'gender' => 'nullable|in:male,female,other',
             'dob' => 'nullable|date',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'bloodGroup' => 'nullable|string|max:10',
+            'height' => 'nullable|string|max:20',
+            'weight' => 'nullable|string|max:20',
+            'allergies' => 'nullable|string|max:1000',
+            'medicalConditions' => 'nullable|string|max:1000',
         ]);
 
         $uid = current_user()['uid'];
@@ -105,6 +110,11 @@ class PatientController extends Controller
             'email',
             'gender',
             'dob',
+            'bloodGroup',
+            'height',
+            'weight',
+            'allergies',
+            'medicalConditions',
         ])->toArray();
 
         // ✅ Handle Image Upload

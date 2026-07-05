@@ -1,7 +1,7 @@
 <?php $page = 'doctor-profile'; ?>
 @extends('layouts.mainlayout')
 @section('content')
-    @component('components.breadcrumb', ['title' => 'Doctor', 'li_1' => 'Doctor Profile', 'li_2' => 'Doctor Details'])
+    @component('components.breadcrumb', ['title' => __('app.doctor_profile.breadcrumb_title'), 'li_1' => __('app.doctor_profile.breadcrumb_profile'), 'li_2' => __('app.doctor_profile.breadcrumb_details')])
     @endcomponent
 
     <!-- Page Content -->
@@ -21,14 +21,14 @@
                                 @if (($doctor['available'] ?? false) === true)
                                     <span class="badge doc-avail-badge">
                                         <i class="fa-solid fa-circle fs-5 me-1"></i>
-                                        Available
+                                        {{ __('app.doctor_profile.available') }}
 
                                     </span>
                                 @else
                                     <span
                                         class="badge doc-avail-badge bg-danger bg-danger-light d-inline-flex align-items-center">
                                         <i class="fa-solid fa-circle fs-5 me-1"></i>
-                                        Not Available
+                                        {{ __('app.doctor_profile.not_available') }}
                                     </span>
                                 @endif
                                 <h4 class="doc-name">{{ $doctor['name'] }} <img
@@ -64,7 +64,7 @@
                                     @endfor
 
                                     <span>{{ number_format($rating, 1) }}</span>
-                                    <a href="#" class="d-inline-block average-rating">{{ $totalReviews }} Reviews</a>
+                                    <a href="#" class="d-inline-block average-rating">{{ $totalReviews }} {{ __('app.doctor_profile.reviews') }}</a>
                                 </div>
 
                             </div>
@@ -85,7 +85,7 @@
                                         <span class="list-icon"><img
                                                 src="{{ URL::asset('build/img/icons/thumb-icon.svg') }}"
                                                 alt="Img"></span>
-                                        <p><b>{{ $recommendationPercentage }} %</b> Recommended</p>
+                                        <p><b>{{ $recommendationPercentage }} %</b> {{ __('app.doctor_profile.recommended') }}</p>
                                     </div>
                                 </li>
                                 <li>
@@ -94,7 +94,7 @@
                                         <ul class="contact-doctors">
                                             <li><a href="{{ route('conversation.create', $doctor['uid']) }}"><span><img
                                                             src="{{ URL::asset('build/img/icons/device-message2.svg') }}"
-                                                            alt="Img"></span>Contact Doctor</a></li>
+                                                            alt="Img"></span>{{ __('app.doctor_profile.contact_doctor') }}</a></li>
                                         </ul>
                                     @endif
                                 </li>
@@ -106,22 +106,22 @@
                             <li>
                                 <span class="bg-blue"><img src="{{ URL::asset('build/img/icons/calendar3.svg') }}"
                                         alt="Img"></span>
-                                Nearly {{ $appointmentCount }} Appointment Booked
+                                {{ __('app.doctor_profile.appointments_booked', ['count' => $appointmentCount]) }}
                             </li>
                             <li>
                                 <span class="bg-dark-blue"><img src="{{ URL::asset('build/img/icons/bullseye.svg') }}"
                                         alt="Img"></span>
-                                In Practice for {{ $doctor['experience'] }}
+                                {{ __('app.doctor_profile.in_practice_for', ['experience' => $doctor['experience']]) }}
                             </li>
 
                         </ul>
                         <div class="bottom-book-btn">
                             @if (session('firebase_token'))
-                                <p><span>Price : {{ $doctor['consultationFee'] }} </span> for a Session</p>
+                                <p><span>{{ __('app.doctor_profile.consultation_fee') }}: ${{ $doctor['consultationFee'] }} </span> {{ __('app.doctor_profile.per_session') }}</p>
                             @endif
                             <div class="clinic-booking">
                                 <a class="apt-btn" href="javascript:void(0)" onclick="handleBookingClick()">
-                                    Book Appointment
+                                    {{ __('app.doctor_profile.book_appointment') }}
                                 </a>
                             </div>
                         </div>
@@ -133,48 +133,54 @@
             <div class="doctors-detailed-info">
                 <ul class="information-title-list">
                     <li class="active">
-                        <a href="#doc_bio">Doctor Bio</a>
+                        <a href="#doc_bio">{{ __('app.doctor_profile.doctor_bio') }}</a>
                     </li>
 
                     <li>
-                        <a href="#speciality">Speciality</a>
+                        <a href="#speciality">{{ __('app.doctor_profile.speciality') }}</a>
                     </li>
                     <li>
-                        <a href="#languages">Languages</a>
+                        <a href="#languages">{{ __('app.doctor_profile.languages') }}</a>
                     </li>
                     <li>
-                        <a href="#availability">Availability</a>
+                        <a href="#availability">{{ __('app.doctor_profile.availability') }}</a>
                     </li>
                     <li>
-                        <a href="#review">Review</a>
+                        <a href="#review">{{ __('app.doctor_profile.review') }}</a>
                     </li>
                 </ul>
                 <div class="doc-information-main">
                     <div class="doc-information-details bio-detail" id="doc_bio">
                         <div class="detail-title">
-                            <h4>Doctor Bio</h4>
+                            <h4>{{ __('app.doctor_profile.doctor_bio') }}</h4>
                         </div>
                         <?php
                         $name = $doctor['name'] ?? 'Dr. John Doe';
                         $qualification = $doctor['qualification'] ?? '';
-                        
+
                         $experience = $doctor['experience'] ?? '';
-                        
+
                         $specializations = $doctor['specializations'] ?? [];
-                        $bio = "Dr. $name holds a $qualification with $experience of experience ";
                         if (!empty($specializations)) {
-                            $bio .=
-                                'and specializes in ' .
-                                implode(
-                                    ', ',
-                                    array_map(function ($spec) {
-                                        return ucwords(str_replace('_', ' ', $spec));
-                                    }, $specializations),
-                                ) .
-                                '.';
+                            $specializationsList = implode(
+                                ', ',
+                                array_map(function ($spec) {
+                                    return ucwords(str_replace('_', ' ', $spec));
+                                }, $specializations),
+                            );
+                            $bio = __('app.doctor_profile.bio_with_specialization', [
+                                'name' => $name,
+                                'qualification' => $qualification,
+                                'experience' => $experience,
+                                'specializations' => $specializationsList,
+                            ]);
+                        } else {
+                            $bio = __('app.doctor_profile.bio_without_specialization', [
+                                'name' => $name,
+                                'qualification' => $qualification,
+                                'experience' => $experience,
+                            ]);
                         }
-                        $bio .= ' Committed to providing the highest quality care to all patients.';
-                        
                         ?>
                         <p>{{ $bio }}
                         </p>
@@ -183,7 +189,7 @@
 
                     <div class="doc-information-details" id="speciality">
                         <div class="detail-title">
-                            <h4>Speciality</h4>
+                            <h4>{{ __('app.doctor_profile.speciality') }}</h4>
                         </div>
 
                         <ul class="special-links">
@@ -200,7 +206,7 @@
                     @if (!empty($doctor['languages']))
                         <div class="doc-information-details" id="languages">
                             <div class="detail-title">
-                                <h4>Languages Spoken</h4>
+                                <h4>{{ __('app.doctor_profile.languages_spoken') }}</h4>
                             </div>
                             <ul class="special-links">
                                 @foreach ($doctor['languages'] as $language)
@@ -248,10 +254,10 @@
                             <ul>
                                 <li style="align-items: start">
                                     <div class="today-hours">
-                                        <h6>Availablity</h6>
+                                        <h6>{{ __('app.doctor_profile.availability') }}</h6>
                                     </div>
                                     <span class="badge doc-avail-badge">
-                                        <i class="fa-solid fa-circle"></i> Available
+                                        <i class="fa-solid fa-circle"></i> {{ __('app.doctor_profile.available') }}
                                     </span>
                                 </li>
                                 @foreach ($days as $day)
@@ -273,7 +279,7 @@
 
                     <div class="doc-information-details mt-2" id="review">
                         <div class="detail-title">
-                            <h4>Reviews ({{ $totalReviews }})</h4>
+                            <h4>{{ __('app.doctor_profile.reviews_with_count', ['count' => $totalReviews]) }}</h4>
                         </div>
                         @foreach ($reviews as $review)
                             <div class="doc-review-card">
@@ -281,7 +287,7 @@
                                     <div class="reviewer-img">
                                         <div class="review-star">
                                             <a
-                                                href="#">{{ isset($review['patientName']) && $review['patientName'] ? $review['patientName'] : $review['patientName'] ?? 'Guest User' }}</a>
+                                                href="#">{{ isset($review['patientName']) && $review['patientName'] ? $review['patientName'] : $review['patientName'] ?? __('app.doctor_profile.guest_user') }}</a>
                                             @php
                                                 $rating = $review['rating'] ?? 0;
                                                 $fullStars = floor($rating);
@@ -313,8 +319,7 @@
                                         </div>
                                     </div>
                                     @if ($review['rating'] >= 4)
-                                        <span class="thumb-icon"><i class="fa-regular fa-thumbs-up"></i>Yes,Recommend for
-                                            Appointment</span>
+                                        <span class="thumb-icon"><i class="fa-regular fa-thumbs-up"></i>{{ __('app.doctor_profile.recommend_for_appointment') }}</span>
                                     @endif
                                 </div>
                                 <p>{{ $review['comment'] }}
@@ -332,111 +337,108 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content" style="border-radius: 20px;">
                 <div class="modal-header border-0 pb-0">
-                    <h4 class="modal-title fw-bold">Medical Consent Agreement</h4>
+                    <h4 class="modal-title fw-bold">{{ __('app.doctor_profile.consent_title') }}</h4>
                 </div>
 
                 <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
 
                     <h5 class="mb-3 text-warning">
                         <i class="fa-solid fa-triangle-exclamation me-2"></i>
-                        Before You Continue
+                        {{ __('app.doctor_profile.before_you_continue') }}
                     </h5>
 
                     <p>
-                        PriGina Global TeleMed provides medical second opinions only.
+                        {{ __('app.doctor_profile.consent_intro') }}
                     </p>
 
                     <p>
-                        This service:<br>
-                        • Is advisory in nature<br>
-                        • Does NOT replace your primary physician<br>
-                        • Does NOT provide emergency care<br>
-                        • Does NOT establish ongoing treatment relationship
+                        {{ __('app.doctor_profile.service_intro') }}<br>
+                        • {{ __('app.doctor_profile.service_advisory') }}<br>
+                        • {{ __('app.doctor_profile.service_not_replace') }}<br>
+                        • {{ __('app.doctor_profile.service_not_emergency') }}<br>
+                        • {{ __('app.doctor_profile.service_not_ongoing') }}
                     </p>
 
                     <hr>
 
-                    <h5 class="mb-3 text-danger">🚨 Not for Emergencies</h5>
+                    <h5 class="mb-3 text-danger">🚨 {{ __('app.doctor_profile.not_for_emergencies') }}</h5>
 
                     <p class="text-danger fw-semibold">
-                        If you are experiencing chest pain, difficulty breathing, stroke symptoms,
-                        severe bleeding, or any life-threatening condition:
-                    </p>
-
-                    <p class="text-danger fw-semibold">
-                        Call 911 (U.S.) or your local emergency number immediately.
+                        {{ __('app.doctor_profile.emergency_warning') }}
                     </p>
 
                     <p class="text-danger fw-semibold">
-                        Do NOT use this platform for urgent or emergency medical care.
+                        {{ __('app.doctor_profile.call_911') }}
+                    </p>
+
+                    <p class="text-danger fw-semibold">
+                        {{ __('app.doctor_profile.no_urgent_use') }}
                     </p>
 
                     <hr>
 
-                    <h5 class="mb-3 text-primary">📋 Important Acknowledgements</h5>
+                    <h5 class="mb-3 text-primary">📋 {{ __('app.doctor_profile.important_acknowledgements') }}</h5>
 
                     <p>
-                        By continuing, you confirm that:
+                        {{ __('app.doctor_profile.confirm_intro') }}
                     </p>
 
                     <p>
-                        ✔ You are voluntarily requesting a second medical opinion<br>
-                        ✔ You understand this is not primary treatment<br>
-                        ✔ You will consult your treating physician before making medical decisions<br>
-                        ✔ You will provide complete and accurate medical records<br>
-                        ✔ You understand that outcomes are not guaranteed
-                    </p>
-
-                    <hr>
-
-                    <h5 class="mb-3 text-secondary">🔒 Telemedicine Notice</h5>
-
-                    <p>
-                        You understand that:<br>
-                        • Your consultation will occur electronically<br>
-                        • No physical examination will be performed<br>
-                        • Recommendations are based solely on information you provide
+                        ✔ {{ __('app.doctor_profile.ack_voluntary') }}<br>
+                        ✔ {{ __('app.doctor_profile.ack_not_primary') }}<br>
+                        ✔ {{ __('app.doctor_profile.ack_consult_physician') }}<br>
+                        ✔ {{ __('app.doctor_profile.ack_accurate_records') }}<br>
+                        ✔ {{ __('app.doctor_profile.ack_no_guarantee') }}
                     </p>
 
                     <hr>
 
-                    <h5 class="mb-3 text-info">🌍 Cross-Border Notice</h5>
+                    <h5 class="mb-3 text-secondary">🔒 {{ __('app.doctor_profile.telemedicine_notice') }}</h5>
 
                     <p>
-                        Physicians may be licensed in specific jurisdictions.
-                        Regulatory rules may differ in your location.
-                        This service is consultative only.
+                        {{ __('app.doctor_profile.telemedicine_intro') }}<br>
+                        • {{ __('app.doctor_profile.telemedicine_electronic') }}<br>
+                        • {{ __('app.doctor_profile.telemedicine_no_exam') }}<br>
+                        • {{ __('app.doctor_profile.telemedicine_based_on_info') }}
                     </p>
 
                     <hr>
 
-                    <h5 class="mb-3 text-success">✅ Consent</h5>
+                    <h5 class="mb-3 text-info">🌍 {{ __('app.doctor_profile.cross_border_notice') }}</h5>
 
                     <p>
-                        By selecting “I Agree”, you confirm that:
+                        {{ __('app.doctor_profile.cross_border_text') }}
+                    </p>
+
+                    <hr>
+
+                    <h5 class="mb-3 text-success">✅ {{ __('app.doctor_profile.consent_heading') }}</h5>
+
+                    <p>
+                        {{ __('app.doctor_profile.agree_confirm_intro') }}
                     </p>
 
                     <p>
-                        • You have read and understood this disclaimer<br>
-                        • You accept the risks and limitations<br>
-                        • You consent to receive a second opinion via telemedicine
+                        • {{ __('app.doctor_profile.consent_read') }}<br>
+                        • {{ __('app.doctor_profile.consent_risks') }}<br>
+                        • {{ __('app.doctor_profile.consent_telemedicine') }}
                     </p>
 
                     <p class="fw-semibold">
-                        This consent is valid for 1 year from today.
+                        {{ __('app.doctor_profile.consent_valid_1_year') }}
                     </p>
 
                     <div class="form-check mt-4">
                         <input class="form-check-input" type="checkbox" id="agreeConsent">
                         <label class="form-check-label" for="agreeConsent">
-                            I agree to the conditions above
+                            {{ __('app.doctor_profile.agree_checkbox_label') }}
                         </label>
                     </div>
                 </div>
 
                 <div class="modal-footer border-0">
                     <button type="button" class="btn btn-primary" id="agreeBtn" disabled>
-                        Agree & Continue
+                        {{ __('app.doctor_profile.agree_continue') }}
                     </button>
                 </div>
             </div>
@@ -445,6 +447,11 @@
 
     <script>
         const bookingUrl = "{{ url($doctor['uid'] . '/booking-slots') }}";
+        const doctorNotAvailableAlert = @json(__('app.doctor_profile.doctor_not_available_alert'));
+        const doctorNoAvailabilityAlert = @json(__('app.doctor_profile.doctor_no_availability_alert'));
+        const pleaseWaitText = @json(__('app.doctor_profile.please_wait'));
+        const agreeContinueText = @json(__('app.doctor_profile.agree_continue'));
+        const somethingWentWrongText = @json(__('app.doctor_profile.something_went_wrong'));
 
         function handleBookingClick() {
 
@@ -452,13 +459,13 @@
             const user = @json(current_user());
 
             if (!doctor.available) {
-                showAlert('This doctor is not available yet plz check back later');
+                showAlert(doctorNotAvailableAlert);
                 return;
             }
 
             if (!doctor.workingDays || doctor.workingDays.length === 0 || !doctor.workingHours || doctor.workingHours
                 .length <= 1) {
-                showAlert('This doctor has not set their availability yet. Please check back later.');
+                showAlert(doctorNoAvailabilityAlert);
                 return;
             }
 
@@ -501,7 +508,7 @@
             btn.disabled = true;
             btn.innerHTML = `
         <span class="spinner-border spinner-border-sm me-2"></span>
-        Please wait...
+        ${pleaseWaitText}
     `;
 
             try {
@@ -526,9 +533,9 @@
             } catch (e) {
 
                 btn.disabled = false;
-                btn.innerHTML = 'Agree & Continue';
+                btn.innerHTML = agreeContinueText;
 
-                alert('Something went wrong. Please try again.');
+                alert(somethingWentWrongText);
             }
         });
     </script>
