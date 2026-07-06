@@ -603,7 +603,7 @@
 
         setTimeout(() => {
             alert.remove();
-        }, 5000);
+        }, 30000);
     }
 </script>
 @include('partials.zego-call-listener')

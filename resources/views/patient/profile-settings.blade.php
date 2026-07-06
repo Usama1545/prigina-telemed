@@ -15,16 +15,16 @@
                 </div>
 
                 <div class="col-lg-8 col-xl-9">
+                    <form id="profileSettingsForm" action="{{ route('patient.settings.update') }}" method="POST"
+                        enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="border-bottom pb-3 mb-3">
+                                    <h5>{{ __('app.profile.title') }}</h5>
+                                </div>
 
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="border-bottom pb-3 mb-3">
-                                <h5>{{ __('app.profile.title') }}</h5>
-                            </div>
-                            <form action="{{ route('patient.settings.update') }}" method="POST"
-                                enctype="multipart/form-data">
-                                @csrf
-                                @method('PUT')
                                 <div class="setting-card">
                                     <label class="form-label mb-2">{{ __('app.profile.photo') }}</label>
                                     <div class="change-avatar img-upload">
@@ -319,17 +319,16 @@
                                         </div>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="border-bottom pb-3 mb-3">
-                                <h5>{{ __('app.profile.medical_information') }}</h5>
+
+
                             </div>
-                            <form action="{{ route('patient.settings.update') }}" method="POST">
-                                @csrf
-                                @method('PUT')
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="border-bottom pb-3 mb-3">
+                                    <h5>{{ __('app.profile.medical_information') }}</h5>
+                                </div>
+
                                 <div class="setting-card">
                                     <div class="row">
                                         <div class="col-lg-6 col-md-6">
@@ -384,19 +383,25 @@
                                     </div>
                                 </div>
                                 <div class="modal-btn text-end">
-                                    <button type="submit"
-                                        class="btn btn-md btn-primary-gradient rounded-pill">{{ __('app.profile.save_changes') }}</button>
+                                    <button type="submit" id="profileSaveBtn"
+                                        class="btn btn-md btn-primary-gradient rounded-pill">
+                                        <span id="profileSaveBtnText">{{ __('app.profile.save_changes') }}</span>
+                                        <span id="profileSaveBtnSpinner"
+                                            class="spinner-border spinner-border-sm ms-2 d-none"></span>
+                                    </button>
                                 </div>
-                            </form>
+                            </div>
                         </div>
-                    </div>
+
+                    </form>
                     @if (($patient['provider'] ?? 'email') !== 'google')
                         <div class="card">
                             <div class="card-body">
                                 <div class="border-bottom pb-3 mb-3">
                                     <h5>{{ __('app.profile.change_password') }}</h5>
                                 </div>
-                                <form action="{{ route('patient.settings.changepassword') }}" method="post">
+                                <form id="changePasswordForm" action="{{ route('patient.settings.changepassword') }}"
+                                    method="post">
                                     @csrf
                                     @method('PUT')
                                     <div class="row">
@@ -433,8 +438,12 @@
                                     <div class="modal-btn border-top pt-3 text-end">
                                         <a href="#"
                                             class="btn btn-md btn-light rounded-pill">{{ __('app.common.cancel') }}</a>
-                                        <button type="submit"
-                                            class="btn btn-md btn-primary-gradient rounded-pill">{{ __('app.profile.save_changes') }}</button>
+                                        <button type="submit" id="passwordSaveBtn"
+                                            class="btn btn-md btn-primary-gradient rounded-pill">
+                                            <span id="passwordSaveBtnText">{{ __('app.profile.save_changes') }}</span>
+                                            <span id="passwordSaveBtnSpinner"
+                                                class="spinner-border spinner-border-sm ms-2 d-none"></span>
+                                        </button>
                                     </div>
                                 </form>
                             </div>
@@ -508,6 +517,26 @@
                     this.classList.toggle('feather-eye-off');
                 });
             }
+
+            function showLoadingOnSubmit(formId, btnId, textId, spinnerId) {
+                const form = document.getElementById(formId);
+                const btn = document.getElementById(btnId);
+                const text = document.getElementById(textId);
+                const spinner = document.getElementById(spinnerId);
+
+                if (form && btn && text && spinner) {
+                    form.addEventListener('submit', function() {
+                        btn.disabled = true;
+                        spinner.classList.remove('d-none');
+                        text.innerText = '{{ __('app.common.loading') }}';
+                    });
+                }
+            }
+
+            showLoadingOnSubmit('profileSettingsForm', 'profileSaveBtn', 'profileSaveBtnText',
+                'profileSaveBtnSpinner');
+            showLoadingOnSubmit('changePasswordForm', 'passwordSaveBtn', 'passwordSaveBtnText',
+                'passwordSaveBtnSpinner');
         });
     </script>
 @endPush
