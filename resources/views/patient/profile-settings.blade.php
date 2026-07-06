@@ -95,7 +95,7 @@
                                                 <label class="form-label">{{ __('app.profile.gender') }} <span
                                                         class="text-danger">*</span></label>
                                                 <div class="form-icon">
-                                                    <input type="date" class="form-control" name="gender"
+                                                    <input class="form-control" name="gender"
                                                         value="{{ $patient['gender'] ?? '' }}">
                                                 </div>
                                             </div>
