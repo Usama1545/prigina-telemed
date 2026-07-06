@@ -190,6 +190,18 @@
         'reviews',
         'social-media',
         'two-factor-authentication',
+        'patient.dashboard',
+        'patient.settings',
+        'patient.appointments',
+        'patient.reports',
+        'patient.reports.show',
+        'doctor.dashboard',
+        'doctor.settings',
+        'doctor.appointments',
+        'doctor.available-timings',
+        'doctor.payout',
+        'doctor.reports',
+        'doctor.reports.edit',
     ]))
     <!-- Sticky Sidebar JS -->
     <script src="{{ URL::asset('build/plugins/theia-sticky-sidebar/ResizeSensor.js') }}"></script>
