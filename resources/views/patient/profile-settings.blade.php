@@ -319,13 +319,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="modal-btn text-end">
-                                    <a href="#"
-                                        class="btn btn-md btn-light rounded-pill">{{ __('app.common.cancel') }}</a>
-                                    <button type="submit"
-                                        class="btn btn-md btn-primary-gradient rounded-pill">{{ __('app.profile.save_changes') }}</button>
-                                </div>
                             </form>
                         </div>
                     </div>

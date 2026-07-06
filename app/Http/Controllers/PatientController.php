@@ -99,6 +99,7 @@ class PatientController extends Controller
             'weight' => 'nullable|string|max:20',
             'allergies' => 'nullable|string|max:1000',
             'medicalConditions' => 'nullable|string|max:1000',
+            'timezone' => 'nullable|string|max:100',
         ]);
 
         $uid = current_user()['uid'];
@@ -114,6 +115,7 @@ class PatientController extends Controller
             'weight',
             'allergies',
             'medicalConditions',
+            'timezone',
         ])->toArray();
 
         if (! empty($data['dob'])) {
