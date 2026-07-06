@@ -87,7 +87,6 @@ class PatientController extends Controller
 
     public function update(Request $request)
     {
-        // ✅ Validation
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:255',
             'phone' => 'sometimes|required|string|max:20',
@@ -117,14 +116,18 @@ class PatientController extends Controller
             'medicalConditions',
         ])->toArray();
 
-        // ✅ Handle Image Upload
+        if (! empty($data['dob'])) {
+            $data['dob'] = Carbon::parse($data['dob'])
+                ->startOfDay()
+                ->toISOString();
+        }
+
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $fileName = time().'_'.$image->getClientOriginalName();
-
             $filePath = "profile_pictures/patients/{$uid}/{$fileName}";
 
-            /** @var Storage $storage */
+            /** @var Storage $storage */s
             $storage = app('firebase.storage');
             $bucket = $storage->getBucket();
 
@@ -136,9 +139,7 @@ class PatientController extends Controller
                 ]
             );
 
-            $imageUrl = 'https://storage.googleapis.com/'.$bucket->name().'/'.$filePath;
-
-            $data['photoUrl'] = $imageUrl;
+            $data['photoUrl'] = 'https://storage.googleapis.com/'.$bucket->name().'/'.$filePath;
         }
 
         $this->firestore->update('patients', $uid, $data);
@@ -298,7 +299,7 @@ class PatientController extends Controller
 
         $conversations = collect($filteredConversations['documents'] ?? [])
             ->filter(fn ($conv) => isset($doctorsWithAppointments[$conv['doctorId'] ?? '']))
-            ->filter(fn ($conv) => !($conv['deletedByPatient'] ?? false))
+            ->filter(fn ($conv) => ! ($conv['deletedByPatient'] ?? false))
             ->map(fn ($conversation) => $this->normalizeConversation($conversation))
             ->values()
             ->all();

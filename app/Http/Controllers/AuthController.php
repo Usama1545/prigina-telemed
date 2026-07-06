@@ -66,6 +66,13 @@ class AuthController extends Controller
             $role = 'doctor';
             $userData = $doctor;
         } elseif ($patient) {
+            if (($patient['isActive'] ?? false) === false) {
+
+                return response()->json([
+                    'error' => 'Your account has been deactivated. Please contact administrator.',
+                ], 403);
+            }
+
             $role = 'patient';
             $userData = $patient;
         } else {

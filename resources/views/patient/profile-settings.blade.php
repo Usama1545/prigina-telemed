@@ -71,13 +71,32 @@
                                                     class="form-control">
                                             </div>
                                         </div>
+                                        @php
+                                            $dob = !empty($patient['dob'])
+                                                ? \Carbon\Carbon::parse($patient['dob'])->format('Y-m-d')
+                                                : '';
+                                        @endphp
+
                                         <div class="col-lg-6 col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">{{ __('app.profile.dob') }} <span
-                                                        class="text-danger">*</span></label>
+                                                <label class="form-label">
+                                                    {{ __('app.profile.dob') }}
+                                                    <span class="text-danger">*</span>
+                                                </label>
+
                                                 <div class="form-icon">
                                                     <input type="date" class="form-control" name="dob"
-                                                        value="{{ $patient['dob'] ?? '' }}">
+                                                        value="{{ old('dob', $dob) }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">{{ __('app.profile.gender') }} <span
+                                                        class="text-danger">*</span></label>
+                                                <div class="form-icon">
+                                                    <input type="date" class="form-control" name="gender"
+                                                        value="{{ $patient['gender'] ?? '' }}">
                                                 </div>
                                             </div>
                                         </div>
@@ -289,8 +308,10 @@
                                 </div>
 
                                 <div class="modal-btn text-end">
-                                    <a href="#" class="btn btn-md btn-light rounded-pill">{{ __('app.common.cancel') }}</a>
-                                    <button type="submit" class="btn btn-md btn-primary-gradient rounded-pill">{{ __('app.profile.save_changes') }}</button>
+                                    <a href="#"
+                                        class="btn btn-md btn-light rounded-pill">{{ __('app.common.cancel') }}</a>
+                                    <button type="submit"
+                                        class="btn btn-md btn-primary-gradient rounded-pill">{{ __('app.profile.save_changes') }}</button>
                                 </div>
                             </form>
                         </div>
@@ -309,7 +330,8 @@
                                             <div class="mb-3">
                                                 <label class="form-label">{{ __('app.profile.blood_group') }}</label>
                                                 <select name="bloodGroup" class="form-control">
-                                                    <option value="">{{ __('app.profile.select_blood_group') }}</option>
+                                                    <option value="">{{ __('app.profile.select_blood_group') }}
+                                                    </option>
                                                     @foreach (['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] as $bloodGroup)
                                                         <option value="{{ $bloodGroup }}"
                                                             {{ ($patient['bloodGroup'] ?? '') == $bloodGroup ? 'selected' : '' }}>
@@ -347,10 +369,10 @@
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="mb-3">
-                                                <label class="form-label">{{ __('app.profile.medical_conditions') }}</label>
+                                                <label
+                                                    class="form-label">{{ __('app.profile.medical_conditions') }}</label>
                                                 <textarea name="medicalConditions" rows="3"
-                                                    placeholder="{{ __('app.profile.medical_conditions_placeholder') }}"
-                                                    class="form-control">{{ $patient['medicalConditions'] ?? '' }}</textarea>
+                                                    placeholder="{{ __('app.profile.medical_conditions_placeholder') }}" class="form-control">{{ $patient['medicalConditions'] ?? '' }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -403,8 +425,10 @@
                                         </div>
                                     </div>
                                     <div class="modal-btn border-top pt-3 text-end">
-                                        <a href="#" class="btn btn-md btn-light rounded-pill">{{ __('app.common.cancel') }}</a>
-                                        <button type="submit" class="btn btn-md btn-primary-gradient rounded-pill">{{ __('app.profile.save_changes') }}</button>
+                                        <a href="#"
+                                            class="btn btn-md btn-light rounded-pill">{{ __('app.common.cancel') }}</a>
+                                        <button type="submit"
+                                            class="btn btn-md btn-primary-gradient rounded-pill">{{ __('app.profile.save_changes') }}</button>
                                     </div>
                                 </form>
                             </div>
