@@ -205,6 +205,7 @@ return [
         'email' => 'Correo electrónico',
         'phone' => 'Número de teléfono',
         'gender' => 'Género',
+        'select_gender' => 'Seleccionar género',
         'dob' => 'Fecha de nacimiento',
         'medical_information' => 'Información Médica',
         'blood_group' => 'Grupo sanguíneo',
