@@ -95,8 +95,21 @@
                                                 <label class="form-label">{{ __('app.profile.gender') }} <span
                                                         class="text-danger">*</span></label>
                                                 <div class="form-icon">
-                                                    <input class="form-control" name="gender"
-                                                        value="{{ $patient['gender'] ?? '' }}">
+                                                    <!-- Genders -->
+                                                    <select name="gender" required class="form-control">
+                                                        <option value="">{{ __('app.profile.select_gender') }}
+                                                        </option>
+
+                                                        <option value="male"
+                                                            {{ ($patient['gender'] ?? '') == 'male' ? 'selected' : '' }}>
+                                                            {{ __('app.profile.male') }}</option>
+                                                        <option value="female"
+                                                            {{ ($patient['gender'] ?? '') == 'female' ? 'selected' : '' }}>
+                                                            {{ __('app.profile.female') }}</option>
+                                                        <option value="other"
+                                                            {{ ($patient['gender'] ?? '') == 'other' ? 'selected' : '' }}>
+                                                            {{ __('app.profile.other') }}</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
