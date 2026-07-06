@@ -127,7 +127,7 @@ class PatientController extends Controller
             $fileName = time().'_'.$image->getClientOriginalName();
             $filePath = "profile_pictures/patients/{$uid}/{$fileName}";
 
-            /** @var Storage $storage */s
+            /** @var Storage $storage */
             $storage = app('firebase.storage');
             $bucket = $storage->getBucket();
 
