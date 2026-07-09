@@ -67,7 +67,8 @@
                                         $dateLabel = $apptDate ? $apptDate->format('d M Y') : '';
                                         $canCancel = $apptDate && $apptDate->gt(now()->addHours(24));
                                     @endphp
-                                    <div class="col-xl-4 col-lg-6 col-md-12 d-flex appointment-card">
+                                    <div class="col-xl-4 col-lg-6 col-md-12 d-flex appointment-card"
+                                        id="appointment-{{ $appointment['id'] }}">
                                         <div class="appointment-wrap appointment-grid-wrap w-100">
                                             <ul>
                                                 <li>
@@ -115,12 +116,6 @@
                                                                 <h6 class="text-primary fw-bold mb-0">
                                                                     ${{ number_format($appointment['amount'], 2) }}</h6>
                                                             @endif
-                                                            <button type="button"
-                                                                class="btn btn-xs btn-outline-info rounded-pill px-2 py-1 view-appointment"
-                                                                data-id="{{ $appointment['id'] }}"
-                                                                title="View Details">
-                                                                <i class="fa-solid fa-eye"></i>
-                                                            </button>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -133,6 +128,7 @@
                                                         <i class="isax isax-clock5 me-2 text-success"></i>
                                                         <span>{{ $appointment['startTime'] ?? '--' }} -
                                                             {{ $appointment['endTime'] ?? '--' }}</span>
+                                                            <small class="text-muted ms-1" style="font-size:11px;">(UTC)</small>
                                                     </div>
                                                     @if (!empty($appointment['symptoms']))
                                                         <div class="mt-3">
@@ -143,14 +139,29 @@
                                                             </p>
                                                         </div>
                                                     @endif
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-outline-info rounded px-2 mt-2 py-1 view-appointment"
+                                                        data-id="{{ $appointment['id'] }}" title="View Details">
+                                                        <i class="fa-solid fa-eye"></i> Documents
+                                                    </button>
                                                 </li>
+
                                                 <li class="appointment-action d-flex gap-2">
                                                     @if ($canCancel)
                                                         <a href="{{ route('patient.cancel-appointment', $appointment['id']) }}"
                                                             class="btn btn-outline-danger w-100">
                                                             <i class="fa-solid fa-xmark me-1"></i>Cancel
                                                         </a>
+                                                        <button type="button"
+                                                            class="btn btn-primary w-100 reschedule-btn"
+                                                            data-id="{{ $appointment['id'] }}"
+                                                            data-doctor-id="{{ $appointment['doctorId'] ?? '' }}"
+                                                            data-bs-toggle="modal" data-bs-target="#rescheduleModal">
+                                                            <i
+                                                                class="isax isax-calendar-edit me-1"></i>{{ __('app.appointments.reschedule') }}
+                                                        </button>
                                                     @endif
+
                                                 </li>
                                             </ul>
                                         </div>
@@ -212,8 +223,7 @@
                                                             @endif
                                                             <button type="button"
                                                                 class="btn btn-xs btn-outline-info rounded-pill px-2 py-1 view-appointment"
-                                                                data-id="{{ $appointment['id'] }}"
-                                                                title="View Details">
+                                                                data-id="{{ $appointment['id'] }}" title="View Details">
                                                                 <i class="fa-solid fa-eye"></i>
                                                             </button>
                                                         </div>
@@ -228,6 +238,7 @@
                                                         <i class="isax isax-clock5 me-2 text-muted"></i>
                                                         <span>{{ $appointment['startTime'] ?? '--' }} -
                                                             {{ $appointment['endTime'] ?? '--' }}</span>
+                                                            <small class="text-muted ms-1" style="font-size:11px;">(UTC)</small>
                                                     </div>
                                                     @if (!empty($appointment['symptoms']))
                                                         <div class="mt-3">
@@ -305,7 +316,8 @@
                                                                     @endif
                                                                 </div>
                                                                 @if ($isPaid)
-                                                                    <span class="badge bg-warning text-dark mt-2">Pending</span>
+                                                                    <span
+                                                                        class="badge bg-warning text-dark mt-2">Pending</span>
                                                                 @else
                                                                     <span class="badge bg-danger mt-2">
                                                                         <i class="fa-solid fa-circle-exclamation me-1"></i>
@@ -321,8 +333,7 @@
                                                             @endif
                                                             <button type="button"
                                                                 class="btn btn-xs btn-outline-info rounded-pill px-2 py-1 view-appointment"
-                                                                data-id="{{ $appointment['id'] }}"
-                                                                title="View Details">
+                                                                data-id="{{ $appointment['id'] }}" title="View Details">
                                                                 <i class="fa-solid fa-eye"></i>
                                                             </button>
                                                         </div>
@@ -337,6 +348,7 @@
                                                         <i class="isax isax-clock5 me-2 text-warning"></i>
                                                         <span>{{ $appointment['startTime'] ?? '--' }} -
                                                             {{ $appointment['endTime'] ?? '--' }}</span>
+                                                            <small class="text-muted ms-1" style="font-size:11px;">(UTC)</small>
                                                     </div>
                                                     @if (!empty($appointment['symptoms']))
                                                         <div class="mt-3">
@@ -358,14 +370,19 @@
                                                         @endif
                                                     @else
                                                         @if ($canPay)
-                                                            <form method="POST" action="{{ route('patient.appointment-pay', $appointment['id']) }}" class="flex-grow-1">
+                                                            <form method="POST"
+                                                                action="{{ route('patient.appointment-pay', $appointment['id']) }}"
+                                                                class="flex-grow-1">
                                                                 @csrf
                                                                 <button type="submit" class="btn btn-success w-100">
-                                                                    <i class="fa-solid fa-credit-card me-1"></i>Pay & Confirm
+                                                                    <i class="fa-solid fa-credit-card me-1"></i>Pay &
+                                                                    Confirm
                                                                 </button>
                                                             </form>
                                                         @endif
-                                                        <form method="POST" action="{{ route('patient.appointment-delete', $appointment['id']) }}" onsubmit="return confirm('Delete this appointment?')">
+                                                        <form method="POST"
+                                                            action="{{ route('patient.appointment-delete', $appointment['id']) }}"
+                                                            onsubmit="return confirm('Delete this appointment?')">
                                                             @csrf
                                                             <button type="submit" class="btn btn-outline-danger">
                                                                 <i class="fa-solid fa-trash me-1"></i>Delete
@@ -444,8 +461,7 @@
                                                             @endif
                                                             <button type="button"
                                                                 class="btn btn-xs btn-outline-info rounded-pill px-2 py-1 view-appointment"
-                                                                data-id="{{ $appointment['id'] }}"
-                                                                title="View Details">
+                                                                data-id="{{ $appointment['id'] }}" title="View Details">
                                                                 <i class="fa-solid fa-eye"></i>
                                                             </button>
                                                         </div>
@@ -460,6 +476,7 @@
                                                         <i class="isax isax-clock5 me-2 text-success"></i>
                                                         <span>{{ $appointment['startTime'] ?? '--' }} -
                                                             {{ $appointment['endTime'] ?? '--' }}</span>
+                                                            <small class="text-muted ms-1" style="font-size:11px;">(UTC)</small>
                                                     </div>
                                                     @if (!empty($appointment['symptoms']))
                                                         <div class="mt-3">
@@ -561,8 +578,10 @@
                                         <div class="patient-det">
                                             <h6 id="patientName"></h6>
                                             <ul>
-                                                <li><strong>{{ __('app.appointments.appointment_id') }} :</strong> <span id="appointmentId"></span></li>
-                                                <li><strong>{{ __('app.appointments.created_at_label') }} :</strong> <span id="createdAt"></span></li>
+                                                <li><strong>{{ __('app.appointments.appointment_id') }} :</strong> <span
+                                                        id="appointmentId"></span></li>
+                                                <li><strong>{{ __('app.appointments.created_at_label') }} :</strong> <span
+                                                        id="createdAt"></span></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -599,6 +618,65 @@
             </div>
         </div>
     </div>
+
+    {{-- Reschedule Modal --}}
+    <div class="modal fade" id="rescheduleModal" tabindex="-1" aria-labelledby="rescheduleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rescheduleModalLabel">{{ __('app.appointments.reschedule_title') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <input type="hidden" id="reschedule-appointment-id">
+                    <input type="hidden" id="reschedule-doctor-id">
+                    <input type="hidden" id="reschedule-selected-date">
+                    <input type="hidden" id="reschedule-selected-slot">
+
+                    <small class="text-muted d-block mb-3">
+                        <i class="isax isax-info-circle"></i>
+                        {{ __('app.appointments.utc_notice') }}
+                    </small>
+
+                    <div id="reschedule-loading" class="text-center py-4 d-none">
+                        <span class="spinner-border spinner-border-sm me-2"></span>{{ __('app.common.loading') }}
+                    </div>
+
+                    <div id="reschedule-empty" class="text-muted text-center py-4 d-none">
+                        {{ __('app.booking.no_slots') }}
+                    </div>
+
+                    <div id="reschedule-picker" class="d-none">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">{{ __('app.appointments.new_date') }}</label>
+                            <select class="form-select" id="reschedule-day-select"></select>
+                        </div>
+
+                        <label class="form-label fw-semibold">{{ __('app.booking.available_slots') }}</label>
+                        <div id="reschedule-slots" class="row g-2"></div>
+                    </div>
+
+                    <div id="reschedule-error" class="alert alert-danger mt-3 d-none"></div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light"
+                        data-bs-dismiss="modal">{{ __('app.common.cancel') }}</button>
+                    <button type="button" class="btn btn-primary" id="reschedule-save-btn" disabled>
+                        <span id="reschedule-spinner" class="spinner-border spinner-border-sm me-1 d-none"></span>
+                        {{ __('app.appointments.save_changes') }}
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <style>
         body {
             background-color: #f5f7fb !important
@@ -652,17 +730,21 @@
                     const urls = Array.isArray(data.documentUrls) ? data.documentUrls : [];
                     if (urls.length) {
                         urls.forEach(url => {
-                            const isImage = /\.(jpg|jpeg|png|gif|webp)(\?|$)/i.test(url);
+                            const isImage = /\.(jpg|jpeg|png|gif|webp)(\?|$)/i.test(
+                                url);
                             const a = document.createElement('a');
                             a.href = url;
                             a.target = '_blank';
                             a.rel = 'noopener';
                             a.className = 'text-decoration-none';
                             if (isImage) {
-                                a.innerHTML = `<img src="${url}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #dee2e6;" alt="document">`;
+                                a.innerHTML =
+                                    `<img src="${url}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #dee2e6;" alt="document">`;
                             } else {
-                                const ext = url.split('.').pop().split('?')[0].toUpperCase().slice(0, 4);
-                                a.innerHTML = `<div style="width:80px;height:80px;border:1px solid #dee2e6;border-radius:8px;background:#f8f9fa;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;color:#6c757d;text-align:center;padding:4px;"><i class="fa-solid fa-file-lines" style="font-size:22px;margin-bottom:4px;"></i><span>${ext}</span></div>`;
+                                const ext = url.split('.').pop().split('?')[0]
+                                    .toUpperCase().slice(0, 4);
+                                a.innerHTML =
+                                    `<div style="width:80px;height:80px;border:1px solid #dee2e6;border-radius:8px;background:#f8f9fa;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;color:#6c757d;text-align:center;padding:4px;"><i class="fa-solid fa-file-lines" style="font-size:22px;margin-bottom:4px;"></i><span>${ext}</span></div>`;
                             }
                             docsContainer.appendChild(a);
                         });
@@ -689,9 +771,159 @@
                 '.appointment-card a[title="Chat"], .appointment-card a[title="Video Call"], .appointment-card a[title="Audio Call"]'
             ).forEach(function(link) {
                 link.addEventListener('click', function() {
-                    this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span>';
+                    this.innerHTML =
+                        '<span class="spinner-border spinner-border-sm" role="status"></span>';
                     this.style.pointerEvents = 'none';
                 });
+            });
+
+            // Reschedule modal: fetch the doctor's real availability and let the
+            // patient pick only from open slots (instead of a free-form date/time).
+            let rescheduleAvailability = [];
+            const rescheduleDaySelect = document.getElementById('reschedule-day-select');
+            const rescheduleSlotsEl = document.getElementById('reschedule-slots');
+            const rescheduleSaveBtn = document.getElementById('reschedule-save-btn');
+            const rescheduleErrorEl = document.getElementById('reschedule-error');
+            const rescheduleLoadingEl = document.getElementById('reschedule-loading');
+            const rescheduleEmptyEl = document.getElementById('reschedule-empty');
+            const reschedulePickerEl = document.getElementById('reschedule-picker');
+
+            function renderRescheduleSlots(index) {
+                const dayData = rescheduleAvailability[index];
+                rescheduleSlotsEl.innerHTML = '';
+                document.getElementById('reschedule-selected-date').value = dayData ? dayData.date : '';
+                document.getElementById('reschedule-selected-slot').value = '';
+                rescheduleSaveBtn.disabled = true;
+
+                if (!dayData || !dayData.slots.length) {
+                    rescheduleSlotsEl.innerHTML =
+                        '<div class="col-12 text-muted">{{ __('app.booking.no_slots') }}</div>';
+                    return;
+                }
+
+                dayData.slots.forEach(slot => {
+                    const col = document.createElement('div');
+                    col.className = 'col-4';
+                    const slotId = `reschedule_slot_${dayData.date}_${slot.replace(/:/g, '')}`;
+                    col.innerHTML = `
+                        <input class="form-check-input d-none" type="radio" name="reschedule_slot_radio"
+                            value="${slot}" id="${slotId}">
+                        <label class="form-check-label w-100 p-2 border rounded text-center slot-label"
+                            for="${slotId}" style="cursor:pointer;">${slot}</label>
+                    `;
+                    rescheduleSlotsEl.appendChild(col);
+                });
+
+                rescheduleSlotsEl.querySelectorAll('input[name="reschedule_slot_radio"]').forEach(radio => {
+                    radio.addEventListener('change', function() {
+                        rescheduleSlotsEl.querySelectorAll('.slot-label').forEach(label => {
+                            label.classList.remove('active', 'bg-primary', 'text-white',
+                                'border-primary');
+                        });
+                        this.nextElementSibling.classList.add('active', 'bg-primary', 'text-white',
+                            'border-primary');
+                        document.getElementById('reschedule-selected-slot').value = this.value;
+                        rescheduleSaveBtn.disabled = false;
+                    });
+                });
+            }
+
+            document.addEventListener('click', function(e) {
+                const btn = e.target.closest('.reschedule-btn');
+                if (!btn) return;
+
+                document.getElementById('reschedule-appointment-id').value = btn.dataset.id;
+                document.getElementById('reschedule-doctor-id').value = btn.dataset.doctorId;
+                rescheduleErrorEl.classList.add('d-none');
+                reschedulePickerEl.classList.add('d-none');
+                rescheduleEmptyEl.classList.add('d-none');
+                rescheduleLoadingEl.classList.remove('d-none');
+                rescheduleSaveBtn.disabled = true;
+
+                fetch(`/doctor/${btn.dataset.doctorId}/available-slots?exclude=${btn.dataset.id}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        rescheduleLoadingEl.classList.add('d-none');
+
+                        if (!data.success || !data.availability.length) {
+                            rescheduleEmptyEl.classList.remove('d-none');
+                            return;
+                        }
+
+                        rescheduleAvailability = data.availability;
+                        rescheduleDaySelect.innerHTML = rescheduleAvailability.map((day, i) =>
+                            `<option value="${i}">${day.day} (${day.date})</option>`
+                        ).join('');
+
+                        renderRescheduleSlots(0);
+                        reschedulePickerEl.classList.remove('d-none');
+                    })
+                    .catch(() => {
+                        rescheduleLoadingEl.classList.add('d-none');
+                        rescheduleErrorEl.textContent = '{{ __('app.appointments.error_network') }}';
+                        rescheduleErrorEl.classList.remove('d-none');
+                    });
+            });
+
+            rescheduleDaySelect.addEventListener('change', function() {
+                renderRescheduleSlots(this.value);
+            });
+
+            rescheduleSaveBtn.addEventListener('click', function() {
+                const id = document.getElementById('reschedule-appointment-id').value;
+                const date = document.getElementById('reschedule-selected-date').value;
+                const startTime = document.getElementById('reschedule-selected-slot').value;
+                const spinner = document.getElementById('reschedule-spinner');
+
+                rescheduleErrorEl.classList.add('d-none');
+
+                if (!date || !startTime) {
+                    rescheduleErrorEl.textContent = '{{ __('app.appointments.error_fill_fields') }}';
+                    rescheduleErrorEl.classList.remove('d-none');
+                    return;
+                }
+
+                this.disabled = true;
+                spinner.classList.remove('d-none');
+
+                fetch(`/patient/appointment/${id}/reschedule`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        },
+                        body: JSON.stringify({
+                            date: date,
+                            startTime: startTime,
+                        }),
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            bootstrap.Modal.getInstance(document.getElementById('rescheduleModal'))
+                                .hide();
+                            // Update the card's displayed date/time without full reload
+                            const card = document.getElementById(`appointment-${id}`);
+                            if (card) {
+                                const dateSpan = card.querySelectorAll('.appointment-info span')[0];
+                                const timeSpan = card.querySelectorAll('.appointment-info span')[1];
+                                if (dateSpan) dateSpan.textContent = data.formattedDate;
+                                if (timeSpan) timeSpan.textContent =
+                                    `${data.startTime} - ${data.endTime}`;
+                            }
+                        } else {
+                            rescheduleErrorEl.textContent = data.message ?? 'Something went wrong.';
+                            rescheduleErrorEl.classList.remove('d-none');
+                        }
+                    })
+                    .catch(() => {
+                        rescheduleErrorEl.textContent = '{{ __('app.appointments.error_network') }}';
+                        rescheduleErrorEl.classList.remove('d-none');
+                    })
+                    .finally(() => {
+                        rescheduleSaveBtn.disabled = false;
+                        spinner.classList.add('d-none');
+                    });
             });
 
         });

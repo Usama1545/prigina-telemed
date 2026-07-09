@@ -10,6 +10,7 @@
         $cert = $report['certification'] ?? [];
         $findings = $report['key_findings'] ?? [];
         $questions = $report['questions_for_physician'] ?? [];
+        $reportId = $report['id'] ?? $report['report_id'];
     @endphp
 
     <div class="page-wrapper">
@@ -73,7 +74,7 @@
                                 Actions</p>
 
                             @if ($report['status'] === 'submitted')
-                                <form method="POST" action="{{ route('admin.second-opinion.approve', $report['id']) }}"
+                                <form method="POST" action="{{ route('admin.second-opinion.approve', $reportId) }}"
                                     class="mb-2">
                                     @csrf
                                     <button type="submit" class="btn btn-success w-100"
@@ -88,7 +89,7 @@
                             @endif
 
                             @if ($report['status'] === 'approved')
-                                <form method="POST" action="{{ route('admin.second-opinion.publish', $report['id']) }}"
+                                <form method="POST" action="{{ route('admin.second-opinion.publish', $reportId) }}"
                                     class="mb-2">
                                     @csrf
                                     <button type="submit" class="btn btn-primary w-100"
@@ -98,7 +99,7 @@
                                 </form>
                             @endif
 
-                            <a href="{{ route('admin.second-opinion.pdf', $report['id']) }}" target="_blank"
+                            <a href="{{ route('admin.second-opinion.pdf', $reportId) }}" target="_blank"
                                 class="btn btn-outline-secondary w-100">
                                 <i class="fe fe-file-text me-2"></i> View PDF
                             </a>
@@ -475,7 +476,7 @@
                     <h5 class="modal-title">Request Revision</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <form method="POST" action="{{ route('admin.second-opinion.revision', $report['id']) }}">
+                <form method="POST" action="{{ route('admin.second-opinion.revision', $reportId) }}">
                     @csrf
                     <div class="modal-body">
                         <label class="form-label fw-semibold">Revision Note <span class="text-danger">*</span></label>

@@ -100,7 +100,11 @@
                                                             </select>
                                                         </div>
 
-                                                        <h6 class="mb-3">Available Slots</h6>
+                                                        <h6 class="mb-2">Available Slots</h6>
+                                                        <small class="text-muted d-block mb-3">
+                                                            <i class="isax isax-info-circle"></i>
+                                                            {{ __('app.appointments.utc_notice') }}
+                                                        </small>
                                                         <div id="slotsContainer" class="row">
                                                             {{-- Slots will render here --}}
                                                         </div>

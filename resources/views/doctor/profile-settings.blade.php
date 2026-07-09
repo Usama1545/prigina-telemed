@@ -113,7 +113,7 @@
                                         </label>
 
                                         <input type="text" name="licenseNumber" class="form-control"
-                                            value="{{ old('licenseNumber', current_user()['licenseNumbers'] ?? '') }}"
+                                            value="{{ old('licenseNumber', current_user()['licenseNumber'] ?? '') }}"
                                             required>
 
                                     </div>
@@ -185,8 +185,8 @@
                                         <select name="specializations[]" class="form-control select2" multiple required>
 
                                             @foreach ($specializations as $spec)
-                                                <option value="{{ $spec['id'] }}"
-                                                    {{ collect(old('specializations', current_user()['specializations'] ?? []))->contains($spec['id']) ? 'selected' : '' }}>
+                                                <option value="{{ $spec['name'] }}"
+                                                    {{ collect(old('specializations', current_user()['specializations'] ?? []))->contains($spec['name']) ? 'selected' : '' }}>
                                                     {{ $spec['name'] }}
                                                 </option>
                                             @endforeach
@@ -198,7 +198,7 @@
                                 </div>
 
                                 <!-- Languages -->
-                                <div class="col-lg-12">
+                                <div class="col-lg-6">
 
                                     <div class="form-wrap">
 
@@ -222,7 +222,6 @@
                                     </div>
 
                                 </div>
-
                             </div>
                         </div>
                         <div class="setting-title">
@@ -230,6 +229,10 @@
                         </div>
 
                         <div class="setting-card bg-white">
+                            <small class="text-muted d-block mb-3">
+                                <i class="isax isax-info-circle"></i>
+                                {{ __('app.appointments.utc_notice') }}
+                            </small>
                             <div class="row">
                                 <div class="row mb-4">
                                     <div class="col-lg-6 col-md-6 ">
@@ -648,105 +651,42 @@
                                 <!-- Hidden Input -->
                                 <input type="hidden" name="breaks" id="breaksInput">
                             </div>
+                            <div class="modal-btn text-end pb-3">
 
-                        </div>
-                </div>
+                                <a href="#" class="btn btn-gray">
+                                    {{ __('app.common.cancel') }}
+                                </a>
 
-                {{-- <!-- Documents -->
-                    <div class="setting-title">
-                        <h5>Documents</h5>
-                    </div>
+                                <button type="submit" class="btn btn-primary prime-btn">
+                                    {{ __('app.profile.save_changes') }}
+                                </button>
 
-                    <div class="setting-card">
-
-                        <div class="row">
-
-                            <div class="col-lg-6">
-                                <div class="form-wrap">
-
-                                    <label class="form-label">
-                                        Medical License
-                                    </label>
-
-                                    <input
-                                        type="file"
-                                        name="medical_license"
-                                        class="form-control"
-                                        accept=".jpg,.jpeg,.png,.pdf"
-                                    >
-
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6">
-                                <div class="form-wrap">
-
-                                    <label class="form-label">
-                                        Degree Certificate
-                                    </label>
-
-                                    <input
-                                        type="file"
-                                        name="degree_certificate"
-                                        class="form-control"
-                                        accept=".jpg,.jpeg,.png,.pdf"
-                                    >
-
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6">
-                                <div class="form-wrap">
-
-                                    <label class="form-label">
-                                        ID Proof
-                                    </label>
-
-                                    <input
-                                        type="file"
-                                        name="id_proof"
-                                        class="form-control"
-                                        accept=".jpg,.jpeg,.png,.pdf"
-                                    >
-
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6">
-                                <div class="form-wrap">
-
-                                    <label class="form-label">
-                                        Clinic Registration
-                                    </label>
-
-                                    <input
-                                        type="file"
-                                        name="clinic_registration"
-                                        class="form-control"
-                                        accept=".jpg,.jpeg,.png,.pdf"
-                                    >
-
-                                </div>
                             </div>
 
                         </div>
 
-                    </div> --}}
-
-                <div class="modal-btn text-end">
-
-                    <a href="#" class="btn btn-gray">
-                        {{ __('app.common.cancel') }}
-                    </a>
-
-                    <button type="submit" class="btn btn-primary prime-btn">
-                        {{ __('app.profile.save_changes') }}
-                    </button>
-
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="border-bottom pb-3 mb-3">
+                                    <h5>{{ __('app.help_support.title') }}</h5>
+                                </div>
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <a href="{{ route('doctor.help-support') }}" class="btn btn-primary prime-btn">
+                                        <i class="isax isax-message-question me-1"></i>
+                                        {{ __('app.help_support.title') }}
+                                    </a>
+                                    <a href="{{ route('doctor.my-tickets') }}" class="btn btn-gray">
+                                        <i class="isax isax-note-2 me-1"></i> {{ __('app.help_support.my_tickets') }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                 </div>
 
                 </form>
                 <!-- /Profile Settings -->
+
+
 
             </div>
         </div>

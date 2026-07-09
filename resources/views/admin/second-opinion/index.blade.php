@@ -168,14 +168,15 @@
                                                 class="badge bg-{{ $color }}-subtle text-{{ $color }}">{{ $label }}</span>
                                         </td>
                                         <td>
+                                            <?php $reportId = $report['id'] ?? $report['report_id']; ?>
                                             <div class="d-flex gap-1 flex-wrap">
-                                                <a href="{{ route('admin.second-opinion.show', $report['id']) }}"
+                                                <a href="{{ route('admin.second-opinion.show', $reportId) }}"
                                                     class="btn btn-sm btn-outline-primary">
                                                     <i class="fe fe-eye me-1"></i>View
                                                 </a>
                                                 @if ($report['status'] === 'submitted')
                                                     <form method="POST"
-                                                        action="{{ route('admin.second-opinion.approve', $report['id']) }}"
+                                                        action="{{ route('admin.second-opinion.approve', $reportId) }}"
                                                         style="display:inline;">
                                                         @csrf
                                                         <button type="submit" class="btn btn-sm btn-success"
@@ -186,7 +187,7 @@
                                                 @endif
                                                 @if ($report['status'] === 'approved')
                                                     <form method="POST"
-                                                        action="{{ route('admin.second-opinion.publish', $report['id']) }}"
+                                                        action="{{ route('admin.second-opinion.publish', $reportId) }}"
                                                         style="display:inline;">
                                                         @csrf
                                                         <button type="submit" class="btn btn-sm btn-primary"

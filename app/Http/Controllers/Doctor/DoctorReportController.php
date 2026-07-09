@@ -93,6 +93,11 @@ class DoctorReportController extends Controller
             return back()->with('error', 'This report cannot be submitted in its current status.');
         }
 
+        $patientInfo = $report['patient_information'] ?? [];
+        if (empty($patientInfo['age']) || empty($patientInfo['gender'])) {
+            return back()->with('error', 'Patient age and gender are required before submitting this report.');
+        }
+
         $this->firestore->update('second_opinion_reports', $id, [
             'status' => 'submitted',
             'submitted_at' => now(),

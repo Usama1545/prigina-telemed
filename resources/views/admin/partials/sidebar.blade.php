@@ -44,6 +44,11 @@
                         <i class="fe fe-file-text"></i> <span>Second Opinion</span>
                     </a>
                 </li>
+                <li class="{{ Request::is('admin/support-tickets*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.support-tickets.index') }}">
+                        <i class="fe fe-ticket"></i> <span>Support Tickets</span>
+                    </a>
+                </li>
                 <li class="{{ Request::is('admin/notifications*') ? 'active' : '' }}">
                     <a href="{{ route('admin.notifications') }}"><i class="fe fe-bell"></i>
                         <span>Notifications</span></a>

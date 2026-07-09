@@ -7,6 +7,7 @@ use App\Mail\NewAppointmentNotification;
 use App\Models\Firestore\Appointment;
 use App\Models\Firestore\AppSetting;
 use App\Models\Firestore\Doctor;
+use App\Services\DoctorAvailabilityService;
 use App\Services\FirestoreService;
 use Carbon\Carbon;
 use Flutterwave\Flutterwave;
@@ -25,121 +26,54 @@ class BookingController extends Controller
 
     protected $appointments;
 
+    protected $availabilityService;
+
     const STRIPE_FEE_PERCENT = 4;
 
-    public function __construct(Doctor $doctors, AppSetting $appSetting, Appointment $appointments)
+    public function __construct(Doctor $doctors, AppSetting $appSetting, Appointment $appointments, DoctorAvailabilityService $availabilityService)
     {
         $this->doctors = $doctors;
         $this->appSetting = $appSetting;
         $this->appointments = $appointments;
+        $this->availabilityService = $availabilityService;
     }
 
     public function BookingSlots($id)
     {
-        $doctor = $this->doctors->find($id);
-        $setting = $this->appSetting->first();
+        $result = $this->availabilityService->getAvailability($id);
 
-        $baseFilter = [
-            [
-                'field' => 'doctorId',
-                'op' => '=',
-                'value' => $id,
-            ],
-        ];
-
-        $firestore = app(FirestoreService::class);
-
-        $bookedSlots = $firestore->query('appointments', $baseFilter);
-
-        $breaks = $doctor['breaks'] ?? [];
-        $workingDays = $doctor['workingDays'] ?? [];
-        $workingHours = $doctor['workingHours'] ?? [];
-        $slotDuration = $setting['slotDuration'] ?? 30;
-
-        $bookedMap = [];
-
-        foreach ($bookedSlots['documents'] ?? [] as $appointment) {
-            $date = date('Y-m-d', strtotime($appointment['date']));
-            $start = date('H:i', strtotime($appointment['startTime']));
-
-            $bookedMap[$date][] = $start;
-        }
-        $weekDays = [];
-
-        $today = now();
-
-        for ($i = 0; $i < 7; $i++) {
-            $day = $today->copy()->addDays($i);
-
-            if (in_array($day->format('l'), $workingDays)) {
-                $weekDays[] = $day->format('Y-m-d');
-            }
-        }
-
-        $slots = [];
-
-        if (
-            empty($workingDays) ||
-            empty($workingHours) ||
-            count($workingHours) < 2
-        ) {
+        if (! $result) {
             return redirect()
                 ->back()
                 ->with('error', 'This doctor has not set their availability yet. Please check back later.');
         }
 
-        $startTime = $workingHours[0]; // "09:00"
-        $endTime = $workingHours[1];   // "17:00"
-
-        foreach ($weekDays as $date) {
-
-            $current = strtotime($startTime);
-            $end = strtotime($endTime);
-
-            while ($current < $end) {
-
-                $slot = date('H:i', $current);
-
-                if (isset($bookedMap[$date]) && in_array($slot, $bookedMap[$date])) {
-                    $current += $slotDuration * 60;
-
-                    continue;
-                }
-
-                if (! empty($breaks)) {
-                    if (count($breaks) === 1) {
-                        $breaks = explode('-', $breaks[0]);
-                    }
-                    $breakStart = strtotime($breaks[0]);
-                    $breakEnd = strtotime($breaks[1]);
-
-                    if ($current >= $breakStart && $current < $breakEnd) {
-                        $current += $slotDuration * 60;
-
-                        continue;
-                    }
-                }
-
-                $slots[$date][] = $slot;
-
-                $current += $slotDuration * 60;
-            }
-        }
-
-        $availability = [];
-
-        foreach ($slots as $date => $daySlots) {
-            $availability[] = [
-                'date' => $date,
-                'day' => date('l', strtotime($date)),
-                'slots' => $daySlots,
-            ];
-        }
-
+        $doctor = $result['doctor'];
+        $availability = $result['availability'];
         $title = 'Select Available Slots';
 
-        return view('booking', compact('doctor', 'slots', 'title', 'availability'));
+        return view('booking', compact('doctor', 'title', 'availability'));
+    }
 
+    /**
+     * JSON list of a doctor's open slots for the next 7 days, optionally
+     * excluding one appointment's own slot (used when rescheduling it).
+     */
+    public function availableSlots(Request $request, $id)
+    {
+        $result = $this->availabilityService->getAvailability($id, $request->query('exclude'));
+
+        if (! $result) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This doctor has not set their availability yet.',
+            ], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'availability' => $result['availability'],
+        ]);
     }
 
     public function processBooking(Request $request)
@@ -177,14 +111,25 @@ class BookingController extends Controller
         // Get current UTC time
         $now = Carbon::now('UTC');
 
-        // Create DateTime objects for start and end times with the selected date
-        $startDateTime = Carbon::parse($validated['selected_date'].' '.date('H:i:s', $startTime), $doctor['timezone'] ?? 'UTC');
-        $endDateTime = Carbon::parse($validated['selected_date'].' '.date('H:i:s', $endTime), $doctor['timezone'] ?? 'UTC');
+        // Slot times are the doctor's own working-hours values, stored and shown
+        // as-is with no timezone conversion — the doctor's timezone is displayed
+        // alongside the time so patients can convert it themselves if needed.
+        $startDateTime = Carbon::parse($validated['selected_date'].' '.date('H:i:s', $startTime), 'UTC');
+        $endDateTime = Carbon::parse($validated['selected_date'].' '.date('H:i:s', $endTime), 'UTC');
         $documentId = uniqid();
 
         // Convert to UTC for storage
         $startTimeUTC = $startDateTime->copy()->setTimezone('UTC');
         $endTimeUTC = $endDateTime->copy()->setTimezone('UTC');
+
+        // Reject stale/tampered submissions for a slot that has already passed
+        // (e.g. the booking page was left open across midnight before submitting).
+        if ($startTimeUTC->lte($now)) {
+            return redirect()
+                ->back()
+                ->with('error', 'The selected time slot is no longer available. Please choose a different date or time.');
+        }
+
         $documentUrls = [];
 
         if ($request->hasFile('documents')) {

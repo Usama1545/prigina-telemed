@@ -7,10 +7,13 @@ use App\Mail\AppointmentCompleted;
 use App\Mail\AppointmentConfirmed;
 use App\Mail\AppointmentRejected;
 use App\Mail\AppointmentReminder;
+use App\Mail\AppointmentRescheduled;
+use App\Mail\AppointmentRescheduledDoctor;
 use App\Mail\NewAppointmentBooked;
 use App\Mail\NewAppointmentNotification;
 use App\Services\FirestoreService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
@@ -71,14 +74,19 @@ class AppointmentEmailController extends Controller
     /**
      * Send the appropriate status email to the patient based on current appointment status.
      * Optionally also sends a new-appointment notification to the doctor when status is pending.
+     * When called with ?reschedule=true, sends the reschedule emails instead, regardless of status.
      * POST /api/appointments/{id}/notify-status
      */
-    public function notifyStatus(string $id): JsonResponse
+    public function notifyStatus(Request $request, string $id): JsonResponse
     {
         $appointment = $this->firestore->find('appointments', $id);
 
         if (! $appointment) {
             return response()->json(['error' => 'Appointment not found.'], 404);
+        }
+
+        if ($request->boolean('reschedule')) {
+            return $this->notifyReschedule($id, $appointment);
         }
 
         $status = $appointment['status'] ?? '';
@@ -156,6 +164,61 @@ class AppointmentEmailController extends Controller
         return response()->json([
             'success' => true,
             'status' => $status,
+            'sent_to' => $sent,
+            'errors' => $errors,
+        ]);
+    }
+
+    /**
+     * Notify the patient and doctor that the appointment's date/time changed.
+     */
+    private function notifyReschedule(string $id, array $appointment): JsonResponse
+    {
+        $patientEmail = $this->patientEmail($appointment);
+        $doctorEmail = $this->doctorEmail($appointment);
+
+        $sent = [];
+        $errors = [];
+
+        if ($patientEmail) {
+            try {
+                Mail::to($patientEmail)->send(new AppointmentRescheduled($appointment));
+                $sent[] = "patient ({$patientEmail})";
+            } catch (\Throwable $e) {
+                Log::error('appointment-rescheduled-patient-email-failed', [
+                    'appointment' => $id,
+                    'email' => $patientEmail,
+                    'error' => $e->getMessage(),
+                ]);
+                $errors[] = "patient email failed: {$e->getMessage()}";
+            }
+        } else {
+            $errors[] = 'patient email not found';
+        }
+
+        if ($doctorEmail) {
+            try {
+                Mail::to($doctorEmail)->send(new AppointmentRescheduledDoctor($appointment));
+                $sent[] = "doctor ({$doctorEmail})";
+            } catch (\Throwable $e) {
+                Log::error('appointment-rescheduled-doctor-email-failed', [
+                    'appointment' => $id,
+                    'email' => $doctorEmail,
+                    'error' => $e->getMessage(),
+                ]);
+                $errors[] = "doctor email failed: {$e->getMessage()}";
+            }
+        } else {
+            $errors[] = 'doctor email not found';
+        }
+
+        if (empty($sent)) {
+            return response()->json(['error' => implode('; ', $errors)], 500);
+        }
+
+        return response()->json([
+            'success' => true,
+            'status' => 'rescheduled',
             'sent_to' => $sent,
             'errors' => $errors,
         ]);

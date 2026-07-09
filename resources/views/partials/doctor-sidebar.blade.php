@@ -100,7 +100,7 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('login') }}">
+                    <a href="{{ route('logout') }}">
                         <i class="isax isax-logout"></i>
                         <span>{{ __('app.doctor_sidebar.logout') }}</span>
                     </a>

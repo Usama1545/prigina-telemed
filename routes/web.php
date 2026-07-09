@@ -5,6 +5,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\Doctor\DoctorProfileController;
 use App\Http\Controllers\Doctor\DoctorReportController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\HelpSupportController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\Patient\PatientReportController;
 use App\Http\Controllers\PatientController;
@@ -39,6 +40,7 @@ Route::get('/index', [IndexController::class, 'index'])->name('index-page');
 
 Route::middleware(['firebase.auth'])->group(function () {
     Route::get('{id}/booking-slots', [BookingController::class, 'bookingSlots'])->name('booking');
+    Route::get('/doctor/{id}/available-slots', [BookingController::class, 'availableSlots'])->name('doctor.available-slots');
     Route::post('/booking/process', [BookingController::class, 'processBooking'])->name('booking.process');
     Route::get('/booking/success', [BookingController::class, 'paymentSuccess'])->name('booking.success');
     Route::get('/booking/cancel', [BookingController::class, 'paymentCancel'])->name('booking.cancel');
@@ -72,6 +74,10 @@ Route::middleware(['firebase.auth'])->group(function () {
         Route::post('agree/consent', 'agreeToConsent')->name('consent.agree');
         Route::post('/appointment/{id}/delete', 'deleteAppointment')->name('patient.appointment-delete');
         Route::post('/appointment/{id}/pay', 'initiatePayment')->name('patient.appointment-pay');
+        Route::post('/appointment/{id}/reschedule', 'rescheduleAppointment')->name('patient.reschedule-appointment');
+        Route::get('/help-support', [HelpSupportController::class, 'index'])->name('patient.help-support');
+        Route::post('/help-support/ticket', [HelpSupportController::class, 'storeTicket'])->name('patient.help-support.ticket');
+        Route::get('/my-tickets', [HelpSupportController::class, 'myTickets'])->name('patient.my-tickets');
     });
 
     Route::prefix('doctor')->controller(DoctorReportController::class)->group(function () {
@@ -118,6 +124,9 @@ Route::middleware(['firebase.auth'])->group(function () {
         Route::post('/toggle-availability', 'toggleAvailability')->name('doctor.toggle-availability');
         Route::post('/appointment/{id}/reschedule', 'rescheduleAppointment')->name('doctor.reschedule-appointment');
         Route::post('/appointment/{id}/delete', 'deleteAppointment')->name('doctor.appointment-delete');
+        Route::get('/help-support', [HelpSupportController::class, 'index'])->name('doctor.help-support');
+        Route::post('/help-support/ticket', [HelpSupportController::class, 'storeTicket'])->name('doctor.help-support.ticket');
+        Route::get('/my-tickets', [HelpSupportController::class, 'myTickets'])->name('doctor.my-tickets');
     });
 
 });

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\AppointmentCancelled;
+use App\Services\DoctorAvailabilityService;
 use App\Services\FirestoreService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -20,9 +21,12 @@ class PatientController extends Controller
 {
     protected $firestore;
 
-    public function __construct(FirestoreService $firestore)
+    protected $availabilityService;
+
+    public function __construct(FirestoreService $firestore, DoctorAvailabilityService $availabilityService)
     {
         $this->firestore = $firestore;
+        $this->availabilityService = $availabilityService;
     }
 
     public function dashboard(Request $request)
@@ -651,6 +655,87 @@ class PatientController extends Controller
         $this->firestore->delete('appointments', $id);
 
         return redirect()->back()->with('success', 'Appointment deleted.');
+    }
+
+    public function rescheduleAppointment(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'date' => 'required|date|after_or_equal:today',
+            'startTime' => 'required|string', // 24h "H:i", must match one of the doctor's open slots
+        ]);
+
+        $appointment = $this->firestore->find('appointments', $id);
+
+        if (! $appointment || ($appointment['patientId'] ?? '') !== current_user()['uid']) {
+            return response()->json(['success' => false, 'message' => 'Appointment not found.'], 404);
+        }
+
+        if (($appointment['status'] ?? '') !== 'confirmed') {
+            return response()->json(['success' => false, 'message' => 'Only confirmed appointments can be rescheduled.'], 422);
+        }
+
+        // Block rescheduling within 24 hours of the appointment
+        if (! empty($appointment['date'])) {
+            $apptDate = Carbon::parse($appointment['date']);
+            if ($apptDate->lte(now()->addHours(24))) {
+                return response()->json(['success' => false, 'message' => 'Appointments cannot be rescheduled within 24 hours of the scheduled time.'], 422);
+            }
+        }
+
+        $doctorId = $appointment['doctorId'] ?? '';
+
+        // Recompute the doctor's real availability server-side rather than trusting
+        // whatever date/time the client posts — the current appointment's own slot
+        // is excluded so it doesn't block itself.
+        $availability = $this->availabilityService->getAvailability($doctorId, $id);
+
+        if (! $availability) {
+            return response()->json(['success' => false, 'message' => 'This doctor has not set their availability.'], 422);
+        }
+
+        $daySlots = collect($availability['availability'])->firstWhere('date', $validated['date'])['slots'] ?? [];
+
+        if (! in_array($validated['startTime'], $daySlots, true)) {
+            return response()->json(['success' => false, 'message' => 'The selected time slot is no longer available. Please choose another.'], 422);
+        }
+
+        $slotDuration = $availability['slotDuration'];
+        $startTimestamp = strtotime($validated['startTime']);
+        $endTimestamp = $startTimestamp + $slotDuration * 60;
+
+        $startTimeFormatted = date('h:i A', $startTimestamp);
+        $endTimeFormatted = date('h:i A', $endTimestamp);
+
+        $formattedDate = Carbon::parse($validated['date'])->format('d M Y');
+
+        // Slot times are the doctor's own working-hours values, stored and shown
+        // as-is with no timezone conversion — the doctor's timezone is displayed
+        // alongside the time so patients can convert it themselves if needed.
+        $startDateTime = Carbon::parse($validated['date'].' '.date('H:i:s', $startTimestamp), 'UTC');
+        $endDateTime = Carbon::parse($validated['date'].' '.date('H:i:s', $endTimestamp), 'UTC');
+
+        // Convert to UTC for storage
+        $startTimeUTC = $startDateTime->copy()->setTimezone('UTC');
+        $endTimeUTC = $endDateTime->copy()->setTimezone('UTC');
+
+        // Reschedule emails (patient + doctor) are sent by the Firestore
+        // onAppointmentStatusChanged Cloud Function, which detects the date/time
+        // change on this write and calls AppointmentEmailController::notifyStatus
+        // with ?reschedule=true — no need to send them from here too.
+        $this->firestore->update('appointments', $id, [
+            'date' => $startDateTime,
+            'startTime' => $startTimeFormatted,
+            'endTime' => $endTimeFormatted,
+            'startTimeUTC' => $startTimeUTC,
+            'endTimeUTC' => $endTimeUTC,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'formattedDate' => $formattedDate,
+            'startTime' => $startTimeFormatted,
+            'endTime' => $endTimeFormatted,
+        ]);
     }
 
     public function initiatePayment($id)

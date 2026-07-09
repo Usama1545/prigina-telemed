@@ -6,8 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\AppointmentCompleted;
 use App\Mail\AppointmentConfirmed;
 use App\Mail\AppointmentRejected;
-use App\Mail\AppointmentRescheduled;
-use App\Mail\AppointmentRescheduledDoctor;
+use App\Services\DoctorAvailabilityService;
 use App\Services\FirestoreService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -26,9 +25,12 @@ class DoctorProfileController extends Controller
 {
     protected $firestore;
 
-    public function __construct(FirestoreService $firestore)
+    protected $availabilityService;
+
+    public function __construct(FirestoreService $firestore, DoctorAvailabilityService $availabilityService)
     {
         $this->firestore = $firestore;
+        $this->availabilityService = $availabilityService;
     }
 
     public function dashboard(Request $request)
@@ -123,6 +125,7 @@ class DoctorProfileController extends Controller
             'workingHours' => 'required|array',
             'breaks' => 'nullable|string',
             'slotDuration' => 'required|numeric',
+            'timezone' => 'required|string',
         ]);
 
         $uid = current_user()['uid'];
@@ -141,6 +144,7 @@ class DoctorProfileController extends Controller
             'workingDays',
             'workingHours',
             'slotDuration',
+            'timezone',
         ])->toArray();
 
         // ✅ Handle Image Upload
@@ -178,6 +182,7 @@ class DoctorProfileController extends Controller
             'languages' => $validated['languages'],
             'breaks' => $breaks,
             'consultationFee' => intval($validated['consultationFee']),
+            'timezone' => $validated['timezone'],
         ]);
 
         return redirect()->back()->with('success', 'Profile updated successfully.');
@@ -416,6 +421,15 @@ class DoctorProfileController extends Controller
     public function cancelAppointment($id)
     {
         $appointment = $this->firestore->find('appointments', $id);
+
+        // Block cancellation within 24 hours of the appointment (only applies once
+        // the booking is confirmed — a still-pending request can be declined anytime)
+        if (($appointment['status'] ?? '') === 'confirmed' && ! empty($appointment['date'])) {
+            $apptDate = Carbon::parse($appointment['date']);
+            if ($apptDate->lte(now()->addHours(24))) {
+                return redirect()->back()->with('error', 'Appointments cannot be cancelled within 24 hours of the scheduled time.');
+            }
+        }
 
         $this->firestore->update('appointments', $id, [
             'status' => 'cancelled',
@@ -946,27 +960,61 @@ class DoctorProfileController extends Controller
     {
         $validated = $request->validate([
             'date' => 'required|date|after_or_equal:today',
-            'startTime' => 'required|string',
-            'endTime' => 'required|string',
+            'startTime' => 'required|string', // 24h "H:i", must match one of the doctor's open slots
         ]);
+
+        $doctorUid = current_user()['uid'];
 
         $appointment = $this->firestore->find('appointments', $id);
 
-        if (! $appointment || ($appointment['doctorId'] ?? '') !== current_user()['uid']) {
+        if (! $appointment || ($appointment['doctorId'] ?? '') !== $doctorUid) {
             return response()->json(['success' => false, 'message' => 'Appointment not found.'], 404);
         }
 
+        // Block rescheduling within 24 hours of the appointment
+        if (! empty($appointment['date'])) {
+            $apptDate = Carbon::parse($appointment['date']);
+            if ($apptDate->lte(now()->addHours(24))) {
+                return response()->json(['success' => false, 'message' => 'Appointments cannot be rescheduled within 24 hours of the scheduled time.'], 422);
+            }
+        }
+
+        // Recompute real availability server-side rather than trusting whatever
+        // time the client posts — the current appointment's own slot is excluded
+        // so it doesn't block itself.
+        $availability = $this->availabilityService->getAvailability($doctorUid, $id);
+
+        if (! $availability) {
+            return response()->json(['success' => false, 'message' => 'Availability is not set up.'], 422);
+        }
+
+        $daySlots = collect($availability['availability'])->firstWhere('date', $validated['date'])['slots'] ?? [];
+
+        if (! in_array($validated['startTime'], $daySlots, true)) {
+            return response()->json(['success' => false, 'message' => 'The selected time slot is no longer available. Please choose another.'], 422);
+        }
+
+        $slotDuration = $availability['slotDuration'];
+        $startTimestamp = strtotime($validated['startTime']);
+        $endTimestamp = $startTimestamp + $slotDuration * 60;
+
         $formattedDate = Carbon::parse($validated['date'])->format('d M Y');
-        $startTimeFormatted = date('h:i A', $validated['startTime']);
-        $endTimeFormatted = date('h:i A', $validated['endTime']);
+        $startTimeFormatted = date('h:i A', $startTimestamp);
+        $endTimeFormatted = date('h:i A', $endTimestamp);
 
-        // Create DateTime objects for start and end times with the selected date
-        $startDateTime = Carbon::parse($validated['date'].' '.date('H:i:s', $validated['startTime']), $doctor['timezone'] ?? 'UTC');
-        $endDateTime = Carbon::parse($validated['date'].' '.date('H:i:s', $validated['endTime']), $doctor['timezone'] ?? 'UTC');
+        // Slot times are the doctor's own working-hours values, stored and shown
+        // as-is with no timezone conversion — times are UTC throughout so both
+        // sides need to convert to their own local time.
+        $startDateTime = Carbon::parse($validated['date'].' '.date('H:i:s', $startTimestamp), 'UTC');
+        $endDateTime = Carbon::parse($validated['date'].' '.date('H:i:s', $endTimestamp), 'UTC');
 
-        // Convert to UTC for storage
         $startTimeUTC = $startDateTime->copy()->setTimezone('UTC');
         $endTimeUTC = $endDateTime->copy()->setTimezone('UTC');
+
+        // Reschedule emails (patient + doctor) are sent by the Firestore
+        // onAppointmentStatusChanged Cloud Function, which detects the date/time
+        // change on this write and calls AppointmentEmailController::notifyStatus
+        // with ?reschedule=true — no need to send them from here too.
         $this->firestore->update('appointments', $id, [
             'date' => $startDateTime,
             'startTime' => $startTimeFormatted,
@@ -975,46 +1023,11 @@ class DoctorProfileController extends Controller
             'endTimeUTC' => $endTimeUTC,
         ]);
 
-        $updatedAppointment = array_merge($appointment, [
-            'date' => $validated['date'],
-            'startTime' => $validated['startTime'],
-            'endTime' => $validated['endTime'],
-        ]);
-
-        // Notify patient
-        $patient = $this->firestore->find('patients', $appointment['patientId'] ?? '');
-        $patientEmail = $patient['email'] ?? null;
-        if ($patientEmail) {
-            try {
-                Mail::to($patientEmail)->send(new AppointmentRescheduled($updatedAppointment));
-            } catch (\Throwable $e) {
-                Log::error('appointment-rescheduled-patient-email-failed', [
-                    'appointment' => $id,
-                    'email' => $patientEmail,
-                    'error' => $e->getMessage(),
-                ]);
-            }
-        }
-
-        // Notify doctor (current user)
-        $doctorEmail = current_user()['email'] ?? null;
-        if ($doctorEmail) {
-            try {
-                Mail::to($doctorEmail)->send(new AppointmentRescheduledDoctor($updatedAppointment));
-            } catch (\Throwable $e) {
-                Log::error('appointment-rescheduled-doctor-email-failed', [
-                    'appointment' => $id,
-                    'email' => $doctorEmail,
-                    'error' => $e->getMessage(),
-                ]);
-            }
-        }
-
         return response()->json([
             'success' => true,
             'formattedDate' => $formattedDate,
-            'startTime' => $validated['startTime'],
-            'endTime' => $validated['endTime'],
+            'startTime' => $startTimeFormatted,
+            'endTime' => $endTimeFormatted,
         ]);
     }
 }

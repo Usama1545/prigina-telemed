@@ -1,12 +1,13 @@
 @php
     $date = '';
+    $apptDateTime = null;
     if (!empty($appointment['date'])) {
-        if (is_numeric($appointment['date'])) {
-            $date = \Carbon\Carbon::createFromTimestamp($appointment['date'])->format('d M Y');
-        } else {
-            $date = \Carbon\Carbon::parse($appointment['date'])->format('d M Y');
-        }
+        $apptDateTime = is_numeric($appointment['date'])
+            ? \Carbon\Carbon::createFromTimestamp($appointment['date'])
+            : \Carbon\Carbon::parse($appointment['date']);
+        $date = $apptDateTime->format('d M Y');
     }
+    $canReschedule = $apptDateTime && $apptDateTime->gt(now()->addHours(24));
 @endphp
 
 <div
@@ -233,7 +234,7 @@
 
                 </li>
 
-                @if(($appointment['status'] ?? '') === 'confirmed')
+                @if(($appointment['status'] ?? '') === 'confirmed' && $canReschedule)
 
                     <li class="appointment-action mt-2">
 

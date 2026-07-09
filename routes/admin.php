@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AdminPatientController;
 use App\Http\Controllers\Admin\AdminPaymentController;
 use App\Http\Controllers\Admin\AdminReportController;
 use App\Http\Controllers\Admin\AdminSecondOpinionController;
+use App\Http\Controllers\Admin\AdminSupportTicketController;
 use Illuminate\Support\Facades\Route;
 
 // =============================
@@ -70,6 +71,11 @@ Route::middleware(['admin.auth'])->group(function () {
         Route::get('/{id}/pdf', 'previewPdf')->name('second-opinion.pdf');
 
     });
+    Route::prefix('support-tickets')->controller(AdminSupportTicketController::class)->group(function () {
+        Route::get('/', 'index')->name('support-tickets.index');
+        Route::patch('/{id}/status', 'updateStatus')->name('support-tickets.status');
+    });
+
     Route::get('/reviews', [AdminDashboardController::class, 'reviews'])->name('reviews');
     Route::delete('/reviews/{review}', [AdminDashboardController::class, 'deleteReview'])->name('reviews.delete');
 

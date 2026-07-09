@@ -311,21 +311,30 @@
                 <div class="modal-body">
 
                     <input type="hidden" id="reschedule-appointment-id">
+                    <input type="hidden" id="reschedule-selected-date">
+                    <input type="hidden" id="reschedule-selected-slot">
 
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">{{ __('app.appointments.new_date') }}</label>
-                        <input type="date" id="reschedule-date" class="form-control" min="{{ date('Y-m-d') }}">
+                    <small class="text-muted d-block mb-3">
+                        <i class="isax isax-info-circle"></i>
+                        {{ __('app.appointments.utc_notice') }}
+                    </small>
+
+                    <div id="reschedule-loading" class="text-center py-4 d-none">
+                        <span class="spinner-border spinner-border-sm me-2"></span>{{ __('app.common.loading') }}
                     </div>
 
-                    <div class="row g-3">
-                        <div class="col-6">
-                            <label class="form-label fw-semibold">{{ __('app.appointments.start_time') }}</label>
-                            <input type="time" id="reschedule-start" class="form-control">
+                    <div id="reschedule-empty" class="text-muted text-center py-4 d-none">
+                        {{ __('app.booking.no_slots') }}
+                    </div>
+
+                    <div id="reschedule-picker" class="d-none">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">{{ __('app.appointments.new_date') }}</label>
+                            <select class="form-select" id="reschedule-day-select"></select>
                         </div>
-                        <div class="col-6">
-                            <label class="form-label fw-semibold">{{ __('app.appointments.end_time') }}</label>
-                            <input type="time" id="reschedule-end" class="form-control">
-                        </div>
+
+                        <label class="form-label fw-semibold">{{ __('app.booking.available_slots') }}</label>
+                        <div id="reschedule-slots" class="row g-2"></div>
                     </div>
 
                     <div id="reschedule-error" class="alert alert-danger mt-3 d-none"></div>
@@ -334,7 +343,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('app.common.cancel') }}</button>
-                    <button type="button" class="btn btn-primary" id="reschedule-save-btn">
+                    <button type="button" class="btn btn-primary" id="reschedule-save-btn" disabled>
                         <span id="reschedule-spinner" class="spinner-border spinner-border-sm me-1 d-none"></span>
                         {{ __('app.appointments.save_changes') }}
                     </button>
@@ -540,6 +549,8 @@
     <script>
         (function() {
 
+            const doctorId = "{{ current_user()['uid'] }}";
+
             // Populate appointment detail modal
             document.getElementById('appointmentDetailModal').addEventListener('show.bs.modal', function(e) {
                 const btn = e.relatedTarget;
@@ -650,70 +661,111 @@
                 }
             });
 
+            // Reschedule modal: fetch the doctor's own real availability and let
+            // them pick only from open slots (instead of a free-form date/time).
+            let rescheduleAvailability = [];
+            const rescheduleDaySelect = document.getElementById('reschedule-day-select');
+            const rescheduleSlotsEl = document.getElementById('reschedule-slots');
+            const rescheduleSaveBtn = document.getElementById('reschedule-save-btn');
+            const rescheduleErrorEl = document.getElementById('reschedule-error');
+            const rescheduleLoadingEl = document.getElementById('reschedule-loading');
+            const rescheduleEmptyEl = document.getElementById('reschedule-empty');
+            const reschedulePickerEl = document.getElementById('reschedule-picker');
+
+            function renderRescheduleSlots(index) {
+                const dayData = rescheduleAvailability[index];
+                rescheduleSlotsEl.innerHTML = '';
+                document.getElementById('reschedule-selected-date').value = dayData ? dayData.date : '';
+                document.getElementById('reschedule-selected-slot').value = '';
+                rescheduleSaveBtn.disabled = true;
+
+                if (!dayData || !dayData.slots.length) {
+                    rescheduleSlotsEl.innerHTML =
+                        '<div class="col-12 text-muted">{{ __('app.booking.no_slots') }}</div>';
+                    return;
+                }
+
+                dayData.slots.forEach(slot => {
+                    const col = document.createElement('div');
+                    col.className = 'col-4';
+                    const slotId = `reschedule_slot_${dayData.date}_${slot.replace(/:/g, '')}`;
+                    col.innerHTML = `
+                        <input class="form-check-input d-none" type="radio" name="reschedule_slot_radio"
+                            value="${slot}" id="${slotId}">
+                        <label class="form-check-label w-100 p-2 border rounded text-center slot-label"
+                            for="${slotId}" style="cursor:pointer;">${slot}</label>
+                    `;
+                    rescheduleSlotsEl.appendChild(col);
+                });
+
+                rescheduleSlotsEl.querySelectorAll('input[name="reschedule_slot_radio"]').forEach(radio => {
+                    radio.addEventListener('change', function() {
+                        rescheduleSlotsEl.querySelectorAll('.slot-label').forEach(label => {
+                            label.classList.remove('active', 'bg-primary', 'text-white',
+                                'border-primary');
+                        });
+                        this.nextElementSibling.classList.add('active', 'bg-primary', 'text-white',
+                            'border-primary');
+                        document.getElementById('reschedule-selected-slot').value = this.value;
+                        rescheduleSaveBtn.disabled = false;
+                    });
+                });
+            }
+
             // Populate modal when a reschedule button is clicked
             document.addEventListener('click', function(e) {
                 const btn = e.target.closest('.reschedule-btn');
                 if (!btn) return;
 
                 document.getElementById('reschedule-appointment-id').value = btn.dataset.id;
+                rescheduleErrorEl.classList.add('d-none');
+                reschedulePickerEl.classList.add('d-none');
+                rescheduleEmptyEl.classList.add('d-none');
+                rescheduleLoadingEl.classList.remove('d-none');
+                rescheduleSaveBtn.disabled = true;
 
-                // Parse date string to yyyy-mm-dd for the date input
-                const rawDate = btn.dataset.date;
-                let isoDate = '';
-                if (rawDate) {
-                    try {
-                        const d = new Date(rawDate);
-                        if (!isNaN(d)) {
-                            isoDate = d.toISOString().split('T')[0];
+                fetch(`/doctor/${doctorId}/available-slots?exclude=${btn.dataset.id}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        rescheduleLoadingEl.classList.add('d-none');
+
+                        if (!data.success || !data.availability.length) {
+                            rescheduleEmptyEl.classList.remove('d-none');
+                            return;
                         }
-                    } catch (_) {}
-                }
-                document.getElementById('reschedule-date').value = isoDate;
 
-                // Convert "9:00 AM" → "09:00" for time inputs
-                function toInputTime(str) {
-                    if (!str) return '';
-                    const [time, meridiem] = str.trim().split(' ');
-                    if (!meridiem) return str; // already 24h
-                    let [h, m] = time.split(':').map(Number);
-                    if (meridiem.toUpperCase() === 'PM' && h !== 12) h += 12;
-                    if (meridiem.toUpperCase() === 'AM' && h === 12) h = 0;
-                    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-                }
+                        rescheduleAvailability = data.availability;
+                        rescheduleDaySelect.innerHTML = rescheduleAvailability.map((day, i) =>
+                            `<option value="${i}">${day.day} (${day.date})</option>`
+                        ).join('');
 
-                document.getElementById('reschedule-start').value = toInputTime(btn.dataset.start);
-                document.getElementById('reschedule-end').value = toInputTime(btn.dataset.end);
-                document.getElementById('reschedule-error').classList.add('d-none');
+                        renderRescheduleSlots(0);
+                        reschedulePickerEl.classList.remove('d-none');
+                    })
+                    .catch(() => {
+                        rescheduleLoadingEl.classList.add('d-none');
+                        rescheduleErrorEl.textContent = '{{ __('app.appointments.error_network') }}';
+                        rescheduleErrorEl.classList.remove('d-none');
+                    });
             });
 
-            document.getElementById('reschedule-save-btn').addEventListener('click', function() {
+            rescheduleDaySelect.addEventListener('change', function() {
+                renderRescheduleSlots(this.value);
+            });
+
+            rescheduleSaveBtn.addEventListener('click', function() {
                 const id = document.getElementById('reschedule-appointment-id').value;
-                const date = document.getElementById('reschedule-date').value;
-                const startTime = document.getElementById('reschedule-start').value;
-                const endTime = document.getElementById('reschedule-end').value;
-                const errorEl = document.getElementById('reschedule-error');
+                const date = document.getElementById('reschedule-selected-date').value;
+                const startTime = document.getElementById('reschedule-selected-slot').value;
+                const errorEl = rescheduleErrorEl;
                 const spinner = document.getElementById('reschedule-spinner');
 
                 errorEl.classList.add('d-none');
 
-                if (!date || !startTime || !endTime) {
+                if (!date || !startTime) {
                     errorEl.textContent = '{{ __('app.appointments.error_fill_fields') }}';
                     errorEl.classList.remove('d-none');
                     return;
-                }
-
-                if (endTime <= startTime) {
-                    errorEl.textContent = '{{ __('app.appointments.error_end_time') }}';
-                    errorEl.classList.remove('d-none');
-                    return;
-                }
-
-                // Format time back to "9:00 AM"
-                function toDisplayTime(val) {
-                    const [h, m] = val.split(':').map(Number);
-                    const meridiem = h >= 12 ? 'PM' : 'AM';
-                    const h12 = h % 12 || 12;
-                    return `${h12}:${String(m).padStart(2, '0')} ${meridiem}`;
                 }
 
                 this.disabled = true;
@@ -727,8 +779,7 @@
                         },
                         body: JSON.stringify({
                             date: date,
-                            startTime: toDisplayTime(startTime),
-                            endTime: toDisplayTime(endTime),
+                            startTime: startTime,
                         }),
                     })
                     .then(res => res.json())

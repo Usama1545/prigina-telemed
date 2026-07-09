@@ -449,6 +449,22 @@
                             </div>
                         </div>
                     @endif
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="border-bottom pb-3 mb-3">
+                                <h5>{{ __('app.help_support.title') }}</h5>
+                            </div>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <a href="{{ route('patient.help-support') }}" class="btn btn-md btn-primary-gradient rounded-pill">
+                                    <i class="isax isax-message-question me-1"></i> {{ __('app.help_support.title') }}
+                                </a>
+                                <a href="{{ route('patient.my-tickets') }}" class="btn btn-md btn-light rounded-pill">
+                                    <i class="isax isax-note-2 me-1"></i> {{ __('app.help_support.my_tickets') }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
