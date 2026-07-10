@@ -34,9 +34,16 @@ if (! function_exists('current_user')) {
 
         $doc = $firestore->find($collection, $uid);
 
-        // If Firestore timed-out or the document is missing, fall back to the
-        // basic user data that was saved in the session at login time so the
-        // user is not kicked back to the login screen unnecessarily.
+        // Auth is valid (we have uid/role) but the Firestore doc came back empty —
+        // this is usually a transient read failure, not a missing document, so
+        // retry once live before trusting the (often stale/absent) session snapshot.
+        if (! $doc) {
+            $doc = $firestore->find($collection, $uid);
+        }
+
+        // If Firestore is still unavailable/missing the document after the retry,
+        // fall back to the basic user data that was saved in the session at login
+        // time so the user is not kicked back to the login screen unnecessarily.
         if (! $doc) {
             $sessionUser = session('auth_user', []);
             $doc = [
