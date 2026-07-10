@@ -31,7 +31,11 @@
 
     <!-- Header Right Menu -->
     <ul class="nav user-menu">
-
+        <li class="nav-item dropdown noti-dropdown" id="noti-dropdown-li">
+            <a href="/" class=" nav-link" target="_blank">
+                <i class="fe fe-globe"></i>
+            </a>
+        </li>
         <!-- Notifications -->
         <li class="nav-item dropdown noti-dropdown" id="noti-dropdown-li">
             <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
@@ -198,7 +202,8 @@
                 const data = await res.json();
                 renderFeed(data);
             } catch (e) {
-                /* silent */ }
+                /* silent */
+            }
         }
 
         // Click on a notification item
@@ -228,7 +233,8 @@
                         badge.style.display = next > 0 ? '' : 'none';
                     }
                 } catch (e) {
-                    /* silent */ }
+                    /* silent */
+                }
             }
 
             if (url && url !== '#') window.location.href = url;
@@ -250,7 +256,8 @@
                     el.querySelector('.fw-semibold')?.classList.remove('fw-semibold');
                 });
             } catch (e) {
-                /* silent */ }
+                /* silent */
+            }
         });
 
         async function clearAllSilently() {
@@ -268,7 +275,8 @@
                     el.querySelector('.fw-semibold')?.classList.remove('fw-semibold');
                 });
             } catch (e) {
-                /* silent */ }
+                /* silent */
+            }
         }
 
         // On dropdown open: load feed then auto-mark all read
