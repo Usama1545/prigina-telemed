@@ -7,6 +7,7 @@ use App\Mail\AppointmentCompleted;
 use App\Mail\AppointmentConfirmed;
 use App\Mail\AppointmentRejected;
 use App\Services\DoctorAvailabilityService;
+use App\Services\FirebaseAuthService;
 use App\Services\FirestoreService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -119,6 +120,7 @@ class DoctorProfileController extends Controller
             'experience' => 'required|string',
             'specializations' => 'required|array|min:1',
             'languages' => 'required|array|min:1',
+            'practiceCountry' => 'required|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'consultationFee' => 'required|numeric',
             'workingDays' => 'required|array',
@@ -140,6 +142,7 @@ class DoctorProfileController extends Controller
             'qualification',
             'experience',
             'specializations',
+            'practiceCountry',
             'consultationFee',
             'workingDays',
             'workingHours',
@@ -252,8 +255,9 @@ class DoctorProfileController extends Controller
         $workingDays = current_user()['workingDays'] ?? [];
         $workingHours = current_user()['workingHours'] ?? [];
         $breaks = current_user()['breaks'] ?? [];
+        $countries = \Symfony\Component\Intl\Countries::getNames();
 
-        return view('doctor.profile-settings', compact('doctor', 'specializations', 'workingDays', 'workingHours', 'breaks'));
+        return view('doctor.profile-settings', compact('doctor', 'specializations', 'workingDays', 'workingHours', 'breaks', 'countries'));
     }
 
     public function changePassword(Request $request, Auth $auth)
@@ -295,6 +299,27 @@ class DoctorProfileController extends Controller
 
         return redirect()->back()->with('success', 'Password updated successfully.');
 
+    }
+
+    public function deleteAccount(Request $request, FirebaseAuthService $authService)
+    {
+        $uid = current_user()['uid'];
+
+        $authService->disableUser($uid);
+        $authService->revokeRefreshTokens($uid);
+
+        // Only the auth account is disabled here — the Firestore doctor
+        // document is intentionally left in place, just flagged inactive.
+        $this->firestore->update('doctors', $uid, [
+            'isActive' => false,
+            'accountDeleted' => true,
+            'deletedAt' => now()->toDateTimeString(),
+        ]);
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login')->with('success', 'Your account has been deleted.');
     }
 
     public function conversations()

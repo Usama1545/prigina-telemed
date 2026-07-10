@@ -52,9 +52,9 @@
                             </div>
                         </div>
 
-                        <!-- Information -->
+                        <!-- Personal Details -->
                         <div class="setting-title">
-                            <h5>{{ __('app.profile.information') }}</h5>
+                            <h5>{{ __('app.profile.personal_details') }}</h5>
                         </div>
 
                         <div class="setting-card bg-white">
@@ -102,6 +102,17 @@
 
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- Education & License Details -->
+                        <div class="setting-title">
+                            <h5>{{ __('app.profile.education_license_details') }}</h5>
+                        </div>
+
+                        <div class="setting-card bg-white">
+
+                            <div class="row">
 
                                 <!-- License -->
                                 <div class="col-lg-6 col-md-6">
@@ -214,6 +225,35 @@
                                                 <option value="{{ $language }}"
                                                     {{ collect(old('languages', current_user()['languages'] ?? []))->contains($language) ? 'selected' : '' }}>
                                                     {{ $language }}
+                                                </option>
+                                            @endforeach
+
+                                        </select>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- Practice Country -->
+                                <div class="col-lg-6">
+
+                                    <div class="form-wrap">
+
+                                        <label class="form-label">
+                                            {{ __('app.profile.practice_country') }}
+                                            <span class="text-danger">*</span>
+                                        </label>
+
+                                        <select name="practiceCountry" class="form-control" required>
+
+                                            <option value="">
+                                                {{ __('app.profile.select_practice_country') }}
+                                            </option>
+
+                                            @foreach ($countries as $code => $countryName)
+                                                <option value="{{ $code }}"
+                                                    {{ old('practiceCountry', current_user()['practiceCountry'] ?? '') == $code ? 'selected' : '' }}>
+                                                    {{ $countryName }}
                                                 </option>
                                             @endforeach
 
@@ -686,7 +726,21 @@
                 </form>
                 <!-- /Profile Settings -->
 
-
+                <div class="card border-danger">
+                    <div class="card-body">
+                        <div class="border-bottom pb-3 mb-3">
+                            <h5 class="text-danger">{{ __('app.profile.delete_account') }}</h5>
+                        </div>
+                        <p class="text-muted">{{ __('app.profile.delete_account_notice') }}</p>
+                        <form id="deleteAccountForm" action="{{ route('doctor.settings.destroy') }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-outline-danger">
+                                {{ __('app.profile.delete_account') }}
+                            </button>
+                        </form>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -821,5 +875,15 @@
 
             document.getElementById('breaksInput').value = breaks.join(',');
         });
+
+        // Delete account confirmation
+        const deleteAccountForm = document.getElementById('deleteAccountForm');
+        if (deleteAccountForm) {
+            deleteAccountForm.addEventListener('submit', function(e) {
+                if (!confirm('{{ __('app.profile.delete_account_confirm') }}')) {
+                    e.preventDefault();
+                }
+            });
+        }
     </script>
 @endpush

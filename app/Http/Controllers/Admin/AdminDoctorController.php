@@ -73,7 +73,7 @@ class AdminDoctorController extends Controller
         }
 
         $this->firestore->update('doctors', $doctorId, [
-            'available' => (bool) $data['isActive'],
+            'isActive' => (bool) $data['isActive'],
             'updatedAt' => now()->toDateTimeString(),
             'updatedBy' => session('auth_uid'),
         ]);

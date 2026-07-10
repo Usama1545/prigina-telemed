@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\AppointmentCancelled;
 use App\Services\DoctorAvailabilityService;
+use App\Services\FirebaseAuthService;
 use App\Services\FirestoreService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -97,6 +98,7 @@ class PatientController extends Controller
             'email' => 'sometimes|required|email|max:255',
             'gender' => 'nullable|in:male,female,other',
             'dob' => 'nullable|date',
+            'age' => 'nullable|integer|min:0|max:150',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'bloodGroup' => 'nullable|string|max:10',
             'height' => 'nullable|string|max:20',
@@ -114,6 +116,7 @@ class PatientController extends Controller
             'email',
             'gender',
             'dob',
+            'age',
             'bloodGroup',
             'height',
             'weight',
@@ -123,6 +126,10 @@ class PatientController extends Controller
         ])->toArray();
 
         if (! empty($data['dob'])) {
+            // Keep age in sync with dob whenever dob is provided, rather than
+            // trusting a separately-typed value that can drift out of date.
+            $data['age'] = Carbon::parse($data['dob'])->age;
+
             $data['dob'] = Carbon::parse($data['dob'])
                 ->startOfDay()
                 ->toISOString();
@@ -281,6 +288,27 @@ class PatientController extends Controller
 
         return redirect()->back()->with('success', 'Password updated successfully.');
 
+    }
+
+    public function deleteAccount(Request $request, FirebaseAuthService $authService)
+    {
+        $uid = current_user()['uid'];
+
+        $authService->disableUser($uid);
+        $authService->revokeRefreshTokens($uid);
+
+        // Only the auth account is disabled here — the Firestore patient
+        // document is intentionally left in place, just flagged inactive.
+        $this->firestore->update('patients', $uid, [
+            'isActive' => false,
+            'accountDeleted' => true,
+            'deletedAt' => now()->toDateTimeString(),
+        ]);
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login')->with('success', 'Your account has been deleted.');
     }
 
     public function conversations()

@@ -85,9 +85,17 @@
                                                 </label>
 
                                                 <div class="form-icon">
-                                                    <input type="date" class="form-control" name="dob"
+                                                    <input type="date" id="dobInput" class="form-control" name="dob"
                                                         value="{{ old('dob', $dob) }}">
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">{{ __('app.profile.age') }}</label>
+                                                <input type="number" id="ageInput" class="form-control" name="age"
+                                                    min="0" max="150"
+                                                    value="{{ old('age', $patient['age'] ?? '') }}">
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-md-6">
@@ -465,6 +473,23 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="card border-danger">
+                        <div class="card-body">
+                            <div class="border-bottom pb-3 mb-3">
+                                <h5 class="text-danger">{{ __('app.profile.delete_account') }}</h5>
+                            </div>
+                            <p class="text-muted">{{ __('app.profile.delete_account_notice') }}</p>
+                            <form id="deleteAccountForm" action="{{ route('patient.settings.destroy') }}"
+                                method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-md btn-outline-danger rounded-pill">
+                                    {{ __('app.profile.delete_account') }}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -495,6 +520,29 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Keep the Age field in sync when Date of Birth changes
+            const dobInput = document.getElementById('dobInput');
+            const ageInput = document.getElementById('ageInput');
+
+            if (dobInput && ageInput) {
+                dobInput.addEventListener('change', function() {
+                    if (!this.value) {
+                        return;
+                    }
+
+                    const dob = new Date(this.value);
+                    const today = new Date();
+                    let age = today.getFullYear() - dob.getFullYear();
+                    const monthDiff = today.getMonth() - dob.getMonth();
+
+                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                        age--;
+                    }
+
+                    ageInput.value = age >= 0 ? age : '';
+                });
+            }
+
             // For Current Password
             const toggleCurrent = document.querySelector('.toggle-password-cur');
             const currentInput = document.querySelector('.pass-input-cur');
@@ -553,6 +601,15 @@
                 'profileSaveBtnSpinner');
             showLoadingOnSubmit('changePasswordForm', 'passwordSaveBtn', 'passwordSaveBtnText',
                 'passwordSaveBtnSpinner');
+
+            const deleteAccountForm = document.getElementById('deleteAccountForm');
+            if (deleteAccountForm) {
+                deleteAccountForm.addEventListener('submit', function(e) {
+                    if (!confirm('{{ __('app.profile.delete_account_confirm') }}')) {
+                        e.preventDefault();
+                    }
+                });
+            }
         });
     </script>
 @endPush

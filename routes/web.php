@@ -60,6 +60,7 @@ Route::middleware(['firebase.auth'])->group(function () {
         Route::get('/profile', 'profile')->name('patient.settings');
         Route::put('/profile', 'update')->name('patient.settings.update');
         Route::put('/profile/change-password', 'changePassword')->name('patient.settings.changepassword');
+        Route::delete('/profile', 'deleteAccount')->name('patient.settings.destroy');
         Route::get('/conversations', 'conversations')->name('patient.conversations');
         Route::get('/zego-token', 'zegoToken')->name('patient.zego-token');
         Route::get('/conversations/{id}/audio-call', 'audioCall')->name('patient.audio-call');
@@ -106,6 +107,7 @@ Route::middleware(['firebase.auth'])->group(function () {
         Route::get('/profile', 'profile')->name('doctor.settings');
         Route::post('/profile', 'update')->name('doctor.settings.update');
         Route::put('/profile/change-password', 'changePassword')->name('doctor.settings.changepassword');
+        Route::delete('/profile', 'deleteAccount')->name('doctor.settings.destroy');
         Route::get('/conversations', 'conversations')->name('doctor.conversations');
         Route::get('/available-timings', 'availableTimings')->name('doctor.available-timings');
         Route::post('/update-available', 'updateAvailableTimings')->name('doctor.update-availability');

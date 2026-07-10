@@ -33,6 +33,16 @@ class FirebaseAuthService
         $this->auth->deleteUser($uid);
     }
 
+    public function disableUser(string $uid): void
+    {
+        $this->auth->disableUser($uid);
+    }
+
+    public function revokeRefreshTokens(string $uid): void
+    {
+        $this->auth->revokeRefreshTokens($uid);
+    }
+
     public function sendPasswordResetLink(string $email): void
     {
         $this->auth->sendPasswordResetLink($email);
