@@ -3,6 +3,7 @@
 use App\Services\FirebaseAuthService;
 use App\Services\FirestoreService;
 use App\Services\Zego\ZegoServerAssistant;
+use Carbon\Carbon;
 
 if (! function_exists('current_user')) {
     function current_user()
@@ -154,6 +155,21 @@ if (! function_exists('check')) {
             return true;
         } catch (Exception $e) {
             return false;
+        }
+    }
+}
+
+if (! function_exists('patient_age')) {
+    function patient_age(?string $dob): string|int
+    {
+        if (blank($dob)) {
+            return '';
+        }
+
+        try {
+            return Carbon::parse($dob)->age;
+        } catch (Throwable) {
+            return '';
         }
     }
 }

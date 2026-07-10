@@ -176,9 +176,9 @@ class DoctorReportController extends Controller
             'patient_information' => [
                 'patient_id' => $appointment['patientId'] ?? '',
                 'patient_name' => $appointment['patientName'] ?? ($patient['name'] ?? ''),
-                'age' => $patient['age'] ?? '',
+                'age' => $patient['age'] ?? patient_age($patient['dob'] ?? null),
                 'gender' => $patient['gender'] ?? '',
-                'primary_concern' => '',
+                'primary_concern' => $appointment['symptoms'] ?? '',
             ],
 
             'documents_reviewed' => [
