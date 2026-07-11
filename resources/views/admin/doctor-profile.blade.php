@@ -261,11 +261,10 @@
                                             );
                                             $aStatus  = $appt['status'] ?? 'pending';
                                             $aPay     = $appt['paymentStatus'] ?? 'pending';
-                                            $aPayout  = $appt['payoutStatus'] ?? 'pending';
+                                            $aPayout  = $appt['payoutStatus'] ?? 'held';
                                             $aId      = $appt['id'] ?? $appt['documentId'] ?? '';
                                             $aDone    = in_array($aStatus, ['completed', 'completedPaid']);
-                                            $aCanHold    = $aDone && !in_array($aPayout, ['held', 'released', 'refunded']);
-                                            $aCanRelease = $aDone && $aPayout === 'held';
+                                            $aCanRelease = $aDone && !in_array($aPayout, ['released', 'refunded']);
                                             $aCanRefund  = $aDone && !in_array($aPayout, ['released', 'refunded']);
                                         @endphp
                                         <tr>
@@ -313,12 +312,6 @@
                                                     <span class="badge bg-danger">Refunded</span>
                                                 @else
                                                     <div class="d-flex flex-column gap-1">
-                                                        <form method="POST"
-                                                            action="{{ route('admin.appointments.payment.hold', $aId) }}">
-                                                            @csrf
-                                                            <button type="submit" class="btn btn-warning btn-sm w-100"
-                                                                {{ $aCanHold ? '' : 'disabled' }}>Hold</button>
-                                                        </form>
                                                         <form method="POST"
                                                             action="{{ route('admin.appointments.payment.release', $aId) }}">
                                                             @csrf

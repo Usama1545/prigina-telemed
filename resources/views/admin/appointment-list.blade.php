@@ -183,14 +183,10 @@
                                                 );
                                                 $status = $appointment['status'] ?? 'pending';
                                                 $payStatus = $appointment['paymentStatus'] ?? 'pending';
-                                                $payoutSt = $appointment['payoutStatus'] ?? 'pending';
+                                                $payoutSt = $appointment['payoutStatus'] ?? 'held';
                                                 $apptId = $appointment['id'] ?? ($appointment['documentId'] ?? '');
                                                 $isCompleted = in_array($status, ['completed', 'completedPaid']);
                                                 $isPaid = $payStatus === 'completed';
-                                                $canHold =
-                                                    $isCompleted &&
-                                                    $isPaid &&
-                                                    !in_array($payoutSt, ['held', 'released', 'refunded']);
                                                 $canRelease =
                                                     $isCompleted &&
                                                     $isPaid &&
@@ -261,12 +257,6 @@
                                                         <span class="badge bg-danger">Refunded</span>
                                                     @else
                                                         <div class="d-flex flex-column gap-1">
-                                                            <form method="POST"
-                                                                action="{{ route('admin.appointments.payment.hold', $apptId) }}">
-                                                                @csrf
-                                                                <button type="submit" class="btn btn-warning btn-sm w-100"
-                                                                    {{ $canHold ? '' : 'disabled' }}>Hold</button>
-                                                            </form>
                                                             <form method="POST"
                                                                 action="{{ route('admin.appointments.payment.release', $apptId) }}">
                                                                 @csrf
@@ -441,12 +431,11 @@
             const time = (a.startTime || a.time || '') + (a.endTime ? ' - ' + a.endTime : '');
             const status = a.status || 'pending';
             const payStatus = a.paymentStatus || 'pending';
-            const payoutSt = a.payoutStatus || 'pending';
+            const payoutSt = a.payoutStatus || 'held';
             const id = a.id || a.documentId || '';
             const completed = ['completed', 'completedPaid'].includes(status);
             const paid = payStatus === 'completed';
-            const canHold = completed && paid && !['held', 'released', 'refunded'].includes(payoutSt);
-            const canRelease = completed && paid && payoutSt === 'held';
+            const canRelease = completed && paid && !['released', 'refunded'].includes(payoutSt);
             const canRefund = completed && paid && !['released', 'refunded'].includes(payoutSt);
 
             const dateFmt = date ?
@@ -466,10 +455,6 @@
                 payoutSt === 'refunded' ?
                 '<span class="badge bg-danger">Refunded</span>' :
                 `<div class="d-flex flex-column gap-1">
-                <form method="POST" action="/admin/appointments/${id}/payment/hold">
-                    <input type="hidden" name="_token" value="${CSRF}">
-                    <button type="submit" class="btn btn-warning btn-sm w-100" ${canHold ? '' : 'disabled'}>Hold</button>
-                </form>
                 <form method="POST" action="/admin/appointments/${id}/payment/release">
                     <input type="hidden" name="_token" value="${CSRF}">
                     <button type="submit" class="btn btn-success btn-sm w-100" ${canRelease ? '' : 'disabled'}>Release</button>

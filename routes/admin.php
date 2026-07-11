@@ -33,7 +33,6 @@ Route::middleware(['admin.auth'])->group(function () {
     Route::get('/appointment-list', [AdminDashboardController::class, 'appointments'])->name('appointment-list');
     Route::get('/appointments/data', [AdminDashboardController::class, 'appointmentData'])->name('appointments.data');
     Route::patch('/appointments/{appointment}/status', [AdminDashboardController::class, 'updateAppointmentStatus'])->name('appointments.status');
-    Route::post('/appointments/{appointment}/payment/hold', [AdminPaymentController::class, 'holdPayment'])->name('appointments.payment.hold');
     Route::post('/appointments/{appointment}/payment/release', [AdminPaymentController::class, 'releasePayment'])->name('appointments.payment.release');
     Route::post('/appointments/{appointment}/payment/refund', [AdminPaymentController::class, 'refundPayment'])->name('appointments.payment.refund');
     Route::get('/doctor-list', [AdminDoctorController::class, 'index'])->name('doctor-list');

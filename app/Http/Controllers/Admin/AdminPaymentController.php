@@ -15,35 +15,6 @@ class AdminPaymentController extends Controller
 {
     public function __construct(protected FirestoreService $firestore) {}
 
-    public function holdPayment(string $appointmentId)
-    {
-        $appointment = $this->firestore->find('appointments', $appointmentId);
-
-        if (! $appointment) {
-            abort(404, 'Appointment not found');
-        }
-
-        if (! in_array($appointment['status'] ?? '', ['completed', 'completedPaid'])) {
-            return back()->withErrors(['payment' => 'Payment can only be held for completed appointments.']);
-        }
-
-        $payoutStatus = $appointment['payoutStatus'] ?? 'pending';
-
-        if (in_array($payoutStatus, ['held', 'released', 'refunded'])) {
-            return back()->withErrors(['payment' => 'Payout is already '.$payoutStatus.'.']);
-        }
-
-        $this->firestore->update('appointments', $appointmentId, [
-            'payoutStatus' => 'held',
-            'payoutHeldAt' => now()->toDateTimeString(),
-            'updatedBy' => session('auth_uid'),
-        ]);
-
-        Cache::forget('admin:stats');
-
-        return back()->with('success', 'Payment held successfully.');
-    }
-
     public function releasePayment(string $appointmentId)
     {
         $appointment = $this->firestore->find('appointments', $appointmentId);
@@ -142,7 +113,7 @@ class AdminPaymentController extends Controller
             abort(404, 'Appointment not found');
         }
 
-        $payoutStatus = $appointment['payoutStatus'] ?? 'pending';
+        $payoutStatus = $appointment['payoutStatus'] ?? 'held';
 
         if (in_array($payoutStatus, ['released', 'refunded'])) {
             return back()->withErrors(['payment' => 'Payment cannot be refunded — it has already been '.$payoutStatus.'.']);
