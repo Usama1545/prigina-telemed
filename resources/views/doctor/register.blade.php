@@ -13,13 +13,12 @@
                 <div class="account-content">
                     <div class="col-md-6 col-lg-5 login-left">
                         <img src="{{ asset('build/img/doctor-register.jpeg') }}" class="img-fluid"
-                            alt="PriGina Global Telemed Login">
+                            alt="{{ __('app.doctor_register.image_alt') }}">
                     </div>
                     <div class="col-md-6 col-lg-7 login-right">
                         <div class="login-header">
-                            <h3 class="text-primary">Create Your Physician Account <a href="{{ route('register') }}">Not a
-                                    Doctor?</a></h3>
-                            <p>Complete the form below to join our network </p>
+                            <h3 class="text-primary">{{ __('app.doctor_register.title') }} <a href="{{ route('register') }}">{{ __('app.doctor_register.not_doctor') }}</a></h3>
+                            <p>{{ __('app.doctor_register.subtitle') }}</p>
                         </div>
                         <form id="doctorRegisterForm" enctype="multipart/form-data">
                             @csrf
@@ -27,7 +26,7 @@
                             <input type="hidden" name="timezone" id="timezone">
                             <div class="row">
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Full Name</label>
+                                    <label class="form-label">{{ __('app.doctor_register.name') }}</label>
 
                                     <input type="text" name="name"
                                         class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}"
@@ -41,7 +40,7 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Email</label>
+                                    <label class="form-label">{{ __('app.doctor_register.email') }}</label>
 
                                     <input type="email" name="email"
                                         class="form-control @error('email') is-invalid @enderror"
@@ -55,7 +54,7 @@
                                 </div>
 
                                 <div class="mb-3 col-md-12">
-                                    <label class="form-label">Phone</label>
+                                    <label class="form-label">{{ __('app.doctor_register.phone') }}</label>
 
                                     <input
                                         class="form-control form-control-lg group_formcontrol form-control-phone @error('phone') is-invalid @enderror"
@@ -71,11 +70,11 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Country of Practice</label>
+                                    <label class="form-label">{{ __('app.doctor_register.practice_country') }}</label>
 
                                     <select name="practiceCountry" id="practiceCountry"
                                         class="form-control @error('practiceCountry') is-invalid @enderror" required>
-                                        <option value="">Select Country</option>
+                                        <option value="">{{ __('app.doctor_register.select_country') }}</option>
                                     </select>
 
                                     @error('practiceCountry')
@@ -86,7 +85,7 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Medical License Number</label>
+                                    <label class="form-label">{{ __('app.doctor_register.license_number') }}</label>
 
                                     <input type="text" name="licenseNumber"
                                         class="form-control @error('licenseNumber') is-invalid @enderror"
@@ -100,11 +99,11 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Qualification</label>
+                                    <label class="form-label">{{ __('app.doctor_register.qualification') }}</label>
 
                                     <select name="qualification"
                                         class="form-control @error('qualification') is-invalid @enderror" required>
-                                        <option value="">Select Qualification</option>
+                                        <option value="">{{ __('app.doctor_register.select_qualification') }}</option>
 
                                         @foreach (['MBBS', 'MD', 'MS', 'DM', 'MCH', 'DNB', 'PHD'] as $qualification)
                                             <option value="{{ $qualification }}"
@@ -122,11 +121,11 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Years of Experience</label>
+                                    <label class="form-label">{{ __('app.doctor_register.experience') }}</label>
 
                                     <select name="experience" class="form-control @error('experience') is-invalid @enderror"
                                         required>
-                                        <option value="">Select Experience</option>
+                                        <option value="">{{ __('app.doctor_register.select_experience') }}</option>
 
                                         @foreach (['0-2 years', '3-5 years', '6-10 years', '11-15 years', '15+ years'] as $experience)
                                             <option value="{{ $experience }}"
@@ -144,7 +143,7 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Specializations</label>
+                                    <label class="form-label">{{ __('app.doctor_register.specializations') }}</label>
 
                                     <select name="specializations[]"
                                         class="form-control select2 @error('specializations') is-invalid @enderror" multiple
@@ -165,7 +164,7 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Create Password</label>
+                                    <label class="form-label">{{ __('app.doctor_register.password') }}</label>
 
                                     <input type="password" name="password"
                                         class="form-control @error('password') is-invalid @enderror" required>
@@ -178,17 +177,17 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Confirm Password</label>
+                                    <label class="form-label">{{ __('app.doctor_register.confirm_password') }}</label>
 
                                     <input type="password" name="password_confirmation" class="form-control" required>
                                 </div>
 
                                 <hr>
 
-                                <h5 class="text-primary fw-bold mb-3">Required Documents</h5>
+                                <h5 class="text-primary fw-bold mb-3">{{ __('app.doctor_register.required_documents') }}</h5>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Medical License</label>
+                                    <label class="form-label">{{ __('app.doctor_register.medical_license') }}</label>
 
                                     <input type="file" name="medical_license"
                                         class="form-control @error('medical_license') is-invalid @enderror"
@@ -202,7 +201,7 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Degree Certificate</label>
+                                    <label class="form-label">{{ __('app.doctor_register.degree_certificate') }}</label>
 
                                     <input type="file" name="degree_certificate"
                                         class="form-control @error('degree_certificate') is-invalid @enderror"
@@ -216,7 +215,7 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">ID Proof</label>
+                                    <label class="form-label">{{ __('app.doctor_register.id_proof') }}</label>
 
                                     <input type="file" name="id_proof"
                                         class="form-control @error('id_proof') is-invalid @enderror"
@@ -230,7 +229,7 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Clinic Registration</label>
+                                    <label class="form-label">{{ __('app.doctor_register.clinic_registration') }}</label>
 
                                     <input type="file" name="clinic_registration"
                                         class="form-control @error('clinic_registration') is-invalid @enderror"
@@ -249,7 +248,7 @@
                                         </span>
 
                                         <span id="registerText">
-                                            Sign Up
+                                            {{ __('app.doctor_register.sign_up') }}
                                         </span>
 
                                     </button>
@@ -257,8 +256,8 @@
 
                                 <div class="account-signup">
                                     <p>
-                                        Already have account?
-                                        <a href="{{ url('login') }}">Sign In</a>
+                                        {{ __('app.doctor_register.already_account') }}
+                                        <a href="{{ url('login') }}">{{ __('app.doctor_register.sign_in') }}</a>
                                     </p>
                                 </div>
                         </form>
@@ -315,7 +314,7 @@
         $(document).ready(function() {
 
             $('.select2').select2({
-                placeholder: "Select Specializations",
+                placeholder: @json(__('app.doctor_register.select_specializations')),
                 allowClear: true,
                 width: '100%'
             });
@@ -360,6 +359,14 @@
             },
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
         });
+        const serverErrorPrefix = @json(__('app.doctor_register.server_error_prefix'));
+        const serverUnexpectedResponse = @json(__('app.doctor_register.server_unexpected_response'));
+        const registrationFailedText = @json(__('app.doctor_register.registration_failed'));
+        const registrationSuccessText = @json(__('app.doctor_register.registration_success'));
+        const somethingWrongText = @json(__('app.doctor_register.something_wrong'));
+        const creatingAccountText = @json(__('app.doctor_register.creating_account'));
+        const signUpText = @json(__('app.doctor_register.sign_up'));
+
         async function parseJsonResponse(response) {
             const contentType = response.headers.get('content-type') || '';
 
@@ -373,8 +380,8 @@
 
             throw new Error(
                 title ?
-                `Server error: ${title}` :
-                'Server returned an unexpected response. Check the Laravel logs for details.'
+                `${serverErrorPrefix}: ${title}` :
+                serverUnexpectedResponse
             );
         }
 
@@ -386,7 +393,7 @@
 
             btn.disabled = true;
             spinner.classList.remove('d-none');
-            text.innerText = 'Creating account...';
+            text.innerText = creatingAccountText;
 
             try {
 
@@ -404,7 +411,7 @@
 
                 if (!response.ok) {
 
-                    let message = 'Registration failed';
+                    let message = registrationFailedText;
 
                     if (data.errors) {
                         message = Object.values(data.errors)
@@ -418,7 +425,7 @@
 
                     btn.disabled = false;
                     spinner.classList.add('d-none');
-                    text.innerText = 'Sign Up';
+                    text.innerText = signUpText;
 
                     return;
                 }
@@ -445,7 +452,7 @@
                 await auth.signOut();
 
                 showAlert(
-                    'Registration successful. Your account is pending verification by our team. You will receive an email once your account is verified..',
+                    registrationSuccessText,
                     'success'
                 );
 
@@ -457,11 +464,11 @@
 
                 console.error(error);
 
-                showAlert(error.message || 'Something went wrong');
+                showAlert(error.message || somethingWrongText);
 
                 btn.disabled = false;
                 spinner.classList.add('d-none');
-                text.innerText = 'Sign Up';
+                text.innerText = signUpText;
             }
         }
 
