@@ -1,7 +1,11 @@
 <?php $page = 'doctor-profile'; ?>
 @extends('layouts.mainlayout')
 @section('content')
-    @component('components.breadcrumb', ['title' => __('app.doctor_profile.breadcrumb_title'), 'li_1' => __('app.doctor_profile.breadcrumb_profile'), 'li_2' => __('app.doctor_profile.breadcrumb_details')])
+    @component('components.breadcrumb', [
+        'title' => __('app.doctor_profile.breadcrumb_title'),
+        'li_1' => __('app.doctor_profile.breadcrumb_profile'),
+        'li_2' => __('app.doctor_profile.breadcrumb_details'),
+    ])
     @endcomponent
 
     <!-- Page Content -->
@@ -64,7 +68,8 @@
                                     @endfor
 
                                     <span>{{ number_format($rating, 1) }}</span>
-                                    <a href="#" class="d-inline-block average-rating">{{ $totalReviews }} {{ __('app.doctor_profile.reviews') }}</a>
+                                    <a href="#" class="d-inline-block average-rating">{{ $totalReviews }}
+                                        {{ __('app.doctor_profile.reviews') }}</a>
                                 </div>
 
                             </div>
@@ -85,7 +90,8 @@
                                         <span class="list-icon"><img
                                                 src="{{ URL::asset('build/img/icons/thumb-icon.svg') }}"
                                                 alt="Img"></span>
-                                        <p><b>{{ $recommendationPercentage }} %</b> {{ __('app.doctor_profile.recommended') }}</p>
+                                        <p><b>{{ $recommendationPercentage }} %</b>
+                                            {{ __('app.doctor_profile.recommended') }}</p>
                                     </div>
                                 </li>
                                 <li>
@@ -94,7 +100,8 @@
                                         <ul class="contact-doctors">
                                             <li><a href="{{ route('conversation.create', $doctor['uid']) }}"><span><img
                                                             src="{{ URL::asset('build/img/icons/device-message2.svg') }}"
-                                                            alt="Img"></span>{{ __('app.doctor_profile.contact_doctor') }}</a></li>
+                                                            alt="Img"></span>{{ __('app.doctor_profile.contact_doctor') }}</a>
+                                            </li>
                                         </ul>
                                     @endif
                                 </li>
@@ -117,13 +124,17 @@
                         </ul>
                         <div class="bottom-book-btn">
                             @if (session('firebase_token'))
-                                <p><span>{{ __('app.doctor_profile.consultation_fee') }}: ${{ $doctor['consultationFee'] }} </span> {{ __('app.doctor_profile.per_session') }}</p>
+                                <p><span>{{ __('app.doctor_profile.consultation_fee') }}:
+                                        ${{ $doctor['consultationFee'] }} </span>
+                                    {{ __('app.doctor_profile.per_session') }}</p>
                             @endif
-                            <div class="clinic-booking">
-                                <a class="apt-btn" href="javascript:void(0)" onclick="handleBookingClick()">
-                                    {{ __('app.doctor_profile.book_appointment') }}
-                                </a>
-                            </div>
+                            @if ($doctor['isActive'] == true && $doctor['isVerified'] == true)
+                                <div class="clinic-booking">
+                                    <a class="apt-btn" href="javascript:void(0)" onclick="handleBookingClick()">
+                                        {{ __('app.doctor_profile.book_appointment') }}
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -157,9 +168,9 @@
                         <?php
                         $name = $doctor['name'] ?? 'Dr. John Doe';
                         $qualification = $doctor['qualification'] ?? '';
-
+                        
                         $experience = $doctor['experience'] ?? '';
-
+                        
                         $specializations = $doctor['specializations'] ?? [];
                         if (!empty($specializations)) {
                             $specializationsList = implode(
@@ -319,7 +330,8 @@
                                         </div>
                                     </div>
                                     @if ($review['rating'] >= 4)
-                                        <span class="thumb-icon"><i class="fa-regular fa-thumbs-up"></i>{{ __('app.doctor_profile.recommend_for_appointment') }}</span>
+                                        <span class="thumb-icon"><i
+                                                class="fa-regular fa-thumbs-up"></i>{{ __('app.doctor_profile.recommend_for_appointment') }}</span>
                                     @endif
                                 </div>
                                 <p>{{ $review['comment'] }}

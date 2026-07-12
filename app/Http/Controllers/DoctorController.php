@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Firestore\Doctor;
-use App\Models\Firestore\Rating;
 use App\Models\Firestore\Category;
-use Google\Cloud\Storage\Connection\Rest;
+use App\Models\Firestore\Doctor;
+use App\Services\FirestoreService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 class DoctorController extends Controller
 {
     protected $doctors;
+
     protected $categories;
 
     public function __construct(Doctor $doctors, Category $categories)
@@ -30,42 +30,52 @@ class DoctorController extends Controller
             $cursor = json_decode($cursor, true);
         }
 
-        if (!is_array($categoryIds)) $categoryIds = [$categoryIds];
-        if (!is_array($availability)) $availability = [$availability];
+        if (! is_array($categoryIds)) {
+            $categoryIds = [$categoryIds];
+        }
+        if (! is_array($availability)) {
+            $availability = [$availability];
+        }
 
         $filters = [
             [
                 'field' => 'isActive',
                 'op' => '=',
-                'value' => true
-            ]
+                'value' => true,
+            ],
+            [
+                'field' => 'isVerified',
+                'op' => '=',
+                'value' => true,
+            ],
+
         ];
 
-        if (!empty($categoryIds)) {
+        if (! empty($categoryIds)) {
             $filters[] = [
                 'field' => 'specializations',
                 'op' => 'array-contains-any',
-                'value' => $categoryIds
+                'value' => $categoryIds,
             ];
-        } elseif (!empty($availability)) {
+        } elseif (! empty($availability)) {
             $filters[] = [
                 'field' => 'workingDays',
                 'op' => 'array-contains-any',
-                'value' => $availability
+                'value' => $availability,
             ];
         }
-        
-        $result = app(\App\Services\FirestoreService::class)
+
+        $result = app(FirestoreService::class)
             ->query('doctors', $filters, 12, $cursor);
 
         $doctors = collect($result['documents']);
 
-        if (!empty($categoryIds) && !empty($availability)) {
+        if (! empty($categoryIds) && ! empty($availability)) {
             $doctors = $doctors->filter(function ($doc) use ($availability) {
-                return !empty(array_intersect($doc['workingDays'] ?? [], $availability));
+                return ! empty(array_intersect($doc['workingDays'] ?? [], $availability));
             })->values();
         }
-        
+
         $categories = Cache::remember('home.doctors.categories', 6000, function () {
             return $this->categories->all()
                 ->where('isActive', true)
@@ -76,7 +86,7 @@ class DoctorController extends Controller
             'doctors' => $doctors,
             'nextCursor' => $result['nextCursor'], // 👈 send to frontend
             'hasMore' => $result['hasMore'] ?? false, // 👈 send to frontend
-            'categories' => $categories
+            'categories' => $categories,
         ]);
     }
 
@@ -84,18 +94,18 @@ class DoctorController extends Controller
     {
         $doctor = $this->doctors->find($id);
 
-        if (!$doctor || !$doctor['isActive']) {
+        if (! $doctor || ! $doctor['isActive'] || ! $doctor['isVerified']) {
             abort(404);
         }
 
-        $firestore = app(\App\Services\FirestoreService::class);
+        $firestore = app(FirestoreService::class);
 
         $baseFilter = [
             [
                 'field' => 'doctorId',
                 'op' => '=',
-                'value' => $id
-            ]
+                'value' => $id,
+            ],
         ];
 
         // 🔥 Cache all stats together (better than multiple keys)
@@ -108,8 +118,8 @@ class DoctorController extends Controller
                 [
                     'field' => 'rating',
                     'op' => '>=',
-                    'value' => 4.0
-                ]
+                    'value' => 4.0,
+                ],
             ]);
 
             $appointmentCount = $firestore->count('appointments', $baseFilter);
@@ -140,14 +150,14 @@ class DoctorController extends Controller
                 ['field' => 'doctorId', 'op' => '=', 'value' => $id],
             ], 1);
 
-            $hasAppointment = !empty($patientAppointments['documents'] ?? []);
+            $hasAppointment = ! empty($patientAppointments['documents'] ?? []);
         }
 
         return view('doctor-profile', [
             'doctor' => $doctor,
             'reviews' => $reviews,
             'hasAppointment' => $hasAppointment,
-            ...$stats
+            ...$stats,
         ]);
     }
 

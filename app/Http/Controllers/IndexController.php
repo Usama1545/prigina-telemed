@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Firestore\Appointment;
 use App\Models\Firestore\Category;
 use App\Models\Firestore\Doctor;
 use App\Models\Firestore\Faq;
+use App\Services\FirestoreService;
 use Illuminate\Support\Facades\Cache;
-
 
 class IndexController extends Controller
 {
     protected $categories;
+
     protected $doctors;
+
     protected $faqs;
+
     public function __construct(
         Category $categories,
         Doctor $doctors,
@@ -23,17 +25,18 @@ class IndexController extends Controller
         $this->doctors = $doctors;
         $this->faqs = $faqs;
     }
+
     public function index()
     {
-        $firestore = app(\App\Services\FirestoreService::class);
+        $firestore = app(FirestoreService::class);
 
         $categories = Cache::remember('home.categories', 6000, function () use ($firestore) {
             $result = $firestore->query('categories', [
                 [
                     'field' => 'isActive',
                     'op' => '=',
-                    'value' => true
-                ]
+                    'value' => true,
+                ],
             ]);
 
             return collect($result['documents'] ?? [])->values();
@@ -44,13 +47,18 @@ class IndexController extends Controller
                 [
                     'field' => 'isActive',
                     'op' => '=',
-                    'value' => true
+                    'value' => true,
                 ],
                 [
                     'field' => 'isTopDoctor',
                     'op' => '=',
-                    'value' => true
-                ]
+                    'value' => true,
+                ],
+                [
+                    'field' => 'isVerified',
+                    'op' => '=',
+                    'value' => true,
+                ],
             ], 10);
 
             return collect($result['documents'] ?? [])->values();
