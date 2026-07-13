@@ -21,7 +21,22 @@
                         <h3>{{ __('app.profile.title') }}</h3>
                     </div>
 
+                    {{-- Availability (mobile only, sidebar switch is hidden below lg) --}}
+                    <div class="doctor-availability-card d-lg-none">
+                        <label class="form-label">
+                            {{ __('app.doctor_sidebar.availability') }}
+                        </label>
 
+                        @php $isAvailable = current_user()['available'] ?? true; @endphp
+
+                        <select class="form-select modern-select availability-select"
+                            data-url="{{ route('doctor.toggle-availability') }}" data-token="{{ csrf_token() }}">
+                            <option value="1" {{ $isAvailable ? 'selected' : '' }}>
+                                {{ __('app.doctor_sidebar.available_now') }}</option>
+                            <option value="0" {{ !$isAvailable ? 'selected' : '' }}>
+                                {{ __('app.doctor_sidebar.not_available') }}</option>
+                        </select>
+                    </div>
 
                     <div class="setting-title">
                         <h5>{{ __('app.profile.photo') }}</h5>

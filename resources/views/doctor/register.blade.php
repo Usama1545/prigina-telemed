@@ -166,11 +166,15 @@
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">{{ __('app.doctor_register.password') }}</label>
 
-                                    <input type="password" name="password"
-                                        class="form-control @error('password') is-invalid @enderror" required>
+                                    <div class="pass-group">
+                                        <input type="password" name="password"
+                                            class="form-control pass-input @error('password') is-invalid @enderror"
+                                            required>
+                                        <span class="feather-eye-off toggle-password"></span>
+                                    </div>
 
                                     @error('password')
-                                        <div class="invalid-feedback">
+                                        <div class="invalid-feedback d-block">
                                             {{ $message }}
                                         </div>
                                     @enderror
@@ -179,7 +183,11 @@
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">{{ __('app.doctor_register.confirm_password') }}</label>
 
-                                    <input type="password" name="password_confirmation" class="form-control" required>
+                                    <div class="pass-group">
+                                        <input type="password" name="password_confirmation"
+                                            class="form-control pass-input-sub" required>
+                                        <span class="feather-eye-off toggle-password-sub"></span>
+                                    </div>
                                 </div>
 
                                 <hr>

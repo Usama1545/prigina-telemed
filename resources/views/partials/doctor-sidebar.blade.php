@@ -38,7 +38,7 @@
 
         @php $isAvailable = current_user()['available'] ?? true; @endphp
 
-        <select id="availability-select" class="form-select modern-select"
+        <select class="form-select modern-select availability-select"
             data-url="{{ route('doctor.toggle-availability') }}" data-token="{{ csrf_token() }}">
             <option value="1" {{ $isAvailable ? 'selected' : '' }}>{{ __('app.doctor_sidebar.available_now') }}</option>
             <option value="0" {{ !$isAvailable ? 'selected' : '' }}>{{ __('app.doctor_sidebar.not_available') }}</option>
@@ -339,39 +339,46 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const select = document.getElementById('availability-select');
-        if (!select) return;
+        const selects = document.querySelectorAll('.availability-select');
+        if (!selects.length) return;
 
-        select.addEventListener('change', function() {
-            const isAvailable = parseInt(this.value);
-            const url = this.dataset.url;
-            const token = this.dataset.token;
+        selects.forEach(function(select) {
+            select.addEventListener('change', function() {
+                const isAvailable = parseInt(this.value);
+                const url = this.dataset.url;
+                const token = this.dataset.token;
 
-            select.disabled = true;
-
-            fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': token,
-                    },
-                    body: JSON.stringify({
-                        isAvailable
-                    }),
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (!data.success) {
-                        // revert on failure
-                        select.value = isAvailable ? '0' : '1';
-                    }
-                })
-                .catch(() => {
-                    select.value = isAvailable ? '0' : '1';
-                })
-                .finally(() => {
-                    select.disabled = false;
+                selects.forEach(function(s) {
+                    s.disabled = true;
                 });
+
+                fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': token,
+                        },
+                        body: JSON.stringify({
+                            isAvailable
+                        }),
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        selects.forEach(function(s) {
+                            s.value = data.success ? (isAvailable ? '1' : '0') : (isAvailable ? '0' : '1');
+                        });
+                    })
+                    .catch(() => {
+                        selects.forEach(function(s) {
+                            s.value = isAvailable ? '0' : '1';
+                        });
+                    })
+                    .finally(() => {
+                        selects.forEach(function(s) {
+                            s.disabled = false;
+                        });
+                    });
+            });
         });
     });
 </script>
