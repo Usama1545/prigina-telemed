@@ -42,6 +42,32 @@
                             </li>
                         </ul>
                     </div>
+
+                    @if (session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
+                    @if (session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <ul class="mb-0 ps-3">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
                     <div class="booking-widget multistep-form mb-5">
                         <form id="bookingForm" action="{{ route('booking.process') }}" method="POST"
                             enctype="multipart/form-data">
@@ -193,7 +219,7 @@
                                                             <label class="form-label">Full Name <span
                                                                     class="text-danger">*</span></label>
                                                             <input type="text" name="name" class="form-control"
-                                                                value="{{ current_user()['name'] ?? '' }}" required>
+                                                                value="{{ old('name', current_user()['name'] ?? '') }}" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-4 col-md-4">
@@ -201,7 +227,7 @@
                                                             <label class="form-label">Phone Number <span
                                                                     class="text-danger">*</span></label>
                                                             <input type="text" name="phone"
-                                                                value="{{ current_user()['phone'] ?? '' }}"
+                                                                value="{{ old('phone', current_user()['phone'] ?? '') }}"
                                                                 class="form-control" required>
                                                         </div>
                                                     </div>
@@ -210,14 +236,15 @@
                                                             <label class="form-label">Email Address <span
                                                                     class="text-danger">*</span></label>
                                                             <input type="email" name="email"
-                                                                value="{{ current_user()['email'] ?? '' }}"
+                                                                value="{{ old('email', current_user()['email'] ?? '') }}"
                                                                 class="form-control" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-12 col-md-12">
                                                         <div class="mb-3">
                                                             <label class="form-label">Symptoms (Optional)</label>
-                                                            <input type="text" class="form-control" name="symptoms">
+                                                            <input type="text" class="form-control" name="symptoms"
+                                                                value="{{ old('symptoms') }}">
                                                         </div>
                                                     </div>
                                                     {{-- <div class="col-lg-12 col-md-12">
@@ -231,7 +258,7 @@
                                                         <div class="mb-3">
                                                             <label class="form-label">Explain your problem
                                                                 (Optional)</label>
-                                                            <textarea class="form-control" rows="3" name="problem"></textarea>
+                                                            <textarea class="form-control" rows="3" name="problem">{{ old('problem') }}</textarea>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-12">
@@ -312,7 +339,7 @@
                                                                 <div class="form-check">
                                                                     <input class="form-check-input gateway-radio"
                                                                         type="radio" name="gateway" id="gatewayStripe"
-                                                                        value="stripe">
+                                                                        value="stripe" @if (old('payment_gateway') === 'stripe') checked @endif>
                                                                     <label
                                                                         class="form-check-label d-flex align-items-center"
                                                                         for="gatewayStripe">
@@ -645,6 +672,50 @@
 
         confirmPayBtn.disabled = true;
 
+        // Restore the client's previous selections after a failed submission
+        // (e.g. slot expired, payment cancelled) instead of dropping them back
+        // to a blank step 1 with no context.
+        const oldSelectedSlot = @json(old('selected_slot'));
+        const oldSelectedDate = @json(old('selected_date'));
+        const oldPaymentGateway = @json(old('payment_gateway'));
+        const hasBookingError = @json((bool) (session('error') || $errors->any()));
+
+        function restorePreviousSelection() {
+            if (!oldSelectedSlot || !oldSelectedDate) {
+                showStep(0);
+                return;
+            }
+
+            const dayIndex = availability.findIndex(day => day.date === oldSelectedDate);
+            if (dayIndex === -1) {
+                showStep(0);
+                return;
+            }
+
+            daySelect.value = dayIndex;
+            renderSlots(dayIndex);
+
+            const time = oldSelectedSlot.replace(`${oldSelectedDate} `, '');
+            const slotId = `slot_${oldSelectedDate}_${time.replace(/:/g, '')}`;
+            const radio = document.getElementById(slotId);
+
+            if (radio) {
+                radio.checked = true;
+                radio.dispatchEvent(new Event('change'));
+            }
+
+            if (oldPaymentGateway) {
+                const gatewayRadio = document.querySelector(`.gateway-radio[value="${oldPaymentGateway}"]`);
+                if (gatewayRadio) {
+                    gatewayRadio.checked = true;
+                    gatewayRadio.dispatchEvent(new Event('change'));
+                }
+            }
+
+            currentStep = hasBookingError ? (fieldsets.length - 2) : 0;
+            showStep(currentStep);
+        }
+
         bookingForm.addEventListener('submit', function(e) {
             if (!paymentGatewayInput.value) {
                 e.preventDefault();
@@ -664,7 +735,7 @@
             return true;
         });
 
-        showStep(0);
+        restorePreviousSelection();
     </script>
 
     <style>

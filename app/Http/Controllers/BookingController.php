@@ -127,6 +127,7 @@ class BookingController extends Controller
         if ($startTimeUTC->lte($now)) {
             return redirect()
                 ->back()
+                ->withInput()
                 ->with('error', 'The selected time slot is no longer available. Please choose a different date or time.');
         }
 
@@ -193,6 +194,8 @@ class BookingController extends Controller
 
     private function initiateStripePayment($bookingData)
     {
+        session(['pending_booking_doctor_id' => $bookingData['doctorId']]);
+
         Stripe::setApiKey(config('services.stripe.secret'));
 
         $consultationFee = (float) $bookingData['amount'];
@@ -240,6 +243,8 @@ class BookingController extends Controller
 
     private function initiateFlutterwavePayment($bookingData)
     {
+        session(['pending_booking_doctor_id' => $bookingData['doctorId']]);
+
         $flutterwave = new Flutterwave(config('services.flutterwave.secretKey'));
 
         $payload = [
@@ -279,6 +284,8 @@ class BookingController extends Controller
 
             $bookingId = $session->metadata->booking_id;
             $appointment = $this->appointments->find($bookingId);
+
+            session()->forget('pending_booking_doctor_id');
 
             $this->appointments->update($bookingId, [
                 'status' => 'confirmed',
@@ -330,7 +337,16 @@ class BookingController extends Controller
 
     public function paymentCancel()
     {
-        return redirect()->route('booking')->with('error', 'Payment was cancelled');
+        $doctorId = session('pending_booking_doctor_id');
+        session()->forget('pending_booking_doctor_id');
+
+        if ($doctorId) {
+            return redirect()
+                ->route('booking', ['id' => $doctorId])
+                ->with('error', 'Payment was cancelled. Please review your details and try again.');
+        }
+
+        return redirect()->route('doctors')->with('error', 'Payment was cancelled.');
     }
 
     public function flutterwaveCallback(Request $request)
