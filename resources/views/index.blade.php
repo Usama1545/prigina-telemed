@@ -192,7 +192,7 @@
             <div class="row g-4 justify-content-center align-items-stretch">
                 @foreach ($services as $service)
                     <div class="col-lg-3 col-md-6">
-                        <div class="service-card h-100 p-4 text-start">
+                        <div class="service-card h-100 p-4 text-start d-flex flex-column">
 
                             <div class="service-icon-circle icon-grad-{{ $service['accent'] }} mx-auto">
                                 <i class="fi fi-rr-{{ $service['icon'] }}"></i>
@@ -215,7 +215,7 @@
                             </ul>
 
                             <a href="{{ check() ? route('doctors') : route('register') }}"
-                                class="btn service-btn btn-{{ $service['accent'] }} w-100 d-flex align-items-center justify-content-center gap-2">
+                                class="btn service-btn btn-{{ $service['accent'] }} w-100 mt-auto d-flex align-items-center justify-content-center gap-2">
                                 {{ __('app.home.service_cta') }} <i class="fi fi-rr-arrow-right"></i>
                             </a>
                         </div>
