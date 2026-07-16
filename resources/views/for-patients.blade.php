@@ -38,7 +38,8 @@
                                 <div class="icon-circle-soft mx-auto">
                                     <i class="fi fi-rr-bulb" style="font-size: 2.5rem; margin-top: 10px;"></i>
                                 </div>
-                                <p class="fw-bold mt-2 mb-2 text-black">{{ __('app.for_patients.independent_opinions') }}</p>
+                                <p class="fw-bold mt-2 mb-2 text-black">{{ __('app.for_patients.independent_opinions') }}
+                                </p>
                                 <p class="small">{{ __('app.for_patients.independent_opinions_desc') }}</p>
                             </div>
                         </div>
@@ -83,63 +84,65 @@
             @php
                 $steps = [
                     [
-                        'icon'  => 'upload',
+                        'icon' => 'upload',
+                        'accent' => 'blue',
                         'title' => __('app.for_patients.step1_title'),
-                        'desc'  => __('app.for_patients.step1_desc'),
+                        'desc' => __('app.for_patients.step1_desc'),
                     ],
                     [
-                        'icon'  => 'user-md',
+                        'icon' => 'user-md',
+                        'accent' => 'teal',
                         'title' => __('app.for_patients.step2_title'),
-                        'desc'  => __('app.for_patients.step2_desc'),
+                        'desc' => __('app.for_patients.step2_desc'),
                     ],
                     [
-                        'icon'  => 'folder',
+                        'icon' => 'folder',
+                        'accent' => 'blue',
                         'title' => __('app.for_patients.step3_title'),
-                        'desc'  => __('app.for_patients.step3_desc'),
+                        'desc' => __('app.for_patients.step3_desc'),
                     ],
                     [
-                        'icon'  => 'file',
+                        'icon' => 'file',
+                        'accent' => 'teal',
                         'title' => __('app.for_patients.step4_title'),
-                        'desc'  => __('app.for_patients.step4_desc'),
+                        'desc' => __('app.for_patients.step4_desc'),
                     ],
                     [
-                        'icon'  => 'video-camera',
+                        'icon' => 'video-camera',
+                        'accent' => 'purple',
                         'title' => __('app.for_patients.step5_title'),
-                        'desc'  => __('app.for_patients.step5_desc'),
+                        'desc' => __('app.for_patients.step5_desc'),
+                    ],
+                    [
+                        'icon' => 'shield-check',
+                        'accent' => 'blue',
+                        'title' => __('app.how_it_works.step6_title'),
+                        'desc' => __('app.how_it_works.step6_desc'),
                     ],
                 ];
             @endphp
             <h2 class="fw-bold mb-4 text-center text-primary">{{ __('app.for_patients.how_works_headline') }}</h2>
 
-            <div class="row g-4 justify-content-center position-relative">
-
+            <div class="row justify-content-center text-center g-4 mt-4">
                 @foreach ($steps as $index => $step)
-                    <div class="col-md-2 position-relative">
-                        <div class="step-simple text-center">
+                    <div class="col-6 col-md-4 col-lg position-relative step-col">
+                        <div class="step-card h-100 position-relative">
 
-                            <!-- ICON -->
-                            <div class="step-icon-circle position-relative">
-                                <i class="fi fi-rr-{{ $step['icon'] }} text-primary fs-20"></i>
+                            <div class="step-icon-circle icon-grad-{{ $step['accent'] }}">
+                                <i class="fi fi-rr-{{ $step['icon'] }}"></i>
                             </div>
+                            <span class="badge badge-{{ $step['accent'] }} mt-2">{{ $index + 1 }}</span>
 
-                            <!-- NUMBER -->
-                            <span class="step-number-small">{{ $index + 1 }}</span>
 
-                            <h6 class="mt-3 text-primary">{{ $step['title'] }}</h6>
-                            <p class="text-muted small mt-1">{{ $step['desc'] }}</p>
+                            <h6 class="fw-semibold mt-3">{{ $step['title'] }}</h6>
+                            <p class="text-muted small">{{ $step['desc'] }}</p>
 
+                            <span class="step-underline underline-{{ $step['accent'] }}"></span>
                         </div>
 
-                        <!-- ARROW (except last) -->
-                        @if (!$loop->last)
-                            <div class="step-arrow d-none d-md-block">
-                                <i class="fi fi-rr-arrow-small-right"></i>
-                            </div>
-                        @endif
 
                     </div>
                 @endforeach
-
             </div>
 
         </div>
@@ -214,7 +217,8 @@
                         <p class="mb-0 text-white">{{ __('app.for_patients.info_desc2') }}</p>
                     </div>
                     <div class="support-info wow fadeInUp" data-wow-duration="1s">
-                        <a href="{{ check() ? route('doctors') : route('login') }}" class="btn btn-light px-4 mt-3 mt-md-0">
+                        <a href="{{ check() ? route('doctors') : route('login') }}"
+                            class="btn btn-light px-4 mt-3 mt-md-0">
                             {{ __('app.for_patients.info_cta') }}
                         </a>
                     </div>
@@ -297,39 +301,110 @@
                     rgba(0, 0, 0, 0) 100%);
         }
 
-        .step-number-small {
+        /* STEP CARD */
+        .step-card {
+            border: 1px solid #eee;
+            border-radius: 12px;
+            background: #fff;
+            transition: 0.3s;
+            padding: 44px 16px 24px;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        /* STEP ICON CIRCLE — sits half in / half out of the card's top border */
+        .step-icon-circle {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            color: #fff;
+            font-size: 28px;
+        }
+
+        .icon-grad-blue {
+            background: linear-gradient(135deg, var(--primary), #2f7ed8);
+        }
+
+        .icon-grad-teal {
+            background: linear-gradient(135deg, var(--secondary), #17c3a4);
+        }
+
+        .icon-grad-purple {
+            background: linear-gradient(135deg, #7b3fe4, #5b2fc2);
+        }
+
+        /* NUMBER BADGE (bottom of icon circle) */
+        .step-badge {
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
             width: 28px;
             height: 28px;
-            margin: 10px auto 0;
             border-radius: 50%;
-            background: var(--secondary);
-            color: #fff;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .step-icon-circle {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            border: 1px dashed #dcdcdc;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: auto;
-            background: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            border: 2px solid #fff;
         }
 
+        .badge-blue {
+            background: var(--primary);
+        }
+
+        .badge-teal {
+            background: var(--secondary);
+        }
+
+        .badge-purple {
+            background: #5b2fc2;
+        }
+
+        /* UNDERLINE */
+        .step-underline {
+            display: inline-block;
+            width: 32px;
+            height: 3px;
+            border-radius: 2px;
+            margin-top: 14px;
+        }
+
+        .underline-blue {
+            background: var(--primary);
+        }
+
+        .underline-teal {
+            background: var(--secondary);
+        }
+
+        .underline-purple {
+            background: #5b2fc2;
+        }
+
+        /* CONNECTOR ARROW — aligned with the icon circle sitting on the card's top border */
         .step-arrow {
             position: absolute;
-            top: 15%;
-            right: -18px;
+            top: 0;
+            right: -22px;
             transform: translateY(-50%);
-            font-size: 20px;
+            align-items: center;
+            justify-content: center;
             color: var(--secondary);
+            font-size: 20px;
+            z-index: 2;
         }
 
         /* FEATURE */

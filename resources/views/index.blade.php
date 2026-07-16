@@ -148,77 +148,191 @@
     </section>
     <!-- /Brochure Download -->
 
+    <!-- OUR SERVICES: THE PRIGINA MODEL -->
+    <section class="py-5 text-center services-model">
+        <div class="container">
+            <h2 class="fw-bold mb-5">
+                <span class="text-dark">{{ __('app.home.services_headline_prefix') }}</span>
+                <span class="text-primary">{{ __('app.home.services_headline_highlight') }}</span>
+            </h2>
+
+            @php
+                $services = [
+                    [
+                        'accent' => 'blue',
+                        'icon' => 'file-medical-alt',
+                        'title' => __('app.home.service1_title'),
+                        'desc' => __('app.home.service1_desc'),
+                        'bullets' => [__('app.home.service1_bullet1'), __('app.home.service1_bullet2'), __('app.home.service1_bullet3')],
+                    ],
+                    [
+                        'accent' => 'teal',
+                        'icon' => 'user-md',
+                        'title' => __('app.home.service2_title'),
+                        'desc' => __('app.home.service2_desc'),
+                        'bullets' => [__('app.home.service2_bullet1'), __('app.home.service2_bullet2'), __('app.home.service2_bullet3')],
+                    ],
+                    [
+                        'accent' => 'green',
+                        'icon' => 'marker',
+                        'title' => __('app.home.service3_title'),
+                        'desc' => __('app.home.service3_desc'),
+                        'bullets' => [__('app.home.service3_bullet1'), __('app.home.service3_bullet2'), __('app.home.service3_bullet3')],
+                    ],
+                    [
+                        'accent' => 'purple',
+                        'icon' => 'users',
+                        'title' => __('app.home.service4_title'),
+                        'desc' => __('app.home.service4_desc'),
+                        'bullets' => [__('app.home.service4_bullet1'), __('app.home.service4_bullet2'), __('app.home.service4_bullet3'), __('app.home.service4_bullet4')],
+                    ],
+                ];
+            @endphp
+
+            <div class="row g-4 justify-content-center align-items-stretch">
+                @foreach ($services as $service)
+                    <div class="col-lg-3 col-md-6">
+                        <div class="service-card h-100 p-4 text-start">
+
+                            <div class="service-icon-circle icon-grad-{{ $service['accent'] }} mx-auto">
+                                <i class="fi fi-rr-{{ $service['icon'] }}"></i>
+                            </div>
+
+                            <h5 class="fw-bold text-center service-title-{{ $service['accent'] }} mt-3">{{ $service['title'] }}</h5>
+                            <p class="text-muted text-center small">{{ $service['desc'] }}</p>
+
+                            <span class="service-underline underline-{{ $service['accent'] }} d-block mx-auto"></span>
+
+                            <ul class="service-bullets mt-3 mb-4">
+                                @foreach ($service['bullets'] as $bullet)
+                                    <li>
+                                        <span class="service-check check-{{ $service['accent'] }}">
+                                            <i class="fi fi-rr-check"></i>
+                                        </span>
+                                        {{ $bullet }}
+                                    </li>
+                                @endforeach
+                            </ul>
+
+                            <a href="{{ check() ? route('doctors') : route('register') }}"
+                                class="btn service-btn btn-{{ $service['accent'] }} w-100 d-flex align-items-center justify-content-center gap-2">
+                                {{ __('app.home.service_cta') }} <i class="fi fi-rr-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
     <section class="py-5 text-center how-works">
         <div class="container">
-            <h6 class="text-muted">{{ __('app.home.how_works_label') }}</h6>
+            <h6 class="how-works-label">{{ __('app.home.how_works_label') }}</h6>
             <h2 class="fw-bold mb-5">{{ __('app.home.how_works_headline') }}</h2>
 
-            <div class="row align-items-stretch position-relative">
+            @php
+                $howSteps = [
+                    [
+                        'img' => 'home-icon-1.png',
+                        'title' => __('app.home.step1_title'),
+                        'desc' => __('app.home.step1_desc'),
+                    ],
+                    [
+                        'img' => 'home-icon-2.png',
+                        'title' => __('app.home.step2_title'),
+                        'desc' => __('app.home.step2_desc'),
+                    ],
+                    [
+                        'img' => 'icon-3.webp',
+                        'title' => __('app.home.step3_title'),
+                        'desc' => __('app.home.step3_desc'),
+                    ],
+                ];
+            @endphp
 
-                <!-- STEP 1 -->
-                <div class="col-md-4 mb-4 mb-md-0 position-relative">
-                    <div class="step-card p-4 border rounded h-100 position-relative">
+            <div class="row align-items-stretch g-4">
 
-                        <span class="step-number">1</span>
-
-                        <div class="step-icon">
-                            <img src="{{ asset('build/img/home-icon-1.png') }}" alt="Submit your case">
+                @foreach ($howSteps as $index => $step)
+                    <div class="col-lg-3 col-md-6 position-relative how-step-col">
+                        <div class="how-step-icon mx-auto position-relative">
+                            <img src="{{ asset('build/img/' . $step['img']) }}" alt="{{ $step['title'] }}">
+                            <span class="how-step-badge">{{ $index + 1 }}</span>
                         </div>
 
-                        <h5>{{ __('app.home.step1_title') }}</h5>
-                        <p class="text-muted mb-0">
-                            {{ __('app.home.step1_desc') }}
-                        </p>
+                        <h5 class="fw-bold text-primary mt-3">{{ $step['title'] }}</h5>
+                        <p class="text-muted small mb-0">{{ $step['desc'] }}</p>
+
+                        {{-- @if (!$loop->last)
+                            <span class="how-step-connector d-none d-lg-flex">
+                                <i class="fi fi-rr-angle-small-right"></i>
+                            </span>
+                        @endif --}}
                     </div>
+                @endforeach
 
-                    <!-- Arrow -->
-                    <div class="step-arrow d-none d-md-block">
-                        <i class="fi fi-rr-arrow-small-right"></i>
-                    </div>
-                </div>
-
-                <!-- STEP 2 -->
-                <div class="col-md-4 mb-4 mb-md-0 position-relative">
-                    <div class="step-card p-4 border rounded h-100 position-relative">
-
-                        <span class="step-number">2</span>
-
-                        <div class="step-icon">
-                            <img src="{{ asset('build/img/home-icon-2.png') }}" alt="Get matched with an expert">
+                <!-- SIDE HIGHLIGHT CARD -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="how-side-card h-100 d-flex align-items-center gap-3 p-4 text-start">
+                        <i class="fi fi-rr-shield-check how-side-icon"></i>
+                        <div>
+                            <h6 class="fw-bold text-primary mb-1">{{ __('app.home.how_works_side_title') }}</h6>
+                            <p class="text-muted small mb-0">{{ __('app.home.how_works_side_desc') }}</p>
                         </div>
-
-                        <h5>{{ __('app.home.step2_title') }}</h5>
-                        <p class="text-muted mb-0">
-                            {{ __('app.home.step2_desc') }}
-                        </p>
-                    </div>
-
-                    <!-- Arrow -->
-                    <div class="step-arrow d-none d-md-block">
-                        <i class="fi fi-rr-arrow-small-right"></i>
-                    </div>
-                </div>
-
-                <!-- STEP 3 -->
-                <div class="col-md-4 position-relative">
-                    <div class="step-card p-4 border rounded h-100 position-relative">
-
-                        <span class="step-number">3</span>
-
-                        <div class="step-icon">
-                            <img src="{{ asset('build/img/icon-3.webp') }}" alt="Receive your second opinion">
-                        </div>
-
-                        <h5>{{ __('app.home.step3_title') }}</h5>
-                        <p class="text-muted mb-0">
-                            {{ __('app.home.step3_desc') }}
-                        </p>
                     </div>
                 </div>
 
             </div>
 
-            <a href="{{ route('patient.dashboard') }}" class="btn btn-secondary mt-5 px-4">{{ __('app.home.start_review') }}</a>
+            <!-- STATS STRIP -->
+            <div class="row g-3 how-stats-strip text-start mt-4">
+
+                <div class="col-md-3 col-6">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="how-stat-icon"><i class="fi fi-rr-users"></i></div>
+                        <div>
+                            <div class="how-stat-number">{{ __('app.home.how_works_stat1_number') }}</div>
+                            <div class="how-stat-label">{{ __('app.home.how_works_stat1_label') }}</div>
+                            <div class="how-stat-sub">{{ __('app.home.how_works_stat1_sub') }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="how-stat-icon"><i class="fi fi-rr-stethoscope"></i></div>
+                        <div>
+                            <div class="how-stat-number">{{ __('app.home.how_works_stat2_number') }}</div>
+                            <div class="how-stat-label">{{ __('app.home.how_works_stat2_label') }}</div>
+                            <div class="how-stat-sub">{{ __('app.home.how_works_stat2_sub') }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="how-stat-icon"><i class="fi fi-rr-globe"></i></div>
+                        <div>
+                            <div class="how-stat-label">{{ __('app.home.how_works_stat3_label') }}</div>
+                            <div class="how-stat-sub">{{ __('app.home.how_works_stat3_sub') }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="how-stat-icon"><i class="fi fi-rr-lock"></i></div>
+                        <div>
+                            <div class="how-stat-number">{{ __('app.home.how_works_stat4_number') }}</div>
+                            <div class="how-stat-label">{{ __('app.home.how_works_stat4_label') }}</div>
+                            <div class="how-stat-sub">{{ __('app.home.how_works_stat4_sub') }}</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <a href="{{ route('patient.dashboard') }}"
+                class="btn btn-secondary mt-5 px-4">{{ __('app.home.start_review') }}</a>
         </div>
     </section>
 
@@ -345,7 +459,8 @@
                                                     href="{{ route('doctor-details', $doctor['id']) }}">{{ $doctor['name'] }}</a>
                                             </h3>
                                             <div class="doctor-location">
-                                                <p class="location-title"><span class="fw-medium">{{ __('app.home.experience') }}
+                                                <p class="location-title"><span
+                                                        class="fw-medium">{{ __('app.home.experience') }}
                                                         {{ $doctor['experience'] }}</span>
                                                 </p>
                                             </div>
@@ -398,18 +513,78 @@
                 <div class="row g-3 justify-content-center">
                     @php
                         $specialties = [
-                            ['name' => 'Cardiology',       'icon' => 'fa-solid fa-heart-pulse',    'color' => '#e74c3c', 'bg' => '#fdecea'],
-                            ['name' => 'Neurology',        'icon' => 'fa-solid fa-brain',           'color' => '#8e44ad', 'bg' => '#f3eafd'],
-                            ['name' => 'Orthopedics',      'icon' => 'fa-solid fa-bone',            'color' => '#2980b9', 'bg' => '#eaf4fd'],
-                            ['name' => 'Pulmonology',      'icon' => 'fa-solid fa-lungs',           'color' => '#16a085', 'bg' => '#e8f8f5'],
-                            ['name' => 'Pediatrics',       'icon' => 'fa-solid fa-baby',            'color' => '#e67e22', 'bg' => '#fef5ec'],
-                            ['name' => "Women's Health",   'icon' => 'fa-solid fa-venus',           'color' => '#e91e8c', 'bg' => '#fde8f4'],
-                            ['name' => 'Internal Medicine','icon' => 'fa-solid fa-stethoscope',     'color' => '#1abc9c', 'bg' => '#e8faf6'],
-                            ['name' => 'Oncology',         'icon' => 'fa-solid fa-ribbon',          'color' => '#9b59b6', 'bg' => '#f5eefa'],
-                            ['name' => 'Endocrinology',    'icon' => 'fa-solid fa-dna',             'color' => '#5b6abf', 'bg' => '#edeffe'],
-                            ['name' => 'Family Medicine',  'icon' => 'fa-solid fa-people-group',    'color' => '#27ae60', 'bg' => '#eafaf1'],
-                            ['name' => 'ENT',              'icon' => 'fa-solid fa-ear-listen',      'color' => '#f39c12', 'bg' => '#fef9ec'],
-                            ['name' => 'Dermatology',      'icon' => 'fa-solid fa-hand-dots',       'color' => '#00b4d8', 'bg' => '#e8f8fc'],
+                            [
+                                'name' => 'Cardiology',
+                                'icon' => 'fa-solid fa-heart-pulse',
+                                'color' => '#e74c3c',
+                                'bg' => '#fdecea',
+                            ],
+                            [
+                                'name' => 'Neurology',
+                                'icon' => 'fa-solid fa-brain',
+                                'color' => '#8e44ad',
+                                'bg' => '#f3eafd',
+                            ],
+                            [
+                                'name' => 'Orthopedics',
+                                'icon' => 'fa-solid fa-bone',
+                                'color' => '#2980b9',
+                                'bg' => '#eaf4fd',
+                            ],
+                            [
+                                'name' => 'Pulmonology',
+                                'icon' => 'fa-solid fa-lungs',
+                                'color' => '#16a085',
+                                'bg' => '#e8f8f5',
+                            ],
+                            [
+                                'name' => 'Pediatrics',
+                                'icon' => 'fa-solid fa-baby',
+                                'color' => '#e67e22',
+                                'bg' => '#fef5ec',
+                            ],
+                            [
+                                'name' => "Women's Health",
+                                'icon' => 'fa-solid fa-venus',
+                                'color' => '#e91e8c',
+                                'bg' => '#fde8f4',
+                            ],
+                            [
+                                'name' => 'Internal Medicine',
+                                'icon' => 'fa-solid fa-stethoscope',
+                                'color' => '#1abc9c',
+                                'bg' => '#e8faf6',
+                            ],
+                            [
+                                'name' => 'Oncology',
+                                'icon' => 'fa-solid fa-ribbon',
+                                'color' => '#9b59b6',
+                                'bg' => '#f5eefa',
+                            ],
+                            [
+                                'name' => 'Endocrinology',
+                                'icon' => 'fa-solid fa-dna',
+                                'color' => '#5b6abf',
+                                'bg' => '#edeffe',
+                            ],
+                            [
+                                'name' => 'Family Medicine',
+                                'icon' => 'fa-solid fa-people-group',
+                                'color' => '#27ae60',
+                                'bg' => '#eafaf1',
+                            ],
+                            [
+                                'name' => 'ENT',
+                                'icon' => 'fa-solid fa-ear-listen',
+                                'color' => '#f39c12',
+                                'bg' => '#fef9ec',
+                            ],
+                            [
+                                'name' => 'Dermatology',
+                                'icon' => 'fa-solid fa-hand-dots',
+                                'color' => '#00b4d8',
+                                'bg' => '#e8f8fc',
+                            ],
                         ];
                     @endphp
 
@@ -575,15 +750,294 @@
 
 
     <style>
-        /* CARD */
-        .step-card {
+        /* OUR SERVICES: THE PRIGINA MODEL */
+        .service-card {
             background: #fff;
-            transition: all 0.3s ease;
+            border: 1px solid #eee;
+            border-radius: 14px;
+            transition: 0.3s;
         }
 
-        .step-card:hover {
+        .service-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+        }
+
+        .service-icon-circle {
+            width: 84px;
+            height: 84px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 32px;
+        }
+
+        .icon-grad-blue {
+            background: linear-gradient(135deg, var(--primary), #2f7ed8);
+        }
+
+        .icon-grad-teal {
+            background: linear-gradient(135deg, var(--secondary), #17c3a4);
+        }
+
+        .icon-grad-green {
+            background: linear-gradient(135deg, #3f9142, #7cb342);
+        }
+
+        .icon-grad-purple {
+            background: linear-gradient(135deg, #7b3fe4, #5b2fc2);
+        }
+
+        .service-title-blue {
+            color: var(--primary);
+        }
+
+        .service-title-teal {
+            color: var(--secondary);
+        }
+
+        .service-title-green {
+            color: #3f9142;
+        }
+
+        .service-title-purple {
+            color: #5b2fc2;
+        }
+
+        .service-underline {
+            width: 32px;
+            height: 3px;
+            border-radius: 2px;
+        }
+
+        .underline-blue {
+            background: var(--primary);
+        }
+
+        .underline-teal {
+            background: var(--secondary);
+        }
+
+        .underline-green {
+            background: #3f9142;
+        }
+
+        .underline-purple {
+            background: #5b2fc2;
+        }
+
+        .service-bullets {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .service-bullets li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #5f6c72;
+        }
+
+        .service-check {
+            width: 20px;
+            height: 20px;
+            min-width: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2px;
+        }
+
+        .service-check i {
+            color: #fff;
+            font-size: 10px;
+        }
+
+        .check-blue {
+            background: var(--primary);
+        }
+
+        .check-teal {
+            background: var(--secondary);
+        }
+
+        .check-green {
+            background: #3f9142;
+        }
+
+        .check-purple {
+            background: #5b2fc2;
+        }
+
+        .service-btn {
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            padding: 10px 16px;
+        }
+
+        .btn-blue {
+            background: var(--primary);
+        }
+
+        .btn-blue:hover {
+            color: #fff;
+            background: color-mix(in srgb, var(--primary) 85%, black);
+        }
+
+        .btn-teal {
+            background: var(--secondary);
+        }
+
+        .btn-teal:hover {
+            color: #fff;
+            background: color-mix(in srgb, var(--secondary) 85%, black);
+        }
+
+        .btn-green {
+            background: #3f9142;
+        }
+
+        .btn-green:hover {
+            color: #fff;
+            background: #357338;
+        }
+
+        .btn-purple {
+            background: linear-gradient(135deg, #7b3fe4, #5b2fc2);
+        }
+
+        .btn-purple:hover {
+            color: #fff;
+            opacity: 0.9;
+        }
+
+        /* HOW IT WORKS LABEL */
+        .how-works-label {
+            color: var(--primary);
+            font-weight: 700;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .how-works-label::before,
+        .how-works-label::after {
+            content: '';
+            width: 32px;
+            height: 2px;
+            background: var(--secondary);
+            display: inline-block;
+        }
+
+        /* STEP ICON (circle, image inside) */
+        .how-step-icon {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: color-mix(in srgb, var(--primary) 10%, white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .how-step-icon img {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* NUMBER BADGE (bottom-right of icon circle) */
+        .how-step-badge {
+            position: absolute;
+            bottom: 0;
+            right: calc(50% - 45px);
+            background: var(--primary);
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* DOTTED CONNECTOR BETWEEN STEPS */
+        .how-step-connector {
+            position: absolute;
+            top: 45px;
+            right: -18px;
+            left: auto;
+            width: calc(100% - 90px);
+            align-items: center;
+            justify-content: flex-end;
+            border-top: 2px dashed var(--secondary);
+            color: var(--secondary);
+            font-size: 18px;
+        }
+
+        /* SIDE HIGHLIGHT CARD */
+        .how-side-card {
+            background: #f4f7fb;
+            border-radius: 14px;
+        }
+
+        .how-side-icon {
+            font-size: 34px;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        /* STATS STRIP */
+        .how-stats-strip {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 20px 12px;
+        }
+
+        .how-stat-icon {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            border-radius: 50%;
+            background: color-mix(in srgb, var(--primary) 10%, white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .how-stat-number {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1.2;
+        }
+
+        .how-stat-label {
+            font-weight: 600;
+            font-size: 14px;
+            color: #212529;
+            line-height: 1.3;
+        }
+
+        .how-stat-sub {
+            font-size: 12px;
+            color: #6c757d;
         }
 
         .width-50 {
@@ -607,59 +1061,6 @@
             aspect-ratio: 612 / 391;
             object-fit: cover;
             display: block;
-        }
-
-        /* NUMBER (top-left badge) */
-        .step-number {
-            position: absolute;
-            top: -12px;
-            left: -12px;
-            background: var(--primary);
-            color: #fff;
-            width: 32px;
-            height: 32px;
-            font-size: 14px;
-            font-weight: 600;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* ICON */
-        .step-icon {
-            width: 70px;
-            height: 70px;
-            margin: 0 auto 15px;
-            background: color-mix(in srgb, var(--primary) 12%, white);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .step-icon i {
-            font-size: 26px;
-            color: var(--primary);
-            display: block;
-            line-height: 1;
-        }
-
-        .step-icon img {
-            width: 42px;
-            height: 42px;
-            object-fit: contain;
-            display: block;
-        }
-
-        /* ARROW BETWEEN CARDS */
-        .step-arrow {
-            position: absolute;
-            top: 50%;
-            right: -12px;
-            transform: translateY(-50%);
-            font-size: 22px;
-            color: var(--secondary);
         }
 
         .view-specialists-link {
