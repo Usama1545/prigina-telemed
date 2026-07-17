@@ -126,7 +126,7 @@
             <div class="row justify-content-center text-center g-4 mt-4">
                 @foreach ($steps as $index => $step)
                     <div class="col-6 col-md-4 col-lg position-relative step-col">
-                        <div class="step-card h-100 position-relative">
+                        <div class="step-card h-100 position-relative d-flex flex-column">
 
                             <div class="step-photo position-relative">
                                 <img src="{{ asset('images/howitworks/' . $step['img']) }}" alt="{{ $step['title'] }}"
@@ -134,7 +134,7 @@
                                 <span class="step-badge badge-{{ $step['accent'] }}">{{ $index + 1 }}</span>
                             </div>
 
-                            <div class="p-3 pt-4">
+                            <div class="p-3 pt-4 d-flex flex-column flex-grow-1">
                                 <h6 class="fw-semibold">{{ $step['title'] }}</h6>
                                 <p class="text-muted small">{{ $step['desc'] }}</p>
 
@@ -360,13 +360,15 @@
             background: #5b2fc2;
         }
 
-        /* UNDERLINE */
+        /* UNDERLINE — pinned to the bottom-center of the card regardless of description length */
         .step-underline {
             display: inline-block;
             width: 32px;
             height: 3px;
             border-radius: 2px;
-            margin-top: 14px;
+            margin-top: auto;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .underline-blue {

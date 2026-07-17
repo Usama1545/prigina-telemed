@@ -185,7 +185,7 @@
                     [
                         'accent' => 'green',
                         'icon' => 'marker',
-                        'img' => '3.png',
+                        'img' => '4.png',
                         'title' => __('app.home.service3_title'),
                         'desc' => __('app.home.service3_desc'),
                         'bullets' => [
@@ -197,7 +197,7 @@
                     [
                         'accent' => 'purple',
                         'icon' => 'users',
-                        'img' => '4.png',
+                        'img' => '3.png',
                         'title' => __('app.home.service4_title'),
                         'desc' => __('app.home.service4_desc'),
                         'bullets' => [
