@@ -161,30 +161,51 @@
                     [
                         'accent' => 'blue',
                         'icon' => 'file-medical-alt',
+                        'img' => '1.png',
                         'title' => __('app.home.service1_title'),
                         'desc' => __('app.home.service1_desc'),
-                        'bullets' => [__('app.home.service1_bullet1'), __('app.home.service1_bullet2'), __('app.home.service1_bullet3')],
+                        'bullets' => [
+                            __('app.home.service1_bullet1'),
+                            __('app.home.service1_bullet2'),
+                            __('app.home.service1_bullet3'),
+                        ],
                     ],
                     [
                         'accent' => 'teal',
                         'icon' => 'user-md',
+                        'img' => '2.png',
                         'title' => __('app.home.service2_title'),
                         'desc' => __('app.home.service2_desc'),
-                        'bullets' => [__('app.home.service2_bullet1'), __('app.home.service2_bullet2'), __('app.home.service2_bullet3')],
+                        'bullets' => [
+                            __('app.home.service2_bullet1'),
+                            __('app.home.service2_bullet2'),
+                            __('app.home.service2_bullet3'),
+                        ],
                     ],
                     [
                         'accent' => 'green',
                         'icon' => 'marker',
+                        'img' => '3.png',
                         'title' => __('app.home.service3_title'),
                         'desc' => __('app.home.service3_desc'),
-                        'bullets' => [__('app.home.service3_bullet1'), __('app.home.service3_bullet2'), __('app.home.service3_bullet3')],
+                        'bullets' => [
+                            __('app.home.service3_bullet1'),
+                            __('app.home.service3_bullet2'),
+                            __('app.home.service3_bullet3'),
+                        ],
                     ],
                     [
                         'accent' => 'purple',
                         'icon' => 'users',
+                        'img' => '4.png',
                         'title' => __('app.home.service4_title'),
                         'desc' => __('app.home.service4_desc'),
-                        'bullets' => [__('app.home.service4_bullet1'), __('app.home.service4_bullet2'), __('app.home.service4_bullet3'), __('app.home.service4_bullet4')],
+                        'bullets' => [
+                            __('app.home.service4_bullet1'),
+                            __('app.home.service4_bullet2'),
+                            __('app.home.service4_bullet3'),
+                            __('app.home.service4_bullet4'),
+                        ],
                     ],
                 ];
             @endphp
@@ -192,32 +213,39 @@
             <div class="row g-4 justify-content-center align-items-stretch">
                 @foreach ($services as $service)
                     <div class="col-lg-3 col-md-6">
-                        <div class="service-card h-100 p-4 text-start d-flex flex-column">
+                        <div class="service-card h-100 text-start d-flex flex-column">
 
-                            <div class="service-icon-circle icon-grad-{{ $service['accent'] }} mx-auto">
-                                <i class="fi fi-rr-{{ $service['icon'] }}"></i>
+                            <div class="service-photo position-relative">
+                                <img src="{{ asset('images/features/' . $service['img']) }}" alt="{{ $service['title'] }}"
+                                    class="img-fluid">
+                                <div class="service-icon-circle icon-grad-{{ $service['accent'] }}">
+                                    <i class="fi fi-rr-{{ $service['icon'] }}"></i>
+                                </div>
                             </div>
 
-                            <h5 class="fw-bold text-center service-title-{{ $service['accent'] }} mt-3">{{ $service['title'] }}</h5>
-                            <p class="text-muted text-center small">{{ $service['desc'] }}</p>
+                            <div class="p-4 pt-5 d-flex flex-column flex-grow-1">
+                                <h5 class="fw-bold text-center service-title-{{ $service['accent'] }}">
+                                    {{ $service['title'] }}</h5>
+                                <p class="text-muted text-center small">{{ $service['desc'] }}</p>
 
-                            <span class="service-underline underline-{{ $service['accent'] }} d-block mx-auto"></span>
+                                <span class="service-underline underline-{{ $service['accent'] }} d-block mx-auto"></span>
 
-                            <ul class="service-bullets mt-3 mb-4">
-                                @foreach ($service['bullets'] as $bullet)
-                                    <li>
-                                        <span class="service-check check-{{ $service['accent'] }}">
-                                            <i class="fi fi-rr-check"></i>
-                                        </span>
-                                        {{ $bullet }}
-                                    </li>
-                                @endforeach
-                            </ul>
+                                <ul class="service-bullets mt-3 mb-4">
+                                    @foreach ($service['bullets'] as $bullet)
+                                        <li>
+                                            <span class="service-check check-{{ $service['accent'] }}">
+                                                <i class="fi fi-rr-check"></i>
+                                            </span>
+                                            {{ $bullet }}
+                                        </li>
+                                    @endforeach
+                                </ul>
 
-                            <a href="{{ check() ? route('doctors') : route('register') }}"
-                                class="btn service-btn btn-{{ $service['accent'] }} w-100 mt-auto d-flex align-items-center justify-content-center gap-2">
-                                {{ __('app.home.service_cta') }} <i class="fi fi-rr-arrow-right"></i>
-                            </a>
+                                {{-- <a href="{{ check() ? route('doctors') : route('register') }}"
+                                    class="btn service-btn btn-{{ $service['accent'] }} w-100 mt-auto d-flex align-items-center justify-content-center gap-2">
+                                    {{ __('app.home.service_cta') }} <i class="fi fi-rr-arrow-right"></i>
+                                </a> --}}
+                            </div>
                         </div>
                     </div>
                 @endforeach
@@ -225,66 +253,11 @@
         </div>
     </section>
 
-    <section class="py-5 text-center how-works">
+    <section class="pb-3 text-center how-works">
         <div class="container">
-            <h6 class="how-works-label">{{ __('app.home.how_works_label') }}</h6>
-            <h2 class="fw-bold mb-5">{{ __('app.home.how_works_headline') }}</h2>
-
-            @php
-                $howSteps = [
-                    [
-                        'img' => 'home-icon-1.png',
-                        'title' => __('app.home.step1_title'),
-                        'desc' => __('app.home.step1_desc'),
-                    ],
-                    [
-                        'img' => 'home-icon-2.png',
-                        'title' => __('app.home.step2_title'),
-                        'desc' => __('app.home.step2_desc'),
-                    ],
-                    [
-                        'img' => 'icon-3.webp',
-                        'title' => __('app.home.step3_title'),
-                        'desc' => __('app.home.step3_desc'),
-                    ],
-                ];
-            @endphp
-
-            <div class="row align-items-stretch g-4">
-
-                @foreach ($howSteps as $index => $step)
-                    <div class="col-lg-3 col-md-6 position-relative how-step-col">
-                        <div class="how-step-icon mx-auto position-relative">
-                            <img src="{{ asset('build/img/' . $step['img']) }}" alt="{{ $step['title'] }}">
-                            <span class="how-step-badge">{{ $index + 1 }}</span>
-                        </div>
-
-                        <h5 class="fw-bold text-primary mt-3">{{ $step['title'] }}</h5>
-                        <p class="text-muted small mb-0">{{ $step['desc'] }}</p>
-
-                        {{-- @if (!$loop->last)
-                            <span class="how-step-connector d-none d-lg-flex">
-                                <i class="fi fi-rr-angle-small-right"></i>
-                            </span>
-                        @endif --}}
-                    </div>
-                @endforeach
-
-                <!-- SIDE HIGHLIGHT CARD -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="how-side-card h-100 d-flex align-items-center gap-3 p-4 text-start">
-                        <i class="fi fi-rr-shield-check how-side-icon"></i>
-                        <div>
-                            <h6 class="fw-bold text-primary mb-1">{{ __('app.home.how_works_side_title') }}</h6>
-                            <p class="text-muted small mb-0">{{ __('app.home.how_works_side_desc') }}</p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
 
             <!-- STATS STRIP -->
-            <div class="row g-3 how-stats-strip text-start mt-4">
+            <div class="row g-3 how-stats-strip text-start">
 
                 <div class="col-md-3 col-6">
                     <div class="d-flex align-items-center gap-3">
@@ -503,84 +476,107 @@
         <section class="py-5 leftpadding">
             <div class="container">
                 <div class="text-center mb-5">
-                    <h6 class="text-secondary fw-semibold">{{ __('app.home.specialties_label') }}</h6>
-                    <h2 class="fw-bold">{{ __('app.home.specialties_headline') }}</h2>
+                    <h2 class="fw-bold specialties-headline">{{ __('app.home.specialties_headline') }}</h2>
                     <p class="text-muted mx-auto" style="max-width:480px;">
                         {{ __('app.home.specialties_desc') }}
                     </p>
                 </div>
 
-                <div class="row g-3 justify-content-center">
+                <div class="row g-4 justify-content-center">
                     @php
                         $specialties = [
                             [
-                                'name' => 'Cardiology',
+                                'name' => __('app.home.spec1_name'),
+                                'desc' => __('app.home.spec1_desc'),
+                                'img' => 'cardiology.jpeg',
                                 'icon' => 'fa-solid fa-heart-pulse',
                                 'color' => '#e74c3c',
                                 'bg' => '#fdecea',
                             ],
                             [
-                                'name' => 'Neurology',
+                                'name' => __('app.home.spec2_name'),
+                                'desc' => __('app.home.spec2_desc'),
+                                'img' => 'brain.jpeg',
                                 'icon' => 'fa-solid fa-brain',
                                 'color' => '#8e44ad',
                                 'bg' => '#f3eafd',
                             ],
                             [
-                                'name' => 'Orthopedics',
+                                'name' => __('app.home.spec3_name'),
+                                'desc' => __('app.home.spec3_desc'),
+                                'img' => 'bone.jpeg',
                                 'icon' => 'fa-solid fa-bone',
                                 'color' => '#2980b9',
                                 'bg' => '#eaf4fd',
                             ],
                             [
-                                'name' => 'Pulmonology',
+                                'name' => __('app.home.spec4_name'),
+                                'desc' => __('app.home.spec4_desc'),
+                                'img' => 'chest.jpeg',
                                 'icon' => 'fa-solid fa-lungs',
                                 'color' => '#16a085',
                                 'bg' => '#e8f8f5',
                             ],
                             [
-                                'name' => 'Pediatrics',
+                                'name' => __('app.home.spec5_name'),
+                                'desc' => __('app.home.spec5_desc'),
+                                'img' => 'pediatrics.jpeg',
                                 'icon' => 'fa-solid fa-baby',
                                 'color' => '#e67e22',
                                 'bg' => '#fef5ec',
                             ],
                             [
-                                'name' => "Women's Health",
+                                'name' => __('app.home.spec6_name'),
+                                'desc' => __('app.home.spec6_desc'),
+                                'img' => 'womens-health.jpeg',
                                 'icon' => 'fa-solid fa-venus',
                                 'color' => '#e91e8c',
                                 'bg' => '#fde8f4',
                             ],
                             [
-                                'name' => 'Internal Medicine',
+                                'name' => __('app.home.spec7_name'),
+                                'desc' => __('app.home.spec7_desc'),
+                                'img' => 'interneal-medicine.jpeg',
                                 'icon' => 'fa-solid fa-stethoscope',
                                 'color' => '#1abc9c',
                                 'bg' => '#e8faf6',
                             ],
                             [
-                                'name' => 'Oncology',
+                                'name' => __('app.home.spec8_name'),
+                                'desc' => __('app.home.spec8_desc'),
+                                'img' => 'oncology.jpeg',
                                 'icon' => 'fa-solid fa-ribbon',
                                 'color' => '#9b59b6',
                                 'bg' => '#f5eefa',
                             ],
                             [
-                                'name' => 'Endocrinology',
+                                'name' => __('app.home.spec9_name'),
+                                'desc' => __('app.home.spec9_desc'),
+                                'img' => 'endo.jpeg',
                                 'icon' => 'fa-solid fa-dna',
                                 'color' => '#5b6abf',
                                 'bg' => '#edeffe',
                             ],
                             [
-                                'name' => 'Family Medicine',
+                                'name' => __('app.home.spec10_name'),
+                                'desc' => __('app.home.spec10_desc'),
+                                'img' => 'family.jpeg',
                                 'icon' => 'fa-solid fa-people-group',
                                 'color' => '#27ae60',
                                 'bg' => '#eafaf1',
                             ],
                             [
-                                'name' => 'ENT',
+                                'name' => __('app.home.spec11_name'),
+                                'desc' => __('app.home.spec11_desc'),
+                                'img' => 'ent.jpeg',
                                 'icon' => 'fa-solid fa-ear-listen',
                                 'color' => '#f39c12',
                                 'bg' => '#fef9ec',
                             ],
                             [
-                                'name' => 'Dermatology',
+                                'name' => __('app.home.spec12_name'),
+                                'desc' => __('app.home.spec12_desc'),
+                                'img' => 'dermatology.jpeg',
                                 'icon' => 'fa-solid fa-hand-dots',
                                 'color' => '#00b4d8',
                                 'bg' => '#e8f8fc',
@@ -590,25 +586,39 @@
 
                     @foreach ($specialties as $spec)
                         <div class="col-6 col-md-3 {{ $loop->index >= 6 ? 'd-none d-md-block' : '' }}">
-                            <div class="specialty-card text-center p-3 border rounded-3 bg-white h-100">
-                                <div class="specialty-icon mx-auto mb-3"
-                                    style="background:{{ $spec['bg'] }}; color:{{ $spec['color'] }};">
-                                    <i class="{{ $spec['icon'] }}"></i>
+                            <div class="specialty-card-v2 h-100 bg-white">
+                                <div class="specialty-photo position-relative">
+                                    <img src="{{ asset('images/specs/' . $spec['img']) }}" alt="{{ $spec['name'] }}"
+                                        class="img-fluid">
+                                    <div class="specialty-photo-icon"
+                                        style="background:{{ $spec['bg'] }}; color:{{ $spec['color'] }};">
+                                        <i class="{{ $spec['icon'] }}"></i>
+                                    </div>
                                 </div>
-                                <p class="fw-semibold mb-0 small">{{ $spec['name'] }}</p>
+                                <div class="specialty-body text-center p-3 pt-4">
+                                    <h6 class="fw-bold text-primary mb-1">{{ $spec['name'] }}</h6>
+                                    <p class="text-muted small mb-0">{{ $spec['desc'] }}</p>
+                                </div>
                             </div>
                         </div>
                     @endforeach
                 </div>
 
-                <div class="mt-4 p-3 border rounded-3 d-flex align-items-center gap-3 specialty-note">
-                    <div class="specialty-note-icon">
-                        <i class="fa-solid fa-shield-halved"></i>
+                <div
+                    class="mt-4 p-3 rounded-3 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 specialty-note">
+                    <div class="d-flex align-items-center gap-3 text-center text-md-start">
+                        <div class="specialty-note-icon">
+                            <i class="fi fi-rr-shield-check"></i>
+                        </div>
+                        <div>
+                            <p class="mb-0 fw-bold">{{ __('app.home.and_more') }}</p>
+                            <p class="mb-0 text-muted small">{{ __('app.home.specialist_note') }}</p>
+                        </div>
                     </div>
-                    <div>
-                        <p class="mb-0 fw-bold">{{ __('app.home.and_more') }}</p>
-                        <p class="mb-0 text-muted small">{{ __('app.home.specialist_note') }}</p>
-                    </div>
+                    <a href="{{ check() ? route('doctors') : route('register') }}"
+                        class="btn btn-primary px-4 d-flex align-items-center justify-content-center gap-2 flex-shrink-0">
+                        {{ __('app.home.create_free_account') }} <i class="fi fi-rr-arrow-right"></i>
+                    </a>
                 </div>
             </div>
         </section>
@@ -755,6 +765,7 @@
             background: #fff;
             border: 1px solid #eee;
             border-radius: 14px;
+            overflow: hidden;
             transition: 0.3s;
         }
 
@@ -763,15 +774,28 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
         }
 
+        .service-photo img {
+            width: 100%;
+            height: 170px;
+            object-fit: cover;
+            display: block;
+        }
+
         .service-icon-circle {
-            width: 84px;
-            height: 84px;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translate(-50%, 50%);
+            width: 76px;
+            height: 76px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #fff;
-            font-size: 32px;
+            font-size: 28px;
+            border: 4px solid #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
         }
 
         .icon-grad-blue {
@@ -1174,27 +1198,61 @@
         }
 
         /* SPECIALTIES GRID (guest view) */
-        .specialty-card {
+        .specialties-headline {
+            position: relative;
+            display: inline-block;
+        }
+
+        .specialties-headline::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -6px;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            border-radius: 2px;
+            background: var(--secondary);
+        }
+
+        .specialty-card-v2 {
+            border: 1px solid #eee;
+            border-radius: 14px;
+            overflow: hidden;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .specialty-card:hover {
+        .specialty-card-v2:hover {
             transform: translateY(-4px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
         }
 
-        .specialty-icon {
-            width: 74px;
-            height: 74px;
-            border-radius: 14px;
+        .specialty-photo img {
+            width: 100%;
+            height: 165px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .specialty-photo-icon {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translate(-50%, 50%);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 26px;
+            font-size: 24px;
+            border: 4px solid #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
         }
 
         .specialty-note {
             background: #f8f9fa;
+            border: 1px solid #eee;
         }
 
         .specialty-note-icon {

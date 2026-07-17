@@ -19,37 +19,37 @@
             @php
                 $steps = [
                     [
-                        'icon' => 'upload',
+                        'img' => '1.png',
                         'accent' => 'blue',
                         'title' => __('app.how_it_works.step1_title'),
                         'desc' => __('app.how_it_works.step1_desc'),
                     ],
                     [
-                        'icon' => 'user-md',
+                        'img' => '2.png',
                         'accent' => 'teal',
                         'title' => __('app.how_it_works.step2_title'),
                         'desc' => __('app.how_it_works.step2_desc'),
                     ],
                     [
-                        'icon' => 'calendar',
+                        'img' => '3.png',
                         'accent' => 'blue',
                         'title' => __('app.how_it_works.step3_title'),
                         'desc' => __('app.how_it_works.step3_desc'),
                     ],
                     [
-                        'icon' => 'video-camera',
+                        'img' => '4.png',
                         'accent' => 'teal',
                         'title' => __('app.how_it_works.step4_title'),
                         'desc' => __('app.how_it_works.step4_desc'),
                     ],
                     [
-                        'icon' => 'document-signed',
+                        'img' => '5.png',
                         'accent' => 'purple',
                         'title' => __('app.how_it_works.step5_title'),
                         'desc' => __('app.how_it_works.step5_desc'),
                     ],
                     [
-                        'icon' => 'shield-check',
+                        'img' => '6.png',
                         'accent' => 'blue',
                         'title' => __('app.how_it_works.step6_title'),
                         'desc' => __('app.how_it_works.step6_desc'),
@@ -62,19 +62,25 @@
                     <div class="col-6 col-md-4 col-lg position-relative step-col">
                         <div class="step-card h-100 position-relative">
 
-                            <div class="step-icon-circle icon-grad-{{ $step['accent'] }}">
-                                <i class="fi fi-rr-{{ $step['icon'] }}"></i>
+                            <div class="step-photo position-relative">
+                                <img src="{{ asset('images/howitworks/' . $step['img']) }}" alt="{{ $step['title'] }}"
+                                    class="img-fluid">
+                                <span class="step-badge badge-{{ $step['accent'] }}">{{ $index + 1 }}</span>
                             </div>
-                            <span class="badge badge-{{ $step['accent'] }} mt-2">{{ $index + 1 }}</span>
 
+                            <div class="p-3 pt-4">
+                                <h6 class="fw-semibold">{{ $step['title'] }}</h6>
+                                <p class="text-muted small">{{ $step['desc'] }}</p>
 
-                            <h6 class="fw-semibold mt-3">{{ $step['title'] }}</h6>
-                            <p class="text-muted small">{{ $step['desc'] }}</p>
-
-                            <span class="step-underline underline-{{ $step['accent'] }}"></span>
+                                <span class="step-underline underline-{{ $step['accent'] }}"></span>
+                            </div>
                         </div>
 
-
+                        {{-- @if (!$loop->last)
+                            <span class="step-arrow d-none d-lg-flex">
+                                <i class="fi fi-rr-angle-small-right"></i>
+                            </span>
+                        @endif --}}
                     </div>
                 @endforeach
             </div>
@@ -209,8 +215,8 @@
             border: 1px solid #eee;
             border-radius: 12px;
             background: #fff;
+            overflow: hidden;
             transition: 0.3s;
-            padding: 44px 16px 24px;
         }
 
         .step-card:hover {
@@ -218,50 +224,31 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
         }
 
-        /* STEP ICON CIRCLE — sits half in / half out of the card's top border */
-        .step-icon-circle {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 28px;
+        /* STEP PHOTO */
+        .step-photo img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            display: block;
         }
 
-        .icon-grad-blue {
-            background: linear-gradient(135deg, var(--primary), #2f7ed8);
-        }
-
-        .icon-grad-teal {
-            background: linear-gradient(135deg, var(--secondary), #17c3a4);
-        }
-
-        .icon-grad-purple {
-            background: linear-gradient(135deg, #7b3fe4, #5b2fc2);
-        }
-
-        /* NUMBER BADGE (bottom of icon circle) */
+        /* NUMBER BADGE — sits half in / half out of the photo's bottom edge */
         .step-badge {
             position: absolute;
-            bottom: -10px;
+            bottom: 0;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translate(-50%, 50%);
             color: #fff;
-            width: 28px;
-            height: 28px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 13px;
-            font-weight: 600;
-            border: 2px solid #fff;
+            font-size: 14px;
+            font-weight: 700;
+            border: 3px solid #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
 
         .badge-blue {
@@ -297,10 +284,10 @@
             background: #5b2fc2;
         }
 
-        /* CONNECTOR ARROW — aligned with the icon circle sitting on the card's top border */
+        /* CONNECTOR ARROW — aligned with the number badge sitting on the photo's bottom edge */
         .step-arrow {
             position: absolute;
-            top: 0;
+            top: 160px;
             right: -22px;
             transform: translateY(-50%);
             align-items: center;
