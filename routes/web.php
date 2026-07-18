@@ -133,8 +133,8 @@ Route::middleware(['firebase.auth'])->group(function () {
 
 });
 
-Route::get('/doctors', [DoctorController::class, 'index'])->middleware('firebase.auth')->name('doctors');
-Route::get('/doctor-details/{id}', [DoctorController::class, 'show'])->name('doctor-details');
+Route::get('/doctors', [DoctorController::class, 'index'])->middleware(['firebase.auth', 'role:patient'])->name('doctors');
+Route::get('/doctor-details/{id}', [DoctorController::class, 'show'])->middleware('role:patient')->name('doctor-details');
 
 Route::get('/about-us', function () {
     return view('about-us');

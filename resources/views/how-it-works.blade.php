@@ -213,15 +213,16 @@
         /* STEP CARD */
         .step-card {
             border: 1px solid #eee;
-            border-radius: 12px;
+            border-radius: 16px;
             background: #fff;
             overflow: hidden;
-            transition: 0.3s;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
         }
 
         .step-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            transform: translateY(-6px);
+            box-shadow: 0 18px 36px rgba(15, 23, 42, 0.1);
         }
 
         /* STEP PHOTO */
@@ -302,8 +303,16 @@
         /* FEATURE STRIP */
         .feature-strip {
             background: #f8f9fb;
-            border-radius: 12px;
-            padding: 20px;
+            border-radius: 16px;
+            padding: 24px 20px;
+        }
+
+        .feature-box {
+            transition: transform 0.25s ease;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-3px);
         }
 
         .feature-icon-circle {
@@ -314,6 +323,12 @@
             align-items: center;
             justify-content: center;
             margin-bottom: 10px;
+            box-shadow: 0 6px 14px rgba(15, 23, 42, 0.08);
+            transition: transform 0.25s ease;
+        }
+
+        .feature-box:hover .feature-icon-circle {
+            transform: scale(1.08);
         }
 
         .feature-icon-circle i {
@@ -347,8 +362,22 @@
         /* CTA BANNER */
         .cta-banner {
             background: linear-gradient(120deg, var(--primary), #001f4d);
-            border-radius: 16px;
+            border-radius: 18px;
             padding: 32px 40px;
+            box-shadow: 0 20px 45px rgba(0, 31, 77, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-banner::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
         }
 
         .cta-shield {
@@ -390,6 +419,28 @@
         .disclaimer i {
             font-size: 20px;
             color: var(--secondary);
+        }
+
+        /* PREMIUM MOBILE REFINEMENTS */
+        @media (max-width: 767.98px) {
+            .cta-banner {
+                text-align: center;
+                padding: 28px 24px;
+                justify-content: center !important;
+            }
+
+            .cta-banner .d-flex.align-items-center.gap-3 {
+                flex-direction: column;
+            }
+
+            .cta-stats {
+                justify-content: center;
+                text-align: start;
+            }
+
+            .step-photo img {
+                height: 130px;
+            }
         }
     </style>
 @endsection

@@ -90,6 +90,23 @@ if (! function_exists('is_doctor')) {
     }
 }
 
+if (! function_exists('patient_cta_route')) {
+    /**
+     * Where a "Get a Second Opinion" / "Book Now" style CTA should send the
+     * visitor: guests go to the given auth route, patients go to the doctors
+     * listing, and doctors (who can't book other doctors) go to their own
+     * dashboard instead of hitting the patient-only /doctors route.
+     */
+    function patient_cta_route(string $guestRoute = 'login')
+    {
+        if (! check()) {
+            return route($guestRoute);
+        }
+
+        return is_doctor() ? route('doctor.dashboard') : route('doctors');
+    }
+}
+
 if (! function_exists('topSpeacilalization')) {
     function topSpeacilalization()
     {

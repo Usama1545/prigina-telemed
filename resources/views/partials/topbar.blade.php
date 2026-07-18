@@ -75,9 +75,12 @@
                                     class="main-menu">{{ __('app.nav.how_it_works') }}</a>
                             </li>
 
-                            <li class="megamenu {{ request()->is('doctors') ? 'active' : '' }}">
-                                <a href="{{ url('doctors') }}" class="main-menu">{{ __('app.nav.specialists') }}</a>
-                            </li>
+                            @unless (is_doctor())
+                                <li class="megamenu {{ request()->is('doctors') ? 'active' : '' }}">
+                                    <a href="{{ url('doctors') }}"
+                                        class="main-menu">{{ __('app.nav.specialists') }}</a>
+                                </li>
+                            @endunless
 
                             <li class="megamenu {{ request()->is('for-patients') ? 'active' : '' }}">
                                 <a href="{{ url('for-patients') }}"

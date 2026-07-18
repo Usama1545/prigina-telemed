@@ -176,31 +176,31 @@
 
             <div class="d-flex flex-wrap justify-content-center gap-2 md-gap-4 ">
 
-                <div class="text-center border rounded p-3 bg-white shadow-sm" style="width: 200px;">
+                <div class="text-center border rounded p-3 bg-white why-card">
                     <i class="fi fi-rr-users text-secondary fs-3 mb-2 d-block"></i>
                     <h6 class="fw-semibold mb-1">{{ __('app.for_patients.top_specialists') }}</h6>
                     <p class="small text-muted mb-0">{{ __('app.for_patients.top_specialists_desc') }}</p>
                 </div>
 
-                <div class="text-center border rounded p-3 bg-white shadow-sm" style="width: 200px;">
+                <div class="text-center border rounded p-3 bg-white why-card">
                     <i class="fi fi-rr-clock text-secondary fs-3 mb-2 d-block"></i>
                     <h6 class="fw-semibold mb-1">{{ __('app.for_patients.convenient') }}</h6>
                     <p class="small text-muted mb-0">{{ __('app.for_patients.convenient_desc') }}</p>
                 </div>
 
-                <div class="text-center border rounded p-3 bg-white shadow-sm" style="width: 200px;">
+                <div class="text-center border rounded p-3 bg-white why-card">
                     <i class="fi fi-rr-heart text-secondary fs-3 mb-2 d-block"></i>
                     <h6 class="fw-semibold mb-1">{{ __('app.for_patients.better_decisions') }}</h6>
                     <p class="small text-muted mb-0">{{ __('app.for_patients.better_decisions_desc') }}</p>
                 </div>
 
-                <div class="text-center border rounded p-3 bg-white shadow-sm" style="width: 200px;">
+                <div class="text-center border rounded p-3 bg-white why-card">
                     <i class="fi fi-rr-globe text-secondary fs-3 mb-2 d-block"></i>
                     <h6 class="fw-semibold mb-1">{{ __('app.for_patients.worldwide') }}</h6>
                     <p class="small text-muted mb-0">{{ __('app.for_patients.worldwide_desc') }}</p>
                 </div>
 
-                <div class="text-center border rounded p-3 bg-white shadow-sm" style="width: 200px;">
+                <div class="text-center border rounded p-3 bg-white why-card">
                     <i class="fi fi-rr-shield-check text-secondary fs-3 mb-2 d-block"></i>
                     <h6 class="fw-semibold mb-1">{{ __('app.for_patients.privacy') }}</h6>
                     <p class="small text-muted mb-0">{{ __('app.for_patients.privacy_desc') }}</p>
@@ -223,7 +223,7 @@
                         <p class="mb-0 text-white">{{ __('app.for_patients.info_desc2') }}</p>
                     </div>
                     <div class="support-info wow fadeInUp" data-wow-duration="1s">
-                        <a href="{{ check() ? route('doctors') : route('login') }}"
+                        <a href="{{ patient_cta_route('login') }}"
                             class="btn btn-light px-4 mt-3 mt-md-0">
                             {{ __('app.for_patients.info_cta') }}
                         </a>
@@ -243,6 +243,12 @@
             align-items: center;
             justify-content: center;
             margin: auto;
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+            transition: transform 0.25s ease;
+        }
+
+        .icon-circle-soft:hover {
+            transform: translateY(-3px) scale(1.05);
         }
 
         .icon-circle-soft i {
@@ -258,6 +264,12 @@
             align-items: center;
             justify-content: center;
             margin: auto;
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+            transition: transform 0.25s ease;
+        }
+
+        .icon-circle-primary:hover {
+            transform: translateY(-3px) scale(1.05);
         }
 
         .icon-circle-primary i {
@@ -273,8 +285,8 @@
             /* centers horizontally */
             background: #fff;
             padding: 16px;
-            border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 14px;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
             width: 100%;
             max-width: 350px;
         }
@@ -310,15 +322,16 @@
         /* STEP CARD */
         .step-card {
             border: 1px solid #eee;
-            border-radius: 12px;
+            border-radius: 16px;
             background: #fff;
             overflow: hidden;
-            transition: 0.3s;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
         }
 
         .step-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            transform: translateY(-6px);
+            box-shadow: 0 18px 36px rgba(15, 23, 42, 0.1);
         }
 
         /* STEP PHOTO */
@@ -401,11 +414,41 @@
             width: 200px;
         }
 
+        /* WHY CARDS */
+        .why-card {
+            width: 200px;
+            max-width: 100%;
+            border-radius: 14px !important;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .why-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 32px rgba(15, 23, 42, 0.1);
+        }
+
         /* DISCLAIMER */
         .disclaimer {
             background: #f1f5f9;
             padding: 10px 15px;
             border-radius: 8px;
+        }
+
+        /* PREMIUM MOBILE REFINEMENTS */
+        @media (max-width: 767.98px) {
+            .why-card {
+                width: 45%;
+            }
+
+            .step-photo img {
+                height: 130px;
+            }
+
+            .testimonial-box {
+                max-width: 90%;
+                padding: 12px;
+            }
         }
     </style>
 @endsection

@@ -206,7 +206,7 @@
                     <p class="mb-0 text-white">{{ __('app.about_us.cta_desc') }}</p>
                 </div>
                 <div class="support-info wow fadeInUp" data-wow-duration="1s">
-                    <a href="{{ check() ? route('doctors') : route('login') }}" class="btn btn-light px-4 mt-3 mt-md-0">
+                    <a href="{{ patient_cta_route('login') }}" class="btn btn-light px-4 mt-3 mt-md-0">
                         {{ __('app.about_us.cta_btn') }}
                     </a>
                 </div>

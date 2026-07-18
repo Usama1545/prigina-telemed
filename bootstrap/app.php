@@ -25,6 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'firebase.auth' => \App\Http\Middleware\FirebaseAuthMiddleware::class,
             'admin.auth' => \App\Http\Middleware\AdminAuthMiddleware::class,
+            'role' => \App\Http\Middleware\RoleMiddleware::class,
         ]);
         $middleware->validateCsrfTokens(except: [
             'broadcasting/auth',

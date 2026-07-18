@@ -36,7 +36,7 @@
                     </div>
 
                     <div class="mt-4 d-flex gap-3">
-                        <a href="{{ check() ? route('doctors') : route('login') }}" class="btn btn-primary px-4 py-2">
+                        <a href="{{ patient_cta_route('login') }}" class="btn btn-primary px-4 py-2">
                             {{ __('app.home.get_second_opinion') }}
                         </a>
                         <a href="{{ route('how-it-works') }}" class="btn btn-outline-secondary px-4 py-2">
@@ -127,7 +127,8 @@
         <div class="px-3">
             <div class="row justify-content-center">
                 <div class="col-lg-8">
-                    <div class="d-flex align-items-center gap-4 p-4 rounded-3 border" style="background:#f8faff;">
+                    <div class="d-flex align-items-center gap-4 p-4 rounded-3 border brochure-box"
+                        style="background:#f8faff;">
                         <div class="flex-shrink-0 d-flex align-items-center justify-content-center rounded-3"
                             style="width:72px;height:72px;background:#e8eef8;">
                             <i class="fi fi-rr-document d-block lh-1 text-primary"
@@ -379,7 +380,7 @@
 
 
     <!-- DOCTORS -->
-    @if (check())
+    @if (check() && is_patient())
         <section class="py-5">
             <div class="container">
                 <div class="position-relative mb-5">
@@ -615,7 +616,7 @@
                             <p class="mb-0 text-muted small">{{ __('app.home.specialist_note') }}</p>
                         </div>
                     </div>
-                    <a href="{{ check() ? route('doctors') : route('register') }}"
+                    <a href="{{ patient_cta_route('register') }}"
                         class="btn btn-primary px-4 d-flex align-items-center justify-content-center gap-2 flex-shrink-0">
                         {{ __('app.home.create_free_account') }} <i class="fi fi-rr-arrow-right"></i>
                     </a>
@@ -708,7 +709,7 @@
                         <p class="mb-0 text-white">{{ __('app.home.info_desc') }}</p>
                     </div>
                     <div class="support-info wow fadeInUp" data-wow-duration="1s">
-                        <a href="{{ check() ? route('doctors') : route('login') }}"
+                        <a href="{{ patient_cta_route('login') }}"
                             class="btn btn-light px-4 mt-3 mt-md-0">
                             {{ __('app.home.info_cta') }}
                         </a>
@@ -760,18 +761,30 @@
 
 
     <style>
+        /* BROCHURE BOX */
+        .brochure-box {
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .brochure-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.1);
+        }
+
         /* OUR SERVICES: THE PRIGINA MODEL */
         .service-card {
             background: #fff;
             border: 1px solid #eee;
-            border-radius: 14px;
+            border-radius: 16px;
             overflow: hidden;
-            transition: 0.3s;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
         }
 
         .service-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1);
         }
 
         .service-photo img {
@@ -1110,7 +1123,7 @@
 
 
         .hero-image {
-            border-radius: 20px;
+            border-radius: 24px;
             overflow: hidden;
             position: relative;
         }
@@ -1122,6 +1135,34 @@
             /* smooth blend into left content */
             -webkit-mask-image: linear-gradient(to left, black 75%, transparent 100%);
             mask-image: linear-gradient(to left, black 75%, transparent 100%);
+        }
+
+        /* PREMIUM BUTTONS */
+        .btn-primary,
+        .btn-outline-secondary,
+        .btn-secondary {
+            border-radius: 10px;
+            font-weight: 600;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .btn-primary {
+            box-shadow: 0 10px 20px rgba(0, 58, 139, 0.18);
+        }
+
+        .btn-primary:hover,
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 26px rgba(0, 58, 139, 0.22);
+        }
+
+        .btn-outline-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(28, 148, 134, 0.15);
+        }
+
+        .hero-features .d-flex.align-items-start:hover .hero-feat-icon {
+            transform: translateY(-3px) scale(1.05);
         }
 
         .recieve-section-image {
@@ -1217,14 +1258,15 @@
 
         .specialty-card-v2 {
             border: 1px solid #eee;
-            border-radius: 14px;
+            border-radius: 16px;
             overflow: hidden;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
         }
 
         .specialty-card-v2:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transform: translateY(-5px);
+            box-shadow: 0 16px 32px rgba(15, 23, 42, 0.1);
         }
 
         .specialty-photo img {
@@ -1277,6 +1319,8 @@
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+            transition: transform 0.25s ease;
         }
 
         .trust-badge-icon {
@@ -1310,6 +1354,26 @@
         @media (max-width: 480px) {
             .leftpadding {
                 padding: 0 10px;
+            }
+        }
+
+        /* PREMIUM MOBILE REFINEMENTS */
+        @media (max-width: 767.98px) {
+            .display-5 {
+                font-size: 2rem;
+            }
+
+            .service-card,
+            .specialty-card-v2 {
+                border-radius: 14px;
+            }
+
+            .how-stats-strip {
+                text-align: center;
+            }
+
+            .how-stats-strip .d-flex {
+                justify-content: center;
             }
         }
     </style>
