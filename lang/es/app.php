@@ -205,6 +205,7 @@ return [
         'name' => 'Nombre completo',
         'email' => 'Correo electrónico',
         'phone' => 'Número de teléfono',
+        'bio' => 'Sobre mí (Opcional)',
         'gender' => 'Género',
         'select_gender' => 'Seleccionar género',
         'dob' => 'Fecha de nacimiento',

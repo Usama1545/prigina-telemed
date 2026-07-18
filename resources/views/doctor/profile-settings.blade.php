@@ -105,7 +105,7 @@
                                 </div>
 
                                 <!-- Phone -->
-                                <div class="col-lg-6 col-md-6">
+                                <div class="col-lg-12 col-md-12">
                                     <div class="form-wrap">
 
                                         <label class="form-label">
@@ -114,6 +114,18 @@
 
                                         <input type="text" name="phone" class="form-control"
                                             value="{{ old('phone', current_user()['phone'] ?? '') }}" required>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="form-wrap">
+
+                                        <label class="form-label">
+                                            {{ __('app.profile.bio') }} <span class="text-danger">*</span>
+                                        </label>
+
+                                        <textarea type="text" name="bio" class="form-control" required>{{ old('bio', current_user()['bio'] ?? '') }}</textarea>
 
                                     </div>
                                 </div>

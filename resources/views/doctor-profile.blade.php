@@ -172,25 +172,28 @@
                         $experience = $doctor['experience'] ?? '';
                         
                         $specializations = $doctor['specializations'] ?? [];
-                        if (!empty($specializations)) {
-                            $specializationsList = implode(
-                                ', ',
-                                array_map(function ($spec) {
-                                    return ucwords(str_replace('_', ' ', $spec));
-                                }, $specializations),
-                            );
-                            $bio = __('app.doctor_profile.bio_with_specialization', [
-                                'name' => $name,
-                                'qualification' => $qualification,
-                                'experience' => $experience,
-                                'specializations' => $specializationsList,
-                            ]);
-                        } else {
-                            $bio = __('app.doctor_profile.bio_without_specialization', [
-                                'name' => $name,
-                                'qualification' => $qualification,
-                                'experience' => $experience,
-                            ]);
+                        $bio = $doctor['bio'] ?? '';
+                        if (empty($bio)) {
+                            if (!empty($specializations)) {
+                                $specializationsList = implode(
+                                    ', ',
+                                    array_map(function ($spec) {
+                                        return ucwords(str_replace('_', ' ', $spec));
+                                    }, $specializations),
+                                );
+                                $bio = __('app.doctor_profile.bio_with_specialization', [
+                                    'name' => $name,
+                                    'qualification' => $qualification,
+                                    'experience' => $experience,
+                                    'specializations' => $specializationsList,
+                                ]);
+                            } else {
+                                $bio = __('app.doctor_profile.bio_without_specialization', [
+                                    'name' => $name,
+                                    'qualification' => $qualification,
+                                    'experience' => $experience,
+                                ]);
+                            }
                         }
                         ?>
                         <p>{{ $bio }}

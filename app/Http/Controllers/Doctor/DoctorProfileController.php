@@ -21,6 +21,7 @@ use Kreait\Firebase\Contract\Storage;
 use Stripe\Account;
 use Stripe\AccountLink;
 use Stripe\Stripe;
+use Symfony\Component\Intl\Countries;
 
 class DoctorProfileController extends Controller
 {
@@ -128,6 +129,7 @@ class DoctorProfileController extends Controller
             'breaks' => 'nullable|string',
             'slotDuration' => 'required|numeric',
             'timezone' => 'required|string',
+            'bio' => 'nullable|string',
         ]);
 
         $uid = current_user()['uid'];
@@ -148,6 +150,7 @@ class DoctorProfileController extends Controller
             'workingHours',
             'slotDuration',
             'timezone',
+            'bio',
         ])->toArray();
 
         // ✅ Handle Image Upload
@@ -255,7 +258,7 @@ class DoctorProfileController extends Controller
         $workingDays = current_user()['workingDays'] ?? [];
         $workingHours = current_user()['workingHours'] ?? [];
         $breaks = current_user()['breaks'] ?? [];
-        $countries = \Symfony\Component\Intl\Countries::getNames();
+        $countries = Countries::getNames();
 
         return view('doctor.profile-settings', compact('doctor', 'specializations', 'workingDays', 'workingHours', 'breaks', 'countries'));
     }

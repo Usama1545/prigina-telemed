@@ -206,6 +206,7 @@ return [
         'name' => 'Full Name',
         'email' => 'Email',
         'phone' => 'Phone Number',
+        'bio' => 'About Me (Optional)',
         'gender' => 'Gender',
         'select_gender' => 'Select Gender',
         'dob' => 'Date of Birth',
