@@ -173,6 +173,10 @@
                         
                         $specializations = $doctor['specializations'] ?? [];
                         $bio = $doctor['bio'] ?? '';
+                        if (is_array($bio)) {
+                            $locale = app()->getLocale();
+                            $bio = $bio[$locale] ?? ($bio['en'] ?? '');
+                        }
                         if (empty($bio)) {
                             if (!empty($specializations)) {
                                 $specializationsList = implode(

@@ -122,10 +122,32 @@
                                     <div class="form-wrap">
 
                                         <label class="form-label">
-                                            {{ __('app.profile.bio') }} <span class="text-danger">*</span>
+                                            {{ __('app.profile.bio') }}
                                         </label>
 
-                                        <textarea type="text" name="bio" class="form-control" required>{{ old('bio', current_user()['bio'] ?? '') }}</textarea>
+                                        @php
+                                            $bioRaw = old('bio', current_user()['bio'] ?? '');
+                                            $bioValues = is_array($bioRaw) ? $bioRaw : ['en' => $bioRaw];
+                                            $bioLanguages = [
+                                                'en' => __('app.profile.bio_lang_en'),
+                                                'es' => __('app.profile.bio_lang_es'),
+                                                'fr' => __('app.profile.bio_lang_fr'),
+                                                'ar' => __('app.profile.bio_lang_ar'),
+                                            ];
+                                        @endphp
+
+                                        <select class="form-control mb-2" id="bioLanguageSelect">
+                                            @foreach ($bioLanguages as $code => $label)
+                                                <option value="{{ $code }}">{{ $label }}</option>
+                                            @endforeach
+                                        </select>
+
+                                        @foreach ($bioLanguages as $code => $label)
+                                            <textarea name="bio[{{ $code }}]" class="form-control bio-textarea"
+                                                data-lang="{{ $code }}"
+                                                style="{{ $code !== 'en' ? 'display:none;' : '' }}"
+                                                placeholder="{{ __('app.profile.bio_placeholder') }}">{{ $bioValues[$code] ?? '' }}</textarea>
+                                        @endforeach
 
                                     </div>
                                 </div>
@@ -788,6 +810,10 @@
             margin-bottom: 25px !important;
         }
 
+        .bio-textarea {
+            margin-bottom: 8px;
+        }
+
         .select2-selection__choice {
             background-color: var(--primary) !important;
             border: 1px solid #ffffff !important;
@@ -829,6 +855,15 @@
                 document.getElementById('timezone').value =
                     Intl.DateTimeFormat().resolvedOptions().timeZone;
             }
+        });
+    </script>
+    <script>
+        // Show only the bio textarea for the language currently selected
+        document.getElementById('bioLanguageSelect').addEventListener('change', function() {
+            const selected = this.value;
+            document.querySelectorAll('.bio-textarea').forEach(function(textarea) {
+                textarea.style.display = textarea.dataset.lang === selected ? 'block' : 'none';
+            });
         });
     </script>
     <script>

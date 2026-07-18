@@ -18,6 +18,9 @@
         $fee = $doctor['consultationFee'] ?? null;
         $earnings = $doctor['totalEarnings'] ?? 0;
         $about = $doctor['about'] ?? ($doctor['bio'] ?? null);
+        if (is_array($about)) {
+            $about = $about[app()->getLocale()] ?? ($about['en'] ?? null);
+        }
         $isVerified = (bool) ($doctor['isVerified'] ?? false);
         $isActive = (bool) ($doctor['isActive'] ?? false);
         $isTop = (bool) ($doctor['isTopDoctor'] ?? false);

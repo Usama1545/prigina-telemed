@@ -129,7 +129,11 @@ class DoctorProfileController extends Controller
             'breaks' => 'nullable|string',
             'slotDuration' => 'required|numeric',
             'timezone' => 'required|string',
-            'bio' => 'nullable|string',
+            'bio' => 'nullable|array',
+            'bio.en' => 'nullable|string',
+            'bio.es' => 'nullable|string',
+            'bio.fr' => 'nullable|string',
+            'bio.ar' => 'nullable|string',
         ]);
 
         $uid = current_user()['uid'];
@@ -150,8 +154,16 @@ class DoctorProfileController extends Controller
             'workingHours',
             'slotDuration',
             'timezone',
-            'bio',
         ])->toArray();
+
+        $bioInput = $validated['bio'] ?? [];
+
+        $data['bio'] = [
+            'en' => $bioInput['en'] ?? '',
+            'es' => $bioInput['es'] ?? '',
+            'fr' => $bioInput['fr'] ?? '',
+            'ar' => $bioInput['ar'] ?? '',
+        ];
 
         // ✅ Handle Image Upload
         if ($request->hasFile('image')) {
