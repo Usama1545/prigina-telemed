@@ -40,7 +40,7 @@ class QualificationExperienceController extends Controller
 
         $this->firestore->createWithId($type, $id, [
             'name' => $data['name'],
-            'isActive' => $data['isActive'] ?? false,
+            'isActive' => $data['isActive'] == 1 ? ($data['isActive'] == 1 ? true : false) : false,
             'docId' => $id,
         ]);
 
@@ -62,7 +62,7 @@ class QualificationExperienceController extends Controller
 
         $this->firestore->update($type, $id, [
             'name' => $data['name'],
-            'isActive' => $data['isActive'] ?? false,
+            'isActive' => $data['isActive'] == 1 ? ($data['isActive'] == 1 ? true : false) : false,
         ]);
 
         return back()->with('success', 'Qualification/Experience was updated successfully.');
