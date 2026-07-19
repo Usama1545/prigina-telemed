@@ -156,8 +156,8 @@ class BookingController extends Controller
         }
         $consultationFee = (float) $validated['amount'];
         $stripeFee = round($consultationFee * (self::STRIPE_FEE_PERCENT / 100), 2);
-        $settings = $firestore->get('app_settings') ?? [];
-        $commission = (float) ($settings['payment']['defaultPlatformFeePercent'] ?? 30);
+        $settings = $firestore->find('app_settings', 'payment') ?? [];
+        $commission = (float) ($settings['defaultPlatformFeePercent'] ?? 30);
         $transferAmount = (int) round($consultationFee * (1 - $commission / 100) * 100); // cents
         $netAmount = round($transferAmount / 100, 2);
         $platformFee = round($consultationFee - $netAmount, 2);

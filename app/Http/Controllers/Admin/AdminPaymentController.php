@@ -49,8 +49,8 @@ class AdminPaymentController extends Controller
         }
 
         $totalAmount = (float) ($appointment['amount'] ?? 0);
-        $settings = $this->firestore->first('app_settings') ?? [];
-        $commission = (float) ($settings['payment']['defaultPlatformFeePercent'] ?? 30);
+        $settings = $this->firestore->find('app_settings', 'payment') ?? [];
+        $commission = (float) ($settings['defaultPlatformFeePercent'] ?? 30);
         $transferAmount = (int) round($totalAmount * (1 - $commission / 100) * 100); // cents
 
         if ($transferAmount <= 0) {
