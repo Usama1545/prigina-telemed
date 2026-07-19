@@ -153,7 +153,12 @@ class BookingController extends Controller
                 $documentUrls[] = 'https://storage.googleapis.com/'.$bucket->name().'/'.$filePath;
             }
         }
-
+        $consultationFee = (float) $validated['amount'];
+        $stripeFee = round($consultationFee * (self::STRIPE_FEE_PERCENT / 100), 2);
+        $commission = (float) ($settings['payment']['defaultPlatformFeePercent'] ?? 30);
+        $transferAmount = (int) round($consultationFee * (1 - $commission / 100) * 100); // cents
+        $netAmount = round($transferAmount / 100, 2);
+        $platformFee = round($consultationFee - $netAmount, 2);
         $appointmentData = [
             'id' => $documentId,
             'doctorId' => $validated['doctor_id'],
@@ -179,6 +184,11 @@ class BookingController extends Controller
             'doctorLocalTime' => $startDateTime->format('h:i A').' - '.$endDateTime->format('h:i A'),
             'createdAt' => now(),
             'updatedAt' => now(),
+            'totalAmount' => $consultationFee + $stripeFee,
+            'transactionFee' => $stripeFee ?? 0,
+            'platformFeePercent' => $commission ?? 30,
+            'doctorAmount' => $netAmount ?? 0,
+            'platformCommission' => $platformFee ?? 0,
         ];
         $firestore = app(FirestoreService::class);
 
