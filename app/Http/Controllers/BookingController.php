@@ -93,6 +93,7 @@ class BookingController extends Controller
             'problem' => 'nullable|string',
             'amount' => 'required|numeric',
         ]);
+        $firestore = app(FirestoreService::class);
 
         $user = current_user();
         $setting = $this->appSetting->first();
@@ -155,6 +156,7 @@ class BookingController extends Controller
         }
         $consultationFee = (float) $validated['amount'];
         $stripeFee = round($consultationFee * (self::STRIPE_FEE_PERCENT / 100), 2);
+        $settings = $firestore->first('app_settings') ?? [];
         $commission = (float) ($settings['payment']['defaultPlatformFeePercent'] ?? 30);
         $transferAmount = (int) round($consultationFee * (1 - $commission / 100) * 100); // cents
         $netAmount = round($transferAmount / 100, 2);
@@ -190,7 +192,6 @@ class BookingController extends Controller
             'doctorAmount' => $netAmount ?? 0,
             'platformCommission' => $platformFee ?? 0,
         ];
-        $firestore = app(FirestoreService::class);
 
         $appointment = $firestore->createWithId('appointments', $documentId, $appointmentData);
 
