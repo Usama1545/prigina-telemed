@@ -17,6 +17,10 @@
                     <a href="{{ route('admin.specialities') }}"><i class="fe fe-users"></i>
                         <span>Specialities</span></a>
                 </li>
+                <li class="{{ Request::is('admin/qualification-experience') ? 'active' : '' }}">
+                    <a href="{{ route('admin.qualification-experience') }}"><i class="fe fe-book"></i>
+                        <span>Qualification & Experience</span></a>
+                </li>
                 <li class="{{ Request::is('admin/doctor-list') ? 'active' : '' }}">
                     <a href="{{ route('admin.doctor-list') }}"><i class="fe fe-user-plus"></i> <span>Doctors</span></a>
                 </li>

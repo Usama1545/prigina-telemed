@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\AdminPaymentController;
 use App\Http\Controllers\Admin\AdminReportController;
 use App\Http\Controllers\Admin\AdminSecondOpinionController;
 use App\Http\Controllers\Admin\AdminSupportTicketController;
+use App\Http\Controllers\Admin\QualificationExperienceController;
 use Illuminate\Support\Facades\Route;
 
 // =============================
@@ -58,6 +59,11 @@ Route::middleware(['admin.auth'])->group(function () {
     Route::get('/notifications/feed', [AdminNotificationController::class, 'feed'])->name('notifications.feed');
     Route::patch('/notifications/{id}/read', [AdminNotificationController::class, 'markRead'])->name('notifications.read');
     Route::post('/notifications/read-all', [AdminNotificationController::class, 'markAllRead'])->name('notifications.read-all');
+
+    Route::get('/qualification-experience', [QualificationExperienceController::class, 'index'])->name('qualification-experience');
+    Route::post('/qualification-experience', [QualificationExperienceController::class, 'store'])->name('qualification-experience.store');
+    Route::put('/qualification-experience/{id}', [QualificationExperienceController::class, 'update'])->name('qualification-experience.update');
+    Route::delete('/qualification-experience/{id}', [QualificationExperienceController::class, 'delete'])->name('qualification-experience.delete');
 
     Route::get('/reports', [AdminReportController::class, 'index'])->name('reports');
 

@@ -197,3 +197,25 @@ if (! function_exists('patient_age')) {
         }
     }
 }
+
+if (! function_exists('getQualifications')) {
+    function getQualifications()
+    {
+        $firestore = app(FirestoreService::class);
+
+        $qualifications = $firestore->get('qualifications');
+
+        return array_values(array_filter($qualifications, fn ($qualification) => $qualification['isActive'] ?? false));
+    }
+}
+
+if (! function_exists('getExperienceRanges')) {
+    function getExperienceRanges()
+    {
+        $firestore = app(FirestoreService::class);
+
+        $qualifications = $firestore->get('experience_ranges');
+
+        return array_values(array_filter($qualifications, fn ($qualification) => $qualification['isActive'] ?? false));
+    }
+}

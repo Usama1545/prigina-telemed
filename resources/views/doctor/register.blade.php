@@ -17,7 +17,8 @@
                     </div>
                     <div class="col-md-6 col-lg-7 login-right">
                         <div class="login-header">
-                            <h3 class="text-primary">{{ __('app.doctor_register.title') }} <a href="{{ route('register') }}">{{ __('app.doctor_register.not_doctor') }}</a></h3>
+                            <h3 class="text-primary">{{ __('app.doctor_register.title') }} <a
+                                    href="{{ route('register') }}">{{ __('app.doctor_register.not_doctor') }}</a></h3>
                             <p>{{ __('app.doctor_register.subtitle') }}</p>
                         </div>
                         <form id="doctorRegisterForm" enctype="multipart/form-data">
@@ -103,12 +104,13 @@
 
                                     <select name="qualification"
                                         class="form-control @error('qualification') is-invalid @enderror" required>
-                                        <option value="">{{ __('app.doctor_register.select_qualification') }}</option>
+                                        <option value="">{{ __('app.doctor_register.select_qualification') }}
+                                        </option>
 
-                                        @foreach (['MBBS', 'MD', 'MS', 'DM', 'MCH', 'DNB', 'PHD'] as $qualification)
-                                            <option value="{{ $qualification }}"
-                                                {{ old('qualification') == $qualification ? 'selected' : '' }}>
-                                                {{ $qualification }}
+                                        @foreach (getQualifications() as $qualification)
+                                            <option value="{{ $qualification['name'] }}"
+                                                {{ old('qualification') == $qualification['name'] ? 'selected' : '' }}>
+                                                {{ $qualification['name'] }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -127,10 +129,10 @@
                                         required>
                                         <option value="">{{ __('app.doctor_register.select_experience') }}</option>
 
-                                        @foreach (['0-2 years', '3-5 years', '6-10 years', '11-15 years', '15+ years'] as $experience)
-                                            <option value="{{ $experience }}"
-                                                {{ old('experience') == $experience ? 'selected' : '' }}>
-                                                {{ $experience }}
+                                        @foreach (getExperienceRanges() as $experience)
+                                            <option value="{{ $experience['name'] }}"
+                                                {{ old('experience') == $experience['name'] ? 'selected' : '' }}>
+                                                {{ $experience['name'] }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -146,8 +148,8 @@
                                     <label class="form-label">{{ __('app.doctor_register.specializations') }}</label>
 
                                     <select name="specializations[]"
-                                        class="form-control select2 @error('specializations') is-invalid @enderror" multiple
-                                        required>
+                                        class="form-control select2 form-select @error('specializations') is-invalid @enderror"
+                                        multiple required>
                                         @foreach ($specializations as $spec)
                                             <option value="{{ $spec['name'] }}"
                                                 {{ collect(old('specializations'))->contains($spec['name']) ? 'selected' : '' }}>
@@ -192,7 +194,8 @@
 
                                 <hr>
 
-                                <h5 class="text-primary fw-bold mb-3">{{ __('app.doctor_register.required_documents') }}</h5>
+                                <h5 class="text-primary fw-bold mb-3">{{ __('app.doctor_register.required_documents') }}
+                                </h5>
 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">{{ __('app.doctor_register.medical_license') }}</label>
