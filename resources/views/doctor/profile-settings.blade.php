@@ -143,10 +143,8 @@
                                         </select>
 
                                         @foreach ($bioLanguages as $code => $label)
-                                            <textarea name="bio[{{ $code }}]" class="form-control bio-textarea"
-                                                data-lang="{{ $code }}"
-                                                style="{{ $code !== 'en' ? 'display:none;' : '' }}"
-                                                placeholder="{{ __('app.profile.bio_placeholder') }}">{{ $bioValues[$code] ?? '' }}</textarea>
+                                            <textarea name="bio[{{ $code }}]" class="form-control bio-textarea" data-lang="{{ $code }}"
+                                                style="{{ $code !== 'en' ? 'display:none;' : '' }}" placeholder="{{ __('app.profile.bio_placeholder') }}">{{ $bioValues[$code] ?? '' }}</textarea>
                                         @endforeach
 
                                     </div>
@@ -187,19 +185,13 @@
                                             {{ __('app.profile.qualification') }} <span class="text-danger">*</span>
                                         </label>
 
-                                        <select name="qualification" class="form-control" required>
-
-                                            <option value="">
-                                                {{ __('app.profile.select_qualification') }}
-                                            </option>
-
-                                            @foreach (['MBBS', 'MD', 'MS', 'DM', 'MCH', 'DNB', 'PHD'] as $qualification)
-                                                <option value="{{ $qualification }}"
-                                                    {{ old('qualification', current_user()['qualification'] ?? '') == $qualification ? 'selected' : '' }}>
-                                                    {{ $qualification }}
+                                        <select name="qualification[]" class="form-control select2" multiple required>
+                                            @foreach (getQualifications() as $qualification)
+                                                <option value="{{ $qualification['name'] }}"
+                                                    {{ in_array($qualification['name'], old('qualification', current_user()['qualification'] ?? [])) ? 'selected' : '' }}>
+                                                    {{ $qualification['name'] }}
                                                 </option>
                                             @endforeach
-
                                         </select>
 
                                     </div>
@@ -770,30 +762,28 @@
                                 </div>
                             </div>
                         </div>
-                </div>
 
-                </form>
-                <!-- /Profile Settings -->
-
-                <div class="card border-danger">
-                    <div class="card-body">
-                        <div class="border-bottom pb-3 mb-3">
-                            <h5 class="text-danger">{{ __('app.profile.delete_account') }}</h5>
+                        <div class="card border-danger">
+                            <div class="card-body">
+                                <div class="border-bottom pb-3 mb-3">
+                                    <h5 class="text-danger">{{ __('app.profile.delete_account') }}</h5>
+                                </div>
+                                <p class="text-muted">{{ __('app.profile.delete_account_notice') }}</p>
+                                <form id="deleteAccountForm" action="{{ route('doctor.settings.destroy') }}"
+                                    method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-outline-danger">
+                                        {{ __('app.profile.delete_account') }}
+                                    </button>
+                                </form>
+                            </div>
                         </div>
-                        <p class="text-muted">{{ __('app.profile.delete_account_notice') }}</p>
-                        <form id="deleteAccountForm" action="{{ route('doctor.settings.destroy') }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-outline-danger">
-                                {{ __('app.profile.delete_account') }}
-                            </button>
-                        </form>
-                    </div>
+                    </form>
+                    <!-- /Profile Settings -->
                 </div>
-
             </div>
         </div>
-    </div>
     </div>
     <style>
         body {

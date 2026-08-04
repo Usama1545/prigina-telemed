@@ -12,9 +12,13 @@
                     <h3><a href="{{ url('profile-settings') }}">{{ current_user()['name'] }}</a></h3>
                 </div>
             </div>
-            <p class="doctor-qualification">
-                {{ current_user()['qualification'] }}
-            </p>
+            @if (!empty(current_user()['qualification']))
+                @foreach (current_user()['qualification'] as $qualification)
+                    <p class="doctor-qualification">
+                        {{ $qualification }}
+                    </p>
+                @endforeach
+            @endif
 
             <div class="doctor-specialities">
 
@@ -40,8 +44,10 @@
 
         <select class="form-select modern-select availability-select"
             data-url="{{ route('doctor.toggle-availability') }}" data-token="{{ csrf_token() }}">
-            <option value="1" {{ $isAvailable ? 'selected' : '' }}>{{ __('app.doctor_sidebar.available_now') }}</option>
-            <option value="0" {{ !$isAvailable ? 'selected' : '' }}>{{ __('app.doctor_sidebar.not_available') }}</option>
+            <option value="1" {{ $isAvailable ? 'selected' : '' }}>{{ __('app.doctor_sidebar.available_now') }}
+            </option>
+            <option value="0" {{ !$isAvailable ? 'selected' : '' }}>{{ __('app.doctor_sidebar.not_available') }}
+            </option>
         </select>
 
     </div>
@@ -365,7 +371,8 @@
                     .then(res => res.json())
                     .then(data => {
                         selects.forEach(function(s) {
-                            s.value = data.success ? (isAvailable ? '1' : '0') : (isAvailable ? '0' : '1');
+                            s.value = data.success ? (isAvailable ? '1' : '0') : (
+                                isAvailable ? '0' : '1');
                         });
                     })
                     .catch(() => {

@@ -261,7 +261,7 @@ return [
         'start_time' => 'Heure de début',
         'end_time' => 'Heure de fin',
         'delete_account' => 'Supprimer le compte',
-        'delete_account_notice' => 'La suppression de votre compte désactivera votre accès de connexion. Vos données sont conservées et peuvent être restaurées en contactant le support.',
+        'delete_account_notice' => 'La suppression de votre compte désactivera définitivement votre accès. Certaines informations associées à votre compte peuvent être conservées lorsque cela est nécessaire pour maintenir les dossiers de service, respecter les obligations légales applicables et soutenir la sécurité, la prévention de la fraude, les audits ainsi que d’autres finalités commerciales légitimes, conformément à notre Politique de confidentialité.',
         'delete_account_confirm' => 'Êtes-vous sûr de vouloir supprimer votre compte ? Vous serez déconnecté et ne pourrez plus vous connecter.',
     ],
 

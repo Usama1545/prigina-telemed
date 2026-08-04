@@ -117,7 +117,7 @@ class DoctorProfileController extends Controller
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
             'licenseNumber' => 'required',
-            'qualification' => 'required',
+            'qualification' => 'required|array|min:1',
             'experience' => 'required|string',
             'specializations' => 'required|array|min:1',
             'languages' => 'required|array|min:1',

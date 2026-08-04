@@ -44,7 +44,11 @@
                                         </span>
                                     @endforeach
                                 </h4>
-                                <p>{{ $doctor['qualification'] }}</p>
+                                <p>
+                                    {{ is_array($doctor['qualification'] ?? null)
+                                        ? implode(', ', $doctor['qualification'])
+                                        : $doctor['qualification'] ?? '' }}
+                                </p>
                                 @php
                                     $rating = $doctor['rating'] ?? 0;
                                     $fullStars = floor($rating);
@@ -187,7 +191,7 @@
                                 );
                                 $bio = __('app.doctor_profile.bio_with_specialization', [
                                     'name' => $name,
-                                    'qualification' => $qualification,
+                                    'qualification' => is_array($doctor['qualification'] ?? null) ? implode(', ', $doctor['qualification']) : $doctor['qualification'] ?? '',
                                     'experience' => $experience,
                                     'specializations' => $specializationsList,
                                 ]);

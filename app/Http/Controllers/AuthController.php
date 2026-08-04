@@ -203,7 +203,7 @@ class AuthController extends Controller
             'email' => 'required|email',
             'phone' => 'required',
             'licenseNumber' => 'required',
-            'qualification' => 'required',
+            'qualification' => 'required|array|min:1',
             'experience' => 'required|string',
             'specializations' => 'required|array|min:1',
             'password' => 'required|confirmed|min:6',

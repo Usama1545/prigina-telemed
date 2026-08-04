@@ -465,11 +465,15 @@
                 <div class="grid-2" style="margin-top:10px;">
                     <div class="field">
                         <label>Specialty</label>
-                        <span>{{ $report['report_information']['specialty'] ?? '—' }}</span>
+                        <span>
+                            {{ \Illuminate\Support\Str::headline($report['report_information']['specialty'] ?? '') ?: '—' }}
+                        </span>
                     </div>
                     <div class="field">
                         <label>Country</label>
-                        <span>{{ $report['report_information']['country'] ?? ($report['report_information']['country_of_practice'] ?? '—') }}</span>
+                        <span>
+                            {{ $report['report_information']['country'] ?: $report['report_information']['country_of_practice'] ?? '—' }}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -637,7 +641,7 @@
                 <div class="section-title">Physician Certification</div>
                 <div class="sig-name">Dr. {{ $report['certification']['physician_name'] ?? '—' }}</div>
                 <div class="sig-sub">
-                    {{ $report['certification']['specialty'] ?? '' }}<br>
+                    {{ \Illuminate\Support\Str::headline($report['certification']['specialty']) ?? '' }}<br>
                     PriGina Global Telemed
                 </div>
                 @if (!empty($report['certification']['certified_at']))

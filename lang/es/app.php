@@ -261,7 +261,7 @@ return [
         'start_time' => 'Hora de inicio',
         'end_time' => 'Hora de fin',
         'delete_account' => 'Eliminar cuenta',
-        'delete_account_notice' => 'Al eliminar tu cuenta se desactivará tu acceso de inicio de sesión. Tus datos se conservan y pueden restaurarse contactando con soporte.',
+        'delete_account_notice' => 'Al eliminar tu cuenta, se deshabilitará permanentemente tu acceso. Es posible que conservemos cierta información asociada a tu cuenta cuando sea necesario para mantener registros del servicio, cumplir con las obligaciones legales aplicables y respaldar la seguridad, la prevención del fraude, las auditorías y otros fines comerciales legítimos, de acuerdo con nuestra Política de Privacidad.',
         'delete_account_confirm' => '¿Está seguro de que desea eliminar su cuenta? Se cerrará su sesión y ya no podrá iniciar sesión.',
     ],
 

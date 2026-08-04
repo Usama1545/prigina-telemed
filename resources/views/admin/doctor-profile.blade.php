@@ -14,7 +14,9 @@
                 ->implode(', ') ?:
             $doctor['specialization'] ?? '-';
         $experience = $doctor['experience'] ?? '-';
-        $qualification = $doctor['qualification'] ?? '-';
+        $qualification = is_array($doctor['qualification'] ?? null)
+            ? implode(', ', $doctor['qualification'])
+            : $doctor['qualification'] ?? '-';
         $fee = $doctor['consultationFee'] ?? null;
         $earnings = $doctor['totalEarnings'] ?? 0;
         $about = $doctor['about'] ?? ($doctor['bio'] ?? null);
@@ -257,18 +259,18 @@
                                 <tbody id="profileApptBody">
                                     @forelse($appointments as $appt)
                                         @php
-                                            $aDate    = $appt['appointmentDate'] ?? $appt['date'] ?? null;
-                                            $aTime    = trim(
-                                                ($appt['startTime'] ?? $appt['time'] ?? '') .
-                                                ($appt['endTime'] ?? null ? ' - ' . $appt['endTime'] : '')
+                                            $aDate = $appt['appointmentDate'] ?? ($appt['date'] ?? null);
+                                            $aTime = trim(
+                                                ($appt['startTime'] ?? ($appt['time'] ?? '')) .
+                                                    ($appt['endTime'] ?? null ? ' - ' . $appt['endTime'] : ''),
                                             );
-                                            $aStatus  = $appt['status'] ?? 'pending';
-                                            $aPay     = $appt['paymentStatus'] ?? 'pending';
-                                            $aPayout  = $appt['payoutStatus'] ?? 'held';
-                                            $aId      = $appt['id'] ?? $appt['documentId'] ?? '';
-                                            $aDone    = in_array($aStatus, ['completed', 'completedPaid']);
+                                            $aStatus = $appt['status'] ?? 'pending';
+                                            $aPay = $appt['paymentStatus'] ?? 'pending';
+                                            $aPayout = $appt['payoutStatus'] ?? 'held';
+                                            $aId = $appt['id'] ?? ($appt['documentId'] ?? '');
+                                            $aDone = in_array($aStatus, ['completed', 'completedPaid']);
                                             $aCanRelease = $aDone && !in_array($aPayout, ['released', 'refunded']);
-                                            $aCanRefund  = $aDone && !in_array($aPayout, ['released', 'refunded']);
+                                            $aCanRefund = $aDone && !in_array($aPayout, ['released', 'refunded']);
                                         @endphp
                                         <tr>
                                             <td>
@@ -283,7 +285,7 @@
                                             </td>
                                             <td>
                                                 {{ $aDate ? \Carbon\Carbon::parse($aDate)->format('d M Y') : '-' }}
-                                                @if($aTime)
+                                                @if ($aTime)
                                                     <span class="text-primary d-block">{{ $aTime }}</span>
                                                 @endif
                                             </td>
@@ -293,7 +295,7 @@
                                                     @csrf @method('PATCH')
                                                     <select name="status" class="form-select-sm"
                                                         onchange="this.form.submit()">
-                                                        @foreach(['pending','confirmed','completed','completedPaid','cancelled'] as $opt)
+                                                        @foreach (['pending', 'confirmed', 'completed', 'completedPaid', 'cancelled'] as $opt)
                                                             <option value="{{ $opt }}"
                                                                 {{ $aStatus === $opt ? 'selected' : '' }}>
                                                                 {{ $opt === 'completedPaid' ? 'Completed & Paid' : ucfirst($opt) }}
@@ -304,12 +306,13 @@
                                             </td>
                                             <td>
                                                 ${{ number_format((float) ($appt['amount'] ?? 0), 2) }}
-                                                <span class="badge {{ $aPay === 'completed' ? 'bg-success' : 'bg-secondary' }}">
+                                                <span
+                                                    class="badge {{ $aPay === 'completed' ? 'bg-success' : 'bg-secondary' }}">
                                                     {{ $aPay === 'completed' ? 'Paid' : 'Unpaid' }}
                                                 </span>
                                             </td>
                                             <td>
-                                                @if($aPayout === 'released')
+                                                @if ($aPayout === 'released')
                                                     <span class="badge bg-success">Released</span>
                                                 @elseif($aPayout === 'refunded')
                                                     <span class="badge bg-danger">Refunded</span>
@@ -347,7 +350,7 @@
         </div>
 
     </div>
-</div>
+    </div>
 
     {{-- Decline Reason Modal --}}
     <div class="modal fade" id="profileDeclineModal" tabindex="-1" aria-hidden="true">
@@ -490,7 +493,7 @@
             const btn = e.target.querySelector('button[type="submit"]');
             if (!btn) return;
             btn.innerHTML = SPINNER_SM;
-            btn.disabled  = true;
+            btn.disabled = true;
         });
 
         // Appointment table — spinner on status select change

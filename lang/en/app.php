@@ -262,7 +262,7 @@ return [
         'start_time' => 'Start Time',
         'end_time' => 'End Time',
         'delete_account' => 'Delete Account',
-        'delete_account_notice' => 'Deleting your account will disable your login access. Your data is retained and can be restored by contacting support.',
+        'delete_account_notice' => 'Deleting your account will permanently disable your access. Certain information associated with your account may be retained where necessary to maintain service records, comply with applicable legal obligations, and support security, fraud prevention, auditing, and other legitimate business purposes in accordance with our Privacy Policy.',
         'delete_account_confirm' => 'Are you sure you want to delete your account? You will be logged out and will no longer be able to sign in.',
     ],
 
