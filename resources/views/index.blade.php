@@ -118,7 +118,7 @@
                     <div class="hero-video-wrap" id="heroVideoWrap">
                         <img id="heroVideoCover" class="hero-video-cover" src="{{ asset('build/img/home-1.jpeg') }}"
                             alt="{{ __('app.home.hero_headline') }}" aria-hidden="true">
-                        <video id="heroVideo" class="hero-video" muted loop playsinline preload="metadata"
+                        <video id="heroVideo" class="hero-video" autoplay playsinline preload="metadata"
                             poster="{{ asset('build/img/home-1.jpeg') }}">
                             <source src="{{ asset('home/IMG_8070.mp4') }}" type="video/mp4">
                         </video>
