@@ -207,7 +207,7 @@
                     ],
                     [
                         'accent' => 'green',
-                        'icon' => 'puzzle-piece',
+                        'icon' => 'puzzle',
                         'img' => 'IMG-3.jpeg',
                         'title' => __('app.home.second_opinion_card3_title'),
                         'desc' => __('app.home.second_opinion_card3_desc'),
