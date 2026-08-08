@@ -118,7 +118,7 @@
                     <div class="hero-video-wrap" id="heroVideoWrap">
                         <img id="heroVideoCover" class="hero-video-cover" src="{{ asset('build/img/home-1.jpeg') }}"
                             alt="{{ __('app.home.hero_headline') }}" aria-hidden="true">
-                        <video id="heroVideo" class="hero-video" autoplay playsinline preload="metadata"
+                        <video id="heroVideo" class="hero-video" playsinline preload="metadata"
                             poster="{{ asset('build/img/home-1.jpeg') }}">
                             <source src="{{ asset('home/IMG_8070.mp4') }}" type="video/mp4">
                         </video>
@@ -1936,7 +1936,6 @@
 
                 function playVideo() {
                     if (!video) return;
-                    video.muted = true;
                     var p = video.play();
                     if (p && typeof p.then === 'function') {
                         p.then(function() {
@@ -1957,9 +1956,39 @@
                     setPlaying(false);
                 }
 
+                function attemptAutoplay() {
+                    if (!video) return;
+                    video.muted = false;
+                    var p = video.play();
+                    if (p && typeof p.then === 'function') {
+                        p.then(function() {
+                            setPlaying(true);
+                            updateSoundIcon();
+                        }).catch(function() {
+                            // Browser blocked unmuted autoplay (no user interaction yet) — retry muted.
+                            video.muted = true;
+                            var p2 = video.play();
+                            if (p2 && typeof p2.then === 'function') {
+                                p2.then(function() {
+                                    setPlaying(true);
+                                    updateSoundIcon();
+                                }).catch(function() {
+                                    setPlaying(false);
+                                    updateSoundIcon();
+                                });
+                            } else {
+                                setPlaying(true);
+                                updateSoundIcon();
+                            }
+                        });
+                    } else {
+                        setPlaying(true);
+                        updateSoundIcon();
+                    }
+                }
+
                 if (video && wrap) {
-                    setPlaying(false);
-                    updateSoundIcon();
+                    attemptAutoplay();
 
                     if (playBtn) {
                         playBtn.addEventListener('click', function() {
