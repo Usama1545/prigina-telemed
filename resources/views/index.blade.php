@@ -172,7 +172,7 @@
 
 
     <!-- WHEN SHOULD YOU CONSIDER A SECOND OPINION -->
-    <section class="py-5 text-center services-model">
+    <section class="py-5 text-center services-model leftpadding">
         <div class="container">
             <div class="d-flex align-items-center justify-content-center gap-2 mb-2 reveal-on-scroll"
                 data-reveal="fade-up">
@@ -229,8 +229,8 @@
                         <div class="service-card h-100 text-start d-flex flex-column">
 
                             <div class="service-photo position-relative">
-                                <img src="{{ asset('images/features/' . $reason['img']) }}"
-                                    alt="{{ $reason['title'] }}" class="img-fluid">
+                                <img src="{{ asset('images/features/' . $reason['img']) }}" alt="{{ $reason['title'] }}"
+                                    class="img-fluid">
                                 <div class="service-icon-circle icon-grad-{{ $reason['accent'] }}">
                                     <i class="fi fi-rr-{{ $reason['icon'] }}"></i>
                                 </div>
@@ -240,7 +240,8 @@
                                 <h5 class="fw-bold text-center service-title-{{ $reason['accent'] }}">
                                     {{ $reason['title'] }}</h5>
 
-                                <span class="service-underline underline-{{ $reason['accent'] }} d-block mx-auto mb-3"></span>
+                                <span
+                                    class="service-underline underline-{{ $reason['accent'] }} d-block mx-auto mb-3"></span>
 
                                 <p class="text-muted text-center small mb-0">{{ $reason['desc'] }}</p>
                             </div>
@@ -249,8 +250,8 @@
                 @endforeach
             </div>
 
-            <a href="{{ route('how-it-works') }}"
-                class="second-opinion-cta reveal-on-scroll" data-reveal="fade-up" data-reveal-delay="400">
+            <a href="{{ route('how-it-works') }}" class="second-opinion-cta reveal-on-scroll" data-reveal="fade-up"
+                data-reveal-delay="400">
                 {{ __('app.home.second_opinion_cta') }} <i class="fi fi-rr-arrow-right"></i>
             </a>
         </div>
