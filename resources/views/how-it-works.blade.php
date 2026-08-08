@@ -2,10 +2,10 @@
 
 @section('content')
     <!-- HEADER -->
-    <section class="py-5 text-center bg-light">
+    <section class="py-5 text-center pg-hero">
         <div class="container">
-            <h1 class="fw-bold mb-3 text-primary">{{ __('app.how_it_works.headline') }}</h1>
-            <p class="text-muted">
+            <h1 class="fw-bold mb-3">{{ __('app.how_it_works.headline') }}</h1>
+            <p class="mx-auto" style="max-width:640px;">
                 {{ __('app.how_it_works.desc') }}
             </p>
         </div>
@@ -57,9 +57,9 @@
                 ];
             @endphp
 
-            <div class="row justify-content-center text-center g-4">
+            <div class="row justify-content-center text-center g-4 reveal-group">
                 @foreach ($steps as $index => $step)
-                    <div class="col-6 col-md-4 col-lg position-relative step-col">
+                    <div class="col-6 col-md-4 col-lg position-relative step-col reveal">
                         <div class="step-card h-100 position-relative d-flex flex-column">
 
                             <div class="step-photo position-relative">
@@ -69,7 +69,7 @@
                             </div>
 
                             <div class="p-3 pt-4 d-flex flex-column flex-grow-1">
-                                <h6 class="fw-semibold">{{ $step['title'] }}</h6>
+                                <h6 class="fw-semibold section-title-serif">{{ $step['title'] }}</h6>
                                 <p class="text-muted small">{{ $step['desc'] }}</p>
 
                                 <span class="step-underline underline-{{ $step['accent'] }}"></span>
@@ -92,9 +92,9 @@
     <!-- FEATURES STRIP -->
     <section class="py-4">
         <div class="container">
-            <div class="row g-3 feature-strip text-center">
+            <div class="row g-3 feature-strip text-center reveal-group">
 
-                <div class="col-md col-6">
+                <div class="col-md col-6 reveal">
                     <div class="feature-box">
                         <div class="feature-icon-circle circle-blue mx-auto">
                             <i class="fi fi-rr-shield-check"></i>
@@ -104,7 +104,7 @@
                     </div>
                 </div>
 
-                <div class="col-md col-6">
+                <div class="col-md col-6 reveal">
                     <div class="feature-box">
                         <div class="feature-icon-circle circle-cyan mx-auto">
                             <i class="fi fi-rr-globe"></i>
@@ -114,7 +114,7 @@
                     </div>
                 </div>
 
-                <div class="col-md col-6">
+                <div class="col-md col-6 reveal">
                     <div class="feature-box">
                         <div class="feature-icon-circle circle-purple mx-auto">
                             <i class="fi fi-rr-award"></i>
@@ -124,7 +124,7 @@
                     </div>
                 </div>
 
-                <div class="col-md col-6">
+                <div class="col-md col-6 reveal">
                     <div class="feature-box">
                         <div class="feature-icon-circle circle-blue mx-auto">
                             <i class="fi fi-rr-document"></i>
@@ -134,7 +134,7 @@
                     </div>
                 </div>
 
-                <div class="col-md col-6">
+                <div class="col-md col-6 reveal">
                     <div class="feature-box">
                         <div class="feature-icon-circle circle-blue mx-auto">
                             <i class="fi fi-rr-bolt"></i>
@@ -152,7 +152,7 @@
     <!-- CTA STATS BANNER -->
     <section class="py-4">
         <div class="container">
-            <div class="cta-banner d-flex flex-wrap align-items-center justify-content-between gap-4">
+            <div class="cta-banner d-flex flex-wrap align-items-center justify-content-between gap-4 reveal">
 
                 <div class="d-flex align-items-center gap-3">
                     <i class="fi fi-rr-shield-check cta-shield"></i>
@@ -200,7 +200,7 @@
     <!-- DISCLAIMER -->
     <section class="py-4">
         <div class="container">
-            <div class="disclaimer d-flex align-items-center mx-md-5">
+            <div class="disclaimer d-flex align-items-center mx-md-5 reveal">
                 <i class="fi fi-rr-info"></i>
                 <p class="mb-0 ms-3 small">
                     {{ __('app.how_it_works.disclaimer') }}
@@ -253,11 +253,11 @@
         }
 
         .badge-blue {
-            background: var(--primary);
+            background: var(--pg-sky);
         }
 
         .badge-teal {
-            background: var(--secondary);
+            background: var(--pg-aqua);
         }
 
         .badge-purple {
@@ -276,11 +276,11 @@
         }
 
         .underline-blue {
-            background: var(--primary);
+            background: var(--pg-sky);
         }
 
         .underline-teal {
-            background: var(--secondary);
+            background: var(--pg-aqua);
         }
 
         .underline-purple {
@@ -336,19 +336,19 @@
         }
 
         .circle-blue {
-            background: color-mix(in srgb, var(--primary) 12%, white);
+            background: color-mix(in srgb, var(--pg-sky) 12%, white);
         }
 
         .circle-blue i {
-            color: var(--primary);
+            color: var(--pg-sky);
         }
 
         .circle-cyan {
-            background: color-mix(in srgb, var(--secondary) 12%, white);
+            background: color-mix(in srgb, var(--pg-aqua) 12%, white);
         }
 
         .circle-cyan i {
-            color: var(--secondary);
+            color: var(--pg-aqua);
         }
 
         .circle-purple {
@@ -361,12 +361,16 @@
 
         /* CTA BANNER */
         .cta-banner {
-            background: linear-gradient(120deg, var(--primary), #001f4d);
+            background: linear-gradient(150deg, var(--pg-ink) 0%, var(--pg-ink-3) 60%, var(--pg-ink-2) 100%);
             border-radius: 18px;
             padding: 32px 40px;
-            box-shadow: 0 20px 45px rgba(0, 31, 77, 0.25);
+            box-shadow: 0 20px 45px rgba(10, 24, 52, 0.25);
             position: relative;
             overflow: hidden;
+        }
+
+        .cta-banner h4 {
+            font-family: 'Fraunces', serif;
         }
 
         .cta-banner::before {
@@ -418,7 +422,7 @@
 
         .disclaimer i {
             font-size: 20px;
-            color: var(--secondary);
+            color: var(--pg-aqua);
         }
 
         /* PREMIUM MOBILE REFINEMENTS */
@@ -443,4 +447,6 @@
             }
         }
     </style>
+
+    @include('partials.premium-theme')
 @endsection

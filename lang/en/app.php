@@ -419,6 +419,7 @@ return [
     ],
 
     'home' => [
+        'hero_eyebrow' => 'Second Medical Opinions, Online',
         'hero_headline' => 'When the Diagnosis Matters,',
         'hero_headline_2' => 'Get a Second Opinion.',
         'hero_desc' => 'Access experienced physicians worldwide for independent medical insights — giving you clarity, confidence, and control over your health decisions.',

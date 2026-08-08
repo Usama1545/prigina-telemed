@@ -418,6 +418,7 @@ return [
     ],
 
     'home' => [
+        'hero_eyebrow' => 'Segundas opiniones médicas, en línea',
         'hero_headline' => 'Cuando el diagnóstico importa,',
         'hero_headline_2' => 'Obtenga una segunda opinión.',
         'hero_desc' => 'Acceda a médicos experimentados de todo el mundo para obtener información médica independiente — brindándole claridad, confianza y control sobre sus decisiones de salud.',

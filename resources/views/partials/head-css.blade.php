@@ -1,6 +1,11 @@
 <!-- Favicon -->
 <link rel="shortcut icon" href="{{ asset('build/img/prigina-gav.png') }}" type="image/x-icon">
 
+<!-- Display Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
 <!-- Apple Touch Icon -->
 <link rel="apple-touch-icon" sizes="180x180" href="{{ URL::asset('build/img/prigina-gav.png') }}">
 

@@ -7629,6 +7629,7 @@ button.bg-danger:hover {
     display: -ms-flexbox;
     display: flex;
     padding: 0;
+    background: rgb(255 255 255 / 0%) !important;
 }
 
 @media (max-width: 1199.98px) {

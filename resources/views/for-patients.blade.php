@@ -2,13 +2,13 @@
 
 @section('content')
     <!-- HERO -->
-    <section class="pb-5 ">
+    <section class="py-5 pg-hero">
         <div class="container">
             <div class="row align-items-center">
 
                 <!-- LEFT -->
                 <div class="col-lg-6 mb-4 mb-md-0">
-                    <h6 class="text-secondary">{{ __('app.for_patients.label') }}</h6>
+                    <h6 class="text-secondary section-eyebrow">{{ __('app.for_patients.label') }}</h6>
 
                     <h1 class="fw-bold mb-3">
                         {{ __('app.for_patients.headline') }}
@@ -19,39 +19,39 @@
                     </p>
 
                     <!-- FEATURES -->
-                    <div class="row mt-4 text-center justify-content-center ">
+                    <div class="row mt-4 text-center justify-content-center reveal-group">
 
                         <!-- ITEM 1 -->
-                        <div class="col-md-4 col-6 mb-3 mb-md-0">
+                        <div class="col-md-4 col-6 mb-3 mb-md-0 reveal">
                             <div class="px-3 h-100">
                                 <div class="icon-circle-soft mx-auto">
                                     <i class="fi fi-rr-globe" style="font-size: 2.5rem; margin-top: 10px;"></i>
                                 </div>
-                                <p class=" fw-bold mt-2 mb-2 text-black">{{ __('app.for_patients.global_expertise') }}</p>
-                                <p class="small">{{ __('app.for_patients.global_expertise_desc') }}</p>
+                                <p class="hero-feature-title fw-bold mt-2 mb-2">{{ __('app.for_patients.global_expertise') }}</p>
+                                <p class="small hero-feature-desc">{{ __('app.for_patients.global_expertise_desc') }}</p>
                             </div>
                         </div>
 
                         <!-- ITEM 2 (CENTER WITH BORDERS) -->
-                        <div class="col-md-4 col-6 mb-3 border-start border-end">
+                        <div class="col-md-4 col-6 mb-3 border-start border-end reveal">
                             <div class="px-3 h-100">
                                 <div class="icon-circle-soft mx-auto">
                                     <i class="fi fi-rr-bulb" style="font-size: 2.5rem; margin-top: 10px;"></i>
                                 </div>
-                                <p class="fw-bold mt-2 mb-2 text-black">{{ __('app.for_patients.independent_opinions') }}
+                                <p class="hero-feature-title fw-bold mt-2 mb-2">{{ __('app.for_patients.independent_opinions') }}
                                 </p>
-                                <p class="small">{{ __('app.for_patients.independent_opinions_desc') }}</p>
+                                <p class="small hero-feature-desc">{{ __('app.for_patients.independent_opinions_desc') }}</p>
                             </div>
                         </div>
 
                         <!-- ITEM 3 -->
-                        <div class="col-md-4 col-6 mt-3 mt-md-0">
+                        <div class="col-md-4 col-6 mt-3 mt-md-0 reveal">
                             <div class="px-3 h-100">
                                 <div class="icon-circle-primary mx-auto ">
                                     <i class="fi fi-rr-lock" style="font-size: 2.5rem; margin-top: 10px;"></i>
                                 </div>
-                                <p class="fw-bold mt-2 mb-2 text-black">{{ __('app.for_patients.secure_confidential') }}</p>
-                                <p class="small">{{ __('app.for_patients.secure_confidential_desc') }}</p>
+                                <p class="hero-feature-title fw-bold mt-2 mb-2">{{ __('app.for_patients.secure_confidential') }}</p>
+                                <p class="small hero-feature-desc">{{ __('app.for_patients.secure_confidential_desc') }}</p>
                             </div>
                         </div>
 
@@ -121,11 +121,11 @@
                     ],
                 ];
             @endphp
-            <h2 class="fw-bold mb-4 text-center text-primary">{{ __('app.for_patients.how_works_headline') }}</h2>
+            <h2 class="fw-bold mb-4 text-center text-primary section-title-serif">{{ __('app.for_patients.how_works_headline') }}</h2>
 
-            <div class="row justify-content-center text-center g-4 mt-4">
+            <div class="row justify-content-center text-center g-4 mt-4 reveal-group">
                 @foreach ($steps as $index => $step)
-                    <div class="col-6 col-md-4 col-lg position-relative step-col">
+                    <div class="col-6 col-md-4 col-lg position-relative step-col reveal">
                         <div class="step-card h-100 position-relative d-flex flex-column">
 
                             <div class="step-photo position-relative">
@@ -135,7 +135,7 @@
                             </div>
 
                             <div class="p-3 pt-4 d-flex flex-column flex-grow-1">
-                                <h6 class="fw-semibold">{{ $step['title'] }}</h6>
+                                <h6 class="fw-semibold section-title-serif">{{ $step['title'] }}</h6>
                                 <p class="text-muted small">{{ $step['desc'] }}</p>
 
                                 <span class="step-underline underline-{{ $step['accent'] }}"></span>
@@ -158,7 +158,7 @@
     <!-- DISCLAIMER -->
     <section class="py-3">
         <div class="container">
-            <div class="disclaimer d-flex align-items-center mx-5">
+            <div class="disclaimer d-flex align-items-center mx-5 reveal">
                 <i class="fi fi-rr-info text-secondary"></i>
                 <p class="mb-0 ms-3 text-primary">
                     {{ __('app.for_patients.disclaimer') }}
@@ -172,35 +172,35 @@
     <section class="py-5 text-center">
         <div class="container">
 
-            <h2 class="fw-bold mb-5 text-primary">{{ __('app.for_patients.why_headline') }}</h2>
+            <h2 class="fw-bold mb-5 text-primary section-title-serif">{{ __('app.for_patients.why_headline') }}</h2>
 
-            <div class="d-flex flex-wrap justify-content-center gap-2 md-gap-4 ">
+            <div class="d-flex flex-wrap justify-content-center gap-2 md-gap-4 reveal-group">
 
-                <div class="text-center border rounded p-3 bg-white why-card">
+                <div class="text-center border rounded p-3 bg-white why-card reveal">
                     <i class="fi fi-rr-users text-secondary fs-3 mb-2 d-block"></i>
                     <h6 class="fw-semibold mb-1">{{ __('app.for_patients.top_specialists') }}</h6>
                     <p class="small text-muted mb-0">{{ __('app.for_patients.top_specialists_desc') }}</p>
                 </div>
 
-                <div class="text-center border rounded p-3 bg-white why-card">
+                <div class="text-center border rounded p-3 bg-white why-card reveal">
                     <i class="fi fi-rr-clock text-secondary fs-3 mb-2 d-block"></i>
                     <h6 class="fw-semibold mb-1">{{ __('app.for_patients.convenient') }}</h6>
                     <p class="small text-muted mb-0">{{ __('app.for_patients.convenient_desc') }}</p>
                 </div>
 
-                <div class="text-center border rounded p-3 bg-white why-card">
+                <div class="text-center border rounded p-3 bg-white why-card reveal">
                     <i class="fi fi-rr-heart text-secondary fs-3 mb-2 d-block"></i>
                     <h6 class="fw-semibold mb-1">{{ __('app.for_patients.better_decisions') }}</h6>
                     <p class="small text-muted mb-0">{{ __('app.for_patients.better_decisions_desc') }}</p>
                 </div>
 
-                <div class="text-center border rounded p-3 bg-white why-card">
+                <div class="text-center border rounded p-3 bg-white why-card reveal">
                     <i class="fi fi-rr-globe text-secondary fs-3 mb-2 d-block"></i>
                     <h6 class="fw-semibold mb-1">{{ __('app.for_patients.worldwide') }}</h6>
                     <p class="small text-muted mb-0">{{ __('app.for_patients.worldwide_desc') }}</p>
                 </div>
 
-                <div class="text-center border rounded p-3 bg-white why-card">
+                <div class="text-center border rounded p-3 bg-white why-card reveal">
                     <i class="fi fi-rr-shield-check text-secondary fs-3 mb-2 d-block"></i>
                     <h6 class="fw-semibold mb-1">{{ __('app.for_patients.privacy') }}</h6>
                     <p class="small text-muted mb-0">{{ __('app.for_patients.privacy_desc') }}</p>
@@ -215,7 +215,7 @@
     <!-- Info Section -->
     <section class="info-section my-3">
         <div class="container">
-            <div class="contact-info">
+            <div class="contact-info reveal">
                 <div class="info-col">
                     <div class="wow fadeInUp" data-wow-duration="1s">
                         <h3 class="info-title">{{ __('app.for_patients.info_headline') }}</h3>
@@ -298,6 +298,17 @@
             margin-right: 6px;
         }
 
+        /* Testimonial sits on its own white card even though the hero
+           section behind it is now dark — .pg-hero forces light text on
+           <p> tags, so pull this one back to a normal dark color. */
+        .pg-hero .testimonial-box p {
+            color: #1a1a1a !important;
+        }
+
+        .pg-hero .testimonial-box small {
+            color: var(--secondary) !important;
+        }
+
         .hero-image {
             border-radius: 20px;
             overflow: hidden;
@@ -362,11 +373,11 @@
         }
 
         .badge-blue {
-            background: var(--primary);
+            background: var(--pg-sky);
         }
 
         .badge-teal {
-            background: var(--secondary);
+            background: var(--pg-aqua);
         }
 
         .badge-purple {
@@ -385,11 +396,11 @@
         }
 
         .underline-blue {
-            background: var(--primary);
+            background: var(--pg-sky);
         }
 
         .underline-teal {
-            background: var(--secondary);
+            background: var(--pg-aqua);
         }
 
         .underline-purple {
@@ -435,6 +446,53 @@
             border-radius: 8px;
         }
 
+        /* HERO FEATURE TEXT — hero is now a dark full-bleed band, so the
+           text-black title / plain description need to flip to light. */
+        .pg-hero .hero-feature-title {
+            color: #fff !important;
+        }
+
+        .pg-hero .hero-feature-desc {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .pg-hero .icon-circle-soft,
+        .pg-hero .icon-circle-primary {
+            background: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .pg-hero .icon-circle-soft i,
+        .pg-hero .icon-circle-primary i {
+            color: var(--pg-aqua) !important;
+        }
+
+        /* INFO / CTA polish to match the rest of the site */
+        section.info-section .contact-info {
+            background: radial-gradient(60% 80% at 80% 0%, rgba(52, 211, 201, 0.22), transparent 60%), linear-gradient(135deg, var(--pg-ink) 0%, var(--pg-ink-2) 100%) !important;
+        }
+
+        section.info-section .info-title {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 13px !important;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--pg-aqua) !important;
+        }
+
+        section.info-section .contact-info p.text-white {
+            font-family: 'Fraunces', serif;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .info-section .btn-light {
+            background: var(--pg-grad) !important;
+            border: none !important;
+            border-radius: 100px !important;
+            color: #fff !important;
+        }
+
         /* PREMIUM MOBILE REFINEMENTS */
         @media (max-width: 767.98px) {
             .why-card {
@@ -451,4 +509,6 @@
             }
         }
     </style>
+
+    @include('partials.premium-theme')
 @endsection

@@ -418,6 +418,7 @@ return [
     ],
 
     'home' => [
+        'hero_eyebrow' => 'Deuxièmes avis médicaux, en ligne',
         'hero_headline' => 'Quand le diagnostic est crucial,',
         'hero_headline_2' => 'Obtenez un deuxième avis.',
         'hero_desc' => 'Accédez à des médecins expérimentés du monde entier pour des avis médicaux indépendants — vous apportant clarté, confiance et contrôle sur vos décisions de santé.',

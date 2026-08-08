@@ -106,3 +106,86 @@
         </div>
     </footer>
     <!-- /Footer Section -->
+
+    <style>
+        .footer.footer-info {
+            background: linear-gradient(150deg, #0A1834 0%, #1B2F63 55%, #14285C 100%) !important;
+        }
+
+        .footer .footer-top {
+            background: transparent !important;
+            padding: 64px 0 40px;
+        }
+
+        .footer .footer-title {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px !important;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 18px !important;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .footer .footer-widget.footer-menu ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer .footer-widget.footer-menu ul li a {
+            padding-left: 0;
+            font-size: 13.5px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .footer .footer-widget.footer-menu ul li a::before {
+            content: none;
+        }
+
+        .footer .footer-widget.footer-menu ul li a:hover {
+            padding-left: 0;
+            color: #34D3C9;
+            letter-spacing: 0;
+        }
+
+        .footer .social-icon ul li a {
+            width: 34px;
+            height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            font-size: 14px;
+        }
+
+        .footer .social-icon ul li a:hover {
+            background: linear-gradient(135deg, #4F9DFF, #34D3C9);
+            border-color: transparent;
+            color: #0A1834;
+        }
+
+        .footer .footer-bottom {
+            background: transparent;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer .footer-bottom .copyright {
+            border-top: none !important;
+            padding: 22px 0 !important;
+        }
+
+        .footer .footer-bottom .copyright-text p {
+            font-size: 12.5px;
+            color: rgba(255, 255, 255, 0.45);
+        }
+
+        .footer .policy-menu li a {
+            font-size: 12.5px;
+            color: rgba(255, 255, 255, 0.45);
+        }
+
+        .footer .policy-menu li a:hover {
+            color: #34D3C9;
+        }
+    </style>

@@ -1,0 +1,1364 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PriGina Global Telemed — Redesign Concept</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #0a1834;
+        --ink-2: #14285c;
+        --ink-3: #1b2f63;
+        --paper: #f5f8fc;
+        --paper-card: #ffffff;
+        --sky: #4f9dff;
+        --aqua: #34d3c9;
+        --text: #101b33;
+        --text-muted: #5b6b8c;
+        --glass-border: rgba(255, 255, 255, 0.35);
+        --glass-fill: rgba(255, 255, 255, 0.1);
+        --radius: 20px;
+        --grad: linear-gradient(135deg, var(--sky), var(--aqua));
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--text);
+        font-family: "Inter", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5 {
+        font-family: "Fraunces", serif;
+        font-weight: 600;
+        margin: 0;
+        letter-spacing: -0.01em;
+        color: var(--ink);
+      }
+      p {
+        margin: 0;
+        color: var(--text-muted);
+        line-height: 1.6;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      .eyebrow {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: var(--sky);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .eyebrow::before {
+        content: "";
+        width: 16px;
+        height: 1px;
+        background: var(--grad);
+      }
+      .wrap {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 0 32px;
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
+
+      /* ---------- reveal on scroll ---------- */
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition:
+          opacity 0.8s ease,
+          transform 0.8s ease;
+      }
+      .reveal.in {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* ---------- top bar ---------- */
+      .topbar {
+        background: var(--ink);
+        color: rgba(255, 255, 255, 0.65);
+        font-size: 12px;
+        padding: 7px 0;
+      }
+      .topbar .wrap {
+        display: flex;
+        justify-content: flex-end;
+        gap: 18px;
+      }
+      .topbar span {
+        opacity: 0.7;
+      }
+
+      /* ---------- nav ---------- */
+      header.nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: rgba(245, 248, 252, 0.75);
+        backdrop-filter: blur(14px) saturate(160%);
+        -webkit-backdrop-filter: blur(14px) saturate(160%);
+        border-bottom: 1px solid rgba(20, 40, 92, 0.08);
+      }
+      .nav .wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 76px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: "Fraunces", serif;
+        font-weight: 600;
+        font-size: 19px;
+        color: var(--ink);
+      }
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        background: var(--grad);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 15px;
+        font-weight: 700;
+        font-family: "IBM Plex Mono", monospace;
+      }
+      nav.links {
+        display: flex;
+        gap: 30px;
+        font-size: 14.5px;
+        font-weight: 500;
+        color: var(--text);
+      }
+      nav.links a {
+        position: relative;
+        padding: 4px 0;
+      }
+      nav.links a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        width: 0;
+        height: 2px;
+        background: var(--grad);
+        transition: width 0.25s ease;
+      }
+      nav.links a:hover::after {
+        width: 100%;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 22px;
+        border-radius: 100px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        border: none;
+        transition:
+          transform 0.25s ease,
+          box-shadow 0.25s ease;
+      }
+      .btn-primary {
+        background: var(--grad);
+        color: white;
+        box-shadow: 0 8px 24px -8px rgba(79, 157, 255, 0.55);
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px -6px rgba(79, 157, 255, 0.7);
+      }
+      .btn-ghost {
+        background: rgba(255, 255, 255, 0.6);
+        color: var(--ink);
+        border: 1px solid rgba(20, 40, 92, 0.12);
+      }
+      .btn-ghost:hover {
+        background: white;
+        transform: translateY(-2px);
+      }
+
+      /* ---------- hero ---------- */
+      .hero {
+        position: relative;
+        background:
+          radial-gradient(
+            60% 55% at 15% 20%,
+            rgba(79, 157, 255, 0.35),
+            transparent 60%
+          ),
+          radial-gradient(
+            50% 50% at 90% 10%,
+            rgba(52, 211, 201, 0.28),
+            transparent 60%
+          ),
+          linear-gradient(
+            160deg,
+            var(--ink) 0%,
+            var(--ink-3) 55%,
+            var(--ink-2) 100%
+          );
+        padding: 96px 0 80px;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+          linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.045) 1px,
+            transparent 1px
+          );
+        background-size: 46px 46px;
+        mask-image: radial-gradient(60% 60% at 30% 30%, black, transparent 75%);
+        pointer-events: none;
+      }
+      .hero .wrap {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 56px;
+        align-items: center;
+      }
+      .hero-eyebrow {
+        color: var(--aqua);
+      }
+      .hero-eyebrow::before {
+        background: var(--grad);
+      }
+      h1.hero-title {
+        color: white;
+        font-size: 46px;
+        line-height: 1.12;
+        margin-top: 18px;
+        max-width: 560px;
+      }
+      h1.hero-title .accent {
+        background: var(--grad);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .hero-sub {
+        color: rgba(255, 255, 255, 0.72);
+        font-size: 16.5px;
+        max-width: 480px;
+        margin-top: 20px;
+      }
+      .hero-badges {
+        display: flex;
+        gap: 28px;
+        margin-top: 30px;
+        flex-wrap: wrap;
+      }
+      .hero-badge {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12.5px;
+        color: rgba(255, 255, 255, 0.85);
+      }
+      .hero-badge b {
+        display: block;
+        font-family: "Fraunces", serif;
+        font-size: 15px;
+        font-weight: 600;
+        color: white;
+        margin-bottom: 2px;
+      }
+      .hero-ctas {
+        display: flex;
+        gap: 14px;
+        margin-top: 36px;
+      }
+      .hero-ctas .btn-ghost {
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
+        border-color: rgba(255, 255, 255, 0.22);
+      }
+      .hero-ctas .btn-ghost:hover {
+        background: rgba(255, 255, 255, 0.16);
+      }
+
+      /* hero visual: consensus stack */
+      .hero-visual {
+        position: relative;
+        height: 460px;
+      }
+      .glow-ring {
+        position: absolute;
+        inset: 0;
+        margin: auto;
+        width: 340px;
+        height: 340px;
+        background: var(--grad);
+        filter: blur(70px);
+        opacity: 0.35;
+        border-radius: 50%;
+        animation: pulse 6s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 0.3;
+        }
+        50% {
+          transform: scale(1.08);
+          opacity: 0.45;
+        }
+      }
+      .stack-card {
+        position: absolute;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(18px) saturate(160%);
+        -webkit-backdrop-filter: blur(18px) saturate(160%);
+        box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+        animation: float 7s ease-in-out infinite;
+      }
+      .stack-card.main {
+        width: 300px;
+        height: 340px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 3;
+      }
+      .stack-card.main img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.94;
+      }
+      .stack-card.back-a {
+        width: 260px;
+        height: 300px;
+        left: 14px;
+        top: 26px;
+        z-index: 1;
+        opacity: 0.55;
+        animation-delay: 0.6s;
+      }
+      .stack-card.back-b {
+        width: 260px;
+        height: 300px;
+        right: 6px;
+        bottom: 8px;
+        z-index: 2;
+        opacity: 0.75;
+        animation-delay: 1.2s;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+      .stack-card.main {
+        animation-name: floatMain;
+      }
+      @keyframes floatMain {
+        0%,
+        100% {
+          transform: translate(-50%, -50%);
+        }
+        50% {
+          transform: translate(-50%, -54%);
+        }
+      }
+      .pin {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--aqua);
+        box-shadow: 0 0 0 5px rgba(52, 211, 201, 0.2);
+        animation: pulse2 2.4s ease-in-out infinite;
+      }
+      @keyframes pulse2 {
+        0%,
+        100% {
+          box-shadow: 0 0 0 5px rgba(52, 211, 201, 0.2);
+        }
+        50% {
+          box-shadow: 0 0 0 9px rgba(52, 211, 201, 0.05);
+        }
+      }
+
+      /* ---------- brochure strip ---------- */
+      .brochure {
+        background: var(--paper-card);
+        border-top: 1px solid rgba(20, 40, 92, 0.06);
+      }
+      .brochure .wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 26px 32px;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+      .brochure p.lead {
+        color: var(--ink);
+        font-weight: 600;
+        font-family: "Fraunces", serif;
+        font-size: 16px;
+      }
+      .brochure p.small {
+        color: var(--text-muted);
+        font-size: 13.5px;
+        margin-top: 3px;
+      }
+
+      /* ---------- section shell ---------- */
+      section {
+        padding: 88px 0;
+      }
+      .section-head {
+        max-width: 640px;
+        margin: 0 auto 48px;
+        text-align: left;
+      }
+      .section-head h2 {
+        font-size: 32px;
+        margin-top: 14px;
+      }
+      .section-head p {
+        margin-top: 12px;
+        font-size: 15.5px;
+      }
+      .center {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      /* ---------- services ---------- */
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 22px;
+      }
+      .service-card {
+        background: var(--paper-card);
+        border: 1px solid rgba(20, 40, 92, 0.07);
+        border-radius: var(--radius);
+        padding: 30px 26px;
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease,
+          border-color 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+      .service-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        background: linear-gradient(
+          160deg,
+          rgba(79, 157, 255, 0.08),
+          rgba(52, 211, 201, 0.05)
+        );
+        transition: opacity 0.3s ease;
+      }
+      .service-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 24px 48px -24px rgba(20, 40, 92, 0.25);
+        border-color: rgba(79, 157, 255, 0.25);
+      }
+      .service-card:hover::before {
+        opacity: 1;
+      }
+      .service-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        margin-bottom: 18px;
+        background: var(--grad);
+        padding: 2px;
+        position: relative;
+        z-index: 1;
+      }
+      .service-icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 12px;
+        background: white;
+        padding: 8px;
+      }
+      .service-card h5 {
+        font-size: 17px;
+        position: relative;
+        z-index: 1;
+      }
+      .service-card p {
+        font-size: 14px;
+        margin-top: 8px;
+        position: relative;
+        z-index: 1;
+      }
+      .service-card ul {
+        list-style: none;
+        padding: 0;
+        margin: 16px 0 0;
+        position: relative;
+        z-index: 1;
+      }
+      .service-card li {
+        font-size: 13px;
+        color: var(--text-muted);
+        padding: 6px 0 6px 20px;
+        position: relative;
+        border-top: 1px dashed rgba(20, 40, 92, 0.09);
+      }
+      .service-card li:first-child {
+        border-top: none;
+      }
+      .service-card li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--sky);
+        font-weight: 700;
+      }
+
+      /* ---------- stats ---------- */
+      .stats {
+        background: linear-gradient(
+          150deg,
+          var(--ink) 0%,
+          var(--ink-3) 60%,
+          var(--ink-2) 100%
+        );
+        position: relative;
+        overflow: hidden;
+      }
+      .stats::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          50% 60% at 80% 20%,
+          rgba(52, 211, 201, 0.18),
+          transparent 60%
+        );
+      }
+      .stats .wrap {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+      }
+      .stat-card {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 16px;
+        padding: 26px 22px;
+        backdrop-filter: blur(10px);
+        text-align: center;
+      }
+      .stat-num {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 34px;
+        font-weight: 600;
+        color: white;
+      }
+      .stat-num .grad {
+        background: var(--grad);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .stat-label {
+        color: rgba(255, 255, 255, 0.75);
+        font-size: 13.5px;
+        margin-top: 6px;
+        font-weight: 600;
+      }
+      .stat-sub {
+        color: rgba(255, 255, 255, 0.45);
+        font-size: 12px;
+        margin-top: 2px;
+      }
+
+      /* ---------- why prigina ---------- */
+      .why-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+      .why-card {
+        padding: 8px;
+      }
+      .why-num {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        color: var(--sky);
+        font-weight: 600;
+        margin-bottom: 14px;
+        display: block;
+      }
+      .why-card h5 {
+        font-size: 18px;
+        margin-bottom: 8px;
+      }
+      .why-card p {
+        font-size: 14.5px;
+      }
+
+      /* ---------- specialties ---------- */
+      .spec-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 16px;
+      }
+      .spec-card {
+        position: relative;
+        border-radius: 16px;
+        overflow: hidden;
+        aspect-ratio: 1/1.05;
+        cursor: pointer;
+      }
+      .spec-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition:
+          transform 0.5s ease,
+          filter 0.5s ease;
+      }
+      .spec-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          0deg,
+          rgba(10, 24, 52, 0.92) 0%,
+          rgba(10, 24, 52, 0.15) 55%,
+          rgba(10, 24, 52, 0.05) 100%
+        );
+      }
+      .spec-text {
+        position: absolute;
+        left: 14px;
+        right: 14px;
+        bottom: 14px;
+      }
+      .spec-text h6 {
+        color: white;
+        font-family: "Fraunces", serif;
+        font-size: 14.5px;
+        font-weight: 600;
+        margin: 0;
+      }
+      .spec-text p {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 11.5px;
+        margin-top: 4px;
+        opacity: 0;
+        max-height: 0;
+        transition: opacity 0.3s ease;
+      }
+      .spec-card:hover img {
+        transform: scale(1.08);
+      }
+      .spec-card:hover .spec-text p {
+        opacity: 1;
+      }
+      .spec-more {
+        grid-column: span 6;
+        text-align: center;
+        margin-top: 8px;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12.5px;
+        color: var(--text-muted);
+        letter-spacing: 0.04em;
+      }
+
+      /* ---------- what you receive ---------- */
+      .receive {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 56px;
+        align-items: center;
+      }
+      .receive-list {
+        list-style: none;
+        padding: 0;
+        margin: 22px 0 0;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .receive-list li {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        font-size: 15px;
+        color: var(--text);
+        padding: 16px 18px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.6);
+        border: 1px solid rgba(20, 40, 92, 0.06);
+        backdrop-filter: blur(6px);
+      }
+      .check {
+        flex: none;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: var(--grad);
+        color: white;
+        font-size: 12px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 1px;
+      }
+      .receive-img {
+        border-radius: 20px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 30px 60px -30px rgba(20, 40, 92, 0.4);
+      }
+      .disclaimer {
+        margin-top: 24px;
+        font-size: 12.5px;
+        color: var(--text-muted);
+        border-left: 2px solid var(--aqua);
+        padding-left: 14px;
+      }
+
+      /* ---------- CTA ---------- */
+      .cta {
+        background:
+          radial-gradient(
+            60% 80% at 80% 0%,
+            rgba(52, 211, 201, 0.25),
+            transparent 60%
+          ),
+          linear-gradient(135deg, var(--ink) 0%, var(--ink-2) 100%);
+        border-radius: 28px;
+        margin: 0 32px;
+        padding: 64px 56px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .cta h3 {
+        color: white;
+        font-size: 30px;
+      }
+      .cta p {
+        color: rgba(255, 255, 255, 0.7);
+        margin-top: 12px;
+        font-size: 15.5px;
+      }
+      .cta .btn-primary {
+        margin-top: 26px;
+        padding: 15px 32px;
+        font-size: 15px;
+      }
+
+      /* ---------- app download ---------- */
+      .app {
+        background: linear-gradient(180deg, var(--paper), #eef3fa);
+      }
+      .app .wrap {
+        display: grid;
+        grid-template-columns: 1fr 0.8fr;
+        align-items: center;
+        gap: 40px;
+      }
+      .app-badges {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+      }
+      .store-badge {
+        background: var(--ink);
+        color: white;
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-size: 12.5px;
+        font-family: "IBM Plex Mono", monospace;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .app-visual {
+        background: linear-gradient(160deg, var(--ink-3), var(--ink));
+        border-radius: 24px;
+        height: 280px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+      }
+      .app-visual img {
+        max-height: 320px;
+        margin-bottom: -20px;
+        filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.4));
+      }
+
+      /* ---------- footer ---------- */
+      footer {
+        background: var(--ink);
+        color: rgba(255, 255, 255, 0.6);
+        padding: 64px 0 28px;
+      }
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr 1fr 1fr;
+        gap: 36px;
+      }
+      footer h6 {
+        color: white;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+      }
+      footer ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        font-size: 13.5px;
+      }
+      footer ul a:hover {
+        color: var(--aqua);
+      }
+      .footer-bottom {
+        margin-top: 48px;
+        padding-top: 24px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        justify-content: space-between;
+        font-size: 12.5px;
+        color: rgba(255, 255, 255, 0.4);
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      @media (max-width: 980px) {
+        .hero .wrap {
+          grid-template-columns: 1fr;
+        }
+        .hero-visual {
+          height: 340px;
+          margin-top: 20px;
+        }
+        .services-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .stats .wrap {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .why-grid {
+          grid-template-columns: 1fr;
+        }
+        .spec-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .spec-more {
+          grid-column: span 3;
+        }
+        .receive {
+          grid-template-columns: 1fr;
+        }
+        .app .wrap {
+          grid-template-columns: 1fr;
+        }
+        .footer-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        nav.links {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="wrap">
+        <span>USA-Registered Telemedicine Company</span>
+        <span>🇺🇸 EN</span>
+      </div>
+    </div>
+
+    <header class="nav">
+      <div class="wrap">
+        <div class="brand"><span class="brand-mark">P</span> PriGina</div>
+        <nav class="links">
+          <a href="#">Home</a>
+          <a href="#">How It Works</a>
+          <a href="#">Specialists</a>
+          <a href="#">For Patients</a>
+          <a href="#">For Doctors</a>
+          <a href="#">About Us</a>
+        </nav>
+        <a class="btn btn-primary" href="#">Get a Second Opinion</a>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="wrap">
+        <div>
+          <div class="eyebrow hero-eyebrow">
+            Second Medical Opinions, Online
+          </div>
+          <h1 class="hero-title">
+            When the Diagnosis Matters,
+            <span class="accent">Get a Second Opinion.</span>
+          </h1>
+          <p class="hero-sub">
+            Access experienced physicians worldwide for independent medical
+            insights — giving you clarity, confidence, and control over your
+            health decisions.
+          </p>
+          <div class="hero-badges">
+            <div class="hero-badge">
+              <b>USA-Registered</b>Telemedicine Company
+            </div>
+            <div class="hero-badge"><b>Healthcare</b>Without Borders</div>
+          </div>
+          <div class="hero-ctas">
+            <a class="btn btn-primary" href="#">Get a Second Opinion</a>
+            <a class="btn btn-ghost" href="#">How It Works</a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="glow-ring"></div>
+          <div class="stack-card back-a"></div>
+          <div class="stack-card back-b"></div>
+          <div class="stack-card main">
+            <img
+              src="https://priginaglobaltelemed.com/build/img/home-1.jpeg"
+              alt="Physician consultation"
+            />
+          </div>
+          <div class="pin" style="top: 18%; left: 8%"></div>
+          <div
+            class="pin"
+            style="bottom: 14%; right: 10%; animation-delay: 1s"
+          ></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="brochure">
+      <div class="wrap">
+        <div>
+          <p class="lead">Learn More About PriGina</p>
+          <p class="small">
+            Download our patient brochure to learn more about how we can help
+            you.
+          </p>
+        </div>
+        <a class="btn btn-ghost" href="#">Download Brochure ↓</a>
+      </div>
+    </div>
+
+    <section class="services reveal">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">The PriGina Model</div>
+          <h2>Our Services</h2>
+        </div>
+        <div class="services-grid">
+          <div class="service-card">
+            <div class="service-icon">
+              <img
+                src="https://priginaglobaltelemed.com/images/features/1.png"
+                alt=""
+              />
+            </div>
+            <h5>Case Review & Consultation</h5>
+            <p>Expert analysis of medical history and files.</p>
+            <ul>
+              <li>1-on-1 discussion</li>
+              <li>Report provided</li>
+              <li>Report + consultation files</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">
+              <img
+                src="https://priginaglobaltelemed.com/images/features/2.png"
+                alt=""
+              />
+            </div>
+            <h5>Second Opinion Services</h5>
+            <p>Access independent expert medical evaluations.</p>
+            <ul>
+              <li>Confirm your diagnosis</li>
+              <li>Evaluate treatment options</li>
+              <li>Peace of mind with expert review</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">
+              <img
+                src="https://priginaglobaltelemed.com/images/features/4.png"
+                alt=""
+              />
+            </div>
+            <h5>Medical Guidance Pathways</h5>
+            <p>Navigating your health journey with confidence.</p>
+            <ul>
+              <li>Expert interpretation of your case</li>
+              <li>Clarification of medical reports</li>
+              <li>Informed decision-making support</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">
+              <img
+                src="https://priginaglobaltelemed.com/images/features/3.png"
+                alt=""
+              />
+            </div>
+            <h5>Multidisciplinary Case Review</h5>
+            <p>Complex cases reviewed by multiple specialists.</p>
+            <ul>
+              <li>Multiple expert opinions</li>
+              <li>Collaborative review</li>
+              <li>Detailed written report</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats reveal">
+      <div class="wrap">
+        <div class="stat-card">
+          <div class="stat-num"><span class="grad">50+</span></div>
+          <div class="stat-label">Expert Specialists</div>
+          <div class="stat-sub">Across the globe</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num"><span class="grad">20+</span></div>
+          <div class="stat-label">Medical Specialties</div>
+          <div class="stat-sub">Wide range of expertise</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="font-size: 20px; padding-top: 8px">
+            <span class="grad">Worldwide</span>
+          </div>
+          <div class="stat-label">Available Everywhere</div>
+          <div class="stat-sub">Healthcare without borders</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num"><span class="grad">100%</span></div>
+          <div class="stat-label">Secure & Confidential</div>
+          <div class="stat-sub">Your data is always protected</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="why reveal">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">Why PriGina?</div>
+          <h2>Built for Better Medical Decisions</h2>
+        </div>
+        <div class="why-grid">
+          <div class="why-card">
+            <span class="why-num">01</span>
+            <h5>Independent Expert Insight</h5>
+            <p>
+              Unbiased medical opinions focused on your case — not institutional
+              constraints.
+            </p>
+          </div>
+          <div class="why-card">
+            <span class="why-num">02</span>
+            <h5>Global Access</h5>
+            <p>
+              Connect with top specialists across borders, without travel or
+              long wait times.
+            </p>
+          </div>
+          <div class="why-card">
+            <span class="why-num">03</span>
+            <h5>Secure & Confidential</h5>
+            <p>
+              Your medical data is handled with strict privacy and security
+              standards.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="specialties reveal">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">Wide Expertise</div>
+          <h2>Our Medical Specialties</h2>
+          <p>
+            Connect with expert physicians across a wide range of specialties.
+          </p>
+        </div>
+        <div class="spec-grid">
+          <div class="spec-card">
+            <img
+              src="https://priginaglobaltelemed.com/images/specs/cardiology.jpeg"
+            />
+            <div class="spec-overlay"></div>
+            <div class="spec-text">
+              <h6>Cardiology</h6>
+              <p>Heart & cardiovascular care</p>
+            </div>
+          </div>
+          <div class="spec-card">
+            <img
+              src="https://priginaglobaltelemed.com/images/specs/brain.jpeg"
+            />
+            <div class="spec-overlay"></div>
+            <div class="spec-text">
+              <h6>Neurology</h6>
+              <p>Brain, spine & nerve care</p>
+            </div>
+          </div>
+          <div class="spec-card">
+            <img
+              src="https://priginaglobaltelemed.com/images/specs/bone.jpeg"
+            />
+            <div class="spec-overlay"></div>
+            <div class="spec-text">
+              <h6>Orthopedics</h6>
+              <p>Bone & joint experts</p>
+            </div>
+          </div>
+          <div class="spec-card">
+            <img
+              src="https://priginaglobaltelemed.com/images/specs/chest.jpeg"
+            />
+            <div class="spec-overlay"></div>
+            <div class="spec-text">
+              <h6>Pulmonology</h6>
+              <p>Respiratory conditions</p>
+            </div>
+          </div>
+          <div class="spec-card">
+            <img
+              src="https://priginaglobaltelemed.com/images/specs/pediatrics.jpeg"
+            />
+            <div class="spec-overlay"></div>
+            <div class="spec-text">
+              <h6>Pediatrics</h6>
+              <p>Infants, children & teens</p>
+            </div>
+          </div>
+          <div class="spec-card">
+            <img
+              src="https://priginaglobaltelemed.com/images/specs/womens-health.jpeg"
+            />
+            <div class="spec-overlay"></div>
+            <div class="spec-text">
+              <h6>Women's Health</h6>
+              <p>Care at every stage</p>
+            </div>
+          </div>
+          <div class="spec-more">
+            + Internal Medicine · Oncology · Endocrinology · Family Medicine ·
+            ENT · Dermatology and more
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="receive reveal">
+      <div class="wrap receive">
+        <div>
+          <div class="eyebrow">What You Receive</div>
+          <h2 style="font-size: 28px; margin-top: 14px">
+            Your Second Opinion Includes:
+          </h2>
+          <ul class="receive-list">
+            <li>
+              <span class="check">✓</span>Detailed medical case review by a
+              qualified specialist
+            </li>
+            <li>
+              <span class="check">✓</span>Expert-written opinion report with
+              clear insights
+            </li>
+            <li>
+              <span class="check">✓</span>Personalized recommendations and
+              next-step guidance
+            </li>
+            <li>
+              <span class="check">✓</span>Optional follow-up discussion with
+              your physician
+            </li>
+          </ul>
+          <p class="disclaimer">
+            This service does not replace your primary physician and does not
+            provide diagnosis, treatment, or prescriptions.
+          </p>
+        </div>
+        <div class="receive-img">
+          <img src="https://priginaglobaltelemed.com/build/img/home-2.jpeg" />
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <div class="cta reveal">
+        <div
+          class="eyebrow center"
+          style="justify-content: center; color: var(--aqua)"
+        >
+          Get the Clarity You Deserve
+        </div>
+        <h3>Make informed medical decisions with confidence.</h3>
+        <p>Request your second opinion and connect with a specialist today.</p>
+        <a class="btn btn-primary" href="#">Request Your Second Opinion →</a>
+      </div>
+    </div>
+
+    <section class="app reveal">
+      <div class="wrap">
+        <div>
+          <div class="eyebrow">Take Prigina With You</div>
+          <h2 style="margin-top: 14px; font-size: 28px">
+            Download the PriGina App today
+          </h2>
+          <p style="margin-top: 12px">
+            Working for your better health, wherever you are.
+          </p>
+          <div class="app-badges">
+            <div class="store-badge">🍎 App Store</div>
+            <div class="store-badge">▶ Google Play</div>
+          </div>
+        </div>
+        <div class="app-visual">
+          <img
+            src="https://priginaglobaltelemed.com/build/img/mobiles-Photoroom.png"
+            alt="App preview"
+          />
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap">
+        <div class="footer-grid">
+          <div>
+            <div class="brand" style="color: white">
+              <span class="brand-mark">P</span>PriGina
+            </div>
+            <p
+              style="
+                margin-top: 14px;
+                font-size: 13.5px;
+                color: rgba(255, 255, 255, 0.5);
+                max-width: 260px;
+              "
+            >
+              Modern healthcare platform connecting patients with trusted second
+              medical opinions worldwide.
+            </p>
+          </div>
+          <div>
+            <h6>For Patients</h6>
+            <ul>
+              <li><a href="#">How It Works</a></li>
+              <li><a href="#">FAQs</a></li>
+              <li><a href="#">Patient Stories</a></li>
+            </ul>
+          </div>
+          <div>
+            <h6>For Doctors</h6>
+            <ul>
+              <li><a href="#">Join Our Network</a></li>
+              <li><a href="#">FAQs</a></li>
+              <li><a href="#">Doctor Stories</a></li>
+            </ul>
+          </div>
+          <div>
+            <h6>Company</h6>
+            <ul>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Our Mission</a></li>
+              <li><a href="#">Contact Us</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span
+            >PriGina Global Telemed LLC — Registered in the United States © 2026
+            All Rights Reserved</span
+          >
+          <span>Privacy Policy · Terms & Conditions</span>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const els = document.querySelectorAll(".reveal");
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("in");
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.12 },
+      );
+      els.forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>

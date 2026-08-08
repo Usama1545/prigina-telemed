@@ -2765,7 +2765,7 @@ button.bg-danger:hover {
     -ms-transition: all 0.2s ease-in-out 0s;
     transition: all 0.2s ease-in-out 0s;
     width: 240px;
-    z-index: 1001;
+    z-index: 10001;
     position: fixed;
     top: 60px;
     bottom: 0;

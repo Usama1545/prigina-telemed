@@ -2,13 +2,13 @@
 
 @section('content')
     <!-- HERO -->
-    <section class="mb-5">
+    <section class="py-5 pg-hero">
         <div class="container">
             <div class="row align-items-center">
 
                 <!-- LEFT -->
                 <div class="col-lg-5">
-                    <h6 class="text-secondary">{{ __('app.for_doctors.label') }}</h6>
+                    <h6 class="text-secondary section-eyebrow">{{ __('app.for_doctors.label') }}</h6>
 
                     <h1 class="fw-bold mb-3 text-primary">
                         {{ __('app.for_doctors.headline') }}
@@ -19,54 +19,54 @@
                     </p>
 
                     <!-- FEATURES -->
-                    <div class="row mt-4 text-center">
+                    <div class="row mt-4 text-center reveal-group">
 
                         <!-- ITEM 1 -->
-                        <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="col-md-4 mb-3 mb-md-0 reveal">
                             <div class="h-100">
                                 <div class="icon-circle-soft mx-auto">
                                     <i class="fi fi-rr-users" style="font-size: 2rem; margin-top: 10px;"></i>
                                 </div>
 
-                                <p class="fw-bold mt-3 mb-1 text-black">
+                                <p class="fw-bold mt-3 mb-1 hero-feature-title">
                                     {{ __('app.for_doctors.make_difference') }}
                                 </p>
 
-                                <p class="small text-muted">
+                                <p class="small hero-feature-desc">
                                     {{ __('app.for_doctors.make_difference_desc') }}
                                 </p>
                             </div>
                         </div>
 
                         <!-- ITEM 2 (CENTER WITH BORDER) -->
-                        <div class="col-md-4 mb-3 mb-md-0 border-md">
+                        <div class="col-md-4 mb-3 mb-md-0 border-md reveal">
                             <div class="h-100">
                                 <div class="icon-circle-soft mx-auto">
                                     <i class="fi fi-rr-globe" style="font-size: 2rem; margin-top: 10px;"></i>
                                 </div>
 
-                                <p class="fw-bold mt-3 mb-1 text-black">
+                                <p class="fw-bold mt-3 mb-1 hero-feature-title">
                                     {{ __('app.for_doctors.work_anywhere') }}
                                 </p>
 
-                                <p class="small text-muted">
+                                <p class="small hero-feature-desc">
                                     {{ __('app.for_doctors.work_anywhere_desc') }}
                                 </p>
                             </div>
                         </div>
 
                         <!-- ITEM 3 -->
-                        <div class="col-md-4">
+                        <div class="col-md-4 reveal">
                             <div class=" h-100">
                                 <div class="icon-circle-soft mx-auto">
                                     <i class="fi fi-rr-shield-check" style="font-size: 2rem; margin-top: 10px;"></i>
                                 </div>
 
-                                <p class="fw-bold mt-3 mb-1 text-black">
+                                <p class="fw-bold mt-3 mb-1 hero-feature-title">
                                     {{ __('app.for_doctors.secure_compliant') }}
                                 </p>
 
-                                <p class="small text-muted">
+                                <p class="small hero-feature-desc">
                                     {{ __('app.for_doctors.secure_compliant_desc') }}
                                 </p>
                             </div>
@@ -98,37 +98,37 @@
     <section class="py-5 text-center">
         <div class="container">
 
-            <h2 class="fw-bold mb-5 text-primary">{{ __('app.for_doctors.why_headline') }}</h2>
+            <h2 class="fw-bold mb-5 text-primary section-title-serif">{{ __('app.for_doctors.why_headline') }}</h2>
 
-            <div class="d-flex flex-wrap justify-content-center gap-4">
+            <div class="d-flex flex-wrap justify-content-center gap-4 reveal-group">
 
-                <div class="feature-card bg-light">
+                <div class="feature-card bg-light reveal">
                     <i class="fi fi-rr-globe"></i>
-                    <h6>{{ __('app.for_doctors.global_impact') }}</h6>
+                    <h6 class="section-title-serif">{{ __('app.for_doctors.global_impact') }}</h6>
                     <p class="mt-2">{{ __('app.for_doctors.global_impact_desc') }}</p>
                 </div>
 
-                <div class="feature-card bg-light">
+                <div class="feature-card bg-light reveal">
                     <i class="fi fi-rr-calendar"></i>
-                    <h6>{{ __('app.for_doctors.flexible_schedule') }}</h6>
+                    <h6 class="section-title-serif">{{ __('app.for_doctors.flexible_schedule') }}</h6>
                     <p class="mt-2">{{ __('app.for_doctors.flexible_schedule_desc') }}</p>
                 </div>
 
-                <div class="feature-card bg-light">
+                <div class="feature-card bg-light reveal">
                     <i class="fi fi-rr-dollar"></i>
-                    <h6>{{ __('app.for_doctors.competitive_pay') }}</h6>
+                    <h6 class="section-title-serif">{{ __('app.for_doctors.competitive_pay') }}</h6>
                     <p class="mt-2">{{ __('app.for_doctors.competitive_pay_desc') }}</p>
                 </div>
 
-                <div class="feature-card bg-light">
+                <div class="feature-card bg-light reveal">
                     <i class="fi fi-rr-graduation-cap"></i>
-                    <h6>{{ __('app.for_doctors.professional_growth') }}</h6>
+                    <h6 class="section-title-serif">{{ __('app.for_doctors.professional_growth') }}</h6>
                     <p class="mt-2">{{ __('app.for_doctors.professional_growth_desc') }}</p>
                 </div>
 
-                <div class="feature-card bg-light">
+                <div class="feature-card bg-light reveal">
                     <i class="fi fi-rr-shield-check"></i>
-                    <h6>{{ __('app.for_doctors.secure_platform') }}</h6>
+                    <h6 class="section-title-serif">{{ __('app.for_doctors.secure_platform') }}</h6>
                     <p class="mt-2">{{ __('app.for_doctors.secure_platform_desc') }}</p>
                 </div>
 
@@ -142,7 +142,7 @@
     <section class="py-5 text-center bg-light">
         <div class="container">
 
-            <h2 class="fw-bold mb-5">{{ __('app.for_doctors.how_works_headline') }}</h2>
+            <h2 class="fw-bold mb-5 section-title-serif">{{ __('app.for_doctors.how_works_headline') }}</h2>
 
             @php
                 $steps = [
@@ -179,10 +179,10 @@
                 ];
             @endphp
 
-            <div class="row g-4 justify-content-center text-center">
+            <div class="row g-4 justify-content-center text-center reveal-group">
 
                 @foreach ($steps as $i => $step)
-                    <div class="col-6 col-md-4 col-lg position-relative step-col">
+                    <div class="col-6 col-md-4 col-lg position-relative step-col reveal">
 
                         <div class="step-card-doc h-100 position-relative d-flex flex-column">
 
@@ -192,7 +192,7 @@
                             </div>
 
                             <div class="p-3 pt-5 d-flex flex-column flex-grow-1">
-                                <h6 class="fw-semibold">{{ $step['title'] }}</h6>
+                                <h6 class="fw-semibold section-title-serif">{{ $step['title'] }}</h6>
                                 <p class="small text-muted">{{ $step['desc'] }}</p>
 
                                 <span class="step-underline-doc underline-{{ $step['accent'] }}"></span>
@@ -211,13 +211,13 @@
     <!-- Info Section -->
     <section class="info-section my-3">
         <div class="container">
-            <div class="contact-info">
+            <div class="contact-info reveal">
                 <div class="row align-items-center">
 
                     <!-- LEFT SIDE -->
                     <div class="col-lg-5">
                         <div class="wow fadeInUp" data-wow-duration="1s">
-                            <h3 class="info-title text-white">{{ __('app.for_doctors.cta_headline') }}</h3>
+                            <h3 class="info-title text-white section-title-serif">{{ __('app.for_doctors.cta_headline') }}</h3>
                             <p class="mb-0 text-white">
                                 {{ __('app.for_doctors.cta_desc') }}
                             </p>
@@ -308,6 +308,24 @@
             color: var(--primary);
         }
 
+        /* HERO FEATURE TEXT — hero is now a dark full-bleed band, so the
+           text-black title / plain description need to flip to light. */
+        .pg-hero .hero-feature-title {
+            color: #fff !important;
+        }
+
+        .pg-hero .hero-feature-desc {
+            color: rgba(255, 255, 255, 0.6) !important;
+        }
+
+        .pg-hero .icon-circle-soft {
+            background: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .pg-hero .icon-circle-soft i {
+            color: var(--pg-aqua) !important;
+        }
+
         .feature-card {
             width: 230px;
             border: 1px solid #e5e7eb;
@@ -326,7 +344,7 @@
 
         .feature-card i {
             font-size: 60px;
-            color: var(--primary);
+            color: var(--pg-sky);
             margin-bottom: 15px;
         }
 
@@ -389,11 +407,11 @@
         }
 
         .icon-grad-blue {
-            background: linear-gradient(135deg, var(--primary), #2f7ed8);
+            background: linear-gradient(135deg, var(--pg-sky), #2f7ed8);
         }
 
         .icon-grad-teal {
-            background: linear-gradient(135deg, var(--secondary), #17c3a4);
+            background: linear-gradient(135deg, var(--pg-aqua), #17c3a4);
         }
 
         .icon-grad-purple {
@@ -401,11 +419,11 @@
         }
 
         .badge-blue {
-            background: var(--primary);
+            background: var(--pg-sky);
         }
 
         .badge-teal {
-            background: var(--secondary);
+            background: var(--pg-aqua);
         }
 
         .badge-purple {
@@ -413,11 +431,11 @@
         }
 
         .underline-blue {
-            background: var(--primary);
+            background: var(--pg-sky);
         }
 
         .underline-teal {
-            background: var(--secondary);
+            background: var(--pg-aqua);
         }
 
         .underline-purple {
@@ -443,6 +461,18 @@
             background: #f1f5f9;
             padding: 10px;
             border-radius: 8px;
+        }
+
+        /* INFO / CTA polish to match the rest of the site */
+        section.info-section .contact-info {
+            background: radial-gradient(60% 80% at 80% 0%, rgba(52, 211, 201, 0.22), transparent 60%), linear-gradient(135deg, var(--pg-ink) 0%, var(--pg-ink-2) 100%) !important;
+        }
+
+        .info-section .btn-light {
+            background: var(--pg-grad) !important;
+            border: none !important;
+            border-radius: 100px !important;
+            color: #fff !important;
         }
 
         .hero-image {
@@ -481,4 +511,6 @@
             }
         }
     </style>
+
+    @include('partials.premium-theme')
 @endsection

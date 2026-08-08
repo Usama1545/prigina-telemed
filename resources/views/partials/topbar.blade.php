@@ -302,12 +302,71 @@
             position: sticky !important;
             top: 0;
             z-index: 999;
-            background: #fff;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, .04);
+            /* No backdrop-filter/transform/filter directly on this element:
+               any of those would make it a containing block for its
+               position:fixed descendants (the mobile .main-menu-wrapper
+               drawer), breaking the drawer's fixed positioning against the
+               viewport. The blur lives on the ::before pseudo instead. */
+            box-shadow: 0 1px 0 rgba(10, 24, 52, 0.06);
+            border-bottom: 1px solid rgba(10, 24, 52, 0.06);
+        }
+
+        .header.header-default::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(16px) saturate(160%);
+            -webkit-backdrop-filter: blur(16px) saturate(160%);
         }
 
         .dropdown-item:active {
             background-color: var(--primary) !important;
+        }
+
+        /* PREMIUM NAV REFINEMENTS */
+        .main-nav > li > a {
+            position: relative;
+            font-weight: 500;
+        }
+
+        .main-nav > li > a::after {
+            content: "";
+            position: absolute;
+            left: 12px;
+            right: 12px;
+            bottom: 4px;
+            height: 2px;
+            border-radius: 2px;
+            background: linear-gradient(135deg, #4F9DFF, #34D3C9);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform .25s ease;
+        }
+
+        .main-nav > li > a:hover::after,
+        .main-nav > li.active > a::after {
+            transform: scaleX(1);
+        }
+
+        .header-navbar-rht .btn.btn-primary,
+        .main-nav .btn.btn-primary {
+            background: linear-gradient(135deg, #4F9DFF, #34D3C9);
+            border: none;
+            border-radius: 100px;
+            box-shadow: 0 8px 20px -8px rgba(79, 157, 255, 0.55);
+            transition: transform .25s ease, box-shadow .25s ease;
+        }
+
+        .header-navbar-rht .btn.btn-primary:hover,
+        .main-nav .btn.btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 26px -6px rgba(79, 157, 255, 0.7);
+        }
+
+        .navbar-brand.logo img {
+            transition: transform .25s ease;
         }
     </style>
     <!-- /Header -->

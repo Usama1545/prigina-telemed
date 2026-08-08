@@ -3,14 +3,16 @@
 @section('content')
     <!-- index -->
     <!-- HERO -->
-    <section class=" mt-2">
+    <section class="hero-section">
         <div class="container">
             <div class="row align-items-center">
 
-                <div class="col-lg-5 order-2 order-lg-1">
-                    <h1 class="fw-bold text-primary display-5">
+                <div class="col-lg-5 order-2 order-lg-1 hero-copy">
+                    <div class="section-eyebrow hero-eyebrow">{{ __('app.home.hero_eyebrow') }}</div>
+
+                    <h1 class="fw-bold text-primary display-5 hero-title">
                         {{ __('app.home.hero_headline') }}<br>
-                        <span class="text-secondary">{{ __('app.home.hero_headline_2') }}</span>
+                        <span class="text-secondary accent">{{ __('app.home.hero_headline_2') }}</span>
                     </h1>
 
                     <p class="text-muted mt-3">
@@ -96,8 +98,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="alert alert-primary mt-4 mb-0 d-flex align-items-center gap-3" role="alert"
-                                style="background: #e0e5ed">
+                            <div class="alert alert-primary hero-note mt-4 mb-0 d-flex align-items-center gap-3"
+                                role="alert">
 
                                 <div class="rounded-circle bg-white d-flex align-items-center justify-content-center flex-shrink-0"
                                     style="width: 50px; height: 50px;">
@@ -113,49 +115,51 @@
 
                 </div>
 
-                <div class="col-lg-7 text-center hero-image order-1 order-lg-2 mb-4 mb-lg-0">
-                    <img src="{{ asset('build/img/home-1.jpeg') }}" class="img-fluid">
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-
-    <!-- Brochure Download -->
-    <section class="py-4">
-        <div class="px-3">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="d-flex align-items-center gap-4 p-4 rounded-3 border brochure-box"
-                        style="background:#f8faff;">
-                        <div class="flex-shrink-0 d-flex align-items-center justify-content-center rounded-3"
-                            style="width:72px;height:72px;background:#e8eef8;">
-                            <i class="fi fi-rr-document d-block lh-1 text-primary"
-                                style="font-size:2.2rem;margin-top:6px;"></i>
+                <div class="col-lg-7 order-1 order-lg-2 mb-4 mb-lg-0">
+                    <div class="hero-visual">
+                        <div class="hero-glow-ring"></div>
+                        <div class="hero-stack-card back-a"></div>
+                        <div class="hero-stack-card back-b"></div>
+                        <div class="hero-stack-card main">
+                            <img src="{{ asset('build/img/home-1.jpeg') }}" class="img-fluid">
                         </div>
-                        <div class="flex-grow-1">
-                            <h5 class="fw-bold mb-1">{{ __('app.home.brochure_title') }}</h5>
-                            <p class="text-muted mb-2 small">{{ __('app.home.brochure_desc') }}</p>
-                            <a href="{{ asset('build/file.pdf') }}" download
-                                class="fw-semibold text-primary text-decoration-none">
-                                {{ __('app.home.download_brochure') }} <i class="fi fi-rr-download ms-1"></i>
-                            </a>
-                        </div>
+                        <span class="hero-pin" style="top:16%; left:9%;"></span>
+                        <span class="hero-pin" style="bottom:13%; right:8%; animation-delay:1.2s;"></span>
                     </div>
                 </div>
+
             </div>
         </div>
+
+        <!-- Brochure Download (merged into hero) -->
+        <div class="hero-brochure">
+            <div class="container">
+                <div
+                    class="d-flex align-items-center justify-content-between flex-wrap gap-4 p-4 rounded-3 brochure-box reveal">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="flex-shrink-0 d-flex align-items-center justify-content-center rounded-3 brochure-icon">
+                            <i class="fi fi-rr-document d-block lh-1"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-1">{{ __('app.home.brochure_title') }}</h5>
+                            <p class="mb-0 small">{{ __('app.home.brochure_desc') }}</p>
+                        </div>
+                    </div>
+                    <a href="{{ asset('build/file.pdf') }}" download
+                        class="btn btn-outline-secondary px-4 py-2 flex-shrink-0">
+                        {{ __('app.home.download_brochure') }} <i class="fi fi-rr-download ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- /Brochure Download -->
     </section>
-    <!-- /Brochure Download -->
 
     <!-- OUR SERVICES: THE PRIGINA MODEL -->
     <section class="py-5 text-center services-model">
         <div class="container">
-            <h2 class="fw-bold mb-5">
-                <span class="text-dark">{{ __('app.home.services_headline_prefix') }}</span>
-                <span class="text-primary">{{ __('app.home.services_headline_highlight') }}</span>
-            </h2>
+            <div class="section-eyebrow center">{{ __('app.home.services_headline_highlight') }}</div>
+            <h2 class="fw-bold mb-5 section-title-serif">{{ __('app.home.services_headline_prefix') }}</h2>
 
             @php
                 $services = [
@@ -211,9 +215,9 @@
                 ];
             @endphp
 
-            <div class="row g-4 justify-content-center align-items-stretch">
+            <div class="row g-4 justify-content-center align-items-stretch reveal-group">
                 @foreach ($services as $service)
-                    <div class="col-lg-3 col-md-6">
+                    <div class="col-lg-3 col-md-6 reveal">
                         <div class="service-card h-100 text-start d-flex flex-column">
 
                             <div class="service-photo position-relative">
@@ -258,9 +262,9 @@
         <div class="container">
 
             <!-- STATS STRIP -->
-            <div class="row g-3 how-stats-strip text-start">
+            <div class="how-stats-grid how-stats-strip text-start reveal-group">
 
-                <div class="col-md-3 col-6">
+                <div class="how-stat-item reveal">
                     <div class="d-flex align-items-center gap-3">
                         <div class="how-stat-icon"><i class="fi fi-rr-users"></i></div>
                         <div>
@@ -271,7 +275,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3 col-6">
+                <div class="how-stat-item reveal">
                     <div class="d-flex align-items-center gap-3">
                         <div class="how-stat-icon"><i class="fi fi-rr-stethoscope"></i></div>
                         <div>
@@ -282,7 +286,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3 col-6">
+                <div class="how-stat-item reveal">
                     <div class="d-flex align-items-center gap-3">
                         <div class="how-stat-icon"><i class="fi fi-rr-globe"></i></div>
                         <div>
@@ -292,7 +296,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3 col-6">
+                <div class="how-stat-item reveal">
                     <div class="d-flex align-items-center gap-3">
                         <div class="how-stat-icon"><i class="fi fi-rr-lock"></i></div>
                         <div>
@@ -305,21 +309,23 @@
 
             </div>
 
-            <a href="{{ route('patient.dashboard') }}"
-                class="btn btn-secondary mt-5 px-4">{{ __('app.home.start_review') }}</a>
+            <a href="{{ route('patient.dashboard') }}" class="btn btn-secondary mt-5 px-4">
+                {{ __('app.home.start_review') }}
+            </a>
         </div>
     </section>
 
-    <section class="py-5 bg-light text-center">
+    <section class="py-5 bg-light text-center why-section">
         <div class="container">
-            <h6 class="text-secondary">{{ __('app.home.why_label') }}</h6>
-            <h2 class="fw-bold mb-5">{{ __('app.home.why_headline') }}</h2>
+            <h6 class="text-secondary section-eyebrow center">{{ __('app.home.why_label') }}</h6>
+            <h2 class="fw-bold mb-5 section-title-serif">{{ __('app.home.why_headline') }}</h2>
 
-            <div class="row align-items-stretch">
+            <div class="row align-items-stretch reveal-group">
 
                 <!-- ITEM 1 -->
-                <div class="col-md-4 mb-4 mb-md-0">
+                <div class="col-md-4 mb-4 mb-md-0 reveal">
                     <div class="px-3 h-100">
+                        <span class="why-num">01</span>
                         <div class="mb-3">
                             <div class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm  icon-soft-primary"
                                 style="width:70px;height:70px;">
@@ -336,9 +342,9 @@
                 </div>
 
                 <!-- ITEM 2 (WITH BORDERS) -->
-                <div class="col-md-4 mb-4 mb-md-0">
+                <div class="col-md-4 mb-4 mb-md-0 reveal">
                     <div class="px-3 h-100 position-relative border-start border-end">
-
+                        <span class="why-num">02</span>
                         <div class="mb-3">
                             <div class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm icon-soft-secondary"
                                 style="width:70px;height:70px;">
@@ -357,8 +363,9 @@
                 </div>
 
                 <!-- ITEM 3 -->
-                <div class="col-md-4">
+                <div class="col-md-4 reveal">
                     <div class="px-3 h-100">
+                        <span class="why-num">03</span>
                         <div class="mb-3">
                             <div class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm icon-soft-primary"
                                 style="width:70px;height:70px;">
@@ -381,12 +388,12 @@
 
     <!-- DOCTORS -->
     @if (check() && is_patient())
-        <section class="py-5">
+        <section class="py-5 featured-section">
             <div class="container">
                 <div class="position-relative mb-5">
                     <div class="text-center">
-                        <h6 class="text-secondary">{{ __('app.home.featured_label') }}</h6>
-                        <h2 class="fw-bold mb-0">{{ __('app.home.featured_headline') }}</h2>
+                        <h6 class="text-secondary section-eyebrow center">{{ __('app.home.featured_label') }}</h6>
+                        <h2 class="fw-bold mb-0 section-title-serif">{{ __('app.home.featured_headline') }}</h2>
                     </div>
                     <a href="{{ route('doctors') }}"
                         class="view-specialists-link text-primary fw-semibold text-decoration-none d-inline-flex align-items-center mt-3 mt-md-0">
@@ -477,13 +484,15 @@
         <section class="py-5 leftpadding">
             <div class="container">
                 <div class="text-center mb-5">
-                    <h2 class="fw-bold specialties-headline">{{ __('app.home.specialties_headline') }}</h2>
+                    <div class="section-eyebrow center">{{ __('app.home.specialties_label') }}</div>
+                    <h2 class="fw-bold specialties-headline section-title-serif">{{ __('app.home.specialties_headline') }}
+                    </h2>
                     <p class="text-muted mx-auto" style="max-width:480px;">
                         {{ __('app.home.specialties_desc') }}
                     </p>
                 </div>
 
-                <div class="row g-4 justify-content-center">
+                <div class="row g-4 justify-content-center reveal-group">
                     @php
                         $specialties = [
                             [
@@ -586,7 +595,7 @@
                     @endphp
 
                     @foreach ($specialties as $spec)
-                        <div class="col-6 col-md-3 {{ $loop->index >= 6 ? 'd-none d-md-block' : '' }}">
+                        <div class="col-6 col-md-3 reveal {{ $loop->index >= 6 ? 'd-none d-md-block' : '' }}">
                             <div class="specialty-card-v2 h-100 bg-white">
                                 <div class="specialty-photo position-relative">
                                     <img src="{{ asset('images/specs/' . $spec['img']) }}" alt="{{ $spec['name'] }}"
@@ -625,14 +634,14 @@
         </section>
     @endif
 
-    <section class="bg-light">
+    <section class="bg-light receive-section">
         <div class="container py-4 py-lg-0">
-            <div class="row align-items-center">
+            <div class="row align-items-center reveal">
 
                 <div class="col-lg-3">
-                    <h6 class="text-secondary text-start">{{ __('app.home.what_receive_label') }}</h6>
+                    <h6 class="text-secondary text-start section-eyebrow">{{ __('app.home.what_receive_label') }}</h6>
 
-                    <h2>{{ __('app.home.what_receive_headline') }}</h2>
+                    <h2 class="section-title-serif">{{ __('app.home.what_receive_headline') }}</h2>
 
                     <ul class="mt-4 list-check">
                         <li>
@@ -674,10 +683,10 @@
     </section>
 
 
-    <section class="py-4 mx-md-4">
+    <section class="py-4 info-section">
         <div class="container ">
             <div
-                class="p-4 border rounded bg-light mx-5 d-flex flex-column flex-md-row align-items-center align-items-md-stretch disclaimer-box">
+                class="p-4 border rounded bg-light d-flex flex-column flex-md-row align-items-center align-items-md-stretch disclaimer-box reveal">
 
                 <!-- ICON -->
                 <div class="disclaimer-icon mb-3 mb-md-0">
@@ -695,6 +704,7 @@
                     </p>
                 </div>
 
+
             </div>
         </div>
     </section>
@@ -702,15 +712,14 @@
     <!-- Info Section -->
     <section class="info-section my-3">
         <div class="container">
-            <div class="contact-info">
+            <div class="contact-info reveal">
                 <div class="info-col">
                     <div class="wow fadeInUp" data-wow-duration="1s">
                         <h3 class="info-title">{{ __('app.home.info_headline') }}</h3>
                         <p class="mb-0 text-white">{{ __('app.home.info_desc') }}</p>
                     </div>
                     <div class="support-info wow fadeInUp" data-wow-duration="1s">
-                        <a href="{{ patient_cta_route('login') }}"
-                            class="btn btn-light px-4 mt-3 mt-md-0">
+                        <a href="{{ patient_cta_route('login') }}" class="btn btn-light px-4 mt-3 mt-md-0">
                             {{ __('app.home.info_cta') }}
                         </a>
                     </div>
@@ -723,14 +732,15 @@
     <!-- App Section -->
     <section class="app-section app-sec-one p-0 mb-3">
         <div class="container">
-            <div class="app-bg">
+            <div class="app-bg reveal">
                 <div class="row">
                     <div class="col-lg-6 col-md-12">
                         <div class="app-content d-flex flex-column justify-content-center">
 
                             <div class="section-header section-header-one wow fadeInUp" data-wow-duration="1s">
-                                <p class="mt-0 mb-0">{{ __('app.home.app_working') }}</p>
-                                <h2 class="section-title">{{ __('app.home.app_headline') }}</h2>
+                                <p class="mt-0 mb-0 section-eyebrow section-eyebrow-dark">
+                                    {{ __('app.home.app_working') }}</p>
+                                <h2 class="section-title section-title-serif">{{ __('app.home.app_headline') }}</h2>
                             </div>
                             <div class="google-imgs wow fadeInUp" data-wow-duration="1s">
                                 <a href="#"><img src="{{ URL::asset('build/img/icons/app-store.svg') }}"
@@ -1044,6 +1054,27 @@
             border-radius: 12px;
             padding: 20px 12px;
         }
+        .how-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 1.5rem;
+        }
+
+        .how-stat-item {
+            min-width: 0;
+        }
+
+        @media (max-width: 991.98px) {
+            .how-stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .how-stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
 
         .how-stat-icon {
             width: 48px;
@@ -1336,24 +1367,24 @@
         }
 
         .leftpadding {
-            padding: 0 220px;
+            padding: 88px 220px;
         }
 
         @media (max-width: 1200px) {
             .leftpadding {
-                padding: 0 100px;
+                padding: 72px 100px;
             }
         }
 
         @media (max-width: 768px) {
             .leftpadding {
-                padding: 0 20px;
+                padding: 56px 20px;
             }
         }
 
         @media (max-width: 480px) {
             .leftpadding {
-                padding: 0 10px;
+                padding: 48px 10px;
             }
         }
 
@@ -1376,5 +1407,727 @@
                 justify-content: center;
             }
         }
+
+        /* ============================================================
+                   PREMIUM REDESIGN
+                   ============================================================ */
+        :root {
+            --pg-ink: #0A1834;
+            --pg-ink-2: #14285C;
+            --pg-ink-3: #1B2F63;
+            --pg-sky: #4F9DFF;
+            --pg-aqua: #34D3C9;
+            --pg-grad: linear-gradient(135deg, var(--pg-sky), var(--pg-aqua));
+        }
+
+        .hero-title,
+        .section-title-serif,
+        .service-card h5,
+        .why-section h5,
+        .specialty-card-v2 h6,
+        .doctor-item .custom-title,
+        section.info-section .contact-info p.mb-0.text-white,
+        .app-sec-one h2.section-title {
+            font-family: 'Fraunces', serif;
+            letter-spacing: -0.01em;
+        }
+
+        /* eyebrow labels */
+        .section-eyebrow {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--pg-sky);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .section-eyebrow::before {
+            content: "";
+            width: 16px;
+            height: 1px;
+            background: var(--pg-grad);
+        }
+
+        .section-eyebrow.center {
+            justify-content: center;
+        }
+
+        .section-eyebrow-dark {
+            color: #8fd8ff;
+        }
+
+        .section-eyebrow-dark::before {
+            background: linear-gradient(135deg, #8fd8ff, #34D3C9);
+        }
+
+        /* ---------------- HERO (full-bleed dark) ---------------- */
+        .hero-section {
+            position: relative;
+            padding: 88px 0 0;
+            overflow: hidden;
+            background:
+                radial-gradient(60% 55% at 15% 20%, rgba(79, 157, 255, 0.35), transparent 60%),
+                radial-gradient(50% 50% at 90% 10%, rgba(52, 211, 201, 0.28), transparent 60%),
+                linear-gradient(160deg, var(--pg-ink) 0%, var(--pg-ink-3) 55%, var(--pg-ink-2) 100%);
+        }
+
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+            background-size: 46px 46px;
+            mask-image: radial-gradient(60% 60% at 30% 30%, black, transparent 75%);
+            -webkit-mask-image: radial-gradient(60% 60% at 30% 30%, black, transparent 75%);
+            pointer-events: none;
+        }
+
+        .hero-section .row {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            color: #fff !important;
+        }
+
+        .hero-title .accent {
+            background: var(--pg-grad);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent !important;
+        }
+
+        .hero-section p.text-muted {
+            color: rgba(255, 255, 255, 0.72) !important;
+        }
+
+        .hero-section .trust-badges p.fw-bold {
+            color: #fff !important;
+        }
+
+        .hero-section .trust-badges p.text-muted {
+            color: rgba(255, 255, 255, 0.6) !important;
+        }
+
+        .trust-divider {
+            background: rgba(255, 255, 255, 0.18) !important;
+        }
+
+        .trust-badge-icon {
+            color: var(--pg-aqua) !important;
+        }
+
+        .hero-features hr {
+            border-color: rgba(255, 255, 255, 0.12);
+            opacity: 1;
+        }
+
+        .hero-section .hero-feat-icon {
+            background: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .hero-section .hero-feat-icon i {
+            color: #8fd8ff !important;
+        }
+
+        .hero-features p.fw-bold {
+            color: #fff !important;
+        }
+
+        .hero-features p.text-muted {
+            color: rgba(255, 255, 255, 0.55) !important;
+        }
+
+        .hero-note {
+            background: rgba(255, 255, 255, 0.08) !important;
+            border: 1px solid rgba(255, 255, 255, 0.16) !important;
+        }
+
+        .hero-note span {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .hero-note .bg-white {
+            background: #fff !important;
+        }
+
+        .hero-section .btn-primary,
+        .specialty-note .btn-primary,
+        .how-works .btn-secondary,
+        .info-section .btn-light {
+            background: var(--pg-grad) !important;
+            border: none !important;
+            border-radius: 100px !important;
+            color: #fff !important;
+            box-shadow: 0 10px 24px -8px rgba(79, 157, 255, 0.5) !important;
+        }
+
+        .hero-section .btn-primary:hover,
+        .specialty-note .btn-primary:hover,
+        .how-works .btn-secondary:hover,
+        .info-section .btn-light:hover {
+            box-shadow: 0 14px 30px -6px rgba(79, 157, 255, 0.65) !important;
+        }
+
+        .hero-section .btn-outline-secondary {
+            border-radius: 100px;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.22);
+            color: #fff;
+        }
+
+        .hero-section .btn-outline-secondary:hover {
+            background: rgba(255, 255, 255, 0.16);
+            color: #fff;
+        }
+
+        @media (max-width: 767.98px) {
+            .hero-section {
+                padding: 64px 0 0;
+            }
+        }
+
+        /* ---------------- HERO BROCHURE STRIP (merged into hero) ---------------- */
+        .hero-brochure {
+            position: relative;
+            z-index: 1;
+            margin-top: 56px;
+            padding: 32px 0 48px;
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .hero-brochure .brochure-box {
+            background: rgba(255, 255, 255, 0.06) !important;
+            border: 1px solid rgba(255, 255, 255, 0.14) !important;
+            backdrop-filter: blur(8px);
+        }
+
+        .hero-brochure .brochure-box:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+            box-shadow: none;
+        }
+
+        .hero-brochure h5 {
+            color: #fff;
+            font-family: 'Fraunces', serif;
+        }
+
+        .hero-brochure p {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .brochure-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--pg-aqua);
+            font-size: 1.6rem;
+        }
+
+        @media (max-width: 767.98px) {
+            .hero-brochure {
+                margin-top: 40px;
+                padding: 24px 0 40px;
+            }
+        }
+
+        /* ---------------- SERVICES ---------------- */
+        .services-model {
+            padding: 88px 0 !important;
+        }
+
+        .service-card h5 {
+            margin-top: 4px;
+        }
+
+        /* ---------------- STATS / HOW IT WORKS ---------------- */
+        .how-works {
+            background: linear-gradient(150deg, var(--pg-ink) 0%, var(--pg-ink-3) 60%, var(--pg-ink-2) 100%);
+            padding: 88px 0 !important;
+        }
+
+        .how-works .how-stats-strip {
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+
+        .how-works .how-stats-strip>.col-md-3 {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 16px;
+            padding: 18px 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .how-works .how-stat-icon {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .how-works .how-stat-number {
+            font-family: 'IBM Plex Mono', monospace;
+            background: var(--pg-grad);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .how-works .how-stat-label {
+            color: #fff;
+        }
+
+        .how-works .how-stat-sub {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* ---------------- WHY ---------------- */
+        .why-section {
+            padding: 88px 0 !important;
+        }
+
+        .receive-section {
+            padding: 88px 0;
+        }
+
+        @media (max-width: 767.98px) {
+            .receive-section {
+                padding: 56px 0;
+            }
+        }
+
+        /* ---------------- SECTION RHYTHM CONSISTENCY ----------------
+                   Utility strips (disclaimer) stay visually slimmer than full
+                   content sections on purpose, but the jump from 88px down to
+                   24px read as broken rather than intentional — narrow that gap.
+                   (Brochure strip now lives inside the hero section itself.) */
+
+        .disclaimer-section {
+            padding: 40px 0 !important;
+        }
+
+        .featured-section {
+            padding: 88px 0 !important;
+        }
+
+        /* ---------------- WIDE-SCREEN CONTAINER ----------------
+                   Bootstrap's .container is capped ~1320px at a fixed breakpoint,
+                   which leaves a big dead strip on either side of the dark
+                   full-bleed sections on large/wide monitors. Instead of gating
+                   this on specific breakpoints (which only helps if the window
+                   happens to land past them), scale continuously with viewport
+                   width so it always fills more of large screens and stays
+                   centered, no matter the exact window size. */
+        @media (min-width: 992px) {
+
+            .hero-section>.container,
+            .services-model>.container,
+            .how-works>.container,
+            .why-section>.container,
+            .receive-section>.container,
+            section.info-section>.container,
+            .app-sec-one>.container,
+            .leftpadding>.container {
+                width: 92%;
+                max-width: 1560px;
+            }
+        }
+
+        .why-section .why-num {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            color: var(--pg-sky);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .why-section h2 {
+            margin-bottom: 48px !important;
+        }
+
+        .why-section .icon-soft-primary {
+            background: rgba(79, 157, 255, 0.12) !important;
+        }
+
+        .why-section .icon-soft-secondary {
+            background: rgba(52, 211, 201, 0.14) !important;
+        }
+
+        /* ---------------- SPECIALTIES (guest) ---------------- */
+        .specialty-photo::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, rgba(10, 24, 52, 0.55) 0%, transparent 55%);
+            opacity: 0;
+            transition: opacity .3s ease;
+        }
+
+        .specialty-card-v2:hover .specialty-photo::after {
+            opacity: 1;
+        }
+
+        .specialty-note {
+            background: #f4f8fc !important;
+        }
+
+        .specialty-note-icon {
+            background: var(--pg-grad) !important;
+            color: #fff !important;
+        }
+
+        /* ---------------- FEATURED DOCTORS ---------------- */
+        .doctor-item .book-btn {
+            background: var(--pg-grad) !important;
+            border: none !important;
+            color: #fff !important;
+        }
+
+        /* ---------------- WHAT YOU RECEIVE ---------------- */
+        .list-check li {
+            background: rgba(79, 157, 255, 0.05);
+            border: 1px solid rgba(10, 24, 52, 0.06);
+            border-radius: 14px;
+            padding: 14px 16px;
+        }
+
+        .check-icon {
+            background: var(--pg-grad) !important;
+        }
+
+        /* ---------------- DISCLAIMER ---------------- */
+        .disclaimer-box {
+            background: #fff !important;
+            border: none !important;
+            border-left: 3px solid var(--pg-aqua) !important;
+            border-radius: 12px !important;
+            box-shadow: 0 10px 30px -12px rgba(10, 24, 52, 0.12);
+        }
+
+        .disclaimer-icon {
+            background: rgba(52, 211, 201, 0.12) !important;
+        }
+
+        .disclaimer-icon i {
+            color: var(--pg-aqua) !important;
+        }
+
+        /* ---------------- INFO / CTA ---------------- */
+        section.info-section .contact-info {
+            background: radial-gradient(60% 80% at 80% 0%, rgba(52, 211, 201, 0.22), transparent 60%), linear-gradient(135deg, var(--pg-ink) 0%, var(--pg-ink-2) 100%) !important;
+        }
+
+        section.info-section .info-title {
+            font-size: 13px !important;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--pg-aqua) !important;
+            margin-bottom: 14px !important;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        section.info-section .info-title::before {
+            content: "";
+            width: 16px;
+            height: 1px;
+            background: var(--pg-grad);
+        }
+
+        section.info-section .contact-info p.mb-0.text-white {
+            font-size: 26px;
+            font-weight: 600;
+            max-width: 520px;
+        }
+
+        /* ---------------- APP DOWNLOAD ---------------- */
+        .app-bg {
+            background: linear-gradient(160deg, var(--pg-ink-3), var(--pg-ink)) !important;
+            position: relative;
+        }
+
+        .app-bg::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(50% 60% at 85% 15%, rgba(52, 211, 201, 0.22), transparent 60%);
+            pointer-events: none;
+        }
+
+        .google-imgs a {
+            display: inline-flex;
+            transition: transform .25s ease;
+        }
+
+        .google-imgs a:hover {
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 767.98px) {
+            .how-works {
+                border-radius: 0;
+            }
+        }
+
+        /* ============================================================
+                   HERO EYEBROW + ENTRANCE ANIMATION
+                   ============================================================ */
+        .hero-eyebrow {
+            color: var(--pg-sky);
+            margin-bottom: 14px;
+        }
+
+        @keyframes pgFadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(34px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-copy>* {
+            opacity: 0;
+            animation: pgFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .hero-copy>*:nth-child(1) {
+            animation-delay: .1s;
+        }
+
+        .hero-copy>*:nth-child(2) {
+            animation-delay: .24s;
+        }
+
+        .hero-copy>*:nth-child(3) {
+            animation-delay: .38s;
+        }
+
+        .hero-copy>*:nth-child(4) {
+            animation-delay: .52s;
+        }
+
+        .hero-copy>*:nth-child(5) {
+            animation-delay: .66s;
+        }
+
+        .hero-copy>*:nth-child(6) {
+            animation-delay: .8s;
+        }
+
+        /* ---------------- HERO VISUAL (stacked cards) ---------------- */
+        .hero-visual {
+            position: relative;
+            height: 420px;
+            opacity: 0;
+            animation: pgFadeUp 1.1s cubic-bezier(0.16, 1, 0.3, 1) .3s forwards;
+        }
+
+        @media (max-width: 991.98px) {
+            .hero-visual {
+                height: 320px;
+            }
+        }
+
+        .hero-glow-ring {
+            position: absolute;
+            inset: 0;
+            margin: auto;
+            width: 300px;
+            height: 300px;
+            background: var(--pg-grad);
+            filter: blur(70px);
+            opacity: 0.32;
+            border-radius: 50%;
+            animation: pgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes pgPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.28;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.42;
+            }
+        }
+
+        .hero-stack-card {
+            position: absolute;
+            border-radius: 18px;
+            overflow: hidden;
+        }
+
+        .hero-stack-card.main {
+            width: 78%;
+            max-width: 380px;
+            height: 82%;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+            box-shadow: 0 30px 60px -24px rgba(10, 24, 52, 0.35);
+            animation: pgFloatMain 7s ease-in-out infinite;
+        }
+
+        .hero-stack-card.main img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .hero-stack-card.back-a,
+        .hero-stack-card.back-b {
+            width: 62%;
+            max-width: 300px;
+            height: 68%;
+            background: rgba(79, 157, 255, 0.14);
+            border: 1px solid rgba(79, 157, 255, 0.18);
+            backdrop-filter: blur(6px);
+            animation: pgFloat 7s ease-in-out infinite;
+        }
+
+        .hero-stack-card.back-a {
+            left: 2%;
+            top: 6%;
+            z-index: 1;
+            animation-delay: .6s;
+        }
+
+        .hero-stack-card.back-b {
+            right: 0;
+            bottom: 4%;
+            z-index: 2;
+            background: rgba(52, 211, 201, 0.14);
+            border-color: rgba(52, 211, 201, 0.2);
+            animation-delay: 1.2s;
+        }
+
+        @keyframes pgFloat {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes pgFloatMain {
+
+            0%,
+            100% {
+                transform: translate(-50%, -50%);
+            }
+
+            50% {
+                transform: translate(-50%, -54%);
+            }
+        }
+
+        .hero-pin {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--pg-aqua);
+            box-shadow: 0 0 0 5px rgba(52, 211, 201, 0.2);
+            animation: pgPulse2 2.4s ease-in-out infinite;
+            z-index: 4;
+        }
+
+        @keyframes pgPulse2 {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 5px rgba(52, 211, 201, 0.2);
+            }
+
+            50% {
+                box-shadow: 0 0 0 9px rgba(52, 211, 201, 0.05);
+            }
+        }
+
+        /* ============================================================
+                   SCROLL REVEAL
+                   ============================================================ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(42px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .reveal,
+            .hero-copy>*,
+            .hero-visual {
+                opacity: 1 !important;
+                transform: none !important;
+                animation: none !important;
+            }
+        }
     </style>
+
+    <script>
+        (function() {
+            var groups = document.querySelectorAll('.reveal-group');
+            groups.forEach(function(group) {
+                var items = group.querySelectorAll(':scope > .reveal');
+                items.forEach(function(el, i) {
+                    el.style.transitionDelay = (i * 0.12) + 's';
+                });
+            });
+
+            var targets = document.querySelectorAll('.reveal');
+            if (!('IntersectionObserver' in window)) {
+                targets.forEach(function(el) {
+                    el.classList.add('in');
+                });
+                return;
+            }
+
+            var io = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in');
+                        io.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0,
+                rootMargin: '0px 0px -120px 0px'
+            });
+
+            targets.forEach(function(el) {
+                io.observe(el);
+            });
+        })();
+    </script>
 @endsection

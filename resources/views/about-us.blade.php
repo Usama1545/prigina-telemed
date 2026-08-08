@@ -4,18 +4,18 @@
 @section('content')
 
 <!-- HERO SECTION -->
-<section class="py-5 bg-light">
+<section class="py-5 pg-hero">
     <div class="container">
         <div class="row align-items-center">
 
             <div class="col-lg-6">
-                <h6 class="text-secondary fw-bold">{{ __('app.about_us.label') }}</h6>
+                <h6 class="text-secondary section-eyebrow">{{ __('app.about_us.label') }}</h6>
 
                 <h1 class="fw-bold mb-3 text-primary">
                     {{ __('app.about_us.headline') }}
                 </h1>
 
-                <h5 class="text-muted mb-4">
+                <h5 class="mb-4" style="color: rgba(255,255,255,0.72);">
                     {{ __('app.about_us.subtitle') }}
                 </h5>
 
@@ -36,18 +36,18 @@
 <!-- MISSION & VISION -->
 <section class="py-5">
     <div class="container">
-        <div class="row g-4">
+        <div class="row g-4 reveal-group">
 
-            <div class="col-md-6">
+            <div class="col-md-6 reveal">
                 <div class="p-4 bg-light rounded h-100 shadow-sm">
-                    <h4 class="fw-bold text-primary">{{ __('app.about_us.our_mission') }}</h4>
+                    <h4 class="fw-bold text-primary section-title-serif">{{ __('app.about_us.our_mission') }}</h4>
                     <p class="mb-0">{{ __('app.about_us.mission_desc') }}</p>
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-6 reveal">
                 <div class="p-4 bg-light rounded h-100 shadow-sm">
-                    <h4 class="fw-bold text-primary">{{ __('app.about_us.our_vision') }}</h4>
+                    <h4 class="fw-bold text-primary section-title-serif">{{ __('app.about_us.our_vision') }}</h4>
                     <p class="mb-0">{{ __('app.about_us.vision_desc') }}</p>
                 </div>
             </div>
@@ -61,29 +61,29 @@
 <section class="py-5 bg-light">
     <div class="container text-center">
 
-        <h2 class="fw-bold mb-3 text-primary">{{ __('app.about_us.what_we_do') }}</h2>
+        <h2 class="fw-bold mb-3 text-primary section-title-serif">{{ __('app.about_us.what_we_do') }}</h2>
 
         <p class="mb-5">{{ __('app.about_us.what_we_do_desc') }}</p>
 
-        <div class="row g-4">
+        <div class="row g-4 reveal-group">
 
-            <div class="col-md-4">
+            <div class="col-md-4 reveal">
                 <div class="p-4 bg-white rounded shadow-sm h-100">
-                    <h5 class="fw-bold text-secondary">{{ __('app.about_us.step1_title') }}</h5>
+                    <h5 class="fw-bold text-secondary section-title-serif">{{ __('app.about_us.step1_title') }}</h5>
                     <p>{{ __('app.about_us.step1_desc') }}</p>
                 </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-4 reveal">
                 <div class="p-4 bg-white rounded shadow-sm h-100">
-                    <h5 class="fw-bold text-secondary">{{ __('app.about_us.step2_title') }}</h5>
+                    <h5 class="fw-bold text-secondary section-title-serif">{{ __('app.about_us.step2_title') }}</h5>
                     <p>{{ __('app.about_us.step2_desc') }}</p>
                 </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-4 reveal">
                 <div class="p-4 bg-white rounded shadow-sm h-100">
-                    <h5 class="fw-bold text-secondary">{{ __('app.about_us.step3_title') }}</h5>
+                    <h5 class="fw-bold text-secondary section-title-serif">{{ __('app.about_us.step3_title') }}</h5>
                     <p>{{ __('app.about_us.step3_desc') }}</p>
                 </div>
             </div>
@@ -99,7 +99,7 @@
 <!-- OPTIONAL DISCUSSION -->
 <section class="py-5">
     <div class="container">
-        <div class="row align-items-center">
+        <div class="row align-items-center reveal">
 
             <div class="col-lg-6">
                 <img src="{{asset('build/img/home-1.jpeg')}}" class="img-fluid rounded shadow">
@@ -107,7 +107,7 @@
 
             <div class="col-lg-6">
 
-                <h3 class="fw-bold mb-3 text-primary">{{ __('app.about_us.optional_headline') }}</h3>
+                <h3 class="fw-bold mb-3 text-primary section-title-serif">{{ __('app.about_us.optional_headline') }}</h3>
 
                 <p>{{ __('app.about_us.optional_p1') }}</p>
 
@@ -126,9 +126,9 @@
 
 <!-- GLOBAL ACCESS -->
 <section class="py-5 bg-light">
-    <div class="container text-center">
+    <div class="container text-center reveal">
 
-        <h3 class="fw-bold mb-3 text-primary">{{ __('app.about_us.global_access') }}</h3>
+        <h3 class="fw-bold mb-3 text-primary section-title-serif">{{ __('app.about_us.global_access') }}</h3>
 
         <p>{{ __('app.about_us.global_p1') }}</p>
 
@@ -142,34 +142,34 @@
 <section class="py-5">
     <div class="container text-center">
 
-        <h2 class="fw-bold mb-5 text-primary">{{ __('app.about_us.approach_headline') }}</h2>
+        <h2 class="fw-bold mb-5 text-primary section-title-serif">{{ __('app.about_us.approach_headline') }}</h2>
 
-        <div class="row g-4">
+        <div class="row g-4 reveal-group">
 
-            <div class="col-md-3">
+            <div class="col-md-3 reveal">
                 <div class="p-4 bg-light rounded h-100">
-                    <h5 class="fw-bold text-secondary">{{ __('app.about_us.clarity') }}</h5>
+                    <h5 class="fw-bold text-secondary section-title-serif">{{ __('app.about_us.clarity') }}</h5>
                     <p>{{ __('app.about_us.clarity_desc') }}</p>
                 </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-3 reveal">
                 <div class="p-4 bg-light rounded h-100">
-                    <h5 class="fw-bold text-secondary">{{ __('app.about_us.independence') }}</h5>
+                    <h5 class="fw-bold text-secondary section-title-serif">{{ __('app.about_us.independence') }}</h5>
                     <p>{{ __('app.about_us.independence_desc') }}</p>
                 </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-3 reveal">
                 <div class="p-4 bg-light rounded h-100">
-                    <h5 class="fw-bold text-secondary">{{ __('app.about_us.privacy') }}</h5>
+                    <h5 class="fw-bold text-secondary section-title-serif">{{ __('app.about_us.privacy') }}</h5>
                     <p>{{ __('app.about_us.privacy_desc') }}</p>
                 </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-3 reveal">
                 <div class="p-4 bg-light rounded h-100">
-                    <h5 class="fw-bold text-secondary">{{ __('app.about_us.quality') }}</h5>
+                    <h5 class="fw-bold text-secondary section-title-serif">{{ __('app.about_us.quality') }}</h5>
                     <p>{{ __('app.about_us.quality_desc') }}</p>
                 </div>
             </div>
@@ -183,9 +183,9 @@
 <!-- IMPORTANT NOTICE -->
 <section class="py-4">
     <div class="container">
-        <div class="alert alert-warning">
+        <div class="alert alert-warning reveal">
 
-            <h5 class="fw-bold text-primary">{{ __('app.about_us.notice_headline') }}</h5>
+            <h5 class="fw-bold text-primary section-title-serif">{{ __('app.about_us.notice_headline') }}</h5>
 
             <p class="mb-2">{{ __('app.about_us.notice_p1') }}</p>
 
@@ -199,10 +199,10 @@
 <!-- CTA -->
 <section class="info-section my-3">
     <div class="container">
-        <div class="contact-info">
+        <div class="contact-info reveal">
             <div class="info-col">
                 <div class="wow fadeInUp" data-wow-duration="1s">
-                    <h3 class="info-title">{{ __('app.about_us.cta_headline') }}</h3>
+                    <h3 class="info-title section-title-serif">{{ __('app.about_us.cta_headline') }}</h3>
                     <p class="mb-0 text-white">{{ __('app.about_us.cta_desc') }}</p>
                 </div>
                 <div class="support-info wow fadeInUp" data-wow-duration="1s">
@@ -216,4 +216,19 @@
     </div>
 </section>
 
+<style>
+    /* INFO / CTA polish to match the rest of the site */
+    section.info-section .contact-info {
+        background: radial-gradient(60% 80% at 80% 0%, rgba(52, 211, 201, 0.22), transparent 60%), linear-gradient(135deg, var(--pg-ink) 0%, var(--pg-ink-2) 100%) !important;
+    }
+
+    .info-section .btn-light {
+        background: var(--pg-grad) !important;
+        border: none !important;
+        border-radius: 100px !important;
+        color: #fff !important;
+    }
+</style>
+
+@include('partials.premium-theme')
 @endsection
