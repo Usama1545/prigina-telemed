@@ -8,16 +8,16 @@
             <div class="row align-items-center">
 
                 <div class="col-lg-5 order-2 order-lg-1">
-                    <h1 class="fw-bold text-primary display-5">
+                    <h1 class="fw-bold text-primary display-5 hero-anim" style="animation-delay:.05s;">
                         {{ __('app.home.hero_headline') }}<br>
                         <span class="text-secondary">{{ __('app.home.hero_headline_2') }}</span>
                     </h1>
 
-                    <p class="text-muted mt-3">
+                    <p class="text-muted mt-3 hero-anim" style="animation-delay:.15s;">
                         {{ __('app.home.hero_desc') }}
                     </p>
 
-                    <div class="d-flex align-items-center gap-3 mt-4 trust-badges">
+                    <div class="d-flex align-items-center gap-3 mt-4 trust-badges hero-anim" style="animation-delay:.25s;">
                         <div class="d-flex align-items-center gap-2">
                             <i class="fi fi-rr-shield-check trust-badge-icon text-secondary"></i>
                             <div>
@@ -35,7 +35,7 @@
                         </div>
                     </div>
 
-                    <div class="mt-4 d-flex gap-3">
+                    <div class="mt-4 d-flex gap-3 hero-anim" style="animation-delay:.35s;">
                         <a href="{{ patient_cta_route('login') }}" class="btn btn-primary px-4 py-2">
                             {{ __('app.home.get_second_opinion') }}
                         </a>
@@ -44,7 +44,7 @@
                         </a>
                     </div>
 
-                    <div class="hero-features mt-5">
+                    <div class="hero-features mt-5 hero-anim" style="animation-delay:.45s;">
 
                         <div class="row g-3">
                             <div class="col-6">
@@ -113,20 +113,41 @@
 
                 </div>
 
-                <div class="col-lg-7 text-center hero-image order-1 order-lg-2 mb-4 mb-lg-0">
-                    <img src="{{ asset('build/img/home-1.jpeg') }}" class="img-fluid">
+                <div class="col-lg-7 text-center hero-image order-1 order-lg-2 mb-4 mb-lg-0 hero-anim"
+                    style="animation-delay:.1s;">
+                    <div class="hero-video-wrap" id="heroVideoWrap">
+                        <img id="heroVideoCover" class="hero-video-cover" src="{{ asset('build/img/home-1.jpeg') }}"
+                            alt="{{ __('app.home.hero_headline') }}" aria-hidden="true">
+                        <video id="heroVideo" class="hero-video" muted loop playsinline preload="metadata"
+                            poster="{{ asset('build/img/home-1.jpeg') }}">
+                            <source src="{{ asset('home/IMG_8070.mp4') }}" type="video/mp4">
+                        </video>
+                        <button type="button" id="heroPlayToggle" class="hero-play-toggle"
+                            aria-label="{{ __('app.home.play_video') }}">
+                            <i class="fa fa-play"></i>
+                        </button>
+                        <div class="hero-video-controls">
+                            <button type="button" id="heroPauseBtn" class="hero-ctrl-btn"
+                                aria-label="{{ __('app.home.pause_video') }}" hidden>
+                                <i class="fa fa-pause"></i>
+                            </button>
+                            <button type="button" id="heroSoundToggle" class="hero-ctrl-btn"
+                                aria-label="{{ __('app.home.toggle_sound') }}" hidden>
+                                <i class="fa fa-volume-mute"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
             </div>
         </div>
     </section>
 
-
     <!-- Brochure Download -->
     <section class="py-4">
         <div class="px-3">
             <div class="row justify-content-center">
-                <div class="col-lg-8">
+                <div class="col-lg-8 reveal-on-scroll" data-reveal="fade-up">
                     <div class="d-flex align-items-center gap-4 p-4 rounded-3 border brochure-box"
                         style="background:#f8faff;">
                         <div class="flex-shrink-0 d-flex align-items-center justify-content-center rounded-3"
@@ -149,10 +170,11 @@
     </section>
     <!-- /Brochure Download -->
 
+
     <!-- OUR SERVICES: THE PRIGINA MODEL -->
     <section class="py-5 text-center services-model">
         <div class="container">
-            <h2 class="fw-bold mb-5">
+            <h2 class="fw-bold mb-5 reveal-on-scroll" data-reveal="fade-up">
                 <span class="text-dark">{{ __('app.home.services_headline_prefix') }}</span>
                 <span class="text-primary">{{ __('app.home.services_headline_highlight') }}</span>
             </h2>
@@ -162,7 +184,7 @@
                     [
                         'accent' => 'blue',
                         'icon' => 'file-medical-alt',
-                        'img' => '1.png',
+                        'img' => 'IMG-1.jpeg',
                         'title' => __('app.home.service1_title'),
                         'desc' => __('app.home.service1_desc'),
                         'bullets' => [
@@ -174,7 +196,7 @@
                     [
                         'accent' => 'teal',
                         'icon' => 'user-md',
-                        'img' => '2.png',
+                        'img' => 'IMG-2.jpeg',
                         'title' => __('app.home.service2_title'),
                         'desc' => __('app.home.service2_desc'),
                         'bullets' => [
@@ -186,7 +208,7 @@
                     [
                         'accent' => 'green',
                         'icon' => 'marker',
-                        'img' => '4.png',
+                        'img' => 'IMG-3.jpeg',
                         'title' => __('app.home.service3_title'),
                         'desc' => __('app.home.service3_desc'),
                         'bullets' => [
@@ -198,7 +220,7 @@
                     [
                         'accent' => 'purple',
                         'icon' => 'users',
-                        'img' => '3.png',
+                        'img' => 'IMG-4.jpeg',
                         'title' => __('app.home.service4_title'),
                         'desc' => __('app.home.service4_desc'),
                         'bullets' => [
@@ -213,12 +235,13 @@
 
             <div class="row g-4 justify-content-center align-items-stretch">
                 @foreach ($services as $service)
-                    <div class="col-lg-3 col-md-6">
+                    <div class="col-lg-3 col-md-6 reveal-on-scroll" data-reveal="fade-up"
+                        data-reveal-delay="{{ $loop->index * 100 }}">
                         <div class="service-card h-100 text-start d-flex flex-column">
 
                             <div class="service-photo position-relative">
-                                <img src="{{ asset('images/features/' . $service['img']) }}" alt="{{ $service['title'] }}"
-                                    class="img-fluid">
+                                <img src="{{ asset('images/features/' . $service['img']) }}"
+                                    alt="{{ $service['title'] }}" class="img-fluid">
                                 <div class="service-icon-circle icon-grad-{{ $service['accent'] }}">
                                     <i class="fi fi-rr-{{ $service['icon'] }}"></i>
                                 </div>
@@ -253,131 +276,6 @@
             </div>
         </div>
     </section>
-
-    <section class="pb-3 text-center how-works">
-        <div class="container">
-
-            <!-- STATS STRIP -->
-            <div class="row g-3 how-stats-strip text-start">
-
-                <div class="col-md-3 col-6">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="how-stat-icon"><i class="fi fi-rr-users"></i></div>
-                        <div>
-                            <div class="how-stat-number">{{ __('app.home.how_works_stat1_number') }}</div>
-                            <div class="how-stat-label">{{ __('app.home.how_works_stat1_label') }}</div>
-                            <div class="how-stat-sub">{{ __('app.home.how_works_stat1_sub') }}</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-6">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="how-stat-icon"><i class="fi fi-rr-stethoscope"></i></div>
-                        <div>
-                            <div class="how-stat-number">{{ __('app.home.how_works_stat2_number') }}</div>
-                            <div class="how-stat-label">{{ __('app.home.how_works_stat2_label') }}</div>
-                            <div class="how-stat-sub">{{ __('app.home.how_works_stat2_sub') }}</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-6">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="how-stat-icon"><i class="fi fi-rr-globe"></i></div>
-                        <div>
-                            <div class="how-stat-label">{{ __('app.home.how_works_stat3_label') }}</div>
-                            <div class="how-stat-sub">{{ __('app.home.how_works_stat3_sub') }}</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-6">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="how-stat-icon"><i class="fi fi-rr-lock"></i></div>
-                        <div>
-                            <div class="how-stat-number">{{ __('app.home.how_works_stat4_number') }}</div>
-                            <div class="how-stat-label">{{ __('app.home.how_works_stat4_label') }}</div>
-                            <div class="how-stat-sub">{{ __('app.home.how_works_stat4_sub') }}</div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <a href="{{ route('patient.dashboard') }}"
-                class="btn btn-secondary mt-5 px-4">{{ __('app.home.start_review') }}</a>
-        </div>
-    </section>
-
-    <section class="py-5 bg-light text-center">
-        <div class="container">
-            <h6 class="text-secondary">{{ __('app.home.why_label') }}</h6>
-            <h2 class="fw-bold mb-5">{{ __('app.home.why_headline') }}</h2>
-
-            <div class="row align-items-stretch">
-
-                <!-- ITEM 1 -->
-                <div class="col-md-4 mb-4 mb-md-0">
-                    <div class="px-3 h-100">
-                        <div class="mb-3">
-                            <div class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm  icon-soft-primary"
-                                style="width:70px;height:70px;">
-                                <i class="fa fa-user-md text-primary  d-block lh-1 text-primary"
-                                    style="font-size: 2.9rem; margin-top: 10px;"></i>
-                            </div>
-                        </div>
-
-                        <h5>{{ __('app.home.independent_expert') }}</h5>
-                        <p class="mx-4 text-muted mb-0">
-                            {{ __('app.home.independent_expert_desc') }}
-                        </p>
-                    </div>
-                </div>
-
-                <!-- ITEM 2 (WITH BORDERS) -->
-                <div class="col-md-4 mb-4 mb-md-0">
-                    <div class="px-3 h-100 position-relative border-start border-end">
-
-                        <div class="mb-3">
-                            <div class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm icon-soft-secondary"
-                                style="width:70px;height:70px;">
-
-                                <i class="fi fi-rr-globe d-block lh-1 text-secondary"
-                                    style="font-size: 2.9rem; margin-top: 10px;"></i>
-                            </div>
-                        </div>
-
-                        <h5>{{ __('app.home.global_access') }}</h5>
-                        <p class="mx-4 text-muted mb-0">
-                            {{ __('app.home.global_access_desc') }}
-                        </p>
-
-                    </div>
-                </div>
-
-                <!-- ITEM 3 -->
-                <div class="col-md-4">
-                    <div class="px-3 h-100">
-                        <div class="mb-3">
-                            <div class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm icon-soft-primary"
-                                style="width:70px;height:70px;">
-                                <i class="fi fi-rr-shield-plus d-block lh-1 text-primary"
-                                    style="font-size: 2.9rem; margin-top: 10px;"></i>
-                            </div>
-                        </div>
-
-                        <h5>{{ __('app.home.secure_confidential') }}</h5>
-                        <p class="mx-4 text-muted mb-0">
-                            {{ __('app.home.secure_confidential_desc') }}
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
 
     <!-- DOCTORS -->
     @if (check() && is_patient())
@@ -586,7 +484,8 @@
                     @endphp
 
                     @foreach ($specialties as $spec)
-                        <div class="col-6 col-md-3 {{ $loop->index >= 6 ? 'd-none d-md-block' : '' }}">
+                        <div class="col-6 col-md-3 {{ $loop->index >= 6 ? 'd-none d-md-block' : '' }} reveal-on-scroll"
+                            data-reveal="fade-up" data-reveal-delay="{{ ($loop->index % 6) * 70 }}">
                             <div class="specialty-card-v2 h-100 bg-white">
                                 <div class="specialty-photo position-relative">
                                     <img src="{{ asset('images/specs/' . $spec['img']) }}" alt="{{ $spec['name'] }}"
@@ -624,6 +523,75 @@
             </div>
         </section>
     @endif
+
+    <section class="py-5 bg-light text-center">
+        <div class="container">
+            <h6 class="text-secondary reveal-on-scroll" data-reveal="fade-up">{{ __('app.home.why_label') }}</h6>
+            <h2 class="fw-bold mb-5 reveal-on-scroll" data-reveal="fade-up" data-reveal-delay="80">
+                {{ __('app.home.why_headline') }}</h2>
+
+            <div class="row align-items-stretch">
+
+                <!-- ITEM 1 -->
+                <div class="col-md-4 mb-4 mb-md-0 reveal-on-scroll" data-reveal="fade-up" data-reveal-delay="100">
+                    <div class="px-3 h-100">
+                        <div class="mb-3">
+                            <div class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm  icon-soft-primary"
+                                style="width:70px;height:70px;">
+                                <i class="fa fa-user-md text-primary  d-block lh-1 text-primary"
+                                    style="font-size: 2.9rem; margin-top: 10px;"></i>
+                            </div>
+                        </div>
+
+                        <h5>{{ __('app.home.independent_expert') }}</h5>
+                        <p class="mx-4 text-muted mb-0">
+                            {{ __('app.home.independent_expert_desc') }}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- ITEM 2 (WITH BORDERS) -->
+                <div class="col-md-4 mb-4 mb-md-0 reveal-on-scroll" data-reveal="fade-up" data-reveal-delay="200">
+                    <div class="px-3 h-100 position-relative border-start border-end">
+
+                        <div class="mb-3">
+                            <div class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm icon-soft-secondary"
+                                style="width:70px;height:70px;">
+
+                                <i class="fi fi-rr-globe d-block lh-1 text-secondary"
+                                    style="font-size: 2.9rem; margin-top: 10px;"></i>
+                            </div>
+                        </div>
+
+                        <h5>{{ __('app.home.global_access') }}</h5>
+                        <p class="mx-4 text-muted mb-0">
+                            {{ __('app.home.global_access_desc') }}
+                        </p>
+
+                    </div>
+                </div>
+
+                <!-- ITEM 3 -->
+                <div class="col-md-4 reveal-on-scroll" data-reveal="fade-up" data-reveal-delay="300">
+                    <div class="px-3 h-100">
+                        <div class="mb-3">
+                            <div class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm icon-soft-primary"
+                                style="width:70px;height:70px;">
+                                <i class="fi fi-rr-shield-plus d-block lh-1 text-primary"
+                                    style="font-size: 2.9rem; margin-top: 10px;"></i>
+                            </div>
+                        </div>
+
+                        <h5>{{ __('app.home.secure_confidential') }}</h5>
+                        <p class="mx-4 text-muted mb-0">
+                            {{ __('app.home.secure_confidential_desc') }}
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
 
     <section class="bg-light">
         <div class="container py-4 py-lg-0">
@@ -674,7 +642,64 @@
     </section>
 
 
-    <section class="py-4 mx-md-4">
+    <section class="pb-3 text-center how-works">
+        <div class="container">
+
+            <!-- STATS STRIP -->
+            <div class="row g-3 how-stats-strip text-start reveal-on-scroll" data-reveal="fade-up">
+
+                <div class="col-md-3 col-6">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="how-stat-icon"><i class="fi fi-rr-users"></i></div>
+                        <div>
+                            <div class="how-stat-number">{{ __('app.home.how_works_stat1_number') }}</div>
+                            <div class="how-stat-label">{{ __('app.home.how_works_stat1_label') }}</div>
+                            <div class="how-stat-sub">{{ __('app.home.how_works_stat1_sub') }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="how-stat-icon"><i class="fi fi-rr-stethoscope"></i></div>
+                        <div>
+                            <div class="how-stat-number">{{ __('app.home.how_works_stat2_number') }}</div>
+                            <div class="how-stat-label">{{ __('app.home.how_works_stat2_label') }}</div>
+                            <div class="how-stat-sub">{{ __('app.home.how_works_stat2_sub') }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="how-stat-icon"><i class="fi fi-rr-globe"></i></div>
+                        <div>
+                            <div class="how-stat-label">{{ __('app.home.how_works_stat3_label') }}</div>
+                            <div class="how-stat-sub">{{ __('app.home.how_works_stat3_sub') }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="how-stat-icon"><i class="fi fi-rr-lock"></i></div>
+                        <div>
+                            <div class="how-stat-number">{{ __('app.home.how_works_stat4_number') }}</div>
+                            <div class="how-stat-label">{{ __('app.home.how_works_stat4_label') }}</div>
+                            <div class="how-stat-sub">{{ __('app.home.how_works_stat4_sub') }}</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <a href="{{ route('patient.dashboard') }}"
+                class="btn btn-secondary mt-5 px-4">{{ __('app.home.start_review') }}</a>
+        </div>
+    </section>
+
+
+    {{-- <section class="py-4 mx-md-4">
         <div class="container ">
             <div
                 class="p-4 border rounded bg-light mx-5 d-flex flex-column flex-md-row align-items-center align-items-md-stretch disclaimer-box">
@@ -697,7 +722,7 @@
 
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <!-- Info Section -->
     <section class="info-section my-3">
@@ -709,8 +734,7 @@
                         <p class="mb-0 text-white">{{ __('app.home.info_desc') }}</p>
                     </div>
                     <div class="support-info wow fadeInUp" data-wow-duration="1s">
-                        <a href="{{ patient_cta_route('login') }}"
-                            class="btn btn-light px-4 mt-3 mt-md-0">
+                        <a href="{{ patient_cta_route('login') }}" class="btn btn-light px-4 mt-3 mt-md-0">
                             {{ __('app.home.info_cta') }}
                         </a>
                     </div>
@@ -721,37 +745,133 @@
     </section>
     <!-- /Info Section -->
     <!-- App Section -->
-    <section class="app-section app-sec-one p-0 mb-3">
+    <section class="app-section-v2 py-5">
         <div class="container">
-            <div class="app-bg">
-                <div class="row">
-                    <div class="col-lg-6 col-md-12">
-                        <div class="app-content d-flex flex-column justify-content-center">
+            <div class="app-showcase-card position-relative overflow-hidden">
 
-                            <div class="section-header section-header-one wow fadeInUp" data-wow-duration="1s">
-                                <p class="mt-0 mb-0">{{ __('app.home.app_working') }}</p>
-                                <h2 class="section-title">{{ __('app.home.app_headline') }}</h2>
-                            </div>
-                            <div class="google-imgs wow fadeInUp" data-wow-duration="1s">
-                                <a href="#"><img src="{{ URL::asset('build/img/icons/app-store.svg') }}"
-                                        alt="img"></a>
-                                <a href="#"><img src="{{ URL::asset('build/img/icons/google-play.svg') }}"
-                                        alt="img"></a>
-                            </div>
+                <div class="app-swoosh app-swoosh-1" aria-hidden="true"></div>
+                <div class="app-swoosh app-swoosh-2" aria-hidden="true"></div>
+
+                <div class="row align-items-stretch g-4 g-lg-5 app-showcase-row">
+
+                    <div class="col-lg-3 col-md-4 order-1 text-center align-self-center reveal-on-scroll"
+                        data-reveal="slide-left">
+                        <div class="app-phone-mockup">
+                            <img src="{{ asset('images/app/img-app.png') }}" class="img-fluid"
+                                alt="{{ __('app.home.app_badge') }}">
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-12 wow fadeInUp" data-wow-duration="1s">
-                        <div class="mobile-img">
-                            <img src="{{ asset('build/img/mobiles-Photoroom.png') }}" class="img-fluid width-50"
-                                alt="img">
+
+                    <div class="col-lg-5 col-md-8 order-2 align-self-center reveal-on-scroll" data-reveal="fade-up">
+                        <span class="app-badge-pill">
+                            <i class="fa-solid fa-mobile-screen-button me-2"></i>{{ __('app.home.app_badge') }}
+                        </span>
+
+                        <h2 class="app-showcase-title mt-3">
+                            {{ __('app.home.app_headline_1') }}
+                            <span>{{ __('app.home.app_headline_2') }}</span>
+                        </h2>
+
+                        <p class="app-showcase-sub text-muted mb-4">{{ __('app.home.app_subline') }}</p>
+
+                        @php
+                            $appFeatures = [
+                                [
+                                    'icon' => 'calendar-check',
+                                    'title' => __('app.home.app_feat1_title'),
+                                    'desc' => __('app.home.app_feat1_desc'),
+                                ],
+                                [
+                                    'icon' => 'video',
+                                    'title' => __('app.home.app_feat2_title'),
+                                    'desc' => __('app.home.app_feat2_desc'),
+                                ],
+                                [
+                                    'icon' => 'file-medical',
+                                    'title' => __('app.home.app_feat3_title'),
+                                    'desc' => __('app.home.app_feat3_desc'),
+                                ],
+                                [
+                                    'icon' => 'comments',
+                                    'title' => __('app.home.app_feat4_title'),
+                                    'desc' => __('app.home.app_feat4_desc'),
+                                ],
+                                [
+                                    'icon' => 'bell',
+                                    'title' => __('app.home.app_feat5_title'),
+                                    'desc' => __('app.home.app_feat5_desc'),
+                                ],
+                            ];
+                        @endphp
+
+                        <ul class="app-feature-list">
+                            @foreach ($appFeatures as $feat)
+                                <li class="reveal-on-scroll" data-reveal="fade-up"
+                                    data-reveal-delay="{{ $loop->index * 80 }}">
+                                    <span class="app-feature-icon"><i
+                                            class="fa-solid fa-{{ $feat['icon'] }}"></i></span>
+                                    <div>
+                                        <p class="fw-bold mb-0">{{ $feat['title'] }}</p>
+                                        <p class="text-muted small mb-0">{{ $feat['desc'] }}</p>
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
+
+                        <div class="google-imgs-v2 mt-4 reveal-on-scroll" data-reveal="fade-up" data-reveal-delay="400">
+                            <a href="#"><img src="{{ URL::asset('build/img/icons/app-store.svg') }}"
+                                    alt="App Store"></a>
+                            <a href="#"><img src="{{ URL::asset('build/img/icons/google-play.svg') }}"
+                                    alt="Google Play"></a>
                         </div>
                     </div>
+
+                    <div class="col-lg-4 order-3 d-none d-lg-block reveal-on-scroll" data-reveal="slide-right">
+                        <div class="app-photo-wrap">
+                            <img src="{{ asset('images/app/app-girl.jpeg') }}" class="app-photo-img"
+                                alt="{{ __('app.home.app_badge') }}">
+                        </div>
+                    </div>
+
                 </div>
-                <div class="app-bgs">
-                    <img src="{{ URL::asset('build/img/bg/app-bg-02.png') }}" alt="img" class="app-bg-01">
-                    <img src="{{ URL::asset('build/img/bg/app-bg-03.png') }}" alt="img" class="app-bg-02">
-                    <img src="{{ URL::asset('build/img/bg/app-bg-04.png') }}" alt="img" class="app-bg-03">
+
+                @php
+                    $appTrust = [
+                        [
+                            'icon' => 'shield-halved',
+                            'title' => __('app.home.app_trust1_title'),
+                            'desc' => __('app.home.app_trust1_desc'),
+                        ],
+                        [
+                            'icon' => 'earth-americas',
+                            'title' => __('app.home.app_trust2_title'),
+                            'desc' => __('app.home.app_trust2_desc'),
+                        ],
+                        [
+                            'icon' => 'language',
+                            'title' => __('app.home.app_trust3_title'),
+                            'desc' => __('app.home.app_trust3_desc'),
+                        ],
+                        [
+                            'icon' => 'hand-holding-heart',
+                            'title' => __('app.home.app_trust4_title'),
+                            'desc' => __('app.home.app_trust4_desc'),
+                        ],
+                    ];
+                @endphp
+
+                <div class="app-trust-bar reveal-on-scroll" data-reveal="fade-up" data-reveal-delay="200">
+                    @foreach ($appTrust as $trust)
+                        <div class="app-trust-item">
+                            <div class="app-trust-icon"><i class="fa-solid fa-{{ $trust['icon'] }}"></i></div>
+                            <div>
+                                <p class="fw-bold mb-0">{{ $trust['title'] }}</p>
+                                <p class="text-muted small mb-0">{{ $trust['desc'] }}</p>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
+
             </div>
         </div>
     </section>
@@ -1137,6 +1257,174 @@
             mask-image: linear-gradient(to left, black 75%, transparent 100%);
         }
 
+        /* HERO VIDEO */
+        .hero-video-wrap {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            background: #eef2f7;
+            aspect-ratio: 16 / 11;
+            cursor: pointer;
+        }
+
+        .hero-video-wrap.is-playing {
+            cursor: default;
+        }
+
+        .hero-video,
+        .hero-video-cover {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            background: #eef2f7;
+            -webkit-mask-image: linear-gradient(to left, black 75%, transparent 100%);
+            mask-image: linear-gradient(to left, black 75%, transparent 100%);
+            transition: opacity 0.35s ease;
+        }
+
+        .hero-video-cover {
+            z-index: 1;
+        }
+
+        .hero-video {
+            z-index: 0;
+        }
+
+        .hero-video-wrap.is-playing .hero-video-cover {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .hero-video-wrap:not(.is-playing) .hero-video {
+            opacity: 0;
+        }
+
+        .hero-play-toggle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(15, 23, 42, 0.62);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.45rem;
+            backdrop-filter: blur(6px);
+            cursor: pointer;
+            z-index: 3;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.25);
+            transition: background 0.25s ease, transform 0.25s ease, opacity 0.25s ease;
+        }
+
+        .hero-play-toggle i {
+            margin-left: 3px;
+        }
+
+        .hero-play-toggle:hover {
+            background: rgba(15, 23, 42, 0.8);
+            transform: translate(-50%, -50%) scale(1.06);
+        }
+
+        .hero-video-wrap.is-playing .hero-play-toggle {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .hero-video-controls {
+            position: absolute;
+            right: 16px;
+            bottom: 16px;
+            display: flex;
+            gap: 10px;
+            z-index: 3;
+        }
+
+        .hero-ctrl-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(15, 23, 42, 0.55);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            backdrop-filter: blur(4px);
+            cursor: pointer;
+            transition: background 0.25s ease, transform 0.25s ease;
+        }
+
+        .hero-ctrl-btn:hover {
+            background: rgba(15, 23, 42, 0.75);
+            transform: translateY(-2px);
+        }
+
+        .hero-video-wrap:not(.is-playing) .hero-video-controls {
+            display: none;
+        }
+
+        @media (max-width: 767.98px) {
+            .hero-video-wrap {
+                aspect-ratio: 4 / 3;
+                border-radius: 18px;
+            }
+
+            .hero-video,
+            .hero-video-cover {
+                border-radius: 18px;
+                -webkit-mask-image: none;
+                mask-image: none;
+            }
+
+            .hero-play-toggle {
+                width: 60px;
+                height: 60px;
+                font-size: 1.2rem;
+            }
+
+            .hero-ctrl-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 0.95rem;
+            }
+
+            .hero-video-controls {
+                right: 12px;
+                bottom: 12px;
+            }
+        }
+
+        /* HERO ENTRANCE ANIMATION */
+        .hero-anim {
+            opacity: 0;
+            transform: translateY(24px);
+            animation: heroFadeUp 0.7s ease forwards;
+        }
+
+        @keyframes heroFadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero-anim {
+                animation: none;
+                opacity: 1;
+                transform: none;
+            }
+        }
+
         /* PREMIUM BUTTONS */
         .btn-primary,
         .btn-outline-secondary,
@@ -1357,6 +1645,303 @@
             }
         }
 
+        /* APP SHOWCASE SECTION */
+        .app-section-v2 {
+            background: #f7f9fc;
+        }
+
+        .app-showcase-card {
+            border-radius: 32px;
+            background:
+                radial-gradient(ellipse 55% 70% at 8% 88%, rgba(46, 130, 200, 0.14) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 60% at 92% 45%, rgba(0, 163, 173, 0.12) 0%, transparent 65%),
+                linear-gradient(160deg, #eef5fc 0%, #f7fbfe 42%, #ffffff 100%);
+            padding: 52px 44px 0;
+            overflow: hidden;
+        }
+
+        .app-swoosh {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .app-swoosh-1 {
+            width: 340px;
+            height: 340px;
+            left: -120px;
+            bottom: 40px;
+            background: radial-gradient(circle, rgba(46, 109, 200, 0.16) 0%, transparent 68%);
+        }
+
+        .app-swoosh-2 {
+            width: 420px;
+            height: 420px;
+            right: -80px;
+            top: 10%;
+            background: radial-gradient(circle, rgba(0, 163, 173, 0.14) 0%, transparent 70%);
+        }
+
+        .app-showcase-row {
+            position: relative;
+            z-index: 1;
+        }
+
+        .app-phone-mockup {
+            position: relative;
+            display: inline-block;
+        }
+
+        .app-phone-mockup img {
+            width: 100%;
+            max-width: 260px;
+            transform: rotate(-6deg) translateY(8px);
+            filter: drop-shadow(0 28px 40px rgba(15, 23, 42, 0.22));
+            transition: transform 0.45s ease;
+        }
+
+        .app-phone-mockup:hover img {
+            transform: rotate(-3deg) translateY(0);
+        }
+
+        .app-badge-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            border-radius: 30px;
+            background: color-mix(in srgb, var(--secondary) 88%, #0a7c84);
+            color: #fff;
+            font-weight: 700;
+            font-size: 12px;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            box-shadow: 0 8px 18px color-mix(in srgb, var(--secondary) 28%, transparent);
+        }
+
+        .app-showcase-title {
+            font-weight: 800;
+            font-size: 2.45rem;
+            color: #0d2b55;
+            line-height: 1.18;
+        }
+
+        .app-showcase-title span {
+            display: inline;
+            color: #0d2b55;
+        }
+
+        .app-showcase-sub {
+            font-size: 1.05rem;
+            color: #5f6c72 !important;
+        }
+
+        .app-feature-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .app-feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 11px 0;
+        }
+
+        .app-feature-icon {
+            width: 42px;
+            height: 42px;
+            min-width: 42px;
+            border-radius: 12px;
+            background: color-mix(in srgb, var(--secondary) 10%, white);
+            border: 1.5px solid color-mix(in srgb, var(--secondary) 28%, transparent);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+        }
+
+        .google-imgs-v2 {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .google-imgs-v2 img {
+            height: 44px;
+            width: auto;
+            transition: transform 0.25s ease;
+        }
+
+        .google-imgs-v2 a:hover img {
+            transform: translateY(-2px);
+        }
+
+        .app-photo-wrap {
+            position: relative;
+            height: calc(100% + 100px);
+            min-height: 400px;
+            margin: -52px -44px -44px 12px;
+        }
+
+        .app-photo-wrap::before {
+            content: '';
+            position: absolute;
+            top: 46%;
+            right: -36px;
+            transform: translateY(-50%);
+            width: 340px;
+            height: 340px;
+            border-radius: 50%;
+            background: color-mix(in srgb, var(--primary) 12%, transparent);
+            z-index: 0;
+        }
+
+        .app-photo-img {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            min-height: 400px;
+            object-fit: cover;
+            object-position: 30% top;
+            border-radius: 220px 0 32px 220px;
+        }
+
+        .app-trust-bar {
+            position: relative;
+            z-index: 1;
+            margin-top: 36px;
+            background: #fff;
+            border-radius: 18px 18px 0 0;
+            box-shadow: 0 -4px 30px rgba(15, 23, 42, 0.06);
+            padding: 28px 12px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .app-trust-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 0 18px;
+            position: relative;
+        }
+
+        .app-trust-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 8px;
+            bottom: 8px;
+            width: 1px;
+            background: #e6ebf2;
+        }
+
+        .app-trust-icon {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 8px 18px color-mix(in srgb, var(--primary) 28%, transparent);
+        }
+
+        .app-trust-item .fw-bold {
+            color: #0d2b55;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 991.98px) {
+            .app-showcase-card {
+                padding: 36px 24px 0;
+            }
+
+            .app-phone-mockup img {
+                max-width: 200px;
+                transform: none;
+            }
+
+            .app-trust-bar {
+                grid-template-columns: repeat(2, 1fr);
+                border-radius: 18px;
+                margin-bottom: 24px;
+                gap: 8px 0;
+            }
+
+            .app-trust-item:nth-child(2n)::after {
+                display: none;
+            }
+
+            .app-trust-item:nth-child(-n+2) {
+                padding-bottom: 16px;
+                margin-bottom: 8px;
+                border-bottom: 1px solid #eef2f7;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .app-showcase-title {
+                font-size: 1.75rem;
+            }
+
+            .app-trust-bar {
+                grid-template-columns: 1fr;
+            }
+
+            .app-trust-item::after {
+                display: none !important;
+            }
+
+            .app-trust-item:not(:last-child) {
+                padding-bottom: 16px;
+                margin-bottom: 8px;
+                border-bottom: 1px solid #eef2f7;
+            }
+        }
+
+        /* SCROLL REVEAL ANIMATIONS */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: opacity, transform;
+        }
+
+        .reveal-on-scroll[data-reveal="slide-left"] {
+            transform: translateX(-40px);
+        }
+
+        .reveal-on-scroll[data-reveal="slide-right"] {
+            transform: translateX(40px);
+        }
+
+        .reveal-on-scroll[data-reveal="fade-up"] {
+            transform: translateY(28px);
+        }
+
+        .reveal-on-scroll.is-visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal-on-scroll {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+        }
+
         /* PREMIUM MOBILE REFINEMENTS */
         @media (max-width: 767.98px) {
             .display-5 {
@@ -1375,6 +1960,148 @@
             .how-stats-strip .d-flex {
                 justify-content: center;
             }
+
+            .app-showcase-card {
+                border-radius: 20px;
+            }
+
+            .app-phone-mockup {
+                margin-bottom: 8px;
+            }
         }
     </style>
+
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                /* ---- Hero video controls ---- */
+                var wrap = document.getElementById('heroVideoWrap');
+                var video = document.getElementById('heroVideo');
+                var playBtn = document.getElementById('heroPlayToggle');
+                var pauseBtn = document.getElementById('heroPauseBtn');
+                var soundBtn = document.getElementById('heroSoundToggle');
+                var playLabel = @json(__('app.home.play_video'));
+                var pauseLabel = @json(__('app.home.pause_video'));
+
+                function setPlaying(playing) {
+                    if (!wrap) return;
+                    wrap.classList.toggle('is-playing', playing);
+                    if (playBtn) {
+                        playBtn.setAttribute('aria-label', playing ? pauseLabel : playLabel);
+                        playBtn.innerHTML = playing ? '<i class="fa fa-pause"></i>' : '<i class="fa fa-play"></i>';
+                    }
+                    if (pauseBtn) pauseBtn.hidden = !playing;
+                    if (soundBtn) soundBtn.hidden = !playing;
+                }
+
+                function updateSoundIcon() {
+                    if (!soundBtn || !video) return;
+                    soundBtn.innerHTML = video.muted ?
+                        '<i class="fa fa-volume-mute"></i>' :
+                        '<i class="fa fa-volume-up"></i>';
+                }
+
+                function playVideo() {
+                    if (!video) return;
+                    video.muted = true;
+                    var p = video.play();
+                    if (p && typeof p.then === 'function') {
+                        p.then(function() {
+                            setPlaying(true);
+                            updateSoundIcon();
+                        }).catch(function() {
+                            setPlaying(false);
+                        });
+                    } else {
+                        setPlaying(true);
+                        updateSoundIcon();
+                    }
+                }
+
+                function pauseVideo() {
+                    if (!video) return;
+                    video.pause();
+                    setPlaying(false);
+                }
+
+                if (video && wrap) {
+                    setPlaying(false);
+                    updateSoundIcon();
+
+                    if (playBtn) {
+                        playBtn.addEventListener('click', function() {
+                            if (video.paused) playVideo();
+                            else pauseVideo();
+                        });
+                    }
+
+                    if (pauseBtn) {
+                        pauseBtn.addEventListener('click', pauseVideo);
+                    }
+
+                    if (soundBtn) {
+                        soundBtn.addEventListener('click', function() {
+                            video.muted = !video.muted;
+                            if (!video.muted) {
+                                video.play().catch(function() {});
+                            }
+                            updateSoundIcon();
+                        });
+                    }
+
+                    // Tap cover / video area to play when paused
+                    wrap.addEventListener('click', function(e) {
+                        if (e.target.closest('.hero-ctrl-btn') || e.target.closest('.hero-play-toggle')) {
+                            return;
+                        }
+                        if (video.paused) playVideo();
+                    });
+
+                    video.addEventListener('play', function() {
+                        setPlaying(true);
+                    });
+                    video.addEventListener('pause', function() {
+                        if (!video.ended) setPlaying(false);
+                    });
+                }
+
+                /* ---- Scroll reveal ---- */
+                var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                var reveals = document.querySelectorAll('.reveal-on-scroll');
+
+                if (prefersReduced) {
+                    reveals.forEach(function(el) {
+                        el.classList.add('is-visible');
+                    });
+                    return;
+                }
+
+                if ('IntersectionObserver' in window) {
+                    var observer = new IntersectionObserver(function(entries) {
+                        entries.forEach(function(entry) {
+                            if (!entry.isIntersecting) return;
+                            var el = entry.target;
+                            var delay = parseInt(el.getAttribute('data-reveal-delay') || '0', 10);
+                            if (delay) {
+                                el.style.transitionDelay = delay + 'ms';
+                            }
+                            el.classList.add('is-visible');
+                            observer.unobserve(el);
+                        });
+                    }, {
+                        threshold: 0.14,
+                        rootMargin: '0px 0px -40px 0px'
+                    });
+
+                    reveals.forEach(function(el) {
+                        observer.observe(el);
+                    });
+                } else {
+                    reveals.forEach(function(el) {
+                        el.classList.add('is-visible');
+                    });
+                }
+            });
+        </script>
+    @endpush
 @endsection
