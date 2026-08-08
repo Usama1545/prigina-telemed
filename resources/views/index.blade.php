@@ -171,109 +171,88 @@
     <!-- /Brochure Download -->
 
 
-    <!-- OUR SERVICES: THE PRIGINA MODEL -->
+    <!-- WHEN SHOULD YOU CONSIDER A SECOND OPINION -->
     <section class="py-5 text-center services-model">
         <div class="container">
-            <h2 class="fw-bold mb-5 reveal-on-scroll" data-reveal="fade-up">
-                <span class="text-dark">{{ __('app.home.services_headline_prefix') }}</span>
-                <span class="text-primary">{{ __('app.home.services_headline_highlight') }}</span>
+            <div class="d-flex align-items-center justify-content-center gap-2 mb-2 reveal-on-scroll"
+                data-reveal="fade-up">
+                <span class="second-opinion-eyebrow-line"></span>
+                <span class="second-opinion-eyebrow-text">{{ __('app.home.second_opinion_eyebrow') }}</span>
+                <span class="second-opinion-eyebrow-line"></span>
+            </div>
+
+            <h2 class="fw-bold second-opinion-title reveal-on-scroll" data-reveal="fade-up">
+                {{ __('app.home.second_opinion_title') }}
             </h2>
 
+            <p class="text-muted second-opinion-subtitle mx-auto mb-5 reveal-on-scroll" data-reveal="fade-up">
+                {{ __('app.home.second_opinion_subtitle') }}
+            </p>
+
             @php
-                $services = [
+                $secondOpinionReasons = [
                     [
                         'accent' => 'blue',
                         'icon' => 'file-medical-alt',
                         'img' => 'IMG-1.jpeg',
-                        'title' => __('app.home.service1_title'),
-                        'desc' => __('app.home.service1_desc'),
-                        'bullets' => [
-                            __('app.home.service1_bullet1'),
-                            __('app.home.service1_bullet2'),
-                            __('app.home.service1_bullet3'),
-                        ],
+                        'title' => __('app.home.second_opinion_card1_title'),
+                        'desc' => __('app.home.second_opinion_card1_desc'),
                     ],
                     [
                         'accent' => 'teal',
-                        'icon' => 'user-md',
+                        'icon' => 'syringe',
                         'img' => 'IMG-2.jpeg',
-                        'title' => __('app.home.service2_title'),
-                        'desc' => __('app.home.service2_desc'),
-                        'bullets' => [
-                            __('app.home.service2_bullet1'),
-                            __('app.home.service2_bullet2'),
-                            __('app.home.service2_bullet3'),
-                        ],
+                        'title' => __('app.home.second_opinion_card2_title'),
+                        'desc' => __('app.home.second_opinion_card2_desc'),
                     ],
                     [
                         'accent' => 'green',
-                        'icon' => 'marker',
+                        'icon' => 'puzzle-piece',
                         'img' => 'IMG-3.jpeg',
-                        'title' => __('app.home.service3_title'),
-                        'desc' => __('app.home.service3_desc'),
-                        'bullets' => [
-                            __('app.home.service3_bullet1'),
-                            __('app.home.service3_bullet2'),
-                            __('app.home.service3_bullet3'),
-                        ],
+                        'title' => __('app.home.second_opinion_card3_title'),
+                        'desc' => __('app.home.second_opinion_card3_desc'),
                     ],
                     [
                         'accent' => 'purple',
-                        'icon' => 'users',
+                        'icon' => 'comment-question',
                         'img' => 'IMG-4.jpeg',
-                        'title' => __('app.home.service4_title'),
-                        'desc' => __('app.home.service4_desc'),
-                        'bullets' => [
-                            __('app.home.service4_bullet1'),
-                            __('app.home.service4_bullet2'),
-                            __('app.home.service4_bullet3'),
-                            __('app.home.service4_bullet4'),
-                        ],
+                        'title' => __('app.home.second_opinion_card4_title'),
+                        'desc' => __('app.home.second_opinion_card4_desc'),
                     ],
                 ];
             @endphp
 
             <div class="row g-4 justify-content-center align-items-stretch">
-                @foreach ($services as $service)
+                @foreach ($secondOpinionReasons as $reason)
                     <div class="col-lg-3 col-md-6 reveal-on-scroll" data-reveal="fade-up"
                         data-reveal-delay="{{ $loop->index * 100 }}">
                         <div class="service-card h-100 text-start d-flex flex-column">
 
                             <div class="service-photo position-relative">
-                                <img src="{{ asset('images/features/' . $service['img']) }}"
-                                    alt="{{ $service['title'] }}" class="img-fluid">
-                                <div class="service-icon-circle icon-grad-{{ $service['accent'] }}">
-                                    <i class="fi fi-rr-{{ $service['icon'] }}"></i>
+                                <img src="{{ asset('images/features/' . $reason['img']) }}"
+                                    alt="{{ $reason['title'] }}" class="img-fluid">
+                                <div class="service-icon-circle icon-grad-{{ $reason['accent'] }}">
+                                    <i class="fi fi-rr-{{ $reason['icon'] }}"></i>
                                 </div>
                             </div>
 
                             <div class="p-4 pt-5 d-flex flex-column flex-grow-1">
-                                <h5 class="fw-bold text-center service-title-{{ $service['accent'] }}">
-                                    {{ $service['title'] }}</h5>
-                                <p class="text-muted text-center small">{{ $service['desc'] }}</p>
+                                <h5 class="fw-bold text-center service-title-{{ $reason['accent'] }}">
+                                    {{ $reason['title'] }}</h5>
 
-                                <span class="service-underline underline-{{ $service['accent'] }} d-block mx-auto"></span>
+                                <span class="service-underline underline-{{ $reason['accent'] }} d-block mx-auto mb-3"></span>
 
-                                <ul class="service-bullets mt-3 mb-4">
-                                    @foreach ($service['bullets'] as $bullet)
-                                        <li>
-                                            <span class="service-check check-{{ $service['accent'] }}">
-                                                <i class="fi fi-rr-check"></i>
-                                            </span>
-                                            {{ $bullet }}
-                                        </li>
-                                    @endforeach
-                                </ul>
-
-                                {{-- <a href="{{ check() ? route('doctors') : route('register') }}"
-                                    class="btn service-btn btn-{{ $service['accent'] }} w-100 mt-auto d-flex align-items-center justify-content-center gap-2">
-                                    {{ __('app.home.service_cta') }} <i class="fi fi-rr-arrow-right"></i>
-                                </a> --}}
+                                <p class="text-muted text-center small mb-0">{{ $reason['desc'] }}</p>
                             </div>
                         </div>
                     </div>
                 @endforeach
             </div>
+
+            <a href="{{ route('how-it-works') }}"
+                class="second-opinion-cta reveal-on-scroll" data-reveal="fade-up" data-reveal-delay="400">
+                {{ __('app.home.second_opinion_cta') }} <i class="fi fi-rr-arrow-right"></i>
+            </a>
         </div>
     </section>
 
@@ -892,7 +871,50 @@
             box-shadow: 0 16px 36px rgba(15, 23, 42, 0.1);
         }
 
-        /* OUR SERVICES: THE PRIGINA MODEL */
+        /* WHEN SHOULD YOU CONSIDER A SECOND OPINION */
+        .second-opinion-eyebrow-line {
+            width: 28px;
+            height: 1px;
+            background: var(--secondary);
+        }
+
+        .second-opinion-eyebrow-text {
+            color: var(--secondary);
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .second-opinion-title {
+            color: var(--primary);
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            margin-bottom: 1rem;
+        }
+
+        .second-opinion-subtitle {
+            max-width: 640px;
+        }
+
+        .second-opinion-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 2.5rem;
+            padding: 12px 28px;
+            border: 1.5px solid var(--secondary);
+            border-radius: 10px;
+            color: var(--secondary);
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .second-opinion-cta:hover {
+            background: var(--secondary);
+            color: #fff;
+        }
+
         .service-card {
             background: #fff;
             border: 1px solid #eee;
@@ -983,96 +1005,6 @@
 
         .underline-purple {
             background: #5b2fc2;
-        }
-
-        .service-bullets {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .service-bullets li {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin-bottom: 10px;
-            font-size: 14px;
-            color: #5f6c72;
-        }
-
-        .service-check {
-            width: 20px;
-            height: 20px;
-            min-width: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 2px;
-        }
-
-        .service-check i {
-            color: #fff;
-            font-size: 10px;
-        }
-
-        .check-blue {
-            background: var(--primary);
-        }
-
-        .check-teal {
-            background: var(--secondary);
-        }
-
-        .check-green {
-            background: #3f9142;
-        }
-
-        .check-purple {
-            background: #5b2fc2;
-        }
-
-        .service-btn {
-            border: none;
-            color: #fff;
-            font-weight: 600;
-            padding: 10px 16px;
-        }
-
-        .btn-blue {
-            background: var(--primary);
-        }
-
-        .btn-blue:hover {
-            color: #fff;
-            background: color-mix(in srgb, var(--primary) 85%, black);
-        }
-
-        .btn-teal {
-            background: var(--secondary);
-        }
-
-        .btn-teal:hover {
-            color: #fff;
-            background: color-mix(in srgb, var(--secondary) 85%, black);
-        }
-
-        .btn-green {
-            background: #3f9142;
-        }
-
-        .btn-green:hover {
-            color: #fff;
-            background: #357338;
-        }
-
-        .btn-purple {
-            background: linear-gradient(135deg, #7b3fe4, #5b2fc2);
-        }
-
-        .btn-purple:hover {
-            color: #fff;
-            opacity: 0.9;
         }
 
         /* HOW IT WORKS LABEL */
