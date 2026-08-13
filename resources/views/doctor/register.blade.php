@@ -102,20 +102,20 @@
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">{{ __('app.doctor_register.qualification') }}</label>
 
-                                    <select name="qualifications[]" multiple
-                                        class="form-control @error('qualifications') is-invalid @enderror select2" required>
+                                    <select name="qualification[]" multiple
+                                        class="form-control @error('qualification') is-invalid @enderror select2" required>
                                         <option value="">{{ __('app.doctor_register.select_qualification') }}
                                         </option>
 
                                         @foreach (getQualifications() as $qualification)
                                             <option value="{{ $qualification['name'] }}"
-                                                {{ collect(old('qualifications'))->contains($qualification['name']) ? 'selected' : '' }}>
+                                                {{ collect(old('qualification'))->contains($qualification['name']) ? 'selected' : '' }}>
                                                 {{ $qualification['name'] }}
                                             </option>
                                         @endforeach
                                     </select>
 
-                                    @error('qualifications')
+                                    @error('qualification')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
