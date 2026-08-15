@@ -22,7 +22,7 @@
 
             <div class="doctor-specialities">
 
-                @foreach (current_user()['specializations'] as $specialization)
+                @foreach (current_user()['specializations'] ?? [] as $specialization)
                     <span class="doctor-speciality-badge">
                         {{ $specialization }}
                     </span>

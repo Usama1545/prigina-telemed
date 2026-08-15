@@ -4,6 +4,7 @@ use App\Services\FirebaseAuthService;
 use App\Services\FirestoreService;
 use App\Services\Zego\ZegoServerAssistant;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 
 if (! function_exists('current_user')) {
     function current_user()
@@ -41,15 +42,37 @@ if (! function_exists('current_user')) {
             $doc = $firestore->find($collection, $uid);
         }
 
-        // If Firestore is still unavailable/missing the document after the retry,
-        // fall back to the basic user data that was saved in the session at login
-        // time so the user is not kicked back to the login screen unnecessarily.
         if (! $doc) {
+            // Both reads came back empty. Find out whether that's because the
+            // account was actually deleted, or Firestore just isn't reachable.
+            if ($firestore->documentExists($collection, $uid) === false) {
+                // Confirmed gone: don't keep serving a half-authenticated
+                // session that will trip over missing fields everywhere.
+                // Force a real logout and stop the current request right
+                // here, however far into rendering it already got, since
+                // current_user() is called from views as well as controllers.
+                session()->invalidate();
+
+                abort(redirect()->route('login'));
+            }
+
+            // Unknown/outage: fall back to the basic user data that was saved
+            // in the session at login time so the user is not kicked back to
+            // the login screen unnecessarily.
             $sessionUser = session('auth_user', []);
             $doc = [
                 'email' => $sessionUser['email'] ?? '',
                 'name' => $sessionUser['name'] ?? '',
             ];
+        }
+
+        // Firestore is schemaless, and legacy/manually-edited documents have
+        // been seen storing these as a single string instead of a list —
+        // normalize so callers can always safely foreach() them.
+        foreach (['qualification', 'specializations'] as $listField) {
+            if (isset($doc[$listField])) {
+                $doc[$listField] = array_values(array_filter(Arr::wrap($doc[$listField]), 'filled'));
+            }
         }
 
         // Always expose both keys so callers can use either current_user()['uid']

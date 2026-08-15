@@ -137,6 +137,24 @@ class FirestoreService
         }
     }
 
+    /**
+     * Check whether a document is confirmed to be absent, as opposed to
+     * find() simply failing to reach Firestore. Returns false only when
+     * Firestore was actually reached and reported the document missing;
+     * returns null (unknown) on any connection/API error so callers don't
+     * mistake an outage for a deleted document.
+     */
+    public function documentExists($collection, $documentId): ?bool
+    {
+        try {
+            return $this->db->collection($collection)->document($documentId)->snapshot()->exists();
+        } catch (Exception $e) {
+            Log::error('Firestore documentExists error: '.$e->getMessage());
+
+            return null;
+        }
+    }
+
     public function update($collection, $documentId, $data)
     {
         try {
