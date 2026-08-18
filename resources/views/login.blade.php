@@ -22,17 +22,99 @@
                             <div class="d-flex align-items-center justify-content-center gap-3 mb-2">
 
                                 <div class="rounded-circle bg-light d-flex align-items-center justify-content-center"
-                                    style="width: 70px; height: 70px;">
-                                    <i class="fa-solid fa-lock text-primary fs-3"></i>
+                                    style="width: 100px; height: 100px;">
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%"
+                                        height="100%">
+                                        <!-- Background -->
+                                        <circle cx="100" cy="100" r="90" fill="#EBF3FA" />
+
+                                        <!-- Scaled-up figures, centered in the circle -->
+                                        <g transform="translate(100 100) scale(1.3) translate(-100.5 -85)">
+
+                                            <!-- ================= DOCTOR ================= -->
+                                            <g stroke="#003B7A" stroke-linecap="round" stroke-linejoin="round">
+                                                <!-- Doctor Neck -->
+                                                <path d="M72 88 V96
+                 C72 100 88 100 88 96
+                 V88" fill="#FFFFFF" stroke-width="4" />
+                                                <!-- Doctor Head -->
+                                                <circle cx="80" cy="68" r="18" fill="#FFFFFF"
+                                                    stroke-width="4.5" />
+                                                <!-- Hair -->
+                                                <path d="M64 65
+                 C65 53 72 48 81 49
+                 C91 49 97 56 96 66
+                 C92 61 87 59 82 60
+                 C75 61 70 64 64 65Z" fill="#003B7A" stroke="none" />
+                                                <!-- Doctor Body / Coat -->
+                                                <path d="M62 122
+                 V105
+                 C62 96 68 91 75 89
+                 L80 98
+                 L85 89
+                 C92 91 98 96 98 105
+                 V122 Z" fill="#FFFFFF" stroke-width="4.5" />
+                                                <!-- Coat Lapels -->
+                                                <path d="M75 89 L80 99 L85 89" fill="none" stroke-width="3" />
+                                                <!-- Shirt -->
+                                                <path d="M75 90 L80 98 L85 90" fill="#EBF3FA" stroke-width="2" />
+                                                <!-- Stethoscope -->
+                                                <path d="M68 92
+                 V101
+                 C68 111 80 113 80 103
+                 V98" fill="none" stroke-width="3" />
+                                                <path d="M80 103 V111" fill="none" stroke-width="3" />
+                                                <!-- Stethoscope Chest Piece -->
+                                                <circle cx="80" cy="114" r="3.5" fill="#003B7A"
+                                                    stroke-width="1.5" />
+                                                <!-- Medical Cross -->
+                                                <rect x="88" y="103" width="7" height="3" rx="1.5"
+                                                    fill="#003B7A" stroke="none" />
+                                                <rect x="90" y="101" width="3" height="7" rx="1.5"
+                                                    fill="#003B7A" stroke="none" />
+                                            </g>
+
+                                            <!-- ================= PATIENT ================= -->
+                                            <g stroke="#003B7A" stroke-linecap="round" stroke-linejoin="round">
+                                                <!-- Patient Neck -->
+                                                <path d="M113 91 V98
+                 C113 102 127 102 127 98
+                 V91" fill="#FFFFFF" stroke-width="3.5" />
+                                                <!-- Patient Head -->
+                                                <circle cx="120" cy="73" r="17" fill="#FFFFFF"
+                                                    stroke-width="4" />
+                                                <!-- Patient Hair -->
+                                                <path d="M104 70
+                 C105 59 112 54 121 55
+                 C130 55 136 62 136 72
+                 C132 67 127 65 121 66
+                 C115 66 110 68 104 70Z" fill="#003B7A" stroke="none" />
+                                                <!-- Patient Body -->
+                                                <path d="M101 122
+                 V108
+                 C101 99 108 95 113 93
+                 L120 101
+                 L127 93
+                 C133 95 139 100 139 108
+                 V122 Z" fill="#003B7A" stroke-width="3.5" />
+                                                <!-- Shirt Collar -->
+                                                <path d="M113 94 L120 102 L127 94" fill="none" stroke="#FFFFFF"
+                                                    stroke-width="2.5" />
+                                            </g>
+
+                                        </g>
+                                    </svg>
+
                                 </div>
 
-                                <h2 class="mb-0 fw-bold">
-                                    {{ __('app.login.sign_in') }}
-                                </h2>
 
                             </div>
+                            <h2 class="mb-0 fw-bold text-primary">
+                                {{ __('app.login.sign_in') }}
+                            </h2>
 
-                            <p class="text-muted mb-0">
+                            <p class="text-muted mb-0 mt-2">
                                 {{ __('app.login.account_desc') }}
                             </p>
 
@@ -189,14 +271,14 @@
 
         function firebaseErrorMessage(error) {
             const messages = {
-                'auth/user-not-found':       'No account found with this email address.',
-                'auth/wrong-password':        'Incorrect password. Please try again.',
-                'auth/invalid-credential':    'Invalid email or password.',
-                'auth/invalid-email':         'Please enter a valid email address.',
-                'auth/user-disabled':         'This account has been disabled. Please contact support.',
-                'auth/too-many-requests':     'Too many failed attempts. Please try again later.',
-                'auth/network-request-failed':'Network error. Please check your connection.',
-                'auth/popup-closed-by-user':  'Sign-in popup was closed before completing.',
+                'auth/user-not-found': 'No account found with this email address.',
+                'auth/wrong-password': 'Incorrect password. Please try again.',
+                'auth/invalid-credential': 'Invalid email or password.',
+                'auth/invalid-email': 'Please enter a valid email address.',
+                'auth/user-disabled': 'This account has been disabled. Please contact support.',
+                'auth/too-many-requests': 'Too many failed attempts. Please try again later.',
+                'auth/network-request-failed': 'Network error. Please check your connection.',
+                'auth/popup-closed-by-user': 'Sign-in popup was closed before completing.',
                 'auth/cancelled-popup-request': 'Sign-in was cancelled.',
             };
             return messages[error.code] || 'Login failed. Please try again.';
@@ -369,7 +451,9 @@
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
                     },
-                    body: JSON.stringify({ email: pendingVerificationUser.email })
+                    body: JSON.stringify({
+                        email: pendingVerificationUser.email
+                    })
                 });
 
                 showAlert(

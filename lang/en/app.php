@@ -395,7 +395,7 @@ return [
     ],
 
     'login' => [
-        'sign_in' => 'Sign In',
+        'sign_in' => 'Patient & Doctor Sign In',
         'account_desc' => 'Access your PriGina Global Telemed account',
         'email' => 'E-mail',
         'password' => 'Password',

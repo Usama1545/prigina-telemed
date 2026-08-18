@@ -394,7 +394,7 @@ return [
     ],
 
     'login' => [
-        'sign_in' => 'Iniciar sesión',
+        'sign_in' => 'Connexion Patient & Médecin',
         'account_desc' => 'Acceda a su cuenta de PriGina Global Telemed',
         'email' => 'Correo electrónico',
         'password' => 'Contraseña',

@@ -394,7 +394,7 @@ return [
     ],
 
     'login' => [
-        'sign_in' => 'Connexion',
+        'sign_in' => 'Inicio de sesión de paciente y médico',
         'account_desc' => 'Accédez à votre compte PriGina Global Telemed',
         'email' => 'E-mail',
         'password' => 'Mot de passe',
@@ -448,7 +448,7 @@ return [
         'second_opinion_card1_title' => 'Nouveau diagnostic',
         'second_opinion_card1_desc' => 'Obtenez des éclaircissements et confirmez votre diagnostic avant de prendre des décisions importantes.',
         'second_opinion_card2_title' => 'Envisager une chirurgie',
-        'second_opinion_card2_desc' => "Explorez toutes vos options et déterminez si la chirurgie est le meilleur choix pour vous.",
+        'second_opinion_card2_desc' => 'Explorez toutes vos options et déterminez si la chirurgie est le meilleur choix pour vous.',
         'second_opinion_card3_title' => 'Cas complexe',
         'second_opinion_card3_desc' => "Bénéficiez d'un autre avis d'expert sur des affections complexes ou rares.",
         'second_opinion_card4_title' => 'Vous avez encore des questions ?',
@@ -554,7 +554,7 @@ return [
         'app_trust3_title' => 'Plusieurs langues',
         'app_trust3_desc' => 'Disponible en anglais, français, espagnol et arabe.',
         'app_trust4_title' => 'Soins de confiance',
-        'app_trust4_desc' => "Des deuxièmes avis indépendants de médecins expérimentés.",
+        'app_trust4_desc' => 'Des deuxièmes avis indépendants de médecins expérimentés.',
     ],
 
     'for_patients' => [
