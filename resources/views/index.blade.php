@@ -801,7 +801,8 @@
                         <div class="google-imgs-v2 mt-4 reveal-on-scroll" data-reveal="fade-up" data-reveal-delay="400">
                             <a href="#"><img src="{{ URL::asset('build/img/icons/app-store.svg') }}"
                                     alt="App Store"></a>
-                            <a href="#"><img src="{{ URL::asset('build/img/icons/google-play.svg') }}"
+                            <a href="https://play.google.com/store/apps/details?id=com.prigina_global.app"
+                                target="_blank"><img src="{{ URL::asset('build/img/icons/google-play.svg') }}"
                                     alt="Google Play"></a>
                         </div>
                     </div>
