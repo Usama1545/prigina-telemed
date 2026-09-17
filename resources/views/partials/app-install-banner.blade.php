@@ -8,7 +8,8 @@
         </span>
     </div>
     <div class="d-flex align-items-center gap-2 flex-shrink-0">
-        <a href="#" class="btn btn-sm btn-dark d-flex align-items-center gap-1 px-3" id="playStoreBtn">
+        <a href="https://play.google.com/store/apps/details?id=com.prigina_global.app"
+            class="btn btn-sm btn-dark d-flex align-items-center gap-1 px-3" id="playStoreBtn">
             <i class="fa-brands fa-google-play"></i>
             <span class="small">Google Play</span>
         </a>
@@ -23,11 +24,14 @@
 </div>
 
 <script>
-    (function () {
+    (function() {
         var banner = document.getElementById('appInstallBanner');
         if (!banner) return;
-        if (localStorage.getItem('appBannerDismissed')) { banner.remove(); return; }
-        document.getElementById('dismissAppBanner').addEventListener('click', function () {
+        if (localStorage.getItem('appBannerDismissed')) {
+            banner.remove();
+            return;
+        }
+        document.getElementById('dismissAppBanner').addEventListener('click', function() {
             banner.remove();
             localStorage.setItem('appBannerDismissed', '1');
         });
