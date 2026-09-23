@@ -45,7 +45,7 @@ class BookingController extends Controller
         if (! $result) {
             return redirect()
                 ->back()
-                ->with('error', 'This doctor has not set their availability yet. Please check back later.');
+                ->with('error', __('app.flash.doctor_no_availability_later'));
         }
 
         $doctor = $result['doctor'];
@@ -66,7 +66,7 @@ class BookingController extends Controller
         if (! $result) {
             return response()->json([
                 'success' => false,
-                'message' => 'This doctor has not set their availability yet.',
+                'message' => __('app.flash.doctor_no_availability_yet'),
             ], 422);
         }
 
@@ -129,7 +129,7 @@ class BookingController extends Controller
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('error', 'The selected time slot is no longer available. Please choose a different date or time.');
+                ->with('error', __('app.flash.slot_unavailable_choose_different'));
         }
 
         $documentUrls = [];
@@ -354,10 +354,10 @@ class BookingController extends Controller
         if ($doctorId) {
             return redirect()
                 ->route('booking', ['id' => $doctorId])
-                ->with('error', 'Payment was cancelled. Please review your details and try again.');
+                ->with('error', __('app.flash.payment_cancelled_retry'));
         }
 
-        return redirect()->route('doctors')->with('error', 'Payment was cancelled.');
+        return redirect()->route('doctors')->with('error', __('app.flash.payment_cancelled'));
     }
 
     public function flutterwaveCallback(Request $request)

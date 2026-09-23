@@ -264,8 +264,8 @@
                         // startCallAcceptWatcher();
 
                         if (Notification.permission === 'granted') {
-                            new Notification('Incoming Call', {
-                                body: `${caller.userName} is calling you...`,
+                            new Notification(@json(__('app.calls.incoming_call')), {
+                                body: @json(__('app.calls.is_calling')).replace(':name', caller.userName),
                                 icon: '/favicon.ico'
                             });
                         }

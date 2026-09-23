@@ -86,23 +86,23 @@
                                                                         <a href="javascript:void(0);"
                                                                             class="view-appointment"
                                                                             data-id="{{ $appointment['id'] }}">
-                                                                            {{ $appointment['doctorName'] ?? 'Doctor' }}
+                                                                            {{ $appointment['doctorName'] ?? __('app.appointments.doctor') }}
                                                                         </a>
                                                                     </h6>
                                                                     @if (!empty($appointment['doctorId']))
                                                                         <a href="{{ route('conversation.create', ['doctor_id' => $appointment['doctorId']]) }}"
                                                                             class="btn btn-xs btn-outline-primary rounded-pill px-2 py-1"
-                                                                            title="Chat">
+                                                                            title="{{ __('app.appointments.chat') }}" data-spinner-link>
                                                                             <i class="isax isax-messages-25"></i>
                                                                         </a>
                                                                         <a href="{{ route('patient.appointment-video-call', $appointment['id']) }}"
                                                                             class="btn btn-xs btn-outline-success rounded-pill px-2 py-1"
-                                                                            title="Video Call">
+                                                                            title="{{ __('app.appointments.video_call') }}" data-spinner-link>
                                                                             <i class="fa-solid fa-video"></i>
                                                                         </a>
                                                                         <a href="{{ route('patient.appointment-audio-call', $appointment['id']) }}"
                                                                             class="btn btn-xs btn-outline-primary rounded-pill px-2 py-1"
-                                                                            title="Audio Call">
+                                                                            title="{{ __('app.appointments.audio_call') }}" data-spinner-link>
                                                                             <i class="fa-solid fa-phone"></i>
                                                                         </a>
                                                                     @endif
@@ -128,11 +128,11 @@
                                                         <i class="isax isax-clock5 me-2 text-success"></i>
                                                         <span>{{ $appointment['startTime'] ?? '--' }} -
                                                             {{ $appointment['endTime'] ?? '--' }}</span>
-                                                            <small class="text-muted ms-1" style="font-size:11px;">(UTC)</small>
+                                                            <small class="text-muted ms-1" style="font-size:11px;">({{ __('app.appointments.utc') }})</small>
                                                     </div>
                                                     @if (!empty($appointment['symptoms']))
                                                         <div class="mt-3">
-                                                            <label class="fw-bold mb-1">Symptoms</label>
+                                                            <label class="fw-bold mb-1">{{ __('app.appointments.symptoms') }}</label>
                                                             <p class="mb-0 text-muted"
                                                                 style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
                                                                 {{ $appointment['symptoms'] }}
@@ -141,8 +141,8 @@
                                                     @endif
                                                     <button type="button"
                                                         class="btn btn-sm btn-outline-info rounded px-2 mt-2 py-1 view-appointment"
-                                                        data-id="{{ $appointment['id'] }}" title="View Details">
-                                                        <i class="fa-solid fa-eye"></i> Documents
+                                                        data-id="{{ $appointment['id'] }}" title="{{ __('app.appointments.view_details') }}">
+                                                        <i class="fa-solid fa-eye"></i> {{ __('app.appointments.documents') }}
                                                     </button>
                                                 </li>
 
@@ -150,7 +150,7 @@
                                                     @if ($canCancel)
                                                         <a href="{{ route('patient.cancel-appointment', $appointment['id']) }}"
                                                             class="btn btn-outline-danger w-100">
-                                                            <i class="fa-solid fa-xmark me-1"></i>Cancel
+                                                            <i class="fa-solid fa-xmark me-1"></i>{{ __('app.common.cancel') }}
                                                         </a>
                                                         <button type="button"
                                                             class="btn btn-primary w-100 reschedule-btn"
@@ -168,18 +168,18 @@
                                     </div>
                                 @empty
                                     <div class="col-12">
-                                        <p class="text-muted text-center py-4">No upcoming appointments.</p>
+                                        <p class="text-muted text-center py-4">{{ __('app.appointments.no_upcoming') }}</p>
                                     </div>
                                 @endforelse
                             </div>
                             <div class="pagination dashboard-pagination mt-3">
                                 <ul>
                                     @if ($hasPrev)
-                                        <li><a href="?direction=prev" class="page-link prev">Prev</a></li>
+                                        <li><a href="?direction=prev" class="page-link prev">{{ __('app.appointments.prev') }}</a></li>
                                     @endif
                                     @if ($hasMore && $nextCursor)
                                         <li><a href="?cursor={{ urlencode(json_encode($nextCursor)) }}&direction=next"
-                                                class="page-link next">Next</a></li>
+                                                class="page-link next">{{ __('app.appointments.next') }}</a></li>
                                     @endif
                                 </ul>
                             </div>
@@ -210,10 +210,10 @@
                                                                 <h6 class="mb-0">
                                                                     <a href="javascript:void(0);" class="view-appointment"
                                                                         data-id="{{ $appointment['id'] }}">
-                                                                        {{ $appointment['doctorName'] ?? 'Doctor' }}
+                                                                        {{ $appointment['doctorName'] ?? __('app.appointments.doctor') }}
                                                                     </a>
                                                                 </h6>
-                                                                <span class="badge bg-danger mt-2">Cancelled</span>
+                                                                <span class="badge bg-danger mt-2">{{ __('app.common.cancelled') }}</span>
                                                             </div>
                                                         </div>
                                                         <div class="d-flex align-items-center gap-2">
@@ -223,7 +223,7 @@
                                                             @endif
                                                             <button type="button"
                                                                 class="btn btn-xs btn-outline-info rounded-pill px-2 py-1 view-appointment"
-                                                                data-id="{{ $appointment['id'] }}" title="View Details">
+                                                                data-id="{{ $appointment['id'] }}" title="{{ __('app.appointments.view_details') }}">
                                                                 <i class="fa-solid fa-eye"></i>
                                                             </button>
                                                         </div>
@@ -238,11 +238,11 @@
                                                         <i class="isax isax-clock5 me-2 text-muted"></i>
                                                         <span>{{ $appointment['startTime'] ?? '--' }} -
                                                             {{ $appointment['endTime'] ?? '--' }}</span>
-                                                            <small class="text-muted ms-1" style="font-size:11px;">(UTC)</small>
+                                                            <small class="text-muted ms-1" style="font-size:11px;">({{ __('app.appointments.utc') }})</small>
                                                     </div>
                                                     @if (!empty($appointment['symptoms']))
                                                         <div class="mt-3">
-                                                            <label class="fw-bold mb-1">Symptoms</label>
+                                                            <label class="fw-bold mb-1">{{ __('app.appointments.symptoms') }}</label>
                                                             <p class="mb-0 text-muted"
                                                                 style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
                                                                 {{ $appointment['symptoms'] }}
@@ -255,18 +255,18 @@
                                     </div>
                                 @empty
                                     <div class="col-12">
-                                        <p class="text-muted text-center py-4">No cancelled appointments.</p>
+                                        <p class="text-muted text-center py-4">{{ __('app.appointments.no_cancelled') }}</p>
                                     </div>
                                 @endforelse
                             </div>
                             <div class="pagination dashboard-pagination mt-3">
                                 <ul>
                                     @if ($hasPrev)
-                                        <li><a href="?direction=prev" class="page-link prev">Prev</a></li>
+                                        <li><a href="?direction=prev" class="page-link prev">{{ __('app.appointments.prev') }}</a></li>
                                     @endif
                                     @if ($hasMore && $nextCursor)
                                         <li><a href="?cursor={{ urlencode(json_encode($nextCursor)) }}&direction=next"
-                                                class="page-link next">Next</a></li>
+                                                class="page-link next">{{ __('app.appointments.next') }}</a></li>
                                     @endif
                                 </ul>
                             </div>
@@ -304,24 +304,24 @@
                                                                         <a href="javascript:void(0);"
                                                                             class="view-appointment"
                                                                             data-id="{{ $appointment['id'] }}">
-                                                                            {{ $appointment['doctorName'] ?? 'Doctor' }}
+                                                                            {{ $appointment['doctorName'] ?? __('app.appointments.doctor') }}
                                                                         </a>
                                                                     </h6>
                                                                     @if ($isPaid && !empty($appointment['doctorId']))
                                                                         <a href="{{ route('conversation.create', ['doctor_id' => $appointment['doctorId']]) }}"
                                                                             class="btn btn-xs btn-outline-primary rounded-pill px-2 py-1"
-                                                                            title="Chat">
+                                                                            title="{{ __('app.appointments.chat') }}" data-spinner-link>
                                                                             <i class="isax isax-messages-25"></i>
                                                                         </a>
                                                                     @endif
                                                                 </div>
                                                                 @if ($isPaid)
                                                                     <span
-                                                                        class="badge bg-warning text-dark mt-2">Pending</span>
+                                                                        class="badge bg-warning text-dark mt-2">{{ __('app.common.pending') }}</span>
                                                                 @else
                                                                     <span class="badge bg-danger mt-2">
                                                                         <i class="fa-solid fa-circle-exclamation me-1"></i>
-                                                                        Not Paid
+                                                                        {{ __('app.appointments.not_paid') }}
                                                                     </span>
                                                                 @endif
                                                             </div>
@@ -333,7 +333,7 @@
                                                             @endif
                                                             <button type="button"
                                                                 class="btn btn-xs btn-outline-info rounded-pill px-2 py-1 view-appointment"
-                                                                data-id="{{ $appointment['id'] }}" title="View Details">
+                                                                data-id="{{ $appointment['id'] }}" title="{{ __('app.appointments.view_details') }}">
                                                                 <i class="fa-solid fa-eye"></i>
                                                             </button>
                                                         </div>
@@ -348,11 +348,11 @@
                                                         <i class="isax isax-clock5 me-2 text-warning"></i>
                                                         <span>{{ $appointment['startTime'] ?? '--' }} -
                                                             {{ $appointment['endTime'] ?? '--' }}</span>
-                                                            <small class="text-muted ms-1" style="font-size:11px;">(UTC)</small>
+                                                            <small class="text-muted ms-1" style="font-size:11px;">({{ __('app.appointments.utc') }})</small>
                                                     </div>
                                                     @if (!empty($appointment['symptoms']))
                                                         <div class="mt-3">
-                                                            <label class="fw-bold mb-1">Symptoms</label>
+                                                            <label class="fw-bold mb-1">{{ __('app.appointments.symptoms') }}</label>
                                                             <p class="mb-0 text-muted"
                                                                 style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
                                                                 {{ $appointment['symptoms'] }}
@@ -365,7 +365,7 @@
                                                         @if ($canCancel)
                                                             <a href="{{ route('patient.cancel-appointment', $appointment['id']) }}"
                                                                 class="btn btn-outline-danger w-100">
-                                                                <i class="fa-solid fa-xmark me-1"></i>Cancel
+                                                                <i class="fa-solid fa-xmark me-1"></i>{{ __('app.common.cancel') }}
                                                             </a>
                                                         @endif
                                                     @else
@@ -375,17 +375,16 @@
                                                                 class="flex-grow-1">
                                                                 @csrf
                                                                 <button type="submit" class="btn btn-success w-100">
-                                                                    <i class="fa-solid fa-credit-card me-1"></i>Pay &
-                                                                    Confirm
+                                                                    <i class="fa-solid fa-credit-card me-1"></i>{{ __('app.appointments.pay_confirm') }}
                                                                 </button>
                                                             </form>
                                                         @endif
                                                         <form method="POST"
                                                             action="{{ route('patient.appointment-delete', $appointment['id']) }}"
-                                                            onsubmit="return confirm('Delete this appointment?')">
+                                                            onsubmit="return confirm(@js(__('app.appointments.delete_confirm')))">
                                                             @csrf
                                                             <button type="submit" class="btn btn-outline-danger">
-                                                                <i class="fa-solid fa-trash me-1"></i>Delete
+                                                                <i class="fa-solid fa-trash me-1"></i>{{ __('app.common.delete') }}
                                                             </button>
                                                         </form>
                                                     @endif
@@ -395,18 +394,18 @@
                                     </div>
                                 @empty
                                     <div class="col-12">
-                                        <p class="text-muted text-center py-4">No pending appointments.</p>
+                                        <p class="text-muted text-center py-4">{{ __('app.appointments.no_pending') }}</p>
                                     </div>
                                 @endforelse
                             </div>
                             <div class="pagination dashboard-pagination mt-3">
                                 <ul>
                                     @if ($hasPrev)
-                                        <li><a href="?direction=prev" class="page-link prev">Prev</a></li>
+                                        <li><a href="?direction=prev" class="page-link prev">{{ __('app.appointments.prev') }}</a></li>
                                     @endif
                                     @if ($hasMore && $nextCursor)
                                         <li><a href="?cursor={{ urlencode(json_encode($nextCursor)) }}&direction=next"
-                                                class="page-link next">Next</a></li>
+                                                class="page-link next">{{ __('app.appointments.next') }}</a></li>
                                     @endif
                                 </ul>
                             </div>
@@ -440,18 +439,18 @@
                                                                         <a href="javascript:void(0);"
                                                                             class="view-appointment"
                                                                             data-id="{{ $appointment['id'] }}">
-                                                                            {{ $appointment['doctorName'] ?? 'Doctor' }}
+                                                                            {{ $appointment['doctorName'] ?? __('app.appointments.doctor') }}
                                                                         </a>
                                                                     </h6>
                                                                     @if (!empty($appointment['doctorId']))
                                                                         <a href="{{ route('conversation.create', ['doctor_id' => $appointment['doctorId']]) }}"
                                                                             class="btn btn-xs btn-outline-primary rounded-pill px-2 py-1"
-                                                                            title="Chat">
+                                                                            title="{{ __('app.appointments.chat') }}" data-spinner-link>
                                                                             <i class="isax isax-messages-25"></i>
                                                                         </a>
                                                                     @endif
                                                                 </div>
-                                                                <span class="badge bg-success mt-2">Completed</span>
+                                                                <span class="badge bg-success mt-2">{{ __('app.common.completed') }}</span>
                                                             </div>
                                                         </div>
                                                         <div class="d-flex align-items-center gap-2">
@@ -461,7 +460,7 @@
                                                             @endif
                                                             <button type="button"
                                                                 class="btn btn-xs btn-outline-info rounded-pill px-2 py-1 view-appointment"
-                                                                data-id="{{ $appointment['id'] }}" title="View Details">
+                                                                data-id="{{ $appointment['id'] }}" title="{{ __('app.appointments.view_details') }}">
                                                                 <i class="fa-solid fa-eye"></i>
                                                             </button>
                                                         </div>
@@ -476,11 +475,11 @@
                                                         <i class="isax isax-clock5 me-2 text-success"></i>
                                                         <span>{{ $appointment['startTime'] ?? '--' }} -
                                                             {{ $appointment['endTime'] ?? '--' }}</span>
-                                                            <small class="text-muted ms-1" style="font-size:11px;">(UTC)</small>
+                                                            <small class="text-muted ms-1" style="font-size:11px;">({{ __('app.appointments.utc') }})</small>
                                                     </div>
                                                     @if (!empty($appointment['symptoms']))
                                                         <div class="mt-3">
-                                                            <label class="fw-bold mb-1">Symptoms</label>
+                                                            <label class="fw-bold mb-1">{{ __('app.appointments.symptoms') }}</label>
                                                             <p class="mb-0 text-muted"
                                                                 style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
                                                                 {{ $appointment['symptoms'] }}
@@ -493,18 +492,18 @@
                                     </div>
                                 @empty
                                     <div class="col-12">
-                                        <p class="text-muted text-center py-4">No completed appointments.</p>
+                                        <p class="text-muted text-center py-4">{{ __('app.appointments.no_completed') }}</p>
                                     </div>
                                 @endforelse
                             </div>
                             <div class="pagination dashboard-pagination mt-3">
                                 <ul>
                                     @if ($hasPrev)
-                                        <li><a href="?direction=prev" class="page-link prev">Prev</a></li>
+                                        <li><a href="?direction=prev" class="page-link prev">{{ __('app.appointments.prev') }}</a></li>
                                     @endif
                                     @if ($hasMore && $nextCursor)
                                         <li><a href="?cursor={{ urlencode(json_encode($nextCursor)) }}&direction=next"
-                                                class="page-link next">Next</a></li>
+                                                class="page-link next">{{ __('app.appointments.next') }}</a></li>
                                     @endif
                                 </ul>
                             </div>
@@ -524,7 +523,7 @@
 
                 <!-- Header -->
                 <div class="modal-header">
-                    <h3 class="modal-title">Appointment Details</h3>
+                    <h3 class="modal-title">{{ __('app.appointments.details') }}</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
@@ -759,7 +758,7 @@
 
             function formatDate(date) {
                 if (!date) return '';
-                return new Date(date).toLocaleDateString('en-GB', {
+                return new Date(date).toLocaleDateString(@json(app()->getLocale()), {
                     day: '2-digit',
                     month: 'short',
                     year: 'numeric'
@@ -768,7 +767,7 @@
 
             // Show inline spinner on chat / call buttons when clicked
             document.querySelectorAll(
-                '.appointment-card a[title="Chat"], .appointment-card a[title="Video Call"], .appointment-card a[title="Audio Call"]'
+                '.appointment-card a[data-spinner-link]'
             ).forEach(function(link) {
                 link.addEventListener('click', function() {
                     this.innerHTML =
@@ -912,7 +911,7 @@
                                     `${data.startTime} - ${data.endTime}`;
                             }
                         } else {
-                            rescheduleErrorEl.textContent = data.message ?? 'Something went wrong.';
+                            rescheduleErrorEl.textContent = data.message ?? @json(__('app.appointments.something_wrong'));
                             rescheduleErrorEl.classList.remove('d-none');
                         }
                     })

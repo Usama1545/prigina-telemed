@@ -3,7 +3,7 @@
 
 @section('content')
 
-@component('components.breadcrumb', ['li_1' => 'Our Mission', 'li_2' => 'Our Mission', 'title' => 'Our Mission'])
+@component('components.breadcrumb', ['li_1' => __('app.our_mission.title'), 'li_2' => __('app.our_mission.title'), 'title' => __('app.our_mission.title')])
 @endcomponent
 
 <!-- Our Mission -->
@@ -14,30 +14,30 @@
 
                 <!-- Header -->
                 <div class="terms-text mb-4">
-                    <h2 class="text-primary fw-bold">Our Mission</h2>
+                    <h2 class="text-primary fw-bold">{{ __('app.our_mission.title') }}</h2>
 
                     <p>
-                        At PriGina Global Telemed, our mission is to make trusted expert medical second opinions accessible across borders through secure, compassionate, and technology-driven healthcare solutions.
+                        {{ __('app.our_mission.p1') }}
                     </p>
 
                     <p>
-                        We are committed to connecting patients with qualified medical professionals worldwide, empowering individuals and families to make informed healthcare decisions with greater clarity and confidence.
+                        {{ __('app.our_mission.p2') }}
                     </p>
 
                     <p>
-                        Through innovation, professionalism, and patient-centered care, we strive to bridge gaps in global healthcare access while maintaining privacy, integrity, and excellence in every consultation.
+                        {{ __('app.our_mission.p3') }}
                     </p>
 
                     <p>
-                        Our platform is built for people who need guidance beyond borders, whether they are seeking reassurance, exploring treatment options, or better understanding a complex diagnosis.
+                        {{ __('app.our_mission.p4') }}
                     </p>
 
                     <p>
-                        We believe every patient deserves respectful communication, secure handling of medical information, and access to expert insight that supports their relationship with local healthcare providers.
+                        {{ __('app.our_mission.p5') }}
                     </p>
 
                     <p>
-                        <strong>Healthcare Without Borders.</strong>
+                        <strong>{{ __('app.our_mission.tagline') }}</strong>
                     </p>
                 </div>
 

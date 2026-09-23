@@ -12,7 +12,7 @@
                                 <div class="profile-step">
                                     <span class="multi-steps">1</span>
                                     <div class="step-section">
-                                        <h6>Date & Time</h6>
+                                        <h6>{{ __('app.booking.date_time') }}</h6>
                                     </div>
                                 </div>
                             </li>
@@ -20,7 +20,7 @@
                                 <div class="profile-step">
                                     <span class="multi-steps">2</span>
                                     <div class="step-section">
-                                        <h6>Basic Information</h6>
+                                        <h6>{{ __('app.booking.step_basic_info') }}</h6>
                                     </div>
                                 </div>
                             </li>
@@ -28,7 +28,7 @@
                                 <div class="profile-step">
                                     <span class="multi-steps">3</span>
                                     <div class="step-section">
-                                        <h6>Payment</h6>
+                                        <h6>{{ __('app.booking.step_payment') }}</h6>
                                     </div>
                                 </div>
                             </li>
@@ -36,7 +36,7 @@
                                 <div class="profile-step">
                                     <span class="multi-steps">4</span>
                                     <div class="step-section">
-                                        <h6>Confirmation</h6>
+                                        <h6>{{ __('app.booking.step_confirmation') }}</h6>
                                     </div>
                                 </div>
                             </li>
@@ -46,14 +46,14 @@
                     @if (session('error'))
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             {{ session('error') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ __('app.common.close') }}"></button>
                         </div>
                     @endif
 
                     @if (session('success'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             {{ session('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ __('app.common.close') }}"></button>
                         </div>
                     @endif
 
@@ -64,7 +64,7 @@
                                     <li>{{ $error }}</li>
                                 @endforeach
                             </ul>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ __('app.common.close') }}"></button>
                         </div>
                     @endif
 
@@ -116,17 +116,17 @@
                                                 <div class="card mb-0">
                                                     <div class="card-body pb-1">
                                                         <div class="mb-4 pb-4 border-bottom">
-                                                            <label class="form-label">Select Day</label>
+                                                            <label class="form-label">{{ __('app.booking.select_day') }}</label>
                                                             <select class="form-select" id="daySelect">
                                                                 @foreach ($availability as $index => $day)
                                                                     <option value="{{ $index }}">
-                                                                        {{ $day['day'] }} ({{ $day['date'] }})
+                                                                        {{ \Carbon\Carbon::parse($day['date'])->translatedFormat('l') }} ({{ $day['date'] }})
                                                                     </option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
 
-                                                        <h6 class="mb-2">Available Slots</h6>
+                                                        <h6 class="mb-2">{{ __('app.booking.available_slots') }}</h6>
                                                         <small class="text-muted d-block mb-3">
                                                             <i class="isax isax-info-circle"></i>
                                                             {{ __('app.appointments.utc_notice') }}
@@ -144,11 +144,11 @@
                                             <a href="javascript:void(0);"
                                                 class="btn btn-md btn-dark inline-flex align-items-center rounded-pill"
                                                 disabled>
-                                                <i class="isax isax-arrow-left-2 me-1"></i> Back
+                                                <i class="isax isax-arrow-left-2 me-1"></i> {{ __('app.common.back') }}
                                             </a>
                                             <button type="button"
                                                 class="btn btn-md btn-primary-gradient nextStep inline-flex align-items-center rounded-pill">
-                                                Add Details
+                                                {{ __('app.booking.add_details') }}
                                                 <i class="isax isax-arrow-right-3 ms-1"></i>
                                             </button>
                                         </div>
@@ -183,23 +183,23 @@
                                                             </p>
                                                         </div>
                                                     </div>
-                                                    <h6 class="mb-2">Booking Info</h6>
+                                                    <h6 class="mb-2">{{ __('app.booking.booking_info') }}</h6>
                                                     <div class="row gx-2 gy-3">
                                                         <div class="col-lg-4 col-sm-6">
                                                             <div>
-                                                                <h6 class="fs-14 fw-medium mb-1">Doctor</h6>
+                                                                <h6 class="fs-14 fw-medium mb-1">{{ __('app.appointments.doctor') }}</h6>
                                                                 <p class="mb-0">{{ $doctor['name'] }}</p>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-4 col-sm-6">
                                                             <div>
-                                                                <h6 class="fs-14 fw-medium mb-1">Date & Time</h6>
-                                                                <p class="mb-0" id="selectedSlotDisplay">Not selected</p>
+                                                                <h6 class="fs-14 fw-medium mb-1">{{ __('app.booking.date_time') }}</h6>
+                                                                <p class="mb-0" id="selectedSlotDisplay">{{ __('app.booking.not_selected') }}</p>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-4 col-sm-6">
                                                             <div>
-                                                                <h6 class="fs-14 fw-medium mb-1">Consultation Fee</h6>
+                                                                <h6 class="fs-14 fw-medium mb-1">{{ __('app.booking.consultation_fee') }}</h6>
                                                                 <p class="mb-0 text-primary fw-bold">
                                                                     ${{ number_format($doctor['consultationFee'] ?? 0, 2) }}
                                                                 </p>
@@ -216,7 +216,7 @@
                                                 <div class="row">
                                                     <div class="col-lg-4 col-md-4">
                                                         <div class="mb-3">
-                                                            <label class="form-label">Full Name <span
+                                                            <label class="form-label">{{ __('app.booking.full_name') }} <span
                                                                     class="text-danger">*</span></label>
                                                             <input type="text" name="name" class="form-control"
                                                                 value="{{ old('name', current_user()['name'] ?? '') }}" required>
@@ -224,7 +224,7 @@
                                                     </div>
                                                     <div class="col-lg-4 col-md-4">
                                                         <div class="mb-3">
-                                                            <label class="form-label">Phone Number <span
+                                                            <label class="form-label">{{ __('app.booking.phone_number') }} <span
                                                                     class="text-danger">*</span></label>
                                                             <input type="text" name="phone"
                                                                 value="{{ old('phone', current_user()['phone'] ?? '') }}"
@@ -233,7 +233,7 @@
                                                     </div>
                                                     <div class="col-lg-4 col-md-4">
                                                         <div class="mb-3">
-                                                            <label class="form-label">Email Address <span
+                                                            <label class="form-label">{{ __('app.booking.email_address') }} <span
                                                                     class="text-danger">*</span></label>
                                                             <input type="email" name="email"
                                                                 value="{{ old('email', current_user()['email'] ?? '') }}"
@@ -242,7 +242,7 @@
                                                     </div>
                                                     <div class="col-lg-12 col-md-12">
                                                         <div class="mb-3">
-                                                            <label class="form-label">Symptoms (Optional)</label>
+                                                            <label class="form-label">{{ __('app.booking.symptoms_optional') }}</label>
                                                             <input type="text" class="form-control" name="symptoms"
                                                                 value="{{ old('symptoms') }}">
                                                         </div>
@@ -256,14 +256,13 @@
                                                     </div> --}}
                                                     <div class="col-lg-12">
                                                         <div class="mb-3">
-                                                            <label class="form-label">Explain your problem
-                                                                (Optional)</label>
+                                                            <label class="form-label">{{ __('app.booking.explain_problem') }}</label>
                                                             <textarea class="form-control" rows="3" name="problem">{{ old('problem') }}</textarea>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-12">
                                                         <div class="mb-3">
-                                                            <label class="form-label">Documents (Optional)</label>
+                                                            <label class="form-label">{{ __('app.booking.documents_optional') }}</label>
                                                             <input type="file" id="documentInput" name="documents[]"
                                                                 class="d-none" multiple
                                                                 accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
@@ -271,10 +270,9 @@
                                                             </div>
                                                             <button type="button"
                                                                 class="btn btn-outline-secondary btn-sm" id="addDocBtn">
-                                                                <i class="fa-solid fa-plus me-1"></i> Add Files
+                                                                <i class="fa-solid fa-plus me-1"></i> {{ __('app.booking.add_files') }}
                                                             </button>
-                                                            <div class="form-text text-muted mt-1">PDF, Word, Images — max
-                                                                10MB each.</div>
+                                                            <div class="form-text text-muted mt-1">{{ __('app.booking.file_hint') }}</div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -285,11 +283,11 @@
                                         <div class="d-flex align-items-center flex-wrap rpw-gap-2 justify-content-between">
                                             <button type="button"
                                                 class="btn btn-md btn-dark prevStep inline-flex align-items-center rounded-pill">
-                                                <i class="isax isax-arrow-left-2 me-1"></i> Back
+                                                <i class="isax isax-arrow-left-2 me-1"></i> {{ __('app.common.back') }}
                                             </button>
                                             <button type="button"
                                                 class="btn btn-md btn-primary-gradient nextStep inline-flex align-items-center rounded-pill">
-                                                Select Payment
+                                                {{ __('app.booking.select_payment') }}
                                                 <i class="isax isax-arrow-right-3 ms-1"></i>
                                             </button>
                                         </div>
@@ -333,7 +331,7 @@
                                             <div class="col-lg-6 d-flex">
                                                 <div class="card flex-fill mb-3 mb-lg-0">
                                                     <div class="card-body">
-                                                        <h6 class="mb-3">Select Payment Gateway</h6>
+                                                        <h6 class="mb-3">{{ __('app.booking.select_gateway') }}</h6>
                                                         <div class="payment-gateway-options">
                                                             <div class="gateway-option mb-3">
                                                                 <div class="form-check">
@@ -347,8 +345,7 @@
                                                                             class="me-2" alt="" width="40">
                                                                         <div>
                                                                             <strong>Stripe</strong>
-                                                                            <p class="mb-0 text-muted small">Pay with
-                                                                                Credit/Debit Card via Stripe</p>
+                                                                            <p class="mb-0 text-muted small">{{ __('app.booking.stripe_desc') }}</p>
                                                                         </div>
                                                                     </label>
                                                                 </div>
@@ -378,30 +375,29 @@
                                             <div class="col-lg-6 d-flex">
                                                 <div class="card flex-fill mb-0">
                                                     <div class="card-body">
-                                                        <h6 class="mb-3">Booking Summary</h6>
+                                                        <h6 class="mb-3">{{ __('app.booking.booking_summary') }}</h6>
                                                         <div class="mb-3">
-                                                            <label class="form-label">Doctor</label>
+                                                            <label class="form-label">{{ __('app.appointments.doctor') }}</label>
                                                             <div class="form-plain-text">{{ $doctor['name'] }}</div>
                                                         </div>
                                                         <div class="mb-3">
-                                                            <label class="form-label">Date & Time</label>
-                                                            <div class="form-plain-text" id="summarySlotDisplay">Not
-                                                                selected</div>
+                                                            <label class="form-label">{{ __('app.booking.date_time') }}</label>
+                                                            <div class="form-plain-text" id="summarySlotDisplay">{{ __('app.booking.not_selected') }}</div>
                                                         </div>
                                                         <div class="pt-3 border-top booking-more-info">
-                                                            <h6 class="mb-3">Payment Info</h6>
+                                                            <h6 class="mb-3">{{ __('app.booking.payment_info') }}</h6>
                                                             <div
                                                                 class="d-flex align-items-center flex-wrap rpw-gap-2 justify-content-between mb-2">
-                                                                <p class="mb-0">Consultation Fee</p>
+                                                                <p class="mb-0">{{ __('app.booking.consultation_fee') }}</p>
                                                                 <span
                                                                     class="fw-medium d-block">${{ number_format($doctor['consultationFee'] ?? 0, 2) }}</span>
                                                             </div>
                                                             <div id="stripeFeeRow"
                                                                 class="d-flex align-items-center flex-wrap rpw-gap-2 justify-content-between mb-2"
                                                                 style="display: none;">
-                                                                <p class="mb-0">Stripe Payment Fee (4%)
+                                                                <p class="mb-0">{{ __('app.booking.stripe_fee') }}
                                                                     <i class="fa-solid fa-circle-info text-muted ms-1"
-                                                                        title="Card payments processed by Stripe include a 4% processing fee, added to your total."></i>
+                                                                        title="{{ __('app.booking.stripe_fee_tooltip') }}"></i>
                                                                 </p>
                                                                 <span class="fw-medium d-block"
                                                                     id="summaryStripeFee">$0.00</span>
@@ -409,7 +405,7 @@
                                                         </div>
                                                         <div
                                                             class="bg-primary d-flex align-items-center flex-wrap rpw-gap-2 justify-content-between p-3 rounded">
-                                                            <h6 class="text-white">Total</h6>
+                                                            <h6 class="text-white">{{ __('app.booking.total') }}</h6>
                                                             <h6 class="text-white" id="summaryTotal">
                                                                 ${{ number_format($doctor['consultationFee'] ?? 0, 2) }}
                                                             </h6>
@@ -423,12 +419,12 @@
                                         <div class="d-flex align-items-center flex-wrap rpw-gap-2 justify-content-between">
                                             <button type="button"
                                                 class="btn btn-md btn-dark prevStep inline-flex align-items-center rounded-pill">
-                                                <i class="isax isax-arrow-left-2 me-1"></i> Back
+                                                <i class="isax isax-arrow-left-2 me-1"></i> {{ __('app.common.back') }}
                                             </button>
                                             <button type="submit"
                                                 class="btn btn-md btn-primary-gradient inline-flex align-items-center rounded-pill"
                                                 id="confirmPayBtn">
-                                                Confirm & Pay
+                                                {{ __('app.booking.confirm_pay') }}
                                                 <i class="isax isax-arrow-right-3 ms-1"></i>
                                             </button>
                                         </div>
@@ -448,7 +444,7 @@
                                                     <div class="card-header">
                                                         <h5 class="d-flex align-items-center flex-wrap rpw-gap-2">
                                                             <i class="isax isax-tick-circle5 text-success me-2"></i>
-                                                            Booking Confirmed
+                                                            {{ __('app.booking.booking_confirmed') }}
                                                         </h5>
                                                     </div>
                                                     <div class="card-header d-flex align-items-center flex-wrap rpw-gap-2">
@@ -456,32 +452,32 @@
                                                             <img src="{{ URL::asset('build/img/clients/client-16.jpg') }}"
                                                                 alt="">
                                                         </span>
-                                                        <p class="mb-0">Your Booking has been Confirmed with <span
+                                                        <p class="mb-0">{{ __('app.booking.confirmed_with') }} <span
                                                                 class="text-dark">{{ $doctor['name'] }}</span></p>
                                                     </div>
                                                     <div class="card-body pb-1">
                                                         <div
                                                             class="d-flex align-items-center flex-wrap rpw-gap-2 justify-content-between mb-3">
-                                                            <h6>Booking Info</h6>
+                                                            <h6>{{ __('app.booking.booking_info') }}</h6>
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-md-6">
                                                                 <div class="mb-3">
-                                                                    <label class="form-label">Doctor</label>
+                                                                    <label class="form-label">{{ __('app.appointments.doctor') }}</label>
                                                                     <div class="form-plain-text">{{ $doctor['name'] }}
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <div class="mb-3">
-                                                                    <label class="form-label">Date & Time</label>
+                                                                    <label class="form-label">{{ __('app.booking.date_time') }}</label>
                                                                     <div class="form-plain-text"
                                                                         id="confirmationSlotDisplay"></div>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <div class="mb-3">
-                                                                    <label class="form-label">Booking ID</label>
+                                                                    <label class="form-label">{{ __('app.booking.booking_id') }}</label>
                                                                     <div class="form-plain-text" id="bookingId"></div>
                                                                 </div>
                                                             </div>
@@ -497,12 +493,12 @@
                                                         <span class="d-block mb-3"><img
                                                                 src="{{ URL::asset('build/img/icons/payment-qr.svg') }}"
                                                                 alt=""></span>
-                                                        <p>Your appointment has been confirmed</p>
+                                                        <p>{{ __('app.booking.appointment_confirmed') }}</p>
                                                     </div>
                                                     <div>
                                                         <a href="{{ url('doctor-grid') }}"
                                                             class="btn w-100 btn-md btn-primary-gradient rounded-pill">
-                                                            Start New Booking
+                                                            {{ __('app.booking.start_new') }}
                                                         </a>
                                                     </div>
                                                 </div>
@@ -618,7 +614,7 @@
             btn.addEventListener('click', function() {
                 if (currentStep === 0) {
                     if (!selectedSlotInput.value) {
-                        alert('Please select a time slot before proceeding');
+                        alert(@json(__('app.booking.err_select_slot_proceed')));
                         return;
                     }
                 }
@@ -719,18 +715,18 @@
         bookingForm.addEventListener('submit', function(e) {
             if (!paymentGatewayInput.value) {
                 e.preventDefault();
-                alert('Please select a payment gateway (Stripe or Flutterwave)');
+                alert(@json(__('app.booking.err_select_gateway')));
                 return false;
             }
 
             if (!selectedSlotInput.value) {
                 e.preventDefault();
-                alert('Please select a time slot');
+                alert(@json(__('app.booking.err_select_slot')));
                 return false;
             }
 
             confirmPayBtn.disabled = true;
-            confirmPayBtn.innerHTML = 'Processing... <i class="isax isax-loading ms-1"></i>';
+            confirmPayBtn.innerHTML = @json(__('app.booking.processing')) + ' <i class="isax isax-loading ms-1"></i>';
 
             return true;
         });

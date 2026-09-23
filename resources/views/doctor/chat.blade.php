@@ -18,14 +18,14 @@
                                 <div class="left-chat-title all-chats d-flex align-items-center justify-content-between">
 
                                     <div class="setting-title-head">
-                                        <h4 class="mb-0">All Chats</h4>
+                                        <h4 class="mb-0">{{ __('app.chat.all_chats') }}</h4>
                                     </div>
 
                                     <div>
                                         <a href="{{ route('doctor.dashboard') }}" class="btn btn-sm btn-primary text-white">
 
                                             <i class="fa-solid fa-arrow-left me-1"></i>
-                                            Dashboard
+                                            {{ __('app.chat.dashboard') }}
 
                                         </a>
                                     </div>
@@ -36,7 +36,7 @@
                                         <div class="user-chat-search">
                                             <span class="form-control-feedback"><i
                                                     class="fa-solid fa-magnifying-glass"></i></span>
-                                            <input type="text" name="chat-search" placeholder="Search"
+                                            <input type="text" name="chat-search" placeholder="{{ __('app.common.search') }}"
                                                 class="form-control">
                                         </div>
                                     </form>
@@ -69,7 +69,7 @@
                                                     </div>
                                                     <div class="users-list-body">
                                                         <div>
-                                                            <h5>{{ $conversation['patientName'] ?: 'Patient' }}</h5>
+                                                            <h5>{{ $conversation['patientName'] ?: __('app.appointments.patient') }}</h5>
                                                             <p>{{ $conversation['lastMessage'] ?? '' }}</p>
                                                         </div>
                                                         @if ($conversation['lastMessageTime'] ?? null)
@@ -121,21 +121,21 @@
                                         <i class="fa-solid fa-user" style="font-size: 40px; color: #007bff;"></i>
                                     </div>
                                     <div class="mt-1">
-                                        <h5 id="selectedDoctorName">Select a conversation</h5>
-                                        <small class="last-seen" id="selectedDoctorStatus">Online</small>
+                                        <h5 id="selectedDoctorName">{{ __('app.chat.select_conversation') }}</h5>
+                                        <small class="last-seen" id="selectedDoctorStatus">{{ __('app.chat.online') }}</small>
                                     </div>
                                 </div>
                                 <div class="chat-options">
                                     <ul class="list-inline">
                                         <li class="list-inline-item">
                                             <a href="javascript:void(0);" class="btn btn-outline-light" id="audioCallBtn"
-                                                title="Audio Call" style="display: none;">
+                                                title="{{ __('app.appointments.audio_call') }}" style="display: none;">
                                                 <i class="fa-solid fa-phone"></i>
                                             </a>
                                         </li>
                                         <li class="list-inline-item">
                                             <a href="javascript:void(0);" class="btn btn-outline-light" id="videoCallBtn"
-                                                title="Video Call" style="display: none;">
+                                                title="{{ __('app.appointments.video_call') }}" style="display: none;">
                                                 <i class="fa-solid fa-video"></i>
                                             </a>
                                         </li>
@@ -146,7 +146,7 @@
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-end">
                                                 <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#change-chat">Delete Chat</a>
+                                                    data-bs-target="#change-chat">{{ __('app.chat.delete_chat') }}</a>
                                             </div>
                                         </li>
                                     </ul>
@@ -155,7 +155,7 @@
                                     <form>
                                         <span class="form-control-feedback"><i
                                                 class="fa-solid fa-magnifying-glass"></i></span>
-                                        <input type="text" name="chat-search" placeholder="Search Chats"
+                                        <input type="text" name="chat-search" placeholder="{{ __('app.chat.search_chats') }}"
                                             class="form-control">
                                         <div class="close-btn-chat"><i class="fa fa-close"></i></div>
                                     </form>
@@ -169,7 +169,7 @@
                                 style="flex: 1; overflow-y: auto; min-height: 0;">
                                 <div class="messages" id="messagesList">
                                     <div class="text-center text-muted p-5" id="noMessagesPlaceholder">
-                                        Select a conversation to start messaging
+                                        {{ __('app.chat.select_to_start') }}
                                     </div>
                                 </div>
                             </div>
@@ -187,10 +187,10 @@
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-end">
                                                 <button type="button" class="dropdown-item" id="attachDocumentBtn">
-                                                    <span><i class="fa-solid fa-file-lines"></i></span> Document
+                                                    <span><i class="fa-solid fa-file-lines"></i></span> {{ __('app.chat.document') }}
                                                 </button>
                                                 <button type="button" class="dropdown-item" id="attachImageBtn">
-                                                    <span><i class="fa-solid fa-image"></i></span> Gallery
+                                                    <span><i class="fa-solid fa-image"></i></span> {{ __('app.chat.gallery') }}
                                                 </button>
                                             </div>
                                         </div>
@@ -198,7 +198,7 @@
                                 </div>
 
                                 <input type="text" class="form-control chat_form" id="messageText"
-                                    placeholder="Type your message here...">
+                                    placeholder="{{ __('app.chat.type_message') }}">
                                 <div class="form-buttons">
                                     <button class="btn send-btn" type="submit">
                                         <i class="isax isax-send-25"></i>
@@ -391,16 +391,16 @@
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Delete Chat</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title">{{ __('app.chat.delete_chat') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('app.common.close') }}"></button>
                 </div>
                 <div class="modal-body text-center">
-                    <p class="mb-1">Are you sure you want to delete this conversation?</p>
-                    <small class="text-muted">The chat will be removed from your view. It is permanently deleted only when the other party deletes it too.</small>
+                    <p class="mb-1">{{ __('app.chat.delete_confirm') }}</p>
+                    <small class="text-muted">{{ __('app.chat.delete_note') }}</small>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="confirmDeleteChat">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('app.common.cancel') }}</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteChat">{{ __('app.common.delete') }}</button>
                 </div>
             </div>
         </div>
@@ -408,6 +408,9 @@
 @endsection
 @push('scripts')
     <script>
+        const chatI18n = @json(__('app.chat'));
+        const chatLocale = @json(app()->getLocale());
+
         $(document).ready(function() {
 
             const CURRENT_UID = "{{ current_user()['uid'] }}";
@@ -548,7 +551,7 @@
                 $('#conversationId').val('');
 
                 $('#selectedDoctorName')
-                    .text('Select a conversation');
+                    .text(chatI18n.select_conversation);
 
                 $('#audioCallBtn, #videoCallBtn').hide();
 
@@ -777,22 +780,22 @@
                 } else if ($('.user-list-item').length) {
 
                     $('#selectedDoctorName')
-                        .text('Select a conversation');
+                        .text(chatI18n.select_conversation);
 
                     $('#messagesList').html(`
                 <div class="text-center text-muted p-5">
-                    Select a conversation to start messaging
+                    ${chatI18n.select_to_start}
                 </div>
             `);
 
                 } else {
 
                     $('#selectedDoctorName')
-                        .text('No conversations');
+                        .text(chatI18n.no_conversations);
 
                     $('#messagesList').html(`
                 <div class="text-center text-muted p-5">
-                    No conversations available
+                    ${chatI18n.no_conversations_available}
                 </div>
             `);
                 }
@@ -960,7 +963,7 @@
 
                             $('#messagesList').html(`
                         <div class="text-center text-danger p-4">
-                            Failed to load messages
+                            ${chatI18n.load_failed}
                         </div>
                     `);
                         }
@@ -1025,24 +1028,24 @@
                 const isCaller = call.callerId === currentUid;
                 const isVideo = call.callType === 'video';
                 const icon = isVideo ? 'fa-video' : 'fa-phone';
-                const label = isVideo ? 'Video call' : 'Audio call';
+                const label = isVideo ? chatI18n.video_call : chatI18n.audio_call;
 
                 let statusText = '';
                 let statusColor = '#6c757d';
                 if (call.status === 'completed') {
                     const mins = call.duration ? Math.floor(call.duration / 60) : 0;
                     const secs = call.duration ? call.duration % 60 : 0;
-                    statusText = call.duration ? `Duration: ${mins}:${String(secs).padStart(2, '0')}` : 'Ended';
+                    statusText = call.duration ? `${chatI18n.duration} ${mins}:${String(secs).padStart(2, '0')}` : chatI18n.ended;
                     statusColor = '#28a745';
                 } else if (call.status === 'missed' || call.status === 'initiated') {
-                    statusText = isCaller ? 'No answer' : 'Missed';
+                    statusText = isCaller ? chatI18n.no_answer : chatI18n.missed;
                     statusColor = '#dc3545';
                 } else if (call.status === 'rejected') {
-                    statusText = 'Declined';
+                    statusText = chatI18n.declined;
                     statusColor = '#dc3545';
                 }
 
-                const timeString = new Date(call.timestamp).toLocaleTimeString([], {
+                const timeString = new Date(call.timestamp).toLocaleTimeString(chatLocale, {
                     hour: '2-digit',
                     minute: '2-digit'
                 });
@@ -1084,7 +1087,7 @@
                 const isOwnMessage = message.senderId === CURRENT_UID;
 
                 const ts = message.timestamp || message.createdAt || new Date().toISOString();
-                const timeString = new Date(ts).toLocaleTimeString([], {
+                const timeString = new Date(ts).toLocaleTimeString(chatLocale, {
                     hour: '2-digit',
                     minute: '2-digit'
                 });
@@ -1119,7 +1122,7 @@
                                 <div class="chat-document mb-2">
                                     <a href="${message.documentUrl}" download target="_blank"
                                         class="btn btn-sm btn-primary text-white">
-                                        <i class="fa-solid fa-file-lines"></i> Download Document
+                                        <i class="fa-solid fa-file-lines"></i> ${chatI18n.download_document}
                                     </a>
                                 </div>` : ''}
                             ${message.text ? `<p class="mb-0">${escapeHtml(message.text)}</p>` : ''}
@@ -1134,10 +1137,10 @@
                 const yesterday = new Date();
                 yesterday.setDate(today.getDate() - 1);
 
-                if (date.toDateString() === today.toDateString()) return 'Today';
-                if (date.toDateString() === yesterday.toDateString()) return 'Yesterday';
+                if (date.toDateString() === today.toDateString()) return chatI18n.today;
+                if (date.toDateString() === yesterday.toDateString()) return chatI18n.yesterday;
 
-                return date.toLocaleDateString([], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                return date.toLocaleDateString(chatLocale, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             }
 
             function renderMessages(messages) {
@@ -1146,7 +1149,7 @@
 
                     $('#messagesList').html(`
                 <div class="text-center text-muted p-5">
-                    No messages yet
+                    ${chatI18n.no_messages}
                 </div>
             `);
 
@@ -1221,7 +1224,7 @@
 
                 if (!conversationId) {
 
-                    alert('Please select a conversation');
+                    alert(chatI18n.select_conversation_alert);
 
                     return;
                 }
@@ -1258,7 +1261,7 @@
 
                     error: function(xhr) {
 
-                        alert('Failed to send message');
+                        alert(chatI18n.send_failed);
 
                         console.error(xhr);
                     },
@@ -1282,7 +1285,7 @@
 
                 if (!conversationId) {
 
-                    alert('Please select a conversation');
+                    alert(chatI18n.select_conversation_alert);
 
                     return;
                 }
@@ -1319,7 +1322,7 @@
                         if (response.message) {
                             window.appendMessage(response.message);
                             const previewText = response.message.text ||
-                                (response.message.imageUrl ? '📷 Photo' : '📄 Document');
+                                (response.message.imageUrl ? '📷 ' + chatI18n.photo : '📄 ' + chatI18n.document);
                             window.updateSidebarConversation(conversationId, previewText, false);
                         }
                     },
@@ -1334,7 +1337,7 @@
 
                         } else {
 
-                            alert('Failed to upload file');
+                            alert(chatI18n.upload_failed);
                         }
                     },
 
@@ -1432,7 +1435,7 @@
                 if (!conversationId) return;
 
                 const $btn = $(this);
-                $btn.prop('disabled', true).text('Deleting…');
+                $btn.prop('disabled', true).text(chatI18n.deleting);
 
                 $.ajax({
                     url: '/doctor/conversation/' + conversationId + '/delete',
@@ -1454,23 +1457,23 @@
                             openConversation(nextConv.data('conversation-id'), nextConv.find('h5').text());
                         } else {
                             $('#conversationId').val('');
-                            $('#selectedDoctorName').text('No conversations');
+                            $('#selectedDoctorName').text(chatI18n.no_conversations);
                             $('#audioCallBtn, #videoCallBtn').hide();
-                            $('#messagesList').html('<div class="text-center text-muted p-5">No conversations available</div>');
+                            $('#messagesList').html('<div class="text-center text-muted p-5">' + chatI18n.no_conversations_available + '</div>');
                             window.history.pushState({}, '', '/doctor/conversations');
                         }
                     },
                     error: function () {
-                        alert('Failed to delete conversation. Please try again.');
+                        alert(chatI18n.delete_failed);
                     },
                     complete: function () {
-                        $btn.prop('disabled', false).text('Delete');
+                        $btn.prop('disabled', false).text(chatI18n.delete);
                     }
                 });
             });
 
             $('#change-chat').on('hidden.bs.modal', function () {
-                $('#confirmDeleteChat').prop('disabled', false).text('Delete');
+                $('#confirmDeleteChat').prop('disabled', false).text(chatI18n.delete);
             });
 
             window.updateSidebarConversation = function(conversationId, text, isIncoming) {
@@ -1482,12 +1485,12 @@
                 let timeBlock = li.find('.last-chat-time');
                 if (!timeBlock.length) {
                     li.find('.users-list-body').append(
-                        `<div class="last-chat-time"><small class="text-muted">just now</small><div class="chat-pin"></div></div>`
+                        `<div class="last-chat-time"><small class="text-muted">${chatI18n.just_now}</small><div class="chat-pin"></div></div>`
                     );
                     timeBlock = li.find('.last-chat-time');
                 }
 
-                timeBlock.find('small').text('just now');
+                timeBlock.find('small').text(chatI18n.just_now);
 
                 const pin = timeBlock.find('.chat-pin');
                 if (isIncoming && window.currentConversationId !== conversationId) {

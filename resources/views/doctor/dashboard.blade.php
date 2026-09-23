@@ -57,7 +57,7 @@
                             <img src="{{ asset('build/img/doc-home/doc-logo-2.jpeg') }}" alt="">
                             <h2>{{ __('app.doctor_dashboard.average_rating') }}</h2>
                             <strong>{{ number_format($rating, 1) }}</strong>
-                            <div class="doctor-home-stars" aria-label="Rating {{ number_format($rating, 1) }} out of 5">
+                            <div class="doctor-home-stars" aria-label="{{ __('app.doctor_dashboard.rating_aria', ['rating' => number_format($rating, 1)]) }}">
                                 @for ($i = 1; $i <= 5; $i++)
                                     <i class="fa-solid fa-star {{ $rating >= $i ? 'active' : '' }}"></i>
                                 @endfor
@@ -103,7 +103,7 @@
                         <article class="doctor-home-panel next-panel">
                             <div class="doctor-home-panel-head">
                                 <h2>{{ __('app.doctor_dashboard.next_up') }}</h2>
-                                <a href="{{ route('doctor.appointments') }}" aria-label="View appointments">
+                                <a href="{{ route('doctor.appointments') }}" aria-label="{{ __('app.doctor_dashboard.view_appointments') }}">
                                     <i class="isax isax-arrow-right-3"></i>
                                 </a>
                             </div>

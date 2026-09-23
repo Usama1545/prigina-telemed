@@ -82,7 +82,7 @@
                                 <a
                                     href="{{ route('doctor.conversation.create', ['patient_id' => $appointment['patientId']]) }}"
                                     class="btn btn-xs btn-outline-primary rounded-pill px-2 py-1"
-                                    title="Chat"
+                                    title="{{ __('app.appointments.chat') }}"
                                 >
 
                                     <i class="isax isax-messages-25"></i>
@@ -92,7 +92,7 @@
                                 <a
                                     href="{{ route('doctor.appointment-video-call', $appointment['id']) }}"
                                     class="btn btn-xs btn-outline-success rounded-pill px-2 py-1"
-                                    title="Video Call"
+                                    title="{{ __('app.appointments.video_call') }}"
                                 >
 
                                     <i class="fa-solid fa-video"></i>
@@ -102,7 +102,7 @@
                                 <a
                                     href="{{ route('doctor.appointment-audio-call', $appointment['id']) }}"
                                     class="btn btn-xs btn-outline-primary rounded-pill px-2 py-1"
-                                    title="Audio Call"
+                                    title="{{ __('app.appointments.audio_call') }}"
                                 >
 
                                     <i class="fa-solid fa-phone"></i>
@@ -141,7 +141,7 @@
                         <button
                             type="button"
                             class="btn btn-xs btn-outline-info rounded-pill px-2 py-1 view-appointment-btn"
-                            title="View Details"
+                            title="{{ __('app.appointments.view_details') }}"
                             data-id="{{ $appointment['id'] }}"
                             data-patient-name="{{ $appointment['patientName'] ?? 'Patient' }}"
                             data-patient-image="{{ $appointment['patientImage'] ?? '' }}"

@@ -221,6 +221,27 @@ if (! function_exists('patient_age')) {
     }
 }
 
+if (! function_exists('tz_label')) {
+    /**
+     * Label for a timezone <option>: keeps the curated English label for
+     * English, and uses the localized CLDR name for any other app locale.
+     */
+    function tz_label(string $timezone, string $englishLabel): string
+    {
+        $locale = app()->getLocale();
+
+        if ($locale === 'en') {
+            return $englishLabel;
+        }
+
+        try {
+            return \Symfony\Component\Intl\Timezones::getName($timezone, $locale);
+        } catch (Throwable) {
+            return $englishLabel;
+        }
+    }
+}
+
 if (! function_exists('getQualifications')) {
     function getQualifications()
     {

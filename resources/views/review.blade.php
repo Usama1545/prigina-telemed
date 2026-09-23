@@ -8,15 +8,13 @@
             <div class="row align-items-center g-4">
 
                 <div class="col-lg-6">
-                    <h6 class="text-secondary fw-bold text-uppercase mb-2">Appointment Review</h6>
+                    <h6 class="text-secondary fw-bold text-uppercase mb-2">{{ __('app.review.eyebrow') }}</h6>
                     @if ($alreadyReviewed)
-                        <h1 class="fw-bold mb-3 text-primary">Thank You for Your Feedback!</h1>
-                        <p class="text-muted">Your review has already been submitted. We truly appreciate you taking the
-                            time to share your experience.</p>
+                        <h1 class="fw-bold mb-3 text-primary">{{ __('app.review.thanks_feedback') }}</h1>
+                        <p class="text-muted">{{ __('app.review.already_submitted_desc') }}</p>
                     @else
-                        <h1 class="fw-bold mb-3 text-primary">Thank You for Choosing<br>PriGina Global Telemed!</h1>
-                        <p class="text-muted ">Thank you for trusting PriGina Global Telemed for your healthcare
-                            consultation. We appreciate the opportunity to support your health and well-being.</p>
+                        <h1 class="fw-bold mb-3 text-primary">{!! __('app.review.thanks_choosing') !!}</h1>
+                        <p class="text-muted ">{{ __('app.review.thanks_trusting') }}</p>
                     @endif
 
                     @if (session('success'))
@@ -45,11 +43,11 @@
         <div class="container">
 
             <h6 class="text-secondary text-uppercase fw-semibold">
-                Appointment Summary
+                {{ __('app.review.appointment_summary') }}
             </h6>
 
             <h2 class="fw-bold mb-5 text-white">
-                Your Consultation Details
+                {{ __('app.review.consultation_details') }}
             </h2>
 
             <div class="row align-items-stretch justify-content-center">
@@ -70,10 +68,10 @@
 
                         </div>
 
-                        <h5 class="text-white">Doctor</h5>
+                        <h5 class="text-white">{{ __('app.appointments.doctor') }}</h5>
 
                         <p class="mx-2 text-white mb-0">
-                            Dr. {{ $appointment['doctorName'] ?? 'N/A' }}
+                            {{ __('app.review.dr_name', ['name' => $appointment['doctorName'] ?? __('app.review.na')]) }}
                         </p>
 
                     </div>
@@ -99,7 +97,7 @@
 
                             </div>
 
-                            <h5 class="text-white">Specialty</h5>
+                            <h5 class="text-white">{{ __('app.reports.specialty') }}</h5>
 
                             <p class="mx-2 text-white mb-0">
                                 {{ $appointment['specialty'] }}
@@ -128,13 +126,13 @@
 
                         </div>
 
-                        <h5 class="text-white">Date</h5>
+                        <h5 class="text-white">{{ __('app.common.date') }}</h5>
 
                         <p class="mx-2 text-white mb-0">
 
                             @php
                                 $d = $appointment['date'] ?? null;
-                                echo $d ? \Carbon\Carbon::parse($d)->format('M j, Y') : 'N/A';
+                                echo e($d ? \Carbon\Carbon::parse($d)->translatedFormat('M j, Y') : __('app.review.na'));
                             @endphp
 
                         </p>
@@ -160,7 +158,7 @@
 
                         </div>
 
-                        <h5 class="text-white">Time</h5>
+                        <h5 class="text-white">{{ __('app.common.time') }}</h5>
 
                         <p class="mx-2 text-white mb-0">
 
@@ -190,10 +188,10 @@
 
                         </div>
 
-                        <h5 class="text-white">Consultation</h5>
+                        <h5 class="text-white">{{ __('app.review.consultation') }}</h5>
 
                         <p class="mx-2 text-white mb-0">
-                            Video Consultation
+                            {{ __('app.review.video_consultation') }}
                         </p>
 
                     </div>
@@ -210,9 +208,8 @@
     <section class="py-5">
         <div class="container">
             <div class="text-center mb-4">
-                <h2 class="fw-bold text-primary">Your Feedback Matters</h2>
-                <p class="text-muted">Your feedback helps us maintain the highest standards of care and<br
-                        class="d-none d-md-block"> continually improve your experience on our platform.</p>
+                <h2 class="fw-bold text-primary">{{ __('app.review.feedback_matters') }}</h2>
+                <p class="text-muted">{{ __('app.review.feedback_matters_desc') }}</p>
             </div>
 
             <div class="row justify-content-center">
@@ -221,14 +218,13 @@
                     @if ($alreadyReviewed)
                         <div class="bg-white rounded shadow-sm p-5 text-center">
                             <div style="font-size:56px; margin-bottom:12px;">🎉</div>
-                            <h4 class="fw-bold text-primary mb-2">Review Submitted</h4>
-                            <p class="text-muted mb-4">You've already shared your feedback for this appointment. Thank you —
-                                it means a lot to us!</p>
-                            <a href="{{ url('/') }}" class="btn btn-primary-gradient px-4">Back to Home</a>
+                            <h4 class="fw-bold text-primary mb-2">{{ __('app.review.review_submitted') }}</h4>
+                            <p class="text-muted mb-4">{{ __('app.review.review_submitted_desc') }}</p>
+                            <a href="{{ url('/') }}" class="btn btn-primary-gradient px-4">{{ __('app.review.back_home') }}</a>
                         </div>
                     @else
                         <div class="">
-                            <h5 class="fw-bold text-center mb-4">How would you rate your overall experience?</h5>
+                            <h5 class="fw-bold text-center mb-4">{{ __('app.review.rate_question') }}</h5>
 
                             <form method="POST" action="{{ url('/' . $appointment['id'] . '/review') }}" id="reviewForm">
                                 @csrf
@@ -255,20 +251,20 @@
                                     </div>
 
                                     <div class="rating-label mt-2" id="ratingLabel">
-                                        Select a rating
+                                        {{ __('app.review.select_rating') }}
                                     </div>
                                 </div>
                                 {{-- Comment --}}
                                 <div class="mb-4">
-                                    <label for="comment" class="form-label fw-semibold">Your Review <span
-                                            class="text-muted fw-normal">(optional)</span></label>
+                                    <label for="comment" class="form-label fw-semibold">{{ __('app.review.your_review') }} <span
+                                            class="text-muted fw-normal">({{ __('app.review.optional') }})</span></label>
                                     <textarea class="form-control" id="comment" name="comment" rows="4"
-                                        style="border-radius:10px; border-color:#e2e8f0;" placeholder="Tell us about your experience with the doctor...">{{ old('comment') }}</textarea>
+                                        style="border-radius:10px; border-color:#e2e8f0;" placeholder="{{ __('app.review.comment_placeholder') }}">{{ old('comment') }}</textarea>
                                 </div>
 
                                 <button type="submit" class="btn btn-primary-gradient w-100 py-3 fw-bold" id="submitBtn"
                                     style="font-size:16px; border-radius:10px;">
-                                    Leave a Review
+                                    {{ __('app.review.leave_review') }}
                                 </button>
                             </form>
                         </div>
@@ -284,9 +280,8 @@
     <section class="py-5">
         <div class="container">
             <div class="text-center mb-5">
-                <h2 class="fw-bold text-primary">What's Next?</h2>
-                <p class="text-muted">We're here to support you every step of the way. Explore the options below to<br
-                        class="d-none d-md-block"> continue your care journey with PriGina Global Telemed.</p>
+                <h2 class="fw-bold text-primary">{{ __('app.review.whats_next') }}</h2>
+                <p class="text-muted">{{ __('app.review.whats_next_desc') }}</p>
             </div>
 
             <div class="row g-4 justify-content-center">
@@ -295,9 +290,9 @@
                     <div class="p-4 bg-light rounded shadow-sm h-100 text-center">
                         <div class="mb-3" style="font-size:36px; color:#0284c7;"><i
                                 class="fa-regular fa-calendar-plus"></i></div>
-                        <h5 class="fw-bold mb-2">Book Follow-Up Appointment</h5>
-                        <p class="text-muted small mb-4">Continue your care with your doctor.</p>
-                        <a href="{{ url('/') }}" class="btn btn-primary-gradient px-4">Book Now</a>
+                        <h5 class="fw-bold mb-2">{{ __('app.review.follow_up_title') }}</h5>
+                        <p class="text-muted small mb-4">{{ __('app.review.follow_up_desc') }}</p>
+                        <a href="{{ url('/') }}" class="btn btn-primary-gradient px-4">{{ __('app.doctors.book_now') }}</a>
                     </div>
                 </div>
 
@@ -305,9 +300,9 @@
                     <div class="p-4 bg-light rounded shadow-sm h-100 text-center">
                         <div class="mb-3" style="font-size:36px; color:#0284c7;"><i
                                 class="fa-solid fa-user-doctor"></i></div>
-                        <h5 class="fw-bold mb-2">Consult Another Specialist</h5>
-                        <p class="text-muted small mb-4">Get expert advice from other specialists.</p>
-                        <a href="{{ url('/') }}" class="btn btn-primary-gradient px-4">Find a Doctor</a>
+                        <h5 class="fw-bold mb-2">{{ __('app.review.another_specialist_title') }}</h5>
+                        <p class="text-muted small mb-4">{{ __('app.review.another_specialist_desc') }}</p>
+                        <a href="{{ url('/') }}" class="btn btn-primary-gradient px-4">{{ __('app.review.find_doctor') }}</a>
                     </div>
                 </div>
 
@@ -315,10 +310,9 @@
                     <div class="p-4 bg-light rounded shadow-sm h-100 text-center">
                         <div class="mb-3" style="font-size:36px; color:#0284c7;"><i
                                 class="fa-regular fa-folder-open"></i></div>
-                        <h5 class="fw-bold mb-2">View Your Medical Records</h5>
-                        <p class="text-muted small mb-4">Access your consultation summary and records.</p>
-                        <a href="{{ route('patient.appointments') }}" class="btn btn-primary-gradient px-4">View
-                            Records</a>
+                        <h5 class="fw-bold mb-2">{{ __('app.review.records_title') }}</h5>
+                        <p class="text-muted small mb-4">{{ __('app.review.records_desc') }}</p>
+                        <a href="{{ route('patient.appointments') }}" class="btn btn-primary-gradient px-4">{{ __('app.review.view_records') }}</a>
                     </div>
                 </div>
 
@@ -333,12 +327,11 @@
             <div class="contact-info">
                 <div class="info-col">
                     <div class="wow fadeInUp" data-wow-duration="1s">
-                        <h3 class="info-title">Your Health. Our Priority.</h3>
-                        <p class="mb-0 text-white">PriGina Global Telemed is committed to providing safe, confidential, and
-                            quality healthcare across the globe.</p>
+                        <h3 class="info-title">{{ __('app.review.cta_title') }}</h3>
+                        <p class="mb-0 text-white">{{ __('app.review.cta_desc') }}</p>
                     </div>
                     <div class="support-info wow fadeInUp" data-wow-duration="1s">
-                        <a href="{{ url('/') }}" class="btn btn-light px-4 mt-3 mt-md-0">Back to Home →</a>
+                        <a href="{{ url('/') }}" class="btn btn-light px-4 mt-3 mt-md-0">{{ __('app.review.back_home') }} →</a>
                     </div>
                 </div>
                 <img src="{{ URL::asset('build/img/bg/info-bg.png') }}" alt="" class="img-fluid element-01">
@@ -390,7 +383,7 @@
 
     @push('scripts')
         <script>
-            const labels = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
+            const labels = @js(['', __('app.review.rating_poor'), __('app.review.rating_fair'), __('app.review.rating_good'), __('app.review.rating_very_good'), __('app.review.rating_excellent')]);
             const ratingLabel = document.getElementById('ratingLabel');
 
             document.querySelectorAll('.star-group input[type="radio"]').forEach(input => {
@@ -405,7 +398,7 @@
             document.getElementById('reviewForm')?.addEventListener('submit', function() {
                 const btn = document.getElementById('submitBtn');
                 btn.disabled = true;
-                btn.textContent = 'Submitting…';
+                btn.textContent = @json(__('app.review.submitting'));
             });
         </script>
     @endpush

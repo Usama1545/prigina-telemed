@@ -15,7 +15,7 @@ class ReviewController extends Controller
         $appointment = $this->firestore->find('appointments', $appointmentId);
 
         if (! $appointment) {
-            abort(404, 'Appointment not found.');
+            abort(404, __('app.flash.appointment_not_found'));
         }
 
         // Already reviewed — show a thank-you instead of the form
@@ -31,12 +31,12 @@ class ReviewController extends Controller
         $appointment = $this->firestore->find('appointments', $appointmentId);
 
         if (! $appointment) {
-            abort(404, 'Appointment not found.');
+            abort(404, __('app.flash.appointment_not_found'));
         }
 
         if (! empty($appointment['reviewSubmitted'])) {
             return redirect('/'.$appointmentId.'/review')
-                ->with('error', 'You have already submitted a review for this appointment.');
+                ->with('error', __('app.flash.review_already_submitted'));
         }
 
         $data = $request->validate([
@@ -73,7 +73,7 @@ class ReviewController extends Controller
         }
 
         return redirect('/'.$appointmentId.'/review')
-            ->with('success', 'Thank you! Your review has been submitted.');
+            ->with('success', __('app.flash.review_submitted'));
     }
 
     private function updateDoctorRating(string $doctorId): void

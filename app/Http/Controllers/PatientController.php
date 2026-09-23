@@ -157,7 +157,7 @@ class PatientController extends Controller
 
         $this->firestore->update('patients', $uid, $data);
 
-        return redirect()->back()->with('success', 'Profile updated successfully.');
+        return redirect()->back()->with('success', __('app.flash.profile_updated'));
     }
 
     public function appointments(Request $request)
@@ -281,12 +281,12 @@ class PatientController extends Controller
 
         // Debug (temporary)
         if (! $updatedUser) {
-            dd('Password update failed');
+            dd(__('app.flash.password_update_failed'));
 
-            return back()->withErrors(['password' => 'Password update failed']);
+            return back()->withErrors(['password' => __('app.flash.password_update_failed')]);
         }
 
-        return redirect()->back()->with('success', 'Password updated successfully.');
+        return redirect()->back()->with('success', __('app.flash.password_updated'));
 
     }
 
@@ -308,7 +308,7 @@ class PatientController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login')->with('success', 'Your account has been deleted.');
+        return redirect()->route('login')->with('success', __('app.flash.account_deleted'));
     }
 
     public function conversations()
@@ -638,14 +638,14 @@ class PatientController extends Controller
         $appointment = $this->firestore->find('appointments', $id);
 
         if (! $appointment) {
-            return redirect()->back()->with('error', 'Appointment not found.');
+            return redirect()->back()->with('error', __('app.flash.appointment_not_found'));
         }
 
         // Block cancellation within 24 hours of the appointment
         if (! empty($appointment['date'])) {
             $apptDate = Carbon::parse($appointment['date']);
             if ($apptDate->lte(now()->addHours(24))) {
-                return redirect()->back()->with('error', 'Appointments cannot be cancelled within 24 hours of the scheduled time.');
+                return redirect()->back()->with('error', __('app.flash.cannot_cancel_24h'));
             }
         }
 
@@ -669,7 +669,7 @@ class PatientController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', 'Appointment cancelled successfully.');
+        return redirect()->back()->with('success', __('app.flash.appointment_cancelled'));
     }
 
     public function deleteAppointment($id)
@@ -677,12 +677,12 @@ class PatientController extends Controller
         $appointment = $this->firestore->find('appointments', $id);
 
         if (! $appointment || ($appointment['patientId'] ?? '') !== current_user()['uid']) {
-            return redirect()->back()->with('error', 'Appointment not found.');
+            return redirect()->back()->with('error', __('app.flash.appointment_not_found'));
         }
 
         $this->firestore->delete('appointments', $id);
 
-        return redirect()->back()->with('success', 'Appointment deleted.');
+        return redirect()->back()->with('success', __('app.flash.appointment_deleted'));
     }
 
     public function rescheduleAppointment(Request $request, $id)
@@ -695,18 +695,18 @@ class PatientController extends Controller
         $appointment = $this->firestore->find('appointments', $id);
 
         if (! $appointment || ($appointment['patientId'] ?? '') !== current_user()['uid']) {
-            return response()->json(['success' => false, 'message' => 'Appointment not found.'], 404);
+            return response()->json(['success' => false, 'message' => __('app.flash.appointment_not_found')], 404);
         }
 
         if (($appointment['status'] ?? '') !== 'confirmed') {
-            return response()->json(['success' => false, 'message' => 'Only confirmed appointments can be rescheduled.'], 422);
+            return response()->json(['success' => false, 'message' => __('app.flash.only_confirmed_reschedule')], 422);
         }
 
         // Block rescheduling within 24 hours of the appointment
         if (! empty($appointment['date'])) {
             $apptDate = Carbon::parse($appointment['date']);
             if ($apptDate->lte(now()->addHours(24))) {
-                return response()->json(['success' => false, 'message' => 'Appointments cannot be rescheduled within 24 hours of the scheduled time.'], 422);
+                return response()->json(['success' => false, 'message' => __('app.flash.cannot_reschedule_24h')], 422);
             }
         }
 
@@ -718,13 +718,13 @@ class PatientController extends Controller
         $availability = $this->availabilityService->getAvailability($doctorId, $id);
 
         if (! $availability) {
-            return response()->json(['success' => false, 'message' => 'This doctor has not set their availability.'], 422);
+            return response()->json(['success' => false, 'message' => __('app.flash.doctor_no_availability')], 422);
         }
 
         $daySlots = collect($availability['availability'])->firstWhere('date', $validated['date'])['slots'] ?? [];
 
         if (! in_array($validated['startTime'], $daySlots, true)) {
-            return response()->json(['success' => false, 'message' => 'The selected time slot is no longer available. Please choose another.'], 422);
+            return response()->json(['success' => false, 'message' => __('app.flash.slot_unavailable_choose_another')], 422);
         }
 
         $slotDuration = $availability['slotDuration'];
@@ -771,11 +771,11 @@ class PatientController extends Controller
         $appointment = $this->firestore->find('appointments', $id);
 
         if (! $appointment || ($appointment['patientId'] ?? '') !== current_user()['uid']) {
-            return redirect()->back()->with('error', 'Appointment not found.');
+            return redirect()->back()->with('error', __('app.flash.appointment_not_found'));
         }
 
         if (($appointment['paymentStatus'] ?? '') === 'completed') {
-            return redirect()->back()->with('error', 'This appointment is already paid.');
+            return redirect()->back()->with('error', __('app.flash.already_paid'));
         }
 
         // Check if the doctor still has this slot available (no confirmed appointment at same date+time)
@@ -793,7 +793,7 @@ class PatientController extends Controller
             ->isNotEmpty();
 
         if ($hasConflict) {
-            return redirect()->back()->with('error', 'This time slot is no longer available. Please book a new appointment.');
+            return redirect()->back()->with('error', __('app.flash.slot_unavailable_book_new'));
         }
 
         Stripe::setApiKey(config('services.stripe.secret'));

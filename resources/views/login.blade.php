@@ -11,7 +11,7 @@
 
                     <div class="col-md-7 col-lg-6 login-left">
 
-                        <img src="{{ asset('build/img/login-1.jpeg') }}" class="img-fluid" alt="PriGina Global Telemed Login">
+                        <img src="{{ asset('build/img/login-1.jpeg') }}" class="img-fluid" alt="{{ __('app.doctor_register.image_alt') }}">
 
                     </div>
 
@@ -271,17 +271,17 @@
 
         function firebaseErrorMessage(error) {
             const messages = {
-                'auth/user-not-found': 'No account found with this email address.',
-                'auth/wrong-password': 'Incorrect password. Please try again.',
-                'auth/invalid-credential': 'Invalid email or password.',
-                'auth/invalid-email': 'Please enter a valid email address.',
-                'auth/user-disabled': 'This account has been disabled. Please contact support.',
-                'auth/too-many-requests': 'Too many failed attempts. Please try again later.',
-                'auth/network-request-failed': 'Network error. Please check your connection.',
-                'auth/popup-closed-by-user': 'Sign-in popup was closed before completing.',
-                'auth/cancelled-popup-request': 'Sign-in was cancelled.',
+                'auth/user-not-found': @json(__('app.login.err_user_not_found')),
+                'auth/wrong-password': @json(__('app.login.err_wrong_password')),
+                'auth/invalid-credential': @json(__('app.login.err_invalid_credential')),
+                'auth/invalid-email': @json(__('app.login.err_invalid_email')),
+                'auth/user-disabled': @json(__('app.login.err_user_disabled')),
+                'auth/too-many-requests': @json(__('app.login.err_too_many_requests')),
+                'auth/network-request-failed': @json(__('app.login.err_network')),
+                'auth/popup-closed-by-user': @json(__('app.login.err_popup_closed')),
+                'auth/cancelled-popup-request': @json(__('app.login.err_popup_cancelled')),
             };
-            return messages[error.code] || 'Login failed. Please try again.';
+            return messages[error.code] || @json(__('app.login.err_login_failed_retry'));
         }
 
         async function handleLogin(e) {
@@ -360,7 +360,7 @@
                 .getElementById('loginHeader')
                 .innerHTML = `
             <h3>
-                Verify Email
+                ${@json(__('app.auth.verify_email'))}
                 <span>PriGina Global Telemed</span>
             </h3>
         `;
@@ -396,13 +396,11 @@
 
             <div class="alert alert-warning">
 
-                Your email address
-                <strong>${user.email}</strong>
-                is not verified yet.
+                ${@json(__('app.login.email_not_verified_yet')).replace(':email', `<strong>${user.email}</strong>`)}
 
                 <hr>
 
-                Please verify your email before logging in.
+                ${@json(__('app.login.verify_before_login'))}
 
             </div>
 
@@ -412,7 +410,7 @@
                 onclick="resendVerificationEmail()"
                 id="resendBtn"
             >
-                Resend Verification Email
+                ${@json(__('app.auth.resend_verification'))}
             </button>
 
             <button
@@ -421,7 +419,7 @@
                 onclick="checkVerificationStatus()"
                 id="checkBtn"
             >
-                I Have Verified My Email
+                ${@json(__('app.login.i_have_verified'))}
             </button>
 
             <button
@@ -429,7 +427,7 @@
                 class="btn btn-light w-100"
                 onclick="window.location.reload()"
             >
-                Back To Login
+                ${@json(__('app.verify_email.back_to_login'))}
             </button>
         `;
         }
@@ -443,7 +441,7 @@
 
                 btn.disabled = true;
 
-                btn.innerText = 'Sending...';
+                btn.innerText = @json(__('app.verify_email.sending'));
 
                 await fetch('/api/auth/send-verification-email', {
                     method: 'POST',
@@ -457,14 +455,14 @@
                 });
 
                 showAlert(
-                    'Verification email sent successfully',
+                    @json(__('app.verify_email.resend_success')),
                     'success'
                 );
 
             } catch (e) {
 
                 showAlert(
-                    e.message || 'Failed to resend email'
+                    e.message || @json(__('app.verify_email.resend_failed'))
                 );
 
             } finally {
@@ -475,7 +473,7 @@
                 btn.disabled = false;
 
                 btn.innerText =
-                    'Resend Verification Email';
+                    @json(__('app.auth.resend_verification'));
             }
         }
 
@@ -488,7 +486,7 @@
 
                 btn.disabled = true;
 
-                btn.innerText = 'Checking...';
+                btn.innerText = @json(__('app.login.checking'));
 
                 await pendingVerificationUser.reload();
 
@@ -498,7 +496,7 @@
                 if (!refreshedUser.emailVerified) {
 
                     showAlert(
-                        'Email is still not verified'
+                        @json(__('app.login.still_not_verified'))
                     );
 
                     return;
@@ -518,7 +516,7 @@
             } catch (e) {
 
                 showAlert(
-                    e.message || 'Verification failed'
+                    e.message || @json(__('app.login.verification_failed'))
                 );
 
             } finally {
@@ -531,7 +529,7 @@
                     btn.disabled = false;
 
                     btn.innerText =
-                        'I Have Verified My Email';
+                        @json(__('app.login.i_have_verified'));
                 }
             }
         }
@@ -671,7 +669,7 @@
             } else {
 
                 showAlert(
-                    data.error || 'Login failed'
+                    data.error || @json(__('app.login.err_login_failed'))
                 );
             }
         }

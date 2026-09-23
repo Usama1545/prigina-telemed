@@ -19,7 +19,7 @@
                         <div class="doc-info-left">
                             <div class="doctor-img">
                                 <img src="{{ isset($doctor['profilePicture']) && $doctor['profilePicture'] ? $doctor['profilePicture'] : asset('build/img/doctors/doc-profile-02.jpg') }}"
-                                    class="img-fluid" alt="User Image">
+                                    class="img-fluid" alt="{{ __('app.stories.user_image') }}">
                             </div>
                             <div class="doc-info-cont">
                                 @if (($doctor['available'] ?? false) === true)

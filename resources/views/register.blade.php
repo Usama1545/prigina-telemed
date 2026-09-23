@@ -15,7 +15,7 @@
                     <div class="col-md-7 col-lg-7 login-left">
 
                         <img src="{{ asset('build/img/patient-register.jpeg') }}" class="img-fluid"
-                            alt="PriGina Global Telemed Login">
+                            alt="{{ __('app.doctor_register.image_alt') }}">
 
                     </div>
 
@@ -27,10 +27,10 @@
                                 <span></span>
 
                                 <span class="d-flex align-items-center gap-2">
-                                    <small>Are you a Physician?</small>
+                                    <small>{{ __('app.register.are_you_physician') }}</small>
 
                                     <a href="{{ url('doctor-register') }}" class="btn btn-outline-primary btn-sm">
-                                        Join Our Network
+                                        {{ __('app.register.join_network') }}
                                     </a>
                                 </span>
                             </h3>
@@ -47,10 +47,10 @@
                             <div class="mb-3">
 
                                 <label class="form-label">
-                                    Name
+                                    {{ __('app.common.name') }}
                                 </label>
 
-                                <input type="text" placeholder="Full name" name="name" class="form-control"
+                                <input type="text" placeholder="{{ __('app.doctor_register.name') }}" name="name" class="form-control"
                                     value="{{ old('name') }}" required>
 
                             </div>
@@ -58,10 +58,10 @@
                             <div class="mb-3">
 
                                 <label class="form-label">
-                                    Email
+                                    {{ __('app.common.email') }}
                                 </label>
 
-                                <input type="email" placeholder="email" name="email" class="form-control"
+                                <input type="email" placeholder="{{ __('app.common.email') }}" name="email" class="form-control"
                                     value="{{ old('email') }}" required>
 
                             </div>
@@ -69,7 +69,7 @@
                             <div class="mb-3">
 
                                 <label class="form-label">
-                                    Phone
+                                    {{ __('app.common.phone') }}
                                 </label>
 
                                 <input class="form-control form-control-lg group_formcontrol form-control-phone"
@@ -81,7 +81,7 @@
                             <div class="mb-3">
 
                                 <label class="form-label">
-                                    Date of Birth
+                                    {{ __('app.profile.dob') }}
                                 </label>
 
                                 <input class="form-control" name="dob" type="date" value="{{ old('dob') }}"
@@ -92,21 +92,21 @@
                             <div class="mb-3">
 
                                 <label class="form-label">
-                                    Gender
+                                    {{ __('app.profile.gender') }}
                                 </label>
 
                                 <select class="form-control" name="gender" required>
 
                                     <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>
-                                        Male
+                                        {{ __('app.profile.male') }}
                                     </option>
 
                                     <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>
-                                        Female
+                                        {{ __('app.profile.female') }}
                                     </option>
 
                                     <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>
-                                        Other
+                                        {{ __('app.profile.other') }}
                                     </option>
 
                                 </select>
@@ -118,7 +118,7 @@
                                 <div class="form-group-flex">
 
                                     <label class="form-label">
-                                        Create Password
+                                        {{ __('app.doctor_register.password') }}
                                     </label>
 
                                 </div>
@@ -138,7 +138,7 @@
                                 <div class="form-group-flex">
 
                                     <label class="form-label">
-                                        Confirm Password
+                                        {{ __('app.doctor_register.confirm_password') }}
                                     </label>
 
                                 </div>
@@ -161,7 +161,7 @@
                                     <span id="registerSpinner" class="spinner-border spinner-border-sm d-none me-2"></span>
 
                                     <span id="registerText">
-                                        Sign Up
+                                        {{ __('app.doctor_register.sign_up') }}
                                     </span>
 
                                 </button>
@@ -171,7 +171,7 @@
                             <div class="login-or">
 
                                 <span class="or-line"></span>
-                                <span class="span-or">or</span>
+                                <span class="span-or">{{ __('app.login.or') }}</span>
 
                             </div>
 
@@ -181,7 +181,7 @@
 
                                     <img src="{{ URL::asset('build/img/icons/google-icon.svg') }}" alt="google-icon">
 
-                                    Sign in With Google
+                                    {{ __('app.login.sign_in_google') }}
 
                                 </button>
 
@@ -190,9 +190,9 @@
                             <div class="account-signup">
 
                                 <p>
-                                    Already have account?
+                                    {{ __('app.doctor_register.already_account') }}
                                     <a href="{{ url('login') }}">
-                                        Sign In
+                                        {{ __('app.doctor_register.sign_in') }}
                                     </a>
                                 </p>
 
@@ -279,8 +279,8 @@
 
             throw new Error(
                 text ?
-                'Server returned an unexpected response. Check the Laravel logs for details.' :
-                'Server returned an empty response.'
+                @json(__('app.doctor_register.server_unexpected_response')) :
+                @json(__('app.register.server_empty_response'))
             );
         }
 
@@ -297,7 +297,7 @@
 
             spinner.classList.remove('d-none');
 
-            text.innerText = 'Creating account...';
+            text.innerText = @json(__('app.doctor_register.creating_account'));
 
             try {
 
@@ -321,7 +321,7 @@
 
                 if (!response.ok) {
 
-                    let message = 'Registration failed';
+                    let message = @json(__('app.doctor_register.registration_failed'));
 
                     if (data.errors) {
 
@@ -339,7 +339,7 @@
 
                     spinner.classList.add('d-none');
 
-                    text.innerText = 'Sign Up';
+                    text.innerText = @json(__('app.doctor_register.sign_up'));
 
                     return;
                 }
@@ -362,7 +362,7 @@
                 await auth.signOut();
 
                 showAlert(
-                    'Registration successful. Please verify your email before login.',
+                    @json(__('app.register.registration_success')),
                     'success'
                 );
 
@@ -377,14 +377,14 @@
                 console.error(error);
 
                 showAlert(
-                    error.message || 'Something went wrong'
+                    error.message || @json(__('app.doctor_register.something_wrong'))
                 );
 
                 btn.disabled = false;
 
                 spinner.classList.add('d-none');
 
-                text.innerText = 'Sign Up';
+                text.innerText = @json(__('app.doctor_register.sign_up'));
             }
         }
 
@@ -447,14 +447,14 @@
                     if (!response.ok) {
 
                         showAlert(
-                            data.message || 'Google signup failed'
+                            data.message || @json(__('app.register.google_failed'))
                         );
 
                         return;
                     }
 
                     showAlert(
-                        'Account created successfully',
+                        @json(__('app.register.account_created')),
                         'success'
                     );
 
@@ -470,7 +470,7 @@
                     console.error(error);
 
                     showAlert(
-                        error.message || 'Google signup failed'
+                        error.message || @json(__('app.register.google_failed'))
                     );
                 }
 

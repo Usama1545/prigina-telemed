@@ -52,7 +52,7 @@ class AuthController extends Controller
             if (($doctor['isActive'] ?? false) === false) {
 
                 return response()->json([
-                    'error' => 'Your account has been deactivated. Please contact administrator.',
+                    'error' => __('app.flash.account_deactivated'),
                 ], 403);
             }
 
@@ -69,7 +69,7 @@ class AuthController extends Controller
             if (($patient['isActive'] ?? false) === false) {
 
                 return response()->json([
-                    'error' => 'Your account has been deactivated. Please contact administrator.',
+                    'error' => __('app.flash.account_deactivated'),
                 ], 403);
             }
 
@@ -360,7 +360,7 @@ class AuthController extends Controller
             }
 
             return response()->json([
-                'message' => 'We could not complete your registration. Please check your documents and try again.',
+                'message' => __('app.flash.registration_incomplete'),
             ], 500);
         }
 

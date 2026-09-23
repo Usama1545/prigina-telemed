@@ -23,12 +23,12 @@
                     </a>
                     <div class="mobile-header-actions d-lg-none">
                         @if (check())
-                            <a href="{{ route('dashboard') }}" aria-label="Dashboard" class="mobile-header-actions-a">
+                            <a href="{{ route('dashboard') }}" aria-label="{{ __('app.chat.dashboard') }}" class="mobile-header-actions-a">
                                 <i class="isax isax-category-2"></i>
                             </a>
                         @endif
                         <div class="dropdown" style="position:relative;">
-                            <a href="#" data-bs-toggle="dropdown" aria-label="Language"
+                            <a href="#" data-bs-toggle="dropdown" aria-label="{{ __('app.common.language') }}"
                                 style="display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--primary);border-radius:50px;padding:7px;background:#fff;box-shadow:0 4px 12px rgba(15,43,92,.08);font-size:12px;text-decoration:none; color: var(--primary);">
                                 {{ __('app.common.language') }}<i class="fa fa-caret-down"></i>
                             </a>
@@ -44,7 +44,7 @@
                             </div>
                         </div>
                         @if (check())
-                            <a href="{{ route('logout') }}" aria-label="Logout" class="logout mobile-header-actions-a">
+                            <a href="{{ route('logout') }}" aria-label="{{ __('app.nav.logout') }}" class="logout mobile-header-actions-a">
                                 <i class="isax isax-logout"></i>
                             </a>
                         @endif

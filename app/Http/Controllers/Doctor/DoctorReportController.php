@@ -90,12 +90,12 @@ class DoctorReportController extends Controller
         }
 
         if (! in_array($report['status'], ['draft', 'revision_requested'])) {
-            return back()->with('error', 'This report cannot be submitted in its current status.');
+            return back()->with('error', __('app.flash.report_cannot_submit'));
         }
 
         $patientInfo = $report['patient_information'] ?? [];
         if (empty($patientInfo['age']) || empty($patientInfo['gender'])) {
-            return back()->with('error', 'Patient age and gender are required before submitting this report.');
+            return back()->with('error', __('app.flash.report_age_gender_required'));
         }
 
         $this->firestore->update('second_opinion_reports', $id, [
@@ -123,7 +123,7 @@ class DoctorReportController extends Controller
 
         return redirect()
             ->route('doctor.reports')
-            ->with('success', 'Report submitted for review successfully.');
+            ->with('success', __('app.flash.report_submitted'));
     }
 
     public function previewPdf(string $id)
