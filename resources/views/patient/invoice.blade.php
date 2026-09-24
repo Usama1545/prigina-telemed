@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice #{{ strtoupper(substr($appointment['id'] ?? 'N/A', 0, 8)) }} — PriGina Global Telemed</title>
+    <title>{{ __('app.invoice.invoice') }} #{{ strtoupper(substr($appointment['id'] ?? 'N/A', 0, 8)) }} — PriGina Global Telemed</title>
     <link rel="stylesheet" href="{{ URL::asset('build/css/style.css') }}">
 
     <style>
@@ -326,16 +326,16 @@
         <div class="inv-header">
             <div class="brand">
                 <h1>PriGina Global Telemed</h1>
-                <p>Healthcare without borders.</p>
+                <p>{{ __('app.our_mission.tagline') }}</p>
             </div>
             <div class="inv-meta">
-                <div class="inv-label">Invoice</div>
+                <div class="inv-label">{{ __('app.invoice.invoice') }}</div>
                 <div class="inv-number">#{{ strtoupper(substr($appointment['id'] ?? 'N/A', 0, 8)) }}</div>
                 <div class="inv-date">
-                    Issued:
+                    {{ __('app.invoice.issued') }}
                     @php
                         $issuedAt = $appointment['paymentCompletedAt'] ?? ($appointment['createdAt'] ?? null);
-                        echo $issuedAt ? \Carbon\Carbon::parse($issuedAt)->format('d M Y') : now()->format('d M Y');
+                        echo e($issuedAt ? \Carbon\Carbon::parse($issuedAt)->translatedFormat('d M Y') : now()->translatedFormat('d M Y'));
                     @endphp
                 </div>
             </div>
@@ -346,11 +346,11 @@
             @php
                 $status = $appointment['paymentStatus'] ?? ($appointment['status'] ?? 'pending');
                 $pillClass = $status === 'completed' ? '' : ($status === 'cancelled' ? 'cancelled' : 'pending');
-                $pillText = $status === 'completed' ? 'Paid' : ucfirst($status);
+                $statusLabel = fn($s) => Lang::has('app.common.' . $s) ? __('app.common.' . $s) : ucfirst($s);
+                $pillText = $status === 'completed' ? __('app.common.paid') : $statusLabel($status);
             @endphp
             <span class="pill {{ $pillClass }}">{{ $pillText }}</span>
-            <span class="label">Payment status for appointment
-                #{{ strtoupper(substr($appointment['id'] ?? '', 0, 8)) }}</span>
+            <span class="label">{{ __('app.invoice.payment_status_for', ['id' => strtoupper(substr($appointment['id'] ?? '', 0, 8))]) }}</span>
         </div>
 
         <div class="inv-body">
@@ -358,9 +358,9 @@
             {{-- Parties --}}
             <div class="parties">
                 <div class="party">
-                    <h4>Billed To</h4>
+                    <h4>{{ __('app.invoice.billed_to') }}</h4>
                     <p>
-                        <strong>{{ $appointment['patientName'] ?? 'N/A' }}</strong><br>
+                        <strong>{{ $appointment['patientName'] ?? __('app.review.na') }}</strong><br>
                         @if (!empty($appointment['email']))
                             {{ $appointment['email'] }}<br>
                         @endif
@@ -370,7 +370,7 @@
                     </p>
                 </div>
                 <div class="party">
-                    <h4>Service Provider</h4>
+                    <h4>{{ __('app.invoice.service_provider') }}</h4>
                     <p>
                         <strong>PriGina Global Telemed</strong><br>
                         {{ config('app.url') }}<br>
@@ -378,9 +378,9 @@
                     </p>
                 </div>
                 <div class="party">
-                    <h4>Consulting Doctor</h4>
+                    <h4>{{ __('app.invoice.consulting_doctor') }}</h4>
                     <p>
-                        <strong>Dr. {{ $appointment['doctorName'] ?? 'N/A' }}</strong><br>
+                        <strong>{{ __('app.review.dr_name', ['name' => $appointment['doctorName'] ?? __('app.review.na')]) }}</strong><br>
                         @if (!empty($appointment['specialty']))
                             {{ $appointment['specialty'] }}
                         @endif
@@ -395,24 +395,23 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Service</th>
-                        <th>Appointment Date</th>
-                        <th>Time</th>
-                        <th>Amount</th>
+                        <th>{{ __('app.invoice.service') }}</th>
+                        <th>{{ __('app.invoice.appointment_date') }}</th>
+                        <th>{{ __('app.common.time') }}</th>
+                        <th>{{ __('app.appointments.amount') }}</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>1</td>
                         <td>
-                            Video Consultation<br>
-                            <span style="font-size:12px; color:#64748b;">with Dr.
-                                {{ $appointment['doctorName'] ?? 'N/A' }}</span>
+                            {{ __('app.review.video_consultation') }}<br>
+                            <span style="font-size:12px; color:#64748b;">{{ __('app.invoice.with_doctor', ['name' => $appointment['doctorName'] ?? __('app.review.na')]) }}</span>
                         </td>
                         <td>
                             @php
                                 $d = $appointment['date'] ?? null;
-                                echo $d ? \Carbon\Carbon::parse($d)->format('d M Y') : 'N/A';
+                                echo e($d ? \Carbon\Carbon::parse($d)->translatedFormat('d M Y') : __('app.review.na'));
                             @endphp
                         </td>
                         <td>{{ $appointment['patientLocalTime'] ?? ($appointment['startTime'] ?? '') . ' – ' . ($appointment['endTime'] ?? '') }}
@@ -426,15 +425,15 @@
             <div class="totals">
                 <div class="totals-box">
                     <div class="totals-row">
-                        <span>Subtotal</span>
+                        <span>{{ __('app.invoice.subtotal') }}</span>
                         <span>${{ number_format($appointment['amount'] ?? 0, 2) }}</span>
                     </div>
                     <div class="totals-row">
-                        <span>Tax</span>
+                        <span>{{ __('app.invoice.tax') }}</span>
                         <span>$0.00</span>
                     </div>
                     <div class="totals-row total">
-                        <span>Total</span>
+                        <span>{{ __('app.booking.total') }}</span>
                         <span>${{ number_format($appointment['amount'] ?? 0, 2) }}</span>
                     </div>
                 </div>
@@ -442,36 +441,36 @@
 
             {{-- Payment info --}}
             <div class="payment-info">
-                <h4>Payment Information</h4>
+                <h4>{{ __('app.invoice.payment_information') }}</h4>
                 @if (!empty($appointment['paymentMethod']))
                     <div class="pi-row">
-                        <span class="pi-label">Payment Method</span>
+                        <span class="pi-label">{{ __('app.booking.payment_method') }}</span>
                         <span class="pi-value">{{ $appointment['paymentMethod'] }}</span>
                     </div>
                 @endif
                 @if (!empty($appointment['paymentIntentId']))
                     <div class="pi-row">
-                        <span class="pi-label">Transaction Reference</span>
+                        <span class="pi-label">{{ __('app.invoice.transaction_reference') }}</span>
                         <span class="pi-value">{{ $appointment['paymentIntentId'] }}</span>
                     </div>
                 @endif
                 @if (!empty($appointment['paymentCompletedAt']))
                     <div class="pi-row">
-                        <span class="pi-label">Payment Date</span>
+                        <span class="pi-label">{{ __('app.invoice.payment_date') }}</span>
                         <span
-                            class="pi-value">{{ \Carbon\Carbon::parse($appointment['paymentCompletedAt'])->format('d M Y, h:i A') }}</span>
+                            class="pi-value">{{ \Carbon\Carbon::parse($appointment['paymentCompletedAt'])->translatedFormat('d M Y, h:i A') }}</span>
                     </div>
                 @endif
                 <div class="pi-row">
-                    <span class="pi-label">Appointment Status</span>
-                    <span class="pi-value">{{ ucfirst($appointment['status'] ?? 'N/A') }}</span>
+                    <span class="pi-label">{{ __('app.invoice.appointment_status') }}</span>
+                    <span class="pi-value">{{ isset($appointment['status']) ? $statusLabel($appointment['status']) : __('app.review.na') }}</span>
                 </div>
             </div>
 
             <p class="inv-note">
-                Thank you for choosing PriGina Global Telemed.<br>
-                For any billing queries, please contact us at <strong>{{ config('mail.from.address') }}</strong>.<br>
-                &copy; {{ date('Y') }} PriGina Global Telemed. All rights reserved.
+                {{ __('app.invoice.thanks') }}<br>
+                {!! __('app.invoice.billing_queries', ['email' => '<strong>' . e(config('mail.from.address')) . '</strong>']) !!}<br>
+                &copy; {{ date('Y') }} PriGina Global Telemed. {{ __('app.invoice.rights_reserved') }}
             </p>
 
         </div>
@@ -484,9 +483,9 @@
                     <path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
                     <rect x="6" y="14" width="12" height="8" />
                 </svg>
-                Print / Save as PDF
+                {{ __('app.invoice.print') }}
             </button>
-            <a href="{{ route('patient.appointments') }}" class="btn-back">← Back to appointments</a>
+            <a href="{{ route('patient.appointments') }}" class="btn-back">← {{ __('app.invoice.back_to_appointments') }}</a>
         </div>
 
     </div>

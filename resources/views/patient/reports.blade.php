@@ -45,7 +45,7 @@
                                                     <span class="badge bg-success-subtle text-success">{{ __('app.reports.published') }}</span>
                                                 </div>
                                                 <p class="mb-1 text-muted small">
-                                                    {{ __('app.reports.doctor_label') }}: <strong>Dr. {{ $report['certification']['physician_name'] ?? '—' }}</strong>
+                                                    {{ __('app.reports.doctor_label') }}: <strong>{{ __('app.review.dr_name', ['name' => $report['certification']['physician_name'] ?? '—']) }}</strong>
                                                     @if(!empty($report['certification']['specialty']))
                                                         · {{ $report['certification']['specialty'] }}
                                                     @endif

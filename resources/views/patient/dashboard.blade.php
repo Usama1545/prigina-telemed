@@ -31,7 +31,7 @@
                     <form class="patient-search-card" action="{{ route('doctors') }}" method="GET">
                         <i class="isax isax-search-normal-1"></i>
                         <input type="search" name="search" placeholder="{{ __('app.patient_dashboard.search_placeholder') }}">
-                        <button type="submit" aria-label="Search filters">
+                        <button type="submit" aria-label="{{ __('app.common.search') }}">
                             <i class="isax isax-setting-4"></i>
                         </button>
                     </form>
@@ -87,7 +87,7 @@
                             </div>
                             @if ($nextAppointment)
                                 <div class="appointment-copy">
-                                    <h3>Dr. {{ $nextAppointment['doctorName'] ?? 'Doctor' }}</h3>
+                                    <h3>{{ __('app.review.dr_name', ['name' => $nextAppointment['doctorName'] ?? __('app.appointments.doctor')]) }}</h3>
                                     <p>{{ $nextAppointment['patientLocalTime'] ?? ($nextAppointment['startTime'] ?? '') . ' - ' . ($nextAppointment['endTime'] ?? '') }}
                                     </p>
                                     <a href="{{ route('patient.appointments') }}">{{ __('app.patient_dashboard.view_appointment') }}</a>
@@ -123,7 +123,7 @@
                                             alt="{{ $doctor['name'] ?? 'Doctor' }}">
                                         <div>
                                             <h3>
-                                                Dr. {{ $doctor['name'] ?? 'Doctor' }}
+                                                {{ __('app.review.dr_name', ['name' => $doctor['name'] ?? __('app.appointments.doctor')]) }}
                                                 <i class="fa-solid fa-circle-check"></i>
                                             </h3>
                                             <p>{{ $doctor['specializations'][0] ?? 'Specialist' }}</p>
@@ -148,7 +148,7 @@
                             @empty
                                 <article class="patient-doctor-card">
                                     <div class="doctor-card-top">
-                                        <img src="{{ asset('build/img/doctor-grid/doctor-grid-01.jpg') }}" alt="Doctor">
+                                        <img src="{{ asset('build/img/doctor-grid/doctor-grid-01.jpg') }}" alt="{{ __('app.appointments.doctor') }}">
                                         <div>
                                             <h3>{{ __('app.patient_dashboard.find_specialist') }} <i class="fa-solid fa-circle-check"></i></h3>
                                             <p>{{ __('app.patient_dashboard.second_opinion_care') }}</p>

@@ -203,7 +203,7 @@ class DoctorProfileController extends Controller
             'timezone' => $validated['timezone'],
         ]);
 
-        return redirect()->back()->with('success', 'Profile updated successfully.');
+        return redirect()->back()->with('success', __('app.flash.profile_updated'));
     }
 
     public function appointments(Request $request)
@@ -307,12 +307,12 @@ class DoctorProfileController extends Controller
 
         // Debug (temporary)
         if (! $updatedUser) {
-            dd('Password update failed');
+            dd(__('app.flash.password_update_failed'));
 
-            return back()->withErrors(['password' => 'Password update failed']);
+            return back()->withErrors(['password' => __('app.flash.password_update_failed')]);
         }
 
-        return redirect()->back()->with('success', 'Password updated successfully.');
+        return redirect()->back()->with('success', __('app.flash.password_updated'));
 
     }
 
@@ -334,7 +334,7 @@ class DoctorProfileController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login')->with('success', 'Your account has been deleted.');
+        return redirect()->route('login')->with('success', __('app.flash.account_deleted'));
     }
 
     public function conversations()
@@ -345,17 +345,8 @@ class DoctorProfileController extends Controller
             ['field' => 'doctorId', 'op' => '=', 'value' => $uid],
         ], null, null, 'lastMessageTime', 'DESC');
 
-        // Only show conversations where an appointment exists with that patient
-        $appointments = $this->firestore->query('appointments', [
-            ['field' => 'doctorId', 'op' => '=', 'value' => $uid],
-        ]);
-
-        $patientsWithAppointments = collect($appointments['documents'] ?? [])
-            ->pluck('patientId')
-            ->filter()
-            ->unique()
-            ->flip()
-            ->toArray();
+        // Only show conversations where a paid/confirmed appointment exists with that patient
+        $patientsWithAppointments = chat_eligible_user_ids($uid, 'doctor');
 
         $conversations = collect($filteredConversations['documents'] ?? [])
             ->filter(fn ($conv) => isset($patientsWithAppointments[$conv['patientId'] ?? '']))
@@ -398,6 +389,14 @@ class DoctorProfileController extends Controller
         $conversation = $this->firestore->find('conversations', $id);
 
         $uid = current_user()['uid'];
+
+        if (! $conversation || ($conversation['doctorId'] ?? null) !== $uid) {
+            abort(404);
+        }
+
+        if (! can_chat($conversation['patientId'] ?? '', $uid)) {
+            abort(403, 'You must have an appointment with this patient before starting a chat.');
+        }
 
         $data = [
             'conversationId' => $id,
@@ -467,7 +466,7 @@ class DoctorProfileController extends Controller
         if (($appointment['status'] ?? '') === 'confirmed' && ! empty($appointment['date'])) {
             $apptDate = Carbon::parse($appointment['date']);
             if ($apptDate->lte(now()->addHours(24))) {
-                return redirect()->back()->with('error', 'Appointments cannot be cancelled within 24 hours of the scheduled time.');
+                return redirect()->back()->with('error', __('app.flash.cannot_cancel_24h'));
             }
         }
 
@@ -493,7 +492,7 @@ class DoctorProfileController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', 'Appointment cancelled successfully.');
+        return redirect()->back()->with('success', __('app.flash.appointment_cancelled'));
     }
 
     public function deleteAppointment($id)
@@ -501,12 +500,12 @@ class DoctorProfileController extends Controller
         $appointment = $this->firestore->find('appointments', $id);
 
         if (! $appointment || ($appointment['doctorId'] ?? '') !== current_user()['uid']) {
-            return redirect()->back()->with('error', 'Appointment not found.');
+            return redirect()->back()->with('error', __('app.flash.appointment_not_found'));
         }
 
         $this->firestore->delete('appointments', $id);
 
-        return redirect()->back()->with('success', 'Appointment deleted.');
+        return redirect()->back()->with('success', __('app.flash.appointment_deleted'));
     }
 
     public function appointmentDetails($id)
@@ -661,6 +660,10 @@ class DoctorProfileController extends Controller
             abort(404);
         }
 
+        if (! can_chat($patient['uid'], $doctor['uid'])) {
+            abort(403, 'You must have an appointment with this patient before starting a chat.');
+        }
+
         $conversation = $this->firestore->query(
             'conversations',
             [
@@ -752,7 +755,7 @@ class DoctorProfileController extends Controller
 
         return redirect()
             ->back()
-            ->with('success', 'Available timings updated successfully.');
+            ->with('success', __('app.flash.timings_updated'));
     }
 
     public function markRead($id)
@@ -907,7 +910,7 @@ class DoctorProfileController extends Controller
 
         return redirect()
             ->route('doctor.payout')
-            ->with('success', 'Payout account setup completed.');
+            ->with('success', __('app.flash.payout_setup_completed'));
     }
 
     public function completeAppointment($id)
@@ -947,7 +950,7 @@ class DoctorProfileController extends Controller
 
         return redirect()
             ->route('doctor.reports.edit', $report['id'])
-            ->with('success', 'Appointment completed. Please fill out the second opinion report.');
+            ->with('success', __('app.flash.appointment_completed_fill_report'));
     }
 
     public function acceptAppointment($id)
@@ -976,7 +979,7 @@ class DoctorProfileController extends Controller
             }
         }
 
-        return back()->with('success', 'Appointment accepted successfully.');
+        return back()->with('success', __('app.flash.appointment_accepted'));
     }
 
     public function toggleAvailability(Request $request)
@@ -1008,14 +1011,14 @@ class DoctorProfileController extends Controller
         $appointment = $this->firestore->find('appointments', $id);
 
         if (! $appointment || ($appointment['doctorId'] ?? '') !== $doctorUid) {
-            return response()->json(['success' => false, 'message' => 'Appointment not found.'], 404);
+            return response()->json(['success' => false, 'message' => __('app.flash.appointment_not_found')], 404);
         }
 
         // Block rescheduling within 24 hours of the appointment
         if (! empty($appointment['date'])) {
             $apptDate = Carbon::parse($appointment['date']);
             if ($apptDate->lte(now()->addHours(24))) {
-                return response()->json(['success' => false, 'message' => 'Appointments cannot be rescheduled within 24 hours of the scheduled time.'], 422);
+                return response()->json(['success' => false, 'message' => __('app.flash.cannot_reschedule_24h')], 422);
             }
         }
 
@@ -1025,13 +1028,13 @@ class DoctorProfileController extends Controller
         $availability = $this->availabilityService->getAvailability($doctorUid, $id);
 
         if (! $availability) {
-            return response()->json(['success' => false, 'message' => 'Availability is not set up.'], 422);
+            return response()->json(['success' => false, 'message' => __('app.flash.availability_not_set')], 422);
         }
 
         $daySlots = collect($availability['availability'])->firstWhere('date', $validated['date'])['slots'] ?? [];
 
         if (! in_array($validated['startTime'], $daySlots, true)) {
-            return response()->json(['success' => false, 'message' => 'The selected time slot is no longer available. Please choose another.'], 422);
+            return response()->json(['success' => false, 'message' => __('app.flash.slot_unavailable_choose_another')], 422);
         }
 
         $slotDuration = $availability['slotDuration'];

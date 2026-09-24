@@ -131,196 +131,196 @@
                                                     <optgroup label="Americas">
                                                         <option value="America/New_York"
                                                             {{ ($patient['timezone'] ?? '') == 'America/New_York' ? 'selected' : '' }}>
-                                                            Eastern Time (US & Canada)</option>
+                                                            {{ tz_label('America/New_York', 'Eastern Time (US & Canada)') }}</option>
                                                         <option value="America/Chicago"
                                                             {{ ($patient['timezone'] ?? '') == 'America/Chicago' ? 'selected' : '' }}>
-                                                            Central Time (US & Canada)</option>
+                                                            {{ tz_label('America/Chicago', 'Central Time (US & Canada)') }}</option>
                                                         <option value="America/Denver"
                                                             {{ ($patient['timezone'] ?? '') == 'America/Denver' ? 'selected' : '' }}>
-                                                            Mountain Time (US & Canada)</option>
+                                                            {{ tz_label('America/Denver', 'Mountain Time (US & Canada)') }}</option>
                                                         <option value="America/Los_Angeles"
                                                             {{ ($patient['timezone'] ?? '') == 'America/Los_Angeles' ? 'selected' : '' }}>
-                                                            Pacific Time (US & Canada)</option>
+                                                            {{ tz_label('America/Los_Angeles', 'Pacific Time (US & Canada)') }}</option>
                                                         <option value="America/Anchorage"
                                                             {{ ($patient['timezone'] ?? '') == 'America/Anchorage' ? 'selected' : '' }}>
-                                                            Alaska</option>
+                                                            {{ tz_label('America/Anchorage', 'Alaska') }}</option>
                                                         <option value="Pacific/Honolulu"
                                                             {{ ($patient['timezone'] ?? '') == 'Pacific/Honolulu' ? 'selected' : '' }}>
-                                                            Hawaii</option>
+                                                            {{ tz_label('Pacific/Honolulu', 'Hawaii') }}</option>
                                                         <option value="America/Toronto"
                                                             {{ ($patient['timezone'] ?? '') == 'America/Toronto' ? 'selected' : '' }}>
-                                                            Toronto</option>
+                                                            {{ tz_label('America/Toronto', 'Toronto') }}</option>
                                                         <option value="America/Mexico_City"
                                                             {{ ($patient['timezone'] ?? '') == 'America/Mexico_City' ? 'selected' : '' }}>
-                                                            Mexico City</option>
+                                                            {{ tz_label('America/Mexico_City', 'Mexico City') }}</option>
                                                         <option value="America/Bogota"
                                                             {{ ($patient['timezone'] ?? '') == 'America/Bogota' ? 'selected' : '' }}>
-                                                            Colombia</option>
+                                                            {{ tz_label('America/Bogota', 'Colombia') }}</option>
                                                         <option value="America/Caracas"
                                                             {{ ($patient['timezone'] ?? '') == 'America/Caracas' ? 'selected' : '' }}>
-                                                            Venezuela</option>
+                                                            {{ tz_label('America/Caracas', 'Venezuela') }}</option>
                                                         <option value="America/Sao_Paulo"
                                                             {{ ($patient['timezone'] ?? '') == 'America/Sao_Paulo' ? 'selected' : '' }}>
-                                                            São Paulo</option>
+                                                            {{ tz_label('America/Sao_Paulo', 'São Paulo') }}</option>
                                                         <option value="America/Buenos_Aires"
                                                             {{ ($patient['timezone'] ?? '') == 'America/Buenos_Aires' ? 'selected' : '' }}>
-                                                            Buenos Aires</option>
+                                                            {{ tz_label('America/Buenos_Aires', 'Buenos Aires') }}</option>
                                                         <option value="America/Santiago"
                                                             {{ ($patient['timezone'] ?? '') == 'America/Santiago' ? 'selected' : '' }}>
-                                                            Santiago</option>
+                                                            {{ tz_label('America/Santiago', 'Santiago') }}</option>
                                                     </optgroup>
                                                     <!-- Europe -->
                                                     <optgroup label="Europe">
                                                         <option value="Europe/London"
                                                             {{ ($patient['timezone'] ?? '') == 'Europe/London' ? 'selected' : '' }}>
-                                                            London (GMT/BST)</option>
+                                                            {{ tz_label('Europe/London', 'London (GMT/BST)') }}</option>
                                                         <option value="Europe/Paris"
                                                             {{ ($patient['timezone'] ?? '') == 'Europe/Paris' ? 'selected' : '' }}>
-                                                            Central European Time</option>
+                                                            {{ tz_label('Europe/Paris', 'Central European Time') }}</option>
                                                         <option value="Europe/Berlin"
                                                             {{ ($patient['timezone'] ?? '') == 'Europe/Berlin' ? 'selected' : '' }}>
-                                                            Berlin</option>
+                                                            {{ tz_label('Europe/Berlin', 'Berlin') }}</option>
                                                         <option value="Europe/Amsterdam"
                                                             {{ ($patient['timezone'] ?? '') == 'Europe/Amsterdam' ? 'selected' : '' }}>
-                                                            Amsterdam</option>
+                                                            {{ tz_label('Europe/Amsterdam', 'Amsterdam') }}</option>
                                                         <option value="Europe/Madrid"
                                                             {{ ($patient['timezone'] ?? '') == 'Europe/Madrid' ? 'selected' : '' }}>
-                                                            Madrid</option>
+                                                            {{ tz_label('Europe/Madrid', 'Madrid') }}</option>
                                                         <option value="Europe/Rome"
                                                             {{ ($patient['timezone'] ?? '') == 'Europe/Rome' ? 'selected' : '' }}>
-                                                            Rome</option>
+                                                            {{ tz_label('Europe/Rome', 'Rome') }}</option>
                                                         <option value="Europe/Vienna"
                                                             {{ ($patient['timezone'] ?? '') == 'Europe/Vienna' ? 'selected' : '' }}>
-                                                            Vienna</option>
+                                                            {{ tz_label('Europe/Vienna', 'Vienna') }}</option>
                                                         <option value="Europe/Prague"
                                                             {{ ($patient['timezone'] ?? '') == 'Europe/Prague' ? 'selected' : '' }}>
-                                                            Prague</option>
+                                                            {{ tz_label('Europe/Prague', 'Prague') }}</option>
                                                         <option value="Europe/Budapest"
                                                             {{ ($patient['timezone'] ?? '') == 'Europe/Budapest' ? 'selected' : '' }}>
-                                                            Budapest</option>
+                                                            {{ tz_label('Europe/Budapest', 'Budapest') }}</option>
                                                         <option value="Europe/Warsaw"
                                                             {{ ($patient['timezone'] ?? '') == 'Europe/Warsaw' ? 'selected' : '' }}>
-                                                            Warsaw</option>
+                                                            {{ tz_label('Europe/Warsaw', 'Warsaw') }}</option>
                                                         <option value="Europe/Stockholm"
                                                             {{ ($patient['timezone'] ?? '') == 'Europe/Stockholm' ? 'selected' : '' }}>
-                                                            Stockholm</option>
+                                                            {{ tz_label('Europe/Stockholm', 'Stockholm') }}</option>
                                                         <option value="Europe/Oslo"
                                                             {{ ($patient['timezone'] ?? '') == 'Europe/Oslo' ? 'selected' : '' }}>
-                                                            Oslo</option>
+                                                            {{ tz_label('Europe/Oslo', 'Oslo') }}</option>
                                                         <option value="Europe/Copenhagen"
                                                             {{ ($patient['timezone'] ?? '') == 'Europe/Copenhagen' ? 'selected' : '' }}>
-                                                            Copenhagen</option>
+                                                            {{ tz_label('Europe/Copenhagen', 'Copenhagen') }}</option>
                                                         <option value="Europe/Dublin"
                                                             {{ ($patient['timezone'] ?? '') == 'Europe/Dublin' ? 'selected' : '' }}>
-                                                            Dublin</option>
+                                                            {{ tz_label('Europe/Dublin', 'Dublin') }}</option>
                                                         <option value="Europe/Lisbon"
                                                             {{ ($patient['timezone'] ?? '') == 'Europe/Lisbon' ? 'selected' : '' }}>
-                                                            Lisbon</option>
+                                                            {{ tz_label('Europe/Lisbon', 'Lisbon') }}</option>
                                                         <option value="Europe/Moscow"
                                                             {{ ($patient['timezone'] ?? '') == 'Europe/Moscow' ? 'selected' : '' }}>
-                                                            Moscow</option>
+                                                            {{ tz_label('Europe/Moscow', 'Moscow') }}</option>
                                                         <option value="Europe/Istanbul"
                                                             {{ ($patient['timezone'] ?? '') == 'Europe/Istanbul' ? 'selected' : '' }}>
-                                                            Istanbul</option>
+                                                            {{ tz_label('Europe/Istanbul', 'Istanbul') }}</option>
                                                         <option value="Europe/Athens"
                                                             {{ ($patient['timezone'] ?? '') == 'Europe/Athens' ? 'selected' : '' }}>
-                                                            Athens</option>
+                                                            {{ tz_label('Europe/Athens', 'Athens') }}</option>
                                                         <option value="Europe/Helsinki"
                                                             {{ ($patient['timezone'] ?? '') == 'Europe/Helsinki' ? 'selected' : '' }}>
-                                                            Helsinki</option>
+                                                            {{ tz_label('Europe/Helsinki', 'Helsinki') }}</option>
                                                     </optgroup>
                                                     <!-- Africa -->
                                                     <optgroup label="Africa">
                                                         <option value="Africa/Cairo"
                                                             {{ ($patient['timezone'] ?? '') == 'Africa/Cairo' ? 'selected' : '' }}>
-                                                            Cairo</option>
+                                                            {{ tz_label('Africa/Cairo', 'Cairo') }}</option>
                                                         <option value="Africa/Johannesburg"
                                                             {{ ($patient['timezone'] ?? '') == 'Africa/Johannesburg' ? 'selected' : '' }}>
-                                                            Johannesburg</option>
+                                                            {{ tz_label('Africa/Johannesburg', 'Johannesburg') }}</option>
                                                         <option value="Africa/Lagos"
                                                             {{ ($patient['timezone'] ?? '') == 'Africa/Lagos' ? 'selected' : '' }}>
-                                                            Lagos</option>
+                                                            {{ tz_label('Africa/Lagos', 'Lagos') }}</option>
                                                         <option value="Africa/Nairobi"
                                                             {{ ($patient['timezone'] ?? '') == 'Africa/Nairobi' ? 'selected' : '' }}>
-                                                            Nairobi</option>
+                                                            {{ tz_label('Africa/Nairobi', 'Nairobi') }}</option>
                                                         <option value="Africa/Casablanca"
                                                             {{ ($patient['timezone'] ?? '') == 'Africa/Casablanca' ? 'selected' : '' }}>
-                                                            Casablanca</option>
+                                                            {{ tz_label('Africa/Casablanca', 'Casablanca') }}</option>
                                                     </optgroup>
                                                     <!-- Middle East -->
                                                     <optgroup label="Middle East">
                                                         <option value="Asia/Dubai"
                                                             {{ ($patient['timezone'] ?? '') == 'Asia/Dubai' ? 'selected' : '' }}>
-                                                            Dubai (Gulf Standard Time)</option>
+                                                            {{ tz_label('Asia/Dubai', 'Dubai (Gulf Standard Time)') }}</option>
                                                         <option value="Asia/Baghdad"
                                                             {{ ($patient['timezone'] ?? '') == 'Asia/Baghdad' ? 'selected' : '' }}>
-                                                            Baghdad</option>
+                                                            {{ tz_label('Asia/Baghdad', 'Baghdad') }}</option>
                                                         <option value="Asia/Jerusalem"
                                                             {{ ($patient['timezone'] ?? '') == 'Asia/Jerusalem' ? 'selected' : '' }}>
-                                                            Jerusalem</option>
+                                                            {{ tz_label('Asia/Jerusalem', 'Jerusalem') }}</option>
                                                         <option value="Asia/Tehran"
                                                             {{ ($patient['timezone'] ?? '') == 'Asia/Tehran' ? 'selected' : '' }}>
-                                                            Tehran</option>
+                                                            {{ tz_label('Asia/Tehran', 'Tehran') }}</option>
                                                     </optgroup>
                                                     <!-- Asia -->
                                                     <optgroup label="Asia">
                                                         <option value="Asia/Kolkata"
                                                             {{ ($patient['timezone'] ?? '') == 'Asia/Kolkata' ? 'selected' : '' }}>
-                                                            India Standard Time</option>
+                                                            {{ tz_label('Asia/Kolkata', 'India Standard Time') }}</option>
                                                         <option value="Asia/Bangkok"
                                                             {{ ($patient['timezone'] ?? '') == 'Asia/Bangkok' ? 'selected' : '' }}>
-                                                            Indochina Time</option>
+                                                            {{ tz_label('Asia/Bangkok', 'Indochina Time') }}</option>
                                                         <option value="Asia/Ho_Chi_Minh"
                                                             {{ ($patient['timezone'] ?? '') == 'Asia/Ho_Chi_Minh' ? 'selected' : '' }}>
-                                                            Ho Chi Minh City</option>
+                                                            {{ tz_label('Asia/Ho_Chi_Minh', 'Ho Chi Minh City') }}</option>
                                                         <option value="Asia/Hong_Kong"
                                                             {{ ($patient['timezone'] ?? '') == 'Asia/Hong_Kong' ? 'selected' : '' }}>
-                                                            Hong Kong</option>
+                                                            {{ tz_label('Asia/Hong_Kong', 'Hong Kong') }}</option>
                                                         <option value="Asia/Singapore"
                                                             {{ ($patient['timezone'] ?? '') == 'Asia/Singapore' ? 'selected' : '' }}>
-                                                            Singapore</option>
+                                                            {{ tz_label('Asia/Singapore', 'Singapore') }}</option>
                                                         <option value="Asia/Tokyo"
                                                             {{ ($patient['timezone'] ?? '') == 'Asia/Tokyo' ? 'selected' : '' }}>
-                                                            Tokyo</option>
+                                                            {{ tz_label('Asia/Tokyo', 'Tokyo') }}</option>
                                                         <option value="Asia/Seoul"
                                                             {{ ($patient['timezone'] ?? '') == 'Asia/Seoul' ? 'selected' : '' }}>
-                                                            Seoul</option>
+                                                            {{ tz_label('Asia/Seoul', 'Seoul') }}</option>
                                                         <option value="Asia/Shanghai"
                                                             {{ ($patient['timezone'] ?? '') == 'Asia/Shanghai' ? 'selected' : '' }}>
-                                                            Shanghai</option>
+                                                            {{ tz_label('Asia/Shanghai', 'Shanghai') }}</option>
                                                         <option value="Asia/Manila"
                                                             {{ ($patient['timezone'] ?? '') == 'Asia/Manila' ? 'selected' : '' }}>
-                                                            Manila</option>
+                                                            {{ tz_label('Asia/Manila', 'Manila') }}</option>
                                                         <option value="Asia/Kuala_Lumpur"
                                                             {{ ($patient['timezone'] ?? '') == 'Asia/Kuala_Lumpur' ? 'selected' : '' }}>
-                                                            Kuala Lumpur</option>
+                                                            {{ tz_label('Asia/Kuala_Lumpur', 'Kuala Lumpur') }}</option>
                                                         <option value="Asia/Karachi"
                                                             {{ ($patient['timezone'] ?? '') == 'Asia/Karachi' ? 'selected' : '' }}>
-                                                            Karachi</option>
+                                                            {{ tz_label('Asia/Karachi', 'Karachi') }}</option>
                                                         <option value="Asia/Kathmandu"
                                                             {{ ($patient['timezone'] ?? '') == 'Asia/Kathmandu' ? 'selected' : '' }}>
-                                                            Kathmandu</option>
+                                                            {{ tz_label('Asia/Kathmandu', 'Kathmandu') }}</option>
                                                     </optgroup>
                                                     <!-- Oceania -->
                                                     <optgroup label="Oceania">
                                                         <option value="Australia/Sydney"
                                                             {{ ($patient['timezone'] ?? '') == 'Australia/Sydney' ? 'selected' : '' }}>
-                                                            Sydney</option>
+                                                            {{ tz_label('Australia/Sydney', 'Sydney') }}</option>
                                                         <option value="Australia/Melbourne"
                                                             {{ ($patient['timezone'] ?? '') == 'Australia/Melbourne' ? 'selected' : '' }}>
-                                                            Melbourne</option>
+                                                            {{ tz_label('Australia/Melbourne', 'Melbourne') }}</option>
                                                         <option value="Australia/Brisbane"
                                                             {{ ($patient['timezone'] ?? '') == 'Australia/Brisbane' ? 'selected' : '' }}>
-                                                            Brisbane</option>
+                                                            {{ tz_label('Australia/Brisbane', 'Brisbane') }}</option>
                                                         <option value="Australia/Perth"
                                                             {{ ($patient['timezone'] ?? '') == 'Australia/Perth' ? 'selected' : '' }}>
-                                                            Perth</option>
+                                                            {{ tz_label('Australia/Perth', 'Perth') }}</option>
                                                         <option value="Pacific/Auckland"
                                                             {{ ($patient['timezone'] ?? '') == 'Pacific/Auckland' ? 'selected' : '' }}>
-                                                            New Zealand</option>
+                                                            {{ tz_label('Pacific/Auckland', 'New Zealand') }}</option>
                                                         <option value="Pacific/Fiji"
                                                             {{ ($patient['timezone'] ?? '') == 'Pacific/Fiji' ? 'selected' : '' }}>
-                                                            Fiji</option>
+                                                            {{ tz_label('Pacific/Fiji', 'Fiji') }}</option>
                                                     </optgroup>
                                                 </select>
                                             </div>

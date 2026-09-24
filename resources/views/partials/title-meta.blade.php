@@ -16,7 +16,7 @@
         $filename === 'index-12' ||
         $filename === 'index-13'
     ) {
-        $title = 'PriGina Global Telemed | Trusted Second Medical Opinions Online';
+        $title = 'PriGina Global Telemed | ' . __('app.home.meta_tagline');
     } else {
         $title = 'PriGina Global Telemed';
     }

@@ -2,9 +2,9 @@
 @extends('layouts.mainlayout')
 @section('content')
     @component('components.breadcrumb', [
-        'title' => 'Bookings',
-        'li_1' => 'Booking Success',
-        'li_2' => 'Booking Success',
+        'title' => __('app.booking.bookings'),
+        'li_1' => __('app.booking.booking_success_crumb'),
+        'li_2' => __('app.booking.booking_success_crumb'),
     ])
     @endcomponent
 
@@ -20,13 +20,13 @@
                         <div class="card-body">
                             <div class="success-cont">
                                 <i class="fas fa-check"></i>
-                                <h3>Appointment booked Successfully!</h3>
-                                <p>Appointment booked with <strong>{{ $appointment['doctorName'] }}</strong><br>
-                                    on<strong>{{ \Carbon\Carbon::parse($appointment['date'])->format('M d, Y') }}</strong>
-                                    at <strong>
-                                        {{ $appointment['patientLocalTime'] }}</strong></p>
-                                <a href="{{ route('patient.appointments') }}" class="btn btn-primary view-inv-btn">View
-                                    Appointments</a>
+                                <h3>{{ __('app.booking.booked_successfully') }}</h3>
+                                <p>{!! __('app.booking.booked_with_on_at', [
+                                    'doctor' => '<strong>' . e($appointment['doctorName']) . '</strong>',
+                                    'date' => '<strong>' . e(\Carbon\Carbon::parse($appointment['date'])->translatedFormat('M d, Y')) . '</strong>',
+                                    'time' => '<strong>' . e($appointment['patientLocalTime']) . '</strong>',
+                                ]) !!}</p>
+                                <a href="{{ route('patient.appointments') }}" class="btn btn-primary view-inv-btn">{{ __('app.booking.view_appointments') }}</a>
                             </div>
                         </div>
                     </div>

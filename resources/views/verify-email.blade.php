@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-md-7 col-lg-6 login-left">
                     <img src="{{ URL::asset('build/img/login-banner.png') }}" class="img-fluid"
-                        alt="PriGina Global Telemed Login">
+                        alt="{{ __('app.doctor_register.image_alt') }}">
                 </div>
                 <div class="col-md-12 col-lg-6 login-right">
                     <div class="text-center">
@@ -38,26 +38,24 @@
                         </div>
 
                         <h2 class="mb-3">
-                            Verify Your Email
+                            {{ __('app.auth.verify_email') }}
                         </h2>
 
                         <p class="text-muted mb-4">
 
-                            We have sent a verification email to your inbox.
-
-                            Please verify your account before logging in.
+                            {{ __('app.verify_email.sent_desc') }}
 
                         </p>
 
                     </div>
                     <div class="alert alert-warning">
 
-                        <strong>Email not verified?</strong>
+                        <strong>{{ __('app.verify_email.not_verified') }}</strong>
 
                         <ul class="mb-0 mt-2">
-                            <li>Check your spam folder</li>
-                            <li>Check promotions tab</li>
-                            <li>Wait a few minutes for delivery</li>
+                            <li>{{ __('app.verify_email.tip_spam') }}</li>
+                            <li>{{ __('app.verify_email.tip_promotions') }}</li>
+                            <li>{{ __('app.verify_email.tip_wait') }}</li>
                         </ul>
 
                     </div>
@@ -68,7 +66,7 @@
                     >
 
                         <span id="resendText">
-                            Resend Verification Email
+                            {{ __('app.auth.resend_verification') }}
                         </span>
 
                         <span
@@ -81,7 +79,7 @@
                         href="{{ route('login') }}"
                         class="btn btn-light w-100"
                     >
-                        Back To Login
+                        {{ __('app.verify_email.back_to_login') }}
                     </a>
                 </div>
             </div>
@@ -108,7 +106,7 @@
 
         resendSpinner.classList.remove('d-none');
 
-        resendText.innerText = 'Sending...';
+        resendText.innerText = @json(__('app.verify_email.sending'));
 
         const response = await fetch(
             "{{ route('resend-verification-email') }}",
@@ -130,19 +128,19 @@
 
         if (!response.ok) {
             throw new Error(
-                data.message || 'Failed to resend email'
+                data.message || @json(__('app.verify_email.resend_failed'))
             );
         }
 
         showAlert(
-            'Verification email sent successfully',
+            @json(__('app.verify_email.resend_success')),
             'success'
         );
 
     } catch (e) {
 
         showAlert(
-            e.message || 'Failed to resend email'
+            e.message || @json(__('app.verify_email.resend_failed'))
         );
 
     } finally {
@@ -152,7 +150,7 @@
         resendSpinner.classList.add('d-none');
 
         resendText.innerText =
-            'Resend Verification Email';
+            @json(__('app.auth.resend_verification'));
     }
 }
 </script>

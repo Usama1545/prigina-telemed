@@ -6,7 +6,7 @@
             <div class="profile-info-widget">
                 <a href="{{ url('profile-settings') }}" class="booking-doc-img">
                     <img src="{{ !empty(current_user()['profilePicture']) ? current_user()['profilePicture'] : URL::asset('build/img/doctors-dashboard/profile-06.jpg') }}"
-                        alt="User Image">
+                        alt="{{ __('app.stories.user_image') }}">
                 </a>
                 <div class="profile-det-info">
                     <h3><a href="{{ url('profile-settings') }}">{{ current_user()['name'] }}</a></h3>

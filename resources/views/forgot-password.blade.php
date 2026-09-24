@@ -13,7 +13,7 @@
                         <div class="row align-items-center justify-content-center">
                             <div class="col-md-7 col-lg-6 login-left">
                                 <img src="{{ URL::asset('build/img/login-banner.png') }}" class="img-fluid"
-                                    alt="PriGina Global Telemed Login">
+                                    alt="{{ __('app.doctor_register.image_alt') }}">
                             </div>
                             <div class="col-md-12 col-lg-6 login-right">
                                 <div class="login-header">

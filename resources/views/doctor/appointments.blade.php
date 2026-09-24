@@ -193,7 +193,7 @@
                         </div>
 
                         <button type="button" class="btn-close btn-close-white align-self-start" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+                            aria-label="{{ __('app.common.close') }}"></button>
                     </div>
                 </div>
 
@@ -453,7 +453,7 @@
                                     </p>
 
                                     <h6>
-                                        ${data.patientName ?? 'Patient'}
+                                        ${data.patientName ?? @json(__('app.appointments.patient'))}
                                     </h6>
 
                                 </div>
@@ -581,32 +581,32 @@
                 const badge = document.getElementById('appt-detail-status-badge');
                 const statusMap = {
                     confirmed: {
-                        label: 'Confirmed',
+                        label: @json(__('app.appointments.confirmed')),
                         bg: '#dcfce7',
                         color: '#15803d',
                         border: '#86efac'
                     },
                     pending: {
-                        label: 'Pending',
+                        label: @json(__('app.common.pending')),
                         bg: '#fef9c3',
                         color: '#a16207',
                         border: '#fde047'
                     },
                     cancelled: {
-                        label: 'Cancelled',
+                        label: @json(__('app.common.cancelled')),
                         bg: '#fee2e2',
                         color: '#b91c1c',
                         border: '#fca5a5'
                     },
                     completed: {
-                        label: 'Completed',
+                        label: @json(__('app.common.completed')),
                         bg: '#ede9fe',
                         color: '#6d28d9',
                         border: '#c4b5fd'
                     },
                 };
                 const s = statusMap[d.status] || {
-                    label: d.status || 'Unknown',
+                    label: d.status || @json(__('app.appointments.unknown')),
                     bg: '#f1f5f9',
                     color: '#475569',
                     border: '#cbd5e1'
@@ -802,7 +802,7 @@
                                 }
                             }
                         } else {
-                            errorEl.textContent = data.message ?? 'Something went wrong.';
+                            errorEl.textContent = data.message ?? @json(__('app.appointments.something_wrong'));
                             errorEl.classList.remove('d-none');
                         }
                     })

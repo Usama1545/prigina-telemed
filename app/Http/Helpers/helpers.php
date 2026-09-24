@@ -221,6 +221,27 @@ if (! function_exists('patient_age')) {
     }
 }
 
+if (! function_exists('tz_label')) {
+    /**
+     * Label for a timezone <option>: keeps the curated English label for
+     * English, and uses the localized CLDR name for any other app locale.
+     */
+    function tz_label(string $timezone, string $englishLabel): string
+    {
+        $locale = app()->getLocale();
+
+        if ($locale === 'en') {
+            return $englishLabel;
+        }
+
+        try {
+            return \Symfony\Component\Intl\Timezones::getName($timezone, $locale);
+        } catch (Throwable) {
+            return $englishLabel;
+        }
+    }
+}
+
 if (! function_exists('getQualifications')) {
     function getQualifications()
     {
@@ -240,5 +261,51 @@ if (! function_exists('getExperienceRanges')) {
         $qualifications = $firestore->get('experience_ranges');
 
         return array_values(array_filter($qualifications, fn ($qualification) => $qualification['isActive'] ?? false));
+    }
+}
+
+if (! function_exists('chat_eligible_statuses')) {
+    // Appointments are created as 'pending' before payment, so only paid/accepted
+    // appointments may unlock chat between a patient and a doctor.
+    function chat_eligible_statuses(): array
+    {
+        return ['confirmed', 'completed', 'rescheduled'];
+    }
+}
+
+if (! function_exists('chat_eligible_user_ids')) {
+    // Returns [otherUserId => true] for every counterpart the given user has an
+    // eligible appointment with. $role is the side of $uid: 'patient' or 'doctor'.
+    function chat_eligible_user_ids(string $uid, string $role): array
+    {
+        [$ownField, $otherField] = $role === 'doctor'
+            ? ['doctorId', 'patientId']
+            : ['patientId', 'doctorId'];
+
+        $appointments = app(FirestoreService::class)->query('appointments', [
+            ['field' => $ownField, 'op' => '=', 'value' => $uid],
+        ]);
+
+        return collect($appointments['documents'] ?? [])
+            ->filter(fn ($a) => in_array($a['status'] ?? null, chat_eligible_statuses(), true))
+            ->pluck($otherField)
+            ->filter()
+            ->unique()
+            ->flip()
+            ->map(fn () => true)
+            ->toArray();
+    }
+}
+
+if (! function_exists('can_chat')) {
+    function can_chat(string $patientId, string $doctorId): bool
+    {
+        $appointments = app(FirestoreService::class)->query('appointments', [
+            ['field' => 'patientId', 'op' => '=', 'value' => $patientId],
+            ['field' => 'doctorId', 'op' => '=', 'value' => $doctorId],
+        ]);
+
+        return collect($appointments['documents'] ?? [])
+            ->contains(fn ($a) => in_array($a['status'] ?? null, chat_eligible_statuses(), true));
     }
 }

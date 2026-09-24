@@ -346,196 +346,196 @@
                                             <optgroup label="Americas">
                                                 <option value="America/New_York"
                                                     {{ (current_user()['timezone'] ?? '') == 'America/New_York' ? 'selected' : '' }}>
-                                                    Eastern Time (US & Canada)</option>
+                                                    {{ tz_label('America/New_York', 'Eastern Time (US & Canada)') }}</option>
                                                 <option value="America/Chicago"
                                                     {{ (current_user()['timezone'] ?? '') == 'America/Chicago' ? 'selected' : '' }}>
-                                                    Central Time (US & Canada)</option>
+                                                    {{ tz_label('America/Chicago', 'Central Time (US & Canada)') }}</option>
                                                 <option value="America/Denver"
                                                     {{ (current_user()['timezone'] ?? '') == 'America/Denver' ? 'selected' : '' }}>
-                                                    Mountain Time (US & Canada)</option>
+                                                    {{ tz_label('America/Denver', 'Mountain Time (US & Canada)') }}</option>
                                                 <option value="America/Los_Angeles"
                                                     {{ (current_user()['timezone'] ?? '') == 'America/Los_Angeles' ? 'selected' : '' }}>
-                                                    Pacific Time (US & Canada)</option>
+                                                    {{ tz_label('America/Los_Angeles', 'Pacific Time (US & Canada)') }}</option>
                                                 <option value="America/Anchorage"
                                                     {{ (current_user()['timezone'] ?? '') == 'America/Anchorage' ? 'selected' : '' }}>
-                                                    Alaska</option>
+                                                    {{ tz_label('America/Anchorage', 'Alaska') }}</option>
                                                 <option value="Pacific/Honolulu"
                                                     {{ (current_user()['timezone'] ?? '') == 'Pacific/Honolulu' ? 'selected' : '' }}>
-                                                    Hawaii</option>
+                                                    {{ tz_label('Pacific/Honolulu', 'Hawaii') }}</option>
                                                 <option value="America/Toronto"
                                                     {{ (current_user()['timezone'] ?? '') == 'America/Toronto' ? 'selected' : '' }}>
-                                                    Toronto</option>
+                                                    {{ tz_label('America/Toronto', 'Toronto') }}</option>
                                                 <option value="America/Mexico_City"
                                                     {{ (current_user()['timezone'] ?? '') == 'America/Mexico_City' ? 'selected' : '' }}>
-                                                    Mexico City</option>
+                                                    {{ tz_label('America/Mexico_City', 'Mexico City') }}</option>
                                                 <option value="America/Bogota"
                                                     {{ (current_user()['timezone'] ?? '') == 'America/Bogota' ? 'selected' : '' }}>
-                                                    Colombia</option>
+                                                    {{ tz_label('America/Bogota', 'Colombia') }}</option>
                                                 <option value="America/Caracas"
                                                     {{ (current_user()['timezone'] ?? '') == 'America/Caracas' ? 'selected' : '' }}>
-                                                    Venezuela</option>
+                                                    {{ tz_label('America/Caracas', 'Venezuela') }}</option>
                                                 <option value="America/Sao_Paulo"
                                                     {{ (current_user()['timezone'] ?? '') == 'America/Sao_Paulo' ? 'selected' : '' }}>
-                                                    São Paulo</option>
+                                                    {{ tz_label('America/Sao_Paulo', 'São Paulo') }}</option>
                                                 <option value="America/Buenos_Aires"
                                                     {{ (current_user()['timezone'] ?? '') == 'America/Buenos_Aires' ? 'selected' : '' }}>
-                                                    Buenos Aires</option>
+                                                    {{ tz_label('America/Buenos_Aires', 'Buenos Aires') }}</option>
                                                 <option value="America/Santiago"
                                                     {{ (current_user()['timezone'] ?? '') == 'America/Santiago' ? 'selected' : '' }}>
-                                                    Santiago</option>
+                                                    {{ tz_label('America/Santiago', 'Santiago') }}</option>
                                             </optgroup>
                                             <!-- Europe -->
                                             <optgroup label="Europe">
                                                 <option value="Europe/London"
                                                     {{ (current_user()['timezone'] ?? '') == 'Europe/London' ? 'selected' : '' }}>
-                                                    London (GMT/BST)</option>
+                                                    {{ tz_label('Europe/London', 'London (GMT/BST)') }}</option>
                                                 <option value="Europe/Paris"
                                                     {{ (current_user()['timezone'] ?? '') == 'Europe/Paris' ? 'selected' : '' }}>
-                                                    Central European Time</option>
+                                                    {{ tz_label('Europe/Paris', 'Central European Time') }}</option>
                                                 <option value="Europe/Berlin"
                                                     {{ (current_user()['timezone'] ?? '') == 'Europe/Berlin' ? 'selected' : '' }}>
-                                                    Berlin</option>
+                                                    {{ tz_label('Europe/Berlin', 'Berlin') }}</option>
                                                 <option value="Europe/Amsterdam"
                                                     {{ (current_user()['timezone'] ?? '') == 'Europe/Amsterdam' ? 'selected' : '' }}>
-                                                    Amsterdam</option>
+                                                    {{ tz_label('Europe/Amsterdam', 'Amsterdam') }}</option>
                                                 <option value="Europe/Madrid"
                                                     {{ (current_user()['timezone'] ?? '') == 'Europe/Madrid' ? 'selected' : '' }}>
-                                                    Madrid</option>
+                                                    {{ tz_label('Europe/Madrid', 'Madrid') }}</option>
                                                 <option value="Europe/Rome"
                                                     {{ (current_user()['timezone'] ?? '') == 'Europe/Rome' ? 'selected' : '' }}>
-                                                    Rome</option>
+                                                    {{ tz_label('Europe/Rome', 'Rome') }}</option>
                                                 <option value="Europe/Vienna"
                                                     {{ (current_user()['timezone'] ?? '') == 'Europe/Vienna' ? 'selected' : '' }}>
-                                                    Vienna</option>
+                                                    {{ tz_label('Europe/Vienna', 'Vienna') }}</option>
                                                 <option value="Europe/Prague"
                                                     {{ (current_user()['timezone'] ?? '') == 'Europe/Prague' ? 'selected' : '' }}>
-                                                    Prague</option>
+                                                    {{ tz_label('Europe/Prague', 'Prague') }}</option>
                                                 <option value="Europe/Budapest"
                                                     {{ (current_user()['timezone'] ?? '') == 'Europe/Budapest' ? 'selected' : '' }}>
-                                                    Budapest</option>
+                                                    {{ tz_label('Europe/Budapest', 'Budapest') }}</option>
                                                 <option value="Europe/Warsaw"
                                                     {{ (current_user()['timezone'] ?? '') == 'Europe/Warsaw' ? 'selected' : '' }}>
-                                                    Warsaw</option>
+                                                    {{ tz_label('Europe/Warsaw', 'Warsaw') }}</option>
                                                 <option value="Europe/Stockholm"
                                                     {{ (current_user()['timezone'] ?? '') == 'Europe/Stockholm' ? 'selected' : '' }}>
-                                                    Stockholm</option>
+                                                    {{ tz_label('Europe/Stockholm', 'Stockholm') }}</option>
                                                 <option value="Europe/Oslo"
                                                     {{ (current_user()['timezone'] ?? '') == 'Europe/Oslo' ? 'selected' : '' }}>
-                                                    Oslo</option>
+                                                    {{ tz_label('Europe/Oslo', 'Oslo') }}</option>
                                                 <option value="Europe/Copenhagen"
                                                     {{ (current_user()['timezone'] ?? '') == 'Europe/Copenhagen' ? 'selected' : '' }}>
-                                                    Copenhagen</option>
+                                                    {{ tz_label('Europe/Copenhagen', 'Copenhagen') }}</option>
                                                 <option value="Europe/Dublin"
                                                     {{ (current_user()['timezone'] ?? '') == 'Europe/Dublin' ? 'selected' : '' }}>
-                                                    Dublin</option>
+                                                    {{ tz_label('Europe/Dublin', 'Dublin') }}</option>
                                                 <option value="Europe/Lisbon"
                                                     {{ (current_user()['timezone'] ?? '') == 'Europe/Lisbon' ? 'selected' : '' }}>
-                                                    Lisbon</option>
+                                                    {{ tz_label('Europe/Lisbon', 'Lisbon') }}</option>
                                                 <option value="Europe/Moscow"
                                                     {{ (current_user()['timezone'] ?? '') == 'Europe/Moscow' ? 'selected' : '' }}>
-                                                    Moscow</option>
+                                                    {{ tz_label('Europe/Moscow', 'Moscow') }}</option>
                                                 <option value="Europe/Istanbul"
                                                     {{ (current_user()['timezone'] ?? '') == 'Europe/Istanbul' ? 'selected' : '' }}>
-                                                    Istanbul</option>
+                                                    {{ tz_label('Europe/Istanbul', 'Istanbul') }}</option>
                                                 <option value="Europe/Athens"
                                                     {{ (current_user()['timezone'] ?? '') == 'Europe/Athens' ? 'selected' : '' }}>
-                                                    Athens</option>
+                                                    {{ tz_label('Europe/Athens', 'Athens') }}</option>
                                                 <option value="Europe/Helsinki"
                                                     {{ (current_user()['timezone'] ?? '') == 'Europe/Helsinki' ? 'selected' : '' }}>
-                                                    Helsinki</option>
+                                                    {{ tz_label('Europe/Helsinki', 'Helsinki') }}</option>
                                             </optgroup>
                                             <!-- Africa -->
                                             <optgroup label="Africa">
                                                 <option value="Africa/Cairo"
                                                     {{ (current_user()['timezone'] ?? '') == 'Africa/Cairo' ? 'selected' : '' }}>
-                                                    Cairo</option>
+                                                    {{ tz_label('Africa/Cairo', 'Cairo') }}</option>
                                                 <option value="Africa/Johannesburg"
                                                     {{ (current_user()['timezone'] ?? '') == 'Africa/Johannesburg' ? 'selected' : '' }}>
-                                                    Johannesburg</option>
+                                                    {{ tz_label('Africa/Johannesburg', 'Johannesburg') }}</option>
                                                 <option value="Africa/Lagos"
                                                     {{ (current_user()['timezone'] ?? '') == 'Africa/Lagos' ? 'selected' : '' }}>
-                                                    Lagos</option>
+                                                    {{ tz_label('Africa/Lagos', 'Lagos') }}</option>
                                                 <option value="Africa/Nairobi"
                                                     {{ (current_user()['timezone'] ?? '') == 'Africa/Nairobi' ? 'selected' : '' }}>
-                                                    Nairobi</option>
+                                                    {{ tz_label('Africa/Nairobi', 'Nairobi') }}</option>
                                                 <option value="Africa/Casablanca"
                                                     {{ (current_user()['timezone'] ?? '') == 'Africa/Casablanca' ? 'selected' : '' }}>
-                                                    Casablanca</option>
+                                                    {{ tz_label('Africa/Casablanca', 'Casablanca') }}</option>
                                             </optgroup>
                                             <!-- Middle East -->
                                             <optgroup label="Middle East">
                                                 <option value="Asia/Dubai"
                                                     {{ (current_user()['timezone'] ?? '') == 'Asia/Dubai' ? 'selected' : '' }}>
-                                                    Dubai (Gulf Standard Time)</option>
+                                                    {{ tz_label('Asia/Dubai', 'Dubai (Gulf Standard Time)') }}</option>
                                                 <option value="Asia/Baghdad"
                                                     {{ (current_user()['timezone'] ?? '') == 'Asia/Baghdad' ? 'selected' : '' }}>
-                                                    Baghdad</option>
+                                                    {{ tz_label('Asia/Baghdad', 'Baghdad') }}</option>
                                                 <option value="Asia/Jerusalem"
                                                     {{ (current_user()['timezone'] ?? '') == 'Asia/Jerusalem' ? 'selected' : '' }}>
-                                                    Jerusalem</option>
+                                                    {{ tz_label('Asia/Jerusalem', 'Jerusalem') }}</option>
                                                 <option value="Asia/Tehran"
                                                     {{ (current_user()['timezone'] ?? '') == 'Asia/Tehran' ? 'selected' : '' }}>
-                                                    Tehran</option>
+                                                    {{ tz_label('Asia/Tehran', 'Tehran') }}</option>
                                             </optgroup>
                                             <!-- Asia -->
                                             <optgroup label="Asia">
                                                 <option value="Asia/Kolkata"
                                                     {{ (current_user()['timezone'] ?? '') == 'Asia/Kolkata' ? 'selected' : '' }}>
-                                                    India Standard Time</option>
+                                                    {{ tz_label('Asia/Kolkata', 'India Standard Time') }}</option>
                                                 <option value="Asia/Bangkok"
                                                     {{ (current_user()['timezone'] ?? '') == 'Asia/Bangkok' ? 'selected' : '' }}>
-                                                    Indochina Time</option>
+                                                    {{ tz_label('Asia/Bangkok', 'Indochina Time') }}</option>
                                                 <option value="Asia/Ho_Chi_Minh"
                                                     {{ (current_user()['timezone'] ?? '') == 'Asia/Ho_Chi_Minh' ? 'selected' : '' }}>
-                                                    Ho Chi Minh City</option>
+                                                    {{ tz_label('Asia/Ho_Chi_Minh', 'Ho Chi Minh City') }}</option>
                                                 <option value="Asia/Hong_Kong"
                                                     {{ (current_user()['timezone'] ?? '') == 'Asia/Hong_Kong' ? 'selected' : '' }}>
-                                                    Hong Kong</option>
+                                                    {{ tz_label('Asia/Hong_Kong', 'Hong Kong') }}</option>
                                                 <option value="Asia/Singapore"
                                                     {{ (current_user()['timezone'] ?? '') == 'Asia/Singapore' ? 'selected' : '' }}>
-                                                    Singapore</option>
+                                                    {{ tz_label('Asia/Singapore', 'Singapore') }}</option>
                                                 <option value="Asia/Tokyo"
                                                     {{ (current_user()['timezone'] ?? '') == 'Asia/Tokyo' ? 'selected' : '' }}>
-                                                    Tokyo</option>
+                                                    {{ tz_label('Asia/Tokyo', 'Tokyo') }}</option>
                                                 <option value="Asia/Seoul"
                                                     {{ (current_user()['timezone'] ?? '') == 'Asia/Seoul' ? 'selected' : '' }}>
-                                                    Seoul</option>
+                                                    {{ tz_label('Asia/Seoul', 'Seoul') }}</option>
                                                 <option value="Asia/Shanghai"
                                                     {{ (current_user()['timezone'] ?? '') == 'Asia/Shanghai' ? 'selected' : '' }}>
-                                                    Shanghai</option>
+                                                    {{ tz_label('Asia/Shanghai', 'Shanghai') }}</option>
                                                 <option value="Asia/Manila"
                                                     {{ (current_user()['timezone'] ?? '') == 'Asia/Manila' ? 'selected' : '' }}>
-                                                    Manila</option>
+                                                    {{ tz_label('Asia/Manila', 'Manila') }}</option>
                                                 <option value="Asia/Kuala_Lumpur"
                                                     {{ (current_user()['timezone'] ?? '') == 'Asia/Kuala_Lumpur' ? 'selected' : '' }}>
-                                                    Kuala Lumpur</option>
+                                                    {{ tz_label('Asia/Kuala_Lumpur', 'Kuala Lumpur') }}</option>
                                                 <option value="Asia/Karachi"
                                                     {{ (current_user()['timezone'] ?? '') == 'Asia/Karachi' ? 'selected' : '' }}>
-                                                    Karachi</option>
+                                                    {{ tz_label('Asia/Karachi', 'Karachi') }}</option>
                                                 <option value="Asia/Kathmandu"
                                                     {{ (current_user()['timezone'] ?? '') == 'Asia/Kathmandu' ? 'selected' : '' }}>
-                                                    Kathmandu</option>
+                                                    {{ tz_label('Asia/Kathmandu', 'Kathmandu') }}</option>
                                             </optgroup>
                                             <!-- Oceania -->
                                             <optgroup label="Oceania">
                                                 <option value="Australia/Sydney"
                                                     {{ (current_user()['timezone'] ?? '') == 'Australia/Sydney' ? 'selected' : '' }}>
-                                                    Sydney</option>
+                                                    {{ tz_label('Australia/Sydney', 'Sydney') }}</option>
                                                 <option value="Australia/Melbourne"
                                                     {{ (current_user()['timezone'] ?? '') == 'Australia/Melbourne' ? 'selected' : '' }}>
-                                                    Melbourne</option>
+                                                    {{ tz_label('Australia/Melbourne', 'Melbourne') }}</option>
                                                 <option value="Australia/Brisbane"
                                                     {{ (current_user()['timezone'] ?? '') == 'Australia/Brisbane' ? 'selected' : '' }}>
-                                                    Brisbane</option>
+                                                    {{ tz_label('Australia/Brisbane', 'Brisbane') }}</option>
                                                 <option value="Australia/Perth"
                                                     {{ (current_user()['timezone'] ?? '') == 'Australia/Perth' ? 'selected' : '' }}>
-                                                    Perth</option>
+                                                    {{ tz_label('Australia/Perth', 'Perth') }}</option>
                                                 <option value="Pacific/Auckland"
                                                     {{ (current_user()['timezone'] ?? '') == 'Pacific/Auckland' ? 'selected' : '' }}>
-                                                    New Zealand</option>
+                                                    {{ tz_label('Pacific/Auckland', 'New Zealand') }}</option>
                                                 <option value="Pacific/Fiji"
                                                     {{ (current_user()['timezone'] ?? '') == 'Pacific/Fiji' ? 'selected' : '' }}>
-                                                    Fiji</option>
+                                                    {{ tz_label('Pacific/Fiji', 'Fiji') }}</option>
                                             </optgroup>
                                         </select>
                                     </div>
@@ -663,11 +663,11 @@
                                 <div class="mb-3 d-flex align-items-center justify-content-between">
 
                                     <label class="form-label fw-semibold mb-0">
-                                        Break Timings
+                                        {{ __('app.profile.break_timings') }}
                                     </label>
 
                                     <button type="button" class="btn btn-sm btn-primary" id="addBreakBtn">
-                                        Add Break
+                                        {{ __('app.profile.add_break') }}
                                     </button>
 
                                 </div>
@@ -685,7 +685,7 @@
                                                 <div class="col-md-5">
                                                     <select class="form-control break-start" name="break_start[]"
                                                         required>
-                                                        <option value="">Select start time</option>
+                                                        <option value="">{{ __('app.profile.select_start_time') }}</option>
                                                         @php
                                                             $timeOptions = '';
                                                             for ($i = 0; $i < 24; $i++) {
@@ -703,7 +703,7 @@
 
                                                 <div class="col-md-5">
                                                     <select class="form-control break-end" name="break_end[]" required>
-                                                        <option value="">Select end time</option>
+                                                        <option value="">{{ __('app.profile.select_end_time') }}</option>
                                                         @php
                                                             $timeOptions = '';
                                                             for ($i = 0; $i < 24; $i++) {
@@ -721,7 +721,7 @@
 
                                                 <div class="col-md-2">
                                                     <button type="button" class="btn btn-danger remove-break w-100">
-                                                        Remove
+                                                        {{ __('app.common.remove') }}
                                                     </button>
                                                 </div>
                                             </div>
@@ -822,13 +822,13 @@
         $(document).ready(function() {
 
             $('.select2').select2({
-                placeholder: "Select Specializations",
+                placeholder: @json(__('app.doctor_register.select_specializations')),
                 allowClear: true,
                 width: '100%'
             });
 
             $('.select2-languages').select2({
-                placeholder: "Select Languages Spoken",
+                placeholder: @json(__('app.profile.select_languages')),
                 allowClear: true,
                 width: '100%'
             });
@@ -859,14 +859,14 @@
     <script>
         $(document).ready(function() {
             $('.select2').select2({
-                placeholder: 'Select Working Days',
+                placeholder: @json(__('app.profile.select_working_days')),
                 width: '100%'
             });
         });
 
         // Helper function to generate time options HTML
         function generateTimeOptions(selected = '') {
-            let html = '<option value="">Select time</option>';
+            let html = '<option value="">' + @json(__('app.profile.select_time')) + '</option>';
             for (let i = 0; i < 24; i++) {
                 for (let j = 0; j < 60; j += 30) {
                     const time = `${String(i).padStart(2, '0')}:${String(j).padStart(2, '0')}`;
@@ -896,7 +896,7 @@
             </div>
             <div class="col-md-2">
                 <button type="button" class="btn btn-danger remove-break w-100">
-                    Remove
+                    ${@json(__('app.common.remove'))}
                 </button>
             </div>
         </div>

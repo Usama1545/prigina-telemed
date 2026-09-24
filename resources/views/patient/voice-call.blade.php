@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Audio Call — Prigina</title>
+    <title>{{ __('app.calls.audio_title') }} — Prigina</title>
 
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('build/img/prigina-gav.png') }}">
 
@@ -71,7 +71,7 @@
 
     <div id="errBanner">
         <span id="errText"></span>
-        <a onclick="window.location.href=backUrl">Go back</a>
+        <a onclick="window.location.href=backUrl">{{ __('app.calls.go_back') }}</a>
     </div>
 
     <div id="zego-container"></div>
@@ -86,10 +86,10 @@
         const appID = {{ (int) config('services.zego.app_id') }};
         const serverToken = @json($token);
         const userID = @json($user['uid']);
-        const userName = @json($user['name'] ?: 'User');
+        const userName = @json($user['name'] ?: __('app.calls.user'));
         const roomID = "call_{{ substr(md5($id), 0, 12) }}";
         const receiverID = @json($doctor['uid'] ?? '');
-        const receiverName = @json($doctor['name'] ?: 'User');
+        const receiverName = @json($doctor['name'] ?: __('app.calls.user'));
         const backUrl = @json($backUrl ?? url('/dashboard'));
         const conversationId = @json($id);
         const callerId = @json($user['uid']);
@@ -217,7 +217,7 @@
 
             } catch (err) {
                 console.error('Initialization error:', err);
-                showErr('Failed to initialise call: ' + (err.message || err));
+                showErr(@json(__('app.calls.init_failed')) + ' ' + (err.message || err));
             }
         })();
 
@@ -249,7 +249,7 @@
                     console.error(`Attempt ${attempt} failed:`, err);
 
                     if (attempt === maxAttempts) {
-                        showErr('Failed to send invitation: ' + (err.message || JSON.stringify(err)));
+                        showErr(@json(__('app.calls.invite_failed')) + ' ' + (err.message || JSON.stringify(err)));
                     } else {
                         await new Promise(r => setTimeout(r, retryDelay));
                     }
