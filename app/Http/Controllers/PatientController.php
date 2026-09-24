@@ -319,17 +319,8 @@ class PatientController extends Controller
             ['field' => 'patientId', 'op' => '=', 'value' => $uid],
         ], null, null, 'lastMessageTime', 'DESC');
 
-        // Only show conversations where an appointment exists with that doctor
-        $appointments = $this->firestore->query('appointments', [
-            ['field' => 'patientId', 'op' => '=', 'value' => $uid],
-        ]);
-
-        $doctorsWithAppointments = collect($appointments['documents'] ?? [])
-            ->pluck('doctorId')
-            ->filter()
-            ->unique()
-            ->flip()
-            ->toArray();
+        // Only show conversations where a paid/confirmed appointment exists with that doctor
+        $doctorsWithAppointments = chat_eligible_user_ids($uid, 'patient');
 
         $conversations = collect($filteredConversations['documents'] ?? [])
             ->filter(fn ($conv) => isset($doctorsWithAppointments[$conv['doctorId'] ?? '']))
@@ -358,6 +349,10 @@ class PatientController extends Controller
                 'nextPage' => null,
                 'hasMore' => false,
             ]);
+        }
+
+        if (! in_array($currentUserId, [$conversation['patientId'] ?? null, $conversation['doctorId'] ?? null], true)) {
+            abort(403);
         }
 
         $otherUserId =
@@ -571,6 +566,14 @@ class PatientController extends Controller
         $conversation = $this->firestore->find('conversations', $id);
 
         $uid = current_user()['uid'];
+
+        if (! $conversation || ($conversation['patientId'] ?? null) !== $uid) {
+            abort(404);
+        }
+
+        if (! can_chat($uid, $conversation['doctorId'] ?? '')) {
+            abort(403, 'You must have an appointment with this doctor before starting a chat.');
+        }
 
         $data = [
             'conversationId' => $id,
@@ -997,13 +1000,8 @@ class PatientController extends Controller
             abort(403);
         }
 
-        // Block conversation creation if no appointment exists with this doctor
-        $appointment = $this->firestore->query('appointments', [
-            ['field' => 'patientId', 'op' => '=', 'value' => $patient['uid']],
-            ['field' => 'doctorId', 'op' => '=', 'value' => $doctor['uid']],
-        ], 1);
-
-        if (empty($appointment['documents'] ?? [])) {
+        // Block conversation creation unless a paid/confirmed appointment exists with this doctor
+        if (! can_chat($patient['uid'], $doctor['uid'])) {
             abort(403, 'You must have an appointment with this doctor before starting a chat.');
         }
 
