@@ -114,6 +114,17 @@
                             </div>
 
                             <div class="mb-3">
+                                <label class="form-label">{{ __('app.country_of_residence.label') }}</label>
+                                @include('partials.country-select', [
+                                    'name' => 'countryOfResidence',
+                                    'selected' => old('countryOfResidence'),
+                                    'required' => true,
+                                    'placeholder' => __('app.country_of_residence.select'),
+                                ])
+                                <small class="text-muted">{{ __('app.country_of_residence.hint') }}</small>
+                            </div>
+
+                            <div class="mb-3">
 
                                 <div class="form-group-flex">
 
@@ -388,22 +399,24 @@
             }
         }
 
+        // Country of residence: follows the phone number's country until the patient picks one.
+        const residenceSelect = document.getElementById('countryOfResidence');
+        let residenceTouched = !!residenceSelect.value;
+        residenceSelect.addEventListener('change', () => residenceTouched = true);
+        function syncResidenceFromPhone() {
+            const iso2 = iti.getSelectedCountryData()?.iso2;
+            if (!residenceTouched && iso2) residenceSelect.value = iso2.toUpperCase();
+        }
+        phoneInput.addEventListener('countrychange', syncResidenceFromPhone);
+        syncResidenceFromPhone();
+
         document
             .getElementById('patientRegisterForm')
             .addEventListener('submit', function(e) {
 
                 e.preventDefault();
 
-                const formData = new FormData(this);
-                const countryData = iti.getSelectedCountryData();
-
-                formData.append(
-                    'practiceCountry',
-                    countryData?.iso2 ?
-                    countryData.iso2.toUpperCase() :
-                    'US'
-                );
-                firebasePatientRegister(formData);
+                firebasePatientRegister(new FormData(this));
             });
 
         document

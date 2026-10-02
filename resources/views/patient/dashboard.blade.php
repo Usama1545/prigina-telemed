@@ -40,6 +40,9 @@
                         </button>
                     </form>
 
+                    {{-- Patient location: doctors approved to practise in this country --}}
+                    @include('partials.doctor-country-filter', compact('country', 'countryOptions'))
+
                     <section class="patient-section">
                         <div class="patient-section-head">
                             <h2>{{ __('app.patient_dashboard.categories') }}</h2>
@@ -137,6 +140,7 @@
                                                 {{ number_format((float) ($doctor['rating'] ?? 0), 1) }}
                                                 <span>({{ $doctor['totalReviews'] ?? 0 }})</span>
                                             </div>
+                                            @include('partials.doctor-practice-countries', ['doctor' => $doctor, 'country' => $country])
                                             <div
                                                 class="doctor-availability {{ $doctor['available'] ?? false ? 'text-success' : 'text-danger' }}">
                                                 <i class="fa-solid fa-circle-check"></i>

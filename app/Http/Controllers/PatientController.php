@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\DoctorDirectory;
 use App\Http\Controllers\Concerns\OpensAppointmentCalls;
 use App\Mail\AppointmentCancelled;
 use App\Exceptions\SlotUnavailableException;
@@ -75,24 +76,16 @@ class PatientController extends Controller
             return collect($result['documents'] ?? [])->values();
         });
 
-        $doctors = Cache::remember('home.doctors', 3000, function () use ($firestore) {
-            $result = $firestore->query('doctors', [
-                [
-                    'field' => 'isActive',
-                    'op' => '=',
-                    'value' => true,
-                ],
-                [
-                    'field' => 'isTopDoctor',
-                    'op' => '=',
-                    'value' => true,
-                ],
-            ], 10);
+        // Top doctors approved to practise in the patient's chosen country
+        // (other doctors there when it has no top doctors yet).
+        $directory = app(DoctorDirectory::class);
+        $country = $directory->selectedCountry(request());
+        $countryOptions = $directory->countryOptions();
+        $inCountry = $directory->inCountry($country);
+        $top = $inCountry->filter(fn ($doc) => ($doc['isTopDoctor'] ?? false) === true);
+        $doctors = ($top->isNotEmpty() ? $top : $inCountry)->take(10)->values();
 
-            return collect($result['documents'] ?? [])->values();
-        });
-
-        return view('patient.dashboard', compact('pastAppointments', 'futureAppointments', 'categories', 'doctors', 'tips'));
+        return view('patient.dashboard', compact('pastAppointments', 'futureAppointments', 'categories', 'doctors', 'tips', 'country', 'countryOptions'));
     }
 
     public function update(Request $request)
@@ -111,9 +104,14 @@ class PatientController extends Controller
             'allergies' => 'nullable|string|max:1000',
             'medicalConditions' => 'nullable|string|max:1000',
             'timezone' => 'nullable|string|max:100',
+            // Doctors are listed for patients by this country (their Countries of Practice).
+            'countryOfResidence' => ['sometimes', 'required', 'string', 'size:2', fn ($attr, $value, $fail) => \Symfony\Component\Intl\Countries::exists(strtoupper((string) $value)) || $fail(__('app.country_of_residence.invalid'))],
         ]);
 
         $uid = current_user()['uid'];
+        if (isset($validated['countryOfResidence'])) {
+            $validated['countryOfResidence'] = strtoupper($validated['countryOfResidence']);
+        }
 
         $data = collect($validated)->only([
             'name',
@@ -128,6 +126,7 @@ class PatientController extends Controller
             'allergies',
             'medicalConditions',
             'timezone',
+            'countryOfResidence',
         ])->toArray();
 
         if (! empty($data['dob'])) {

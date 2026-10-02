@@ -839,6 +839,45 @@ return [
         'view_appointments' => 'Voir les rendez-vous',
     ],
 
+    'doctor_country_filter' => [
+        'label' => 'Localisation du patient',
+        'all' => 'Tous les pays',
+        'showing_in' => 'Médecins disponibles en :country',
+        'showing_all' => 'Médecins de tous les pays',
+        'none_in' => 'Aucun médecin n\'est encore disponible en :country. Essayez un autre pays.',
+        'none' => 'Aucun médecin trouvé.',
+        'available_in' => 'Disponible en :country',
+    ],
+
+    'country_of_residence' => [
+        'label' => 'Pays de résidence',
+        'select' => 'Sélectionnez votre pays',
+        'hint' => 'Nous vous montrons les médecins autorisés à exercer dans ce pays. Vous pouvez le modifier à tout moment.',
+        'invalid' => 'Veuillez choisir un pays valide.',
+    ],
+
+    'countries_of_practice' => [
+        'title' => 'Pays d\'exercice',
+        'subtitle' => 'Ajoutez chaque pays où vous exercez avec votre licence médicale. Chacun est vérifié avant d\'être visible par les patients.',
+        'add' => 'Ajouter un autre pays',
+        'remove' => 'Supprimer',
+        'entry' => 'Pays :n',
+        'country' => 'Pays d\'exercice',
+        'select_country' => 'Sélectionnez un pays',
+        'licensing_authority' => 'Autorité de délivrance des licences',
+        'licensing_authority_placeholder' => 'ex. Conseil de l\'Ordre des médecins',
+        'license_number' => 'Numéro de licence / d\'enregistrement',
+        'license_expiry' => 'Date d\'expiration de la licence',
+        'if_applicable' => 'le cas échéant',
+        'document' => 'Téléverser la licence en cours',
+        'current_document' => 'Voir le document actuel',
+        'duplicate_country' => 'Chaque pays ne peut être ajouté qu\'une fois.',
+        'license_taken' => 'La licence :number est déjà enregistrée en :country.',
+        'status_pending' => 'En cours de vérification',
+        'status_approved' => 'Approuvé',
+        'status_rejected' => 'Refusé',
+    ],
+
     'doctor_register' => [
         'title' => 'Créez votre compte médecin',
         'not_doctor' => 'Vous n\'êtes pas médecin ?',

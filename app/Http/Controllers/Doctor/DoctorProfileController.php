@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Doctor;
 
+use App\Services\DoctorDirectory;
+use App\Services\CountriesOfPracticeService;
+use App\Support\CountriesOfPractice;
 use App\Http\Controllers\Concerns\OpensAppointmentCalls;
 use App\Http\Controllers\Controller;
 use App\Mail\AppointmentCompleted;
@@ -107,19 +110,19 @@ class DoctorProfileController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, CountriesOfPracticeService $countriesOfPractice)
     {
 
         // ✅ Validation
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
-            'licenseNumber' => 'required',
             'qualification' => 'required|array|min:1',
             'experience' => 'required|string',
             'specializations' => 'required|array|min:1',
             'languages' => 'required|array|min:1',
-            'practiceCountry' => 'required|string',
+            // Countries of Practice; documents only needed for new or replaced licences.
+            ...$countriesOfPractice->rules(documentRequired: false),
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'consultationFee' => 'required|numeric',
             'workingDays' => 'required|array',
@@ -132,9 +135,10 @@ class DoctorProfileController extends Controller
             'bio.es' => 'nullable|string',
             'bio.fr' => 'nullable|string',
             'bio.ar' => 'nullable|string',
-        ]);
+        ], $countriesOfPractice->messages());
 
         $uid = current_user()['uid'];
+        $countriesOfPractice->assertLicensesAvailable($request->input('practice', []), $uid);
 
         $data = collect($validated)->only([
             'name',
@@ -142,11 +146,9 @@ class DoctorProfileController extends Controller
             'email',
             'gender',
             'dob',
-            'licenseNumber',
             'qualification',
             'experience',
             'specializations',
-            'practiceCountry',
             'consultationFee',
             'workingDays',
             'workingHours',
@@ -193,6 +195,17 @@ class DoctorProfileController extends Controller
             $breaks = explode(',', $validated['breaks']);
         }
 
+        // Countries of Practice: new or changed licences go back for admin
+        // review (hidden from patients in that country until approved);
+        // existing appointments are not affected.
+        $entries = $countriesOfPractice->saveFromProfile(
+            $this->firestore->find('doctors', $uid) ?? [],
+            $request->input('practice', []),
+            $request->file('practice', []),
+            $uid,
+        );
+        $data = [...$data, ...CountriesOfPractice::fields($entries)];
+
         $this->firestore->update('doctors', $uid, [
             ...$data,
             'languages' => $validated['languages'],
@@ -200,6 +213,9 @@ class DoctorProfileController extends Controller
             'consultationFee' => intval($validated['consultationFee']),
             'timezone' => $validated['timezone'],
         ]);
+
+        // Countries of Practice may have changed which countries list this doctor.
+        DoctorDirectory::forget();
 
         return redirect()->back()->with('success', __('app.flash.profile_updated'));
     }
@@ -905,7 +921,7 @@ class DoctorProfileController extends Controller
             'available' => $validated['isAvailable'] ? true : false,
         ]);
 
-        Cache::forget('home.doctors');
+        DoctorDirectory::forget();
 
         return response()->json(['success' => true, 'isAvailable' => $validated['isAvailable']]);
     }

@@ -839,6 +839,45 @@ return [
         'view_appointments' => 'View appointments',
     ],
 
+    'doctor_country_filter' => [
+        'label' => 'Patient location',
+        'all' => 'All countries',
+        'showing_in' => 'Showing doctors available in :country',
+        'showing_all' => 'Showing doctors from all countries',
+        'none_in' => 'No doctors are available in :country yet. Try another country.',
+        'none' => 'No doctors found.',
+        'available_in' => 'Available in :country',
+    ],
+
+    'country_of_residence' => [
+        'label' => 'Country of residence',
+        'select' => 'Select your country',
+        'hint' => 'We show you doctors licensed to practise in this country. You can change it anytime.',
+        'invalid' => 'Please choose a valid country.',
+    ],
+
+    'countries_of_practice' => [
+        'title' => 'Countries of Practice',
+        'subtitle' => 'Add each country you practise in with its medical licence. Each is reviewed before it is shown to patients.',
+        'add' => 'Add another country',
+        'remove' => 'Remove',
+        'entry' => 'Country :n',
+        'country' => 'Country of practice',
+        'select_country' => 'Select country',
+        'licensing_authority' => 'Medical licensing authority',
+        'licensing_authority_placeholder' => 'e.g. Medical and Dental Council',
+        'license_number' => 'Licence / registration number',
+        'license_expiry' => 'Licence expiry date',
+        'if_applicable' => 'if applicable',
+        'document' => 'Upload current licence',
+        'current_document' => 'View current document',
+        'duplicate_country' => 'Each country can only be added once.',
+        'license_taken' => 'Licence :number is already registered in :country.',
+        'status_pending' => 'Under review',
+        'status_approved' => 'Approved',
+        'status_rejected' => 'Rejected',
+    ],
+
     'doctor_register' => [
         'title' => 'Create Your Physician Account',
         'not_doctor' => 'Not a Doctor?',

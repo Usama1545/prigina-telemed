@@ -839,6 +839,45 @@ return [
         'view_appointments' => 'عرض المواعيد',
     ],
 
+    'doctor_country_filter' => [
+        'label' => 'موقع المريض',
+        'all' => 'جميع الدول',
+        'showing_in' => 'عرض الأطباء المتاحين في :country',
+        'showing_all' => 'عرض الأطباء من جميع الدول',
+        'none_in' => 'لا يوجد أطباء متاحون في :country بعد. جرّب دولة أخرى.',
+        'none' => 'لم يتم العثور على أطباء.',
+        'available_in' => 'متاح في :country',
+    ],
+
+    'country_of_residence' => [
+        'label' => 'بلد الإقامة',
+        'select' => 'اختر بلدك',
+        'hint' => 'نعرض لك الأطباء المرخص لهم بالممارسة في هذا البلد. يمكنك تغييره في أي وقت.',
+        'invalid' => 'يرجى اختيار بلد صالح.',
+    ],
+
+    'countries_of_practice' => [
+        'title' => 'دول الممارسة',
+        'subtitle' => 'أضف كل دولة تمارس فيها مع ترخيصك الطبي. تتم مراجعة كل دولة قبل عرضها للمرضى.',
+        'add' => 'إضافة دولة أخرى',
+        'remove' => 'إزالة',
+        'entry' => 'الدولة :n',
+        'country' => 'دولة الممارسة',
+        'select_country' => 'اختر الدولة',
+        'licensing_authority' => 'جهة الترخيص الطبي',
+        'licensing_authority_placeholder' => 'مثال: المجلس الطبي',
+        'license_number' => 'رقم الترخيص / التسجيل',
+        'license_expiry' => 'تاريخ انتهاء الترخيص',
+        'if_applicable' => 'إن وُجد',
+        'document' => 'رفع الترخيص الحالي',
+        'current_document' => 'عرض المستند الحالي',
+        'duplicate_country' => 'لا يمكن إضافة كل دولة إلا مرة واحدة.',
+        'license_taken' => 'الترخيص :number مسجل بالفعل في :country.',
+        'status_pending' => 'قيد المراجعة',
+        'status_approved' => 'مقبول',
+        'status_rejected' => 'مرفوض',
+    ],
+
     'doctor_register' => [
         'title' => 'إنشاء حساب طبيب',
         'not_doctor' => 'لست طبيبًا؟',

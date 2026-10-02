@@ -839,6 +839,45 @@ return [
         'view_appointments' => 'Ver citas',
     ],
 
+    'doctor_country_filter' => [
+        'label' => 'Ubicación del paciente',
+        'all' => 'Todos los países',
+        'showing_in' => 'Mostrando médicos disponibles en :country',
+        'showing_all' => 'Mostrando médicos de todos los países',
+        'none_in' => 'Aún no hay médicos disponibles en :country. Pruebe con otro país.',
+        'none' => 'No se encontraron médicos.',
+        'available_in' => 'Disponible en :country',
+    ],
+
+    'country_of_residence' => [
+        'label' => 'País de residencia',
+        'select' => 'Seleccione su país',
+        'hint' => 'Le mostramos médicos con licencia para ejercer en este país. Puede cambiarlo en cualquier momento.',
+        'invalid' => 'Elija un país válido.',
+    ],
+
+    'countries_of_practice' => [
+        'title' => 'Países de ejercicio',
+        'subtitle' => 'Agregue cada país donde ejerce con su licencia médica. Cada uno se revisa antes de mostrarse a los pacientes.',
+        'add' => 'Agregar otro país',
+        'remove' => 'Eliminar',
+        'entry' => 'País :n',
+        'country' => 'País de ejercicio',
+        'select_country' => 'Seleccione un país',
+        'licensing_authority' => 'Autoridad de licencias médicas',
+        'licensing_authority_placeholder' => 'p. ej., Consejo Médico',
+        'license_number' => 'Número de licencia / registro',
+        'license_expiry' => 'Fecha de vencimiento de la licencia',
+        'if_applicable' => 'si corresponde',
+        'document' => 'Subir licencia vigente',
+        'current_document' => 'Ver documento actual',
+        'duplicate_country' => 'Cada país solo se puede agregar una vez.',
+        'license_taken' => 'La licencia :number ya está registrada en :country.',
+        'status_pending' => 'En revisión',
+        'status_approved' => 'Aprobado',
+        'status_rejected' => 'Rechazado',
+    ],
+
     'doctor_register' => [
         'title' => 'Crea tu cuenta de médico',
         'not_doctor' => '¿No eres médico?',

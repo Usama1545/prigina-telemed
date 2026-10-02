@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Services\DoctorDirectory;
 use App\Http\Controllers\Controller;
 use App\Services\FirestoreService;
+use App\Support\CountriesOfPractice;
+use Carbon\Carbon;
 use Google\Cloud\Firestore\Timestamp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -30,7 +33,8 @@ class AdminDoctorController extends Controller
         return response()->json(
             $this->doctorsPage(
                 $request->query('search', ''),
-                (int) $request->query('cursor', 0)
+                (int) $request->query('cursor', 0),
+                (string) $request->query('filter', ''),
             )
         );
     }
@@ -79,7 +83,7 @@ class AdminDoctorController extends Controller
         ]);
 
         Cache::forget('admin:stats');
-        Cache::forget('home.doctors');
+        DoctorDirectory::forget();
 
         return response()->json(['success' => true]);
     }
@@ -99,23 +103,34 @@ class AdminDoctorController extends Controller
         ]);
 
         Cache::forget('admin:stats');
-        Cache::forget('home.doctors');
+        DoctorDirectory::forget();
 
         return response()->json(['success' => true]);
     }
 
     public function approve(string $doctorId)
     {
-        if (! $this->firestore->find('doctors', $doctorId)) {
+        $doctor = $this->firestore->find('doctors', $doctorId);
+        if (! $doctor) {
             abort(404);
         }
 
+        // Approving the doctor also approves their Countries of Practice still
+        // under review, so they appear to patients there (rejected ones stay rejected).
+        $entries = CountriesOfPractice::of($doctor)
+            ?: array_filter([CountriesOfPractice::fromLegacy($doctor)]);
+        $countries = $entries
+            ? CountriesOfPractice::fields(CountriesOfPractice::approvePending($entries, Carbon::now('UTC'), session('auth_uid')))
+            : [];
+
         $this->firestore->update('doctors', $doctorId, [
+            ...$countries,
             'isVerified' => true,
             'isActive' => true,
             'verifiedAt' => now()->toDateTimeString(),
             'verifiedBy' => session('auth_uid'),
         ]);
+        DoctorDirectory::forget();
 
         Cache::forget('admin:stats');
 
@@ -141,7 +156,49 @@ class AdminDoctorController extends Controller
         return response()->json(['success' => true, 'message' => 'Doctor declined.']);
     }
 
-    protected function doctorsPage(string $search = '', int $offset = 0): array
+    /**
+     * Approve or reject one Country of Practice. Only that country is affected:
+     * a rejected country is hidden from patients there; the doctor's other
+     * countries and existing appointments are unchanged.
+     */
+    public function reviewCountry(Request $request, string $doctorId, string $entryId)
+    {
+        $data = $request->validate([
+            'decision' => 'required|in:approved,rejected',
+            'reason' => 'required_if:decision,rejected|nullable|string|max:500',
+        ]);
+
+        $doctor = $this->firestore->find('doctors', $doctorId);
+        if (! $doctor) {
+            abort(404);
+        }
+
+        $entries = CountriesOfPractice::of($doctor)
+            ?: array_filter([CountriesOfPractice::fromLegacy($doctor)]);
+
+        try {
+            $entries = CountriesOfPractice::review(
+                $entries, $entryId, $data['decision'], (string) ($data['reason'] ?? ''),
+                Carbon::now('UTC'), session('auth_uid'),
+            );
+        } catch (\InvalidArgumentException) {
+            abort(404);
+        }
+
+        $this->firestore->update('doctors', $doctorId, [
+            ...CountriesOfPractice::fields($entries),
+            'updatedAt' => now()->toDateTimeString(),
+        ]);
+        DoctorDirectory::forget();
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * @param  string  $filter  '' (all), 'review' (countries waiting for review)
+     *                          or 'expired' (a licence past its expiry date)
+     */
+    protected function doctorsPage(string $search = '', int $offset = 0, string $filter = ''): array
     {
         $chunkSize = 500;
         $maxFetch = 5000; // safety cap: stops after 5,000 doctors
@@ -159,6 +216,21 @@ class AdminDoctorController extends Controller
                 break;
             }
             $cursor = $result['nextCursor'];
+        }
+
+        // Flags shown in the list (and used by the filters).
+        $today = Carbon::now('UTC');
+        $all = $all->map(function ($doc) use ($today) {
+            $entries = CountriesOfPractice::of($doc);
+            $doc['countriesToReview'] = count(array_filter($entries, fn ($e) => $e['status'] === CountriesOfPractice::PENDING));
+            $doc['licenceExpired'] = CountriesOfPractice::hasExpired($entries, $today);
+
+            return $doc;
+        });
+        if ($filter === 'review') {
+            $all = $all->filter(fn ($doc) => $doc['countriesToReview'] > 0)->values();
+        } elseif ($filter === 'expired') {
+            $all = $all->filter(fn ($doc) => $doc['licenceExpired'])->values();
         }
 
         if ($search !== '') {
