@@ -9,7 +9,11 @@
         $specialty = $doctor['specializations'][0] ?? ($doctor['qualification'] ?? 'Specialist');
         $license = $doctor['licenseNumber'] ?? 'Not Set';
         $todayCount = $todayAppointments->count();
-        $nextAppointment = $futureAppointments->first();
+        // The soonest appointment that hasn't started yet, by its UTC start.
+        $nextAppointment = $futureAppointments
+            ->filter(fn ($a) => \App\Support\AppointmentTime::startUtc($a)?->isFuture())
+            ->sortBy(fn ($a) => \App\Support\AppointmentTime::startUtc($a)->getTimestamp())
+            ->first();
         $activityCount = count($notifications ?? []);
     @endphp
 
@@ -88,7 +92,7 @@
                                         <a href="{{ route('doctor.appointments') }}" class="doctor-home-list-item">
                                             <span>
                                                 <strong>{{ $appointment['patientName'] ?? 'Patient' }}</strong>
-                                                {{ $appointment['patientLocalTime'] ?? ($appointment['startTime'] ?? '') . ' - ' . ($appointment['endTime'] ?? '') }}
+                                                {{ appointment_when($appointment)['label'] }}
                                             </span>
                                             <i class="isax isax-arrow-right-3"></i>
                                         </a>
@@ -114,7 +118,7 @@
                                         <i class="isax isax-calendar-tick"></i>
                                     </div>
                                     <h3>{{ $nextAppointment['patientName'] ?? 'Upcoming patient' }}</h3>
-                                    <p>{{ $nextAppointment['patientLocalTime'] ?? ($nextAppointment['startTime'] ?? '') . ' - ' . ($nextAppointment['endTime'] ?? '') }}
+                                    <p>{{ appointment_when($nextAppointment)['label'] }}
                                     </p>
                                 </div>
                             @else

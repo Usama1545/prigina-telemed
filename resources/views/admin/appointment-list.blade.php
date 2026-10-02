@@ -173,14 +173,10 @@
                                     <tbody id="appointmentsTableBody">
                                         @forelse($appointments as $appointment)
                                             @php
-                                                $date =
-                                                    $appointment['appointmentDate'] ?? ($appointment['date'] ?? null);
-                                                $time = trim(
-                                                    ($appointment['startTime'] ?? ($appointment['time'] ?? '')) .
-                                                        ($appointment['endTime'] ?? null
-                                                            ? ' - ' . $appointment['endTime']
-                                                            : ''),
-                                                );
+                                                // Shown in the doctor's timezone, labelled with it.
+                                                $when = appointment_when($appointment, $appointment['doctorTimezone'] ?? 'UTC');
+                                                $date = $appointment['appointmentDate'] ?? $when['date'];
+                                                $time = $when['label'];
                                                 $status = $appointment['status'] ?? 'pending';
                                                 $payStatus = $appointment['paymentStatus'] ?? 'pending';
                                                 $payoutSt = $appointment['payoutStatus'] ?? 'held';
@@ -427,8 +423,8 @@
         };
 
         function appointmentRow(a) {
-            const date = a.appointmentDate || a.date || null;
-            const time = (a.startTime || a.time || '') + (a.endTime ? ' - ' + a.endTime : '');
+            const date = a.appointmentDate || a.displayDate || a.date || null;
+            const time = a.displayTime || ((a.startTime || a.time || '') + (a.endTime ? ' - ' + a.endTime : ''));
             const status = a.status || 'pending';
             const payStatus = a.paymentStatus || 'pending';
             const payoutSt = a.payoutStatus || 'held';

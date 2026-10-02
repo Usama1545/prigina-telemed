@@ -312,7 +312,7 @@
                         <div class="setting-card bg-white">
                             <small class="text-muted d-block mb-3">
                                 <i class="isax isax-info-circle"></i>
-                                {{ __('app.appointments.utc_notice') }}
+                                {{ __('app.appointments.working_hours_timezone_notice') }}
                             </small>
                             <div class="row">
                                 <div class="row mb-4">

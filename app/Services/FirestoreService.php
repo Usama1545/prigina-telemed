@@ -187,6 +187,33 @@ class FirestoreService
         }
     }
 
+    /**
+     * Every document in a collection, streamed (for maintenance commands).
+     *
+     * @return \Generator<string, array> document id => data
+     */
+    public function each(string $collection): \Generator
+    {
+        foreach ($this->db->collection($collection)->documents() as $doc) {
+            if ($doc->exists()) {
+                yield $doc->id() => $doc->data();
+            }
+        }
+    }
+
+    /**
+     * Run $callback(Transaction $transaction, FirestoreClient $db) as a
+     * Firestore transaction; the client retries it on contention.
+     */
+    public function transaction(callable $callback)
+    {
+        try {
+            return $this->db->runTransaction(fn ($transaction) => $callback($transaction, $this->db));
+        } finally {
+            $this->cache = [];
+        }
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Simple Get (Paginated)

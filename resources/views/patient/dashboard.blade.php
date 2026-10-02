@@ -7,7 +7,11 @@
         $categories = collect($categories ?? [])->take(8);
         $doctors = collect($doctors ?? [])->take(8);
         $tips = collect($tips ?? [])->take(3);
-        $nextAppointment = $futureAppointments->first();
+        // The soonest appointment that hasn't started yet, by its UTC start.
+        $nextAppointment = $futureAppointments
+            ->filter(fn ($a) => \App\Support\AppointmentTime::startUtc($a)?->isFuture())
+            ->sortBy(fn ($a) => \App\Support\AppointmentTime::startUtc($a)->getTimestamp())
+            ->first();
         $defaultCategoryImages = [
             'build/img/icons/cardiology.png',
             'build/img/category/category-02.svg',
@@ -88,7 +92,7 @@
                             @if ($nextAppointment)
                                 <div class="appointment-copy">
                                     <h3>{{ __('app.review.dr_name', ['name' => $nextAppointment['doctorName'] ?? __('app.appointments.doctor')]) }}</h3>
-                                    <p>{{ $nextAppointment['patientLocalTime'] ?? ($nextAppointment['startTime'] ?? '') . ' - ' . ($nextAppointment['endTime'] ?? '') }}
+                                    <p>{{ appointment_when($nextAppointment)['label'] }}
                                     </p>
                                     <a href="{{ route('patient.appointments') }}">{{ __('app.patient_dashboard.view_appointment') }}</a>
                                 </div>

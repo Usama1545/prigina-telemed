@@ -410,11 +410,11 @@
                         </td>
                         <td>
                             @php
-                                $d = $appointment['date'] ?? null;
-                                echo e($d ? \Carbon\Carbon::parse($d)->translatedFormat('d M Y') : __('app.review.na'));
+                                $when = appointment_when($appointment);
+                                echo e($when['date'] ?: __('app.review.na'));
                             @endphp
                         </td>
-                        <td>{{ $appointment['patientLocalTime'] ?? ($appointment['startTime'] ?? '') . ' – ' . ($appointment['endTime'] ?? '') }}
+                        <td>{{ $when['label'] }}
                         </td>
                         <td><strong>${{ number_format($appointment['amount'] ?? 0, 2) }}</strong></td>
                     </tr>

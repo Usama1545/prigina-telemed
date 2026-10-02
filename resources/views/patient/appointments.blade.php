@@ -61,14 +61,14 @@
                             <div class="row g-3 mt-1">
                                 @forelse($appointments['upcoming'] as $appointment)
                                     @php
-                                        $apptDate = isset($appointment['date'])
-                                            ? \Carbon\Carbon::parse($appointment['date'])
-                                            : null;
-                                        $dateLabel = $apptDate ? $apptDate->format('d M Y') : '';
+                                        $when = appointment_when($appointment);
+                                        $apptDate = \App\Support\AppointmentTime::startUtc($appointment);
+                                        $dateLabel = $when['date'];
                                         $canCancel = $apptDate && $apptDate->gt(now()->addHours(24));
                                     @endphp
                                     <div class="col-xl-4 col-lg-6 col-md-12 d-flex appointment-card"
-                                        id="appointment-{{ $appointment['id'] }}">
+                                        id="appointment-{{ $appointment['id'] }}"
+                                        data-call-gate="appointment={{ urlencode($appointment['id']) }}">
                                         <div class="appointment-wrap appointment-grid-wrap w-100">
                                             <ul>
                                                 <li>
@@ -95,18 +95,20 @@
                                                                             title="{{ __('app.appointments.chat') }}" data-spinner-link>
                                                                             <i class="isax isax-messages-25"></i>
                                                                         </a>
-                                                                        <a href="{{ route('patient.appointment-video-call', $appointment['id']) }}"
+                                                                        <a href="{{ route('patient.appointment-video-call', $appointment['id']) }}" data-call-button
                                                                             class="btn btn-xs btn-outline-success rounded-pill px-2 py-1"
                                                                             title="{{ __('app.appointments.video_call') }}" data-spinner-link>
                                                                             <i class="fa-solid fa-video"></i>
                                                                         </a>
-                                                                        <a href="{{ route('patient.appointment-audio-call', $appointment['id']) }}"
+                                                                        <a href="{{ route('patient.appointment-audio-call', $appointment['id']) }}" data-call-button
                                                                             class="btn btn-xs btn-outline-primary rounded-pill px-2 py-1"
                                                                             title="{{ __('app.appointments.audio_call') }}" data-spinner-link>
                                                                             <i class="fa-solid fa-phone"></i>
                                                                         </a>
                                                                     @endif
                                                                 </div>
+                                                                {{-- Why calling is disabled, and the no-show report (see partials/call-gate) --}}
+                                                                <div class="mt-1"><small class="call-gate-hint" data-call-hint></small> <span class="call-gate-report" data-call-report></span></div>
                                                                 <span
                                                                     class="badge bg-success mt-2">{{ ucfirst($appointment['status'] ?? 'Confirmed') }}</span>
                                                             </div>
@@ -126,9 +128,8 @@
                                                     </div>
                                                     <div class="mb-2 d-flex align-items-center">
                                                         <i class="isax isax-clock5 me-2 text-success"></i>
-                                                        <span>{{ $appointment['startTime'] ?? '--' }} -
-                                                            {{ $appointment['endTime'] ?? '--' }}</span>
-                                                            <small class="text-muted ms-1" style="font-size:11px;">({{ __('app.appointments.utc') }})</small>
+                                                        <span>{{ $when['time'] ?: '--' }}</span>
+                                                            <small class="text-muted ms-1" style="font-size:11px;">({{ $when['timezone'] }})</small>
                                                     </div>
                                                     @if (!empty($appointment['symptoms']))
                                                         <div class="mt-3">
@@ -190,9 +191,8 @@
                             <div class="row g-3 mt-1">
                                 @forelse($appointments['cancelled'] as $appointment)
                                     @php
-                                        $dateLabel = isset($appointment['date'])
-                                            ? \Carbon\Carbon::parse($appointment['date'])->format('d M Y')
-                                            : '';
+                                        $when = appointment_when($appointment);
+                                        $dateLabel = $when['date'];
                                     @endphp
                                     <div class="col-xl-4 col-lg-6 col-md-12 d-flex appointment-card">
                                         <div class="appointment-wrap appointment-grid-wrap w-100">
@@ -236,9 +236,8 @@
                                                     </div>
                                                     <div class="mb-2 d-flex align-items-center">
                                                         <i class="isax isax-clock5 me-2 text-muted"></i>
-                                                        <span>{{ $appointment['startTime'] ?? '--' }} -
-                                                            {{ $appointment['endTime'] ?? '--' }}</span>
-                                                            <small class="text-muted ms-1" style="font-size:11px;">({{ __('app.appointments.utc') }})</small>
+                                                        <span>{{ $when['time'] ?: '--' }}</span>
+                                                            <small class="text-muted ms-1" style="font-size:11px;">({{ $when['timezone'] }})</small>
                                                     </div>
                                                     @if (!empty($appointment['symptoms']))
                                                         <div class="mt-3">
@@ -278,10 +277,9 @@
                             <div class="row g-3 mt-1">
                                 @forelse($appointments['pending'] as $appointment)
                                     @php
-                                        $apptDate = isset($appointment['date'])
-                                            ? \Carbon\Carbon::parse($appointment['date'])
-                                            : null;
-                                        $dateLabel = $apptDate ? $apptDate->format('d M Y') : '';
+                                        $when = appointment_when($appointment);
+                                        $apptDate = \App\Support\AppointmentTime::startUtc($appointment);
+                                        $dateLabel = $when['date'];
                                         $canCancel = $apptDate && $apptDate->gt(now()->addHours(24));
                                         $isPaid = ($appointment['paymentStatus'] ?? '') === 'completed';
                                         $canPay = !$isPaid && $apptDate && $apptDate->gt(now()->addDays(3));
@@ -346,9 +344,8 @@
                                                     </div>
                                                     <div class="mb-2 d-flex align-items-center">
                                                         <i class="isax isax-clock5 me-2 text-warning"></i>
-                                                        <span>{{ $appointment['startTime'] ?? '--' }} -
-                                                            {{ $appointment['endTime'] ?? '--' }}</span>
-                                                            <small class="text-muted ms-1" style="font-size:11px;">({{ __('app.appointments.utc') }})</small>
+                                                        <span>{{ $when['time'] ?: '--' }}</span>
+                                                            <small class="text-muted ms-1" style="font-size:11px;">({{ $when['timezone'] }})</small>
                                                     </div>
                                                     @if (!empty($appointment['symptoms']))
                                                         <div class="mt-3">
@@ -417,9 +414,8 @@
                             <div class="row g-3 mt-1">
                                 @forelse($appointments['completed'] as $appointment)
                                     @php
-                                        $dateLabel = isset($appointment['date'])
-                                            ? \Carbon\Carbon::parse($appointment['date'])->format('d M Y')
-                                            : '';
+                                        $when = appointment_when($appointment);
+                                        $dateLabel = $when['date'];
                                     @endphp
                                     <div class="col-xl-4 col-lg-6 col-md-12 d-flex appointment-card">
                                         <div class="appointment-wrap appointment-grid-wrap w-100">
@@ -473,9 +469,8 @@
                                                     </div>
                                                     <div class="mb-2 d-flex align-items-center">
                                                         <i class="isax isax-clock5 me-2 text-success"></i>
-                                                        <span>{{ $appointment['startTime'] ?? '--' }} -
-                                                            {{ $appointment['endTime'] ?? '--' }}</span>
-                                                            <small class="text-muted ms-1" style="font-size:11px;">({{ __('app.appointments.utc') }})</small>
+                                                        <span>{{ $when['time'] ?: '--' }}</span>
+                                                            <small class="text-muted ms-1" style="font-size:11px;">({{ $when['timezone'] }})</small>
                                                     </div>
                                                     @if (!empty($appointment['symptoms']))
                                                         <div class="mt-3">
@@ -638,7 +633,7 @@
 
                     <small class="text-muted d-block mb-3">
                         <i class="isax isax-info-circle"></i>
-                        {{ __('app.appointments.utc_notice') }}
+                        {{ __('app.appointments.timezone_notice', ['timezone' => \App\Support\AppointmentTime::timezone(current_user()['timezone'] ?? null)]) }}
                     </small>
 
                     <div id="reschedule-loading" class="text-center py-4 d-none">
@@ -708,11 +703,12 @@
                     document.getElementById('patientName').innerText = data.patientName ?? '';
                     document.getElementById('appointmentId').innerText = data.id ?? '';
 
-                    document.getElementById('appDate').innerText = formatDate(data.date);
-                    document.getElementById('modalDate').innerText = formatDate(data.date);
+                    const displayDate = data.displayDate || formatDate(data.date);
+                    document.getElementById('appDate').innerText = displayDate;
+                    document.getElementById('modalDate').innerText = displayDate;
 
                     document.getElementById('appTime').innerText =
-                        (data.startTime ?? '') + ' - ' + (data.endTime ?? '');
+                        data.displayTime || ((data.startTime ?? '') + ' - ' + (data.endTime ?? ''));
 
                     document.getElementById('appStatus').innerText = data.status ?? '';
 
@@ -803,12 +799,13 @@
                 dayData.slots.forEach(slot => {
                     const col = document.createElement('div');
                     col.className = 'col-4';
-                    const slotId = `reschedule_slot_${dayData.date}_${slot.replace(/:/g, '')}`;
+                    // slot.utc is the exact start instant sent to the server; slot.label is it in the viewer's timezone.
+                    const slotId = `reschedule_slot_${dayData.date}_${slot.time.replace(/:/g, '')}`;
                     col.innerHTML = `
                         <input class="form-check-input d-none" type="radio" name="reschedule_slot_radio"
-                            value="${slot}" id="${slotId}">
+                            value="${slot.utc}" id="${slotId}">
                         <label class="form-check-label w-100 p-2 border rounded text-center slot-label"
-                            for="${slotId}" style="cursor:pointer;">${slot}</label>
+                            for="${slotId}" style="cursor:pointer;">${slot.label}</label>
                     `;
                     rescheduleSlotsEl.appendChild(col);
                 });
@@ -892,8 +889,7 @@
                             'X-CSRF-TOKEN': '{{ csrf_token() }}',
                         },
                         body: JSON.stringify({
-                            date: date,
-                            startTime: startTime,
+                            slot: startTime,
                         }),
                     })
                     .then(res => res.json())

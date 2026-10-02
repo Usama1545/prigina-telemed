@@ -131,13 +131,13 @@
                                 <div class="chat-options">
                                     <ul class="list-inline">
                                         <li class="list-inline-item">
-                                            <a href="javascript:void(0);" class="btn btn-outline-light" id="audioCallBtn"
+                                            <a href="javascript:void(0);" class="btn btn-outline-light" id="audioCallBtn" data-call-button
                                                 title="{{ __('app.appointments.audio_call') }}" style="display: none;">
                                                 <i class="fa-solid fa-phone"></i>
                                             </a>
                                         </li>
                                         <li class="list-inline-item">
-                                            <a href="javascript:void(0);" class="btn btn-outline-light" id="videoCallBtn"
+                                            <a href="javascript:void(0);" class="btn btn-outline-light" id="videoCallBtn" data-call-button
                                                 title="{{ __('app.appointments.video_call') }}" style="display: none;">
                                                 <i class="fa-solid fa-video"></i>
                                             </a>
@@ -163,6 +163,12 @@
                                     </form>
                                 </div>
                             </div>
+                        </div>
+
+                        {{-- Why calling is disabled, and the no-show report (see partials/call-gate) --}}
+                        <div id="callGateBar" class="px-3 py-1 d-flex flex-wrap align-items-center gap-2 border-bottom" style="display: none !important;">
+                            <small class="call-gate-hint" id="callGateHint"></small>
+                            <span class="call-gate-report" id="callGateReport"></span>
                         </div>
 
                         <div style="position: relative; flex: 1; display: flex; flex-direction: column; min-height: 0;">
@@ -683,6 +689,16 @@
                 }
 
                 $('#audioCallBtn, #videoCallBtn').show();
+
+                // Calling only works in the appointment's window; chat is always available.
+                document.getElementById('callGateBar').style.removeProperty('display');
+                if (window.CallGate) {
+                    CallGate.watch('chat', 'conversation=' + encodeURIComponent(conversationId), {
+                        buttons: () => document.querySelectorAll('#audioCallBtn, #videoCallBtn'),
+                        hint: () => document.getElementById('callGateHint'),
+                        report: () => document.getElementById('callGateReport'),
+                    });
+                }
 
                 setActiveConversation(conversationId);
 

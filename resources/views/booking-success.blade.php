@@ -23,8 +23,8 @@
                                 <h3>{{ __('app.booking.booked_successfully') }}</h3>
                                 <p>{!! __('app.booking.booked_with_on_at', [
                                     'doctor' => '<strong>' . e($appointment['doctorName']) . '</strong>',
-                                    'date' => '<strong>' . e(\Carbon\Carbon::parse($appointment['date'])->translatedFormat('M d, Y')) . '</strong>',
-                                    'time' => '<strong>' . e($appointment['patientLocalTime']) . '</strong>',
+                                    'date' => '<strong>' . e(appointment_when($appointment)['date']) . '</strong>',
+                                    'time' => '<strong>' . e(appointment_when($appointment)['label']) . '</strong>',
                                 ]) !!}</p>
                                 <a href="{{ route('patient.appointments') }}" class="btn btn-primary view-inv-btn">{{ __('app.booking.view_appointments') }}</a>
                             </div>

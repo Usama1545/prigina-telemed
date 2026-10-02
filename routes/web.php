@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\CallController;
 use App\Http\Controllers\Doctor\DoctorProfileController;
 use App\Http\Controllers\Doctor\DoctorReportController;
 use App\Http\Controllers\DoctorController;
@@ -50,7 +51,12 @@ Route::middleware(['firebase.auth'])->group(function () {
     Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('conversation/{id}/messages', [PatientController::class, 'messages'])->name('conversation.messages');
-    Route::post('conversation/{id}/save-call', [PatientController::class, 'saveCall'])->name('conversation.save-call');
+    // Appointment calls: window state, call record stamps and no-show reports.
+    Route::get('/calls/access', [CallController::class, 'access'])->name('calls.access');
+    Route::post('/calls/{callId}/zego', [CallController::class, 'attachZego'])->name('calls.zego');
+    Route::post('/calls/connected', [CallController::class, 'connected'])->name('calls.connected');
+    Route::post('/calls/ended', [CallController::class, 'ended'])->name('calls.ended');
+    Route::post('/appointments/{id}/no-show', [CallController::class, 'reportNoShow'])->name('appointments.no-show');
 
     Route::prefix('patient')->controller(PatientController::class)->group(function () {
         Route::get('/appointment/{id}/cancel', 'cancelAppointment')->name('patient.cancel-appointment');

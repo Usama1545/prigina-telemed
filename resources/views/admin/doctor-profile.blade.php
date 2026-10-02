@@ -259,11 +259,10 @@
                                 <tbody id="profileApptBody">
                                     @forelse($appointments as $appt)
                                         @php
-                                            $aDate = $appt['appointmentDate'] ?? ($appt['date'] ?? null);
-                                            $aTime = trim(
-                                                ($appt['startTime'] ?? ($appt['time'] ?? '')) .
-                                                    ($appt['endTime'] ?? null ? ' - ' . $appt['endTime'] : ''),
-                                            );
+                                            // Shown in the doctor's timezone, labelled with it.
+                                            $aWhen = appointment_when($appt, $appt['doctorTimezone'] ?? 'UTC');
+                                            $aDate = $appt['appointmentDate'] ?? $aWhen['date'];
+                                            $aTime = $aWhen['label'];
                                             $aStatus = $appt['status'] ?? 'pending';
                                             $aPay = $appt['paymentStatus'] ?? 'pending';
                                             $aPayout = $appt['payoutStatus'] ?? 'held';

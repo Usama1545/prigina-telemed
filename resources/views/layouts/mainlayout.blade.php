@@ -607,6 +607,9 @@
     }
 </script>
 @include('partials.zego-call-listener')
+@if (in_array(session('auth_role'), ['patient', 'doctor']))
+    @include('partials.call-gate')
+@endif
 @stack('scripts')
 </body>
 

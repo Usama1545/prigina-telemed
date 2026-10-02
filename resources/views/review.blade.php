@@ -131,8 +131,8 @@
                         <p class="mx-2 text-white mb-0">
 
                             @php
-                                $d = $appointment['date'] ?? null;
-                                echo e($d ? \Carbon\Carbon::parse($d)->translatedFormat('M j, Y') : __('app.review.na'));
+                                $when = appointment_when($appointment);
+                                echo e($when['date'] ?: __('app.review.na'));
                             @endphp
 
                         </p>
@@ -162,8 +162,7 @@
 
                         <p class="mx-2 text-white mb-0">
 
-                            {{ $appointment['patientLocalTime'] ??
-                                ($appointment['startTime'] ?? '') . ' – ' . ($appointment['endTime'] ?? '') }}
+                            {{ $when['label'] }}
 
                         </p>
 
