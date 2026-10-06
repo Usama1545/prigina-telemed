@@ -129,7 +129,7 @@
                                                         <h6 class="mb-2">{{ __('app.booking.available_slots') }}</h6>
                                                         <small class="text-muted d-block mb-3">
                                                             <i class="isax isax-info-circle"></i>
-                                                            {{ __('app.appointments.utc_notice') }}
+                                                            {{ __('app.appointments.timezone_notice', ['timezone' => $timezone]) }}
                                                         </small>
                                                         <div id="slotsContainer" class="row">
                                                             {{-- Slots will render here --}}
@@ -531,26 +531,28 @@
         function renderSlots(index) {
             const dayData = availability[index];
             slotsContainer.innerHTML = '';
+            if (!dayData) return;
 
             dayData.slots.forEach(slot => {
                 const col = document.createElement('div');
                 col.className = 'col-lg-3 col-md-4 col-6 mb-3';
 
-                const slotId = `slot_${dayData.date}_${slot.replace(/:/g, '')}`;
+                // slot.utc is the exact start instant sent to the server; slot.label is it in the patient's timezone.
+                const slotId = `slot_${dayData.date}_${slot.time.replace(/:/g, '')}`;
 
                 col.innerHTML = `
                 <div class="service-item text-center" style="padding: 0px !important">
                     <input class="form-check-input d-none" 
                            type="radio" 
                            name="selected_slot_radio" 
-                           value="${slot}" 
+                           value="${slot.utc}" 
                            id="${slotId}"
                            data-date="${dayData.date}"
-                           data-time="${slot}">
+                           data-label="${slot.label}">
 
                     <label class="form-check-label w-100 p-2 border rounded slot-label" 
                            for="${slotId}">
-                        ${slot}
+                        ${slot.label}
                     </label>
                 </div>
             `;
@@ -572,11 +574,11 @@
                     const label = this.nextElementSibling;
                     label.classList.add('active', 'bg-primary', 'text-white', 'border-primary');
 
-                    selectedSlotValue = `${this.dataset.time}`;
+                    selectedSlotValue = this.value;
                     selectedDateValue = this.dataset.date;
-                    const fullSlot = `${selectedDateValue} ${selectedSlotValue}`;
+                    const fullSlot = `${selectedDateValue} ${this.dataset.label}`;
 
-                    selectedSlotInput.value = fullSlot;
+                    selectedSlotInput.value = selectedSlotValue;
                     selectedDateInput.value = selectedDateValue;
                     selectedSlotDisplay.innerText = fullSlot;
                     summarySlotDisplay.innerText = fullSlot;
@@ -691,9 +693,8 @@
             daySelect.value = dayIndex;
             renderSlots(dayIndex);
 
-            const time = oldSelectedSlot.replace(`${oldSelectedDate} `, '');
-            const slotId = `slot_${oldSelectedDate}_${time.replace(/:/g, '')}`;
-            const radio = document.getElementById(slotId);
+            const radio = Array.from(document.querySelectorAll('input[name="selected_slot_radio"]'))
+                .find(r => r.value === oldSelectedSlot);
 
             if (radio) {
                 radio.checked = true;

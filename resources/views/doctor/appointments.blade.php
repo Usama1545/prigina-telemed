@@ -316,7 +316,7 @@
 
                     <small class="text-muted d-block mb-3">
                         <i class="isax isax-info-circle"></i>
-                        {{ __('app.appointments.utc_notice') }}
+                        {{ __('app.appointments.timezone_notice', ['timezone' => \App\Support\AppointmentTime::timezone(current_user()['timezone'] ?? null)]) }}
                     </small>
 
                     <div id="reschedule-loading" class="text-center py-4 d-none">
@@ -574,7 +574,7 @@
                 document.getElementById('appt-detail-patient-name').textContent = d.patientName;
                 document.getElementById('appt-detail-date').textContent = d.date || '—';
                 document.getElementById('appt-detail-time').textContent = d.start && d.end ?
-                    `${d.start} – ${d.end}` : '—';
+                    `${d.start} – ${d.end}` : (d.start || '—');
                 document.getElementById('appt-detail-amount').textContent = `$${d.amount}`;
 
                 // Status badge
@@ -688,12 +688,13 @@
                 dayData.slots.forEach(slot => {
                     const col = document.createElement('div');
                     col.className = 'col-4';
-                    const slotId = `reschedule_slot_${dayData.date}_${slot.replace(/:/g, '')}`;
+                    // slot.utc is the exact start instant sent to the server; slot.label is it in the viewer's timezone.
+                    const slotId = `reschedule_slot_${dayData.date}_${slot.time.replace(/:/g, '')}`;
                     col.innerHTML = `
                         <input class="form-check-input d-none" type="radio" name="reschedule_slot_radio"
-                            value="${slot}" id="${slotId}">
+                            value="${slot.utc}" id="${slotId}">
                         <label class="form-check-label w-100 p-2 border rounded text-center slot-label"
-                            for="${slotId}" style="cursor:pointer;">${slot}</label>
+                            for="${slotId}" style="cursor:pointer;">${slot.label}</label>
                     `;
                     rescheduleSlotsEl.appendChild(col);
                 });
@@ -778,8 +779,7 @@
                             'X-CSRF-TOKEN': '{{ csrf_token() }}',
                         },
                         body: JSON.stringify({
-                            date: date,
-                            startTime: startTime,
+                            slot: startTime,
                         }),
                     })
                     .then(res => res.json())

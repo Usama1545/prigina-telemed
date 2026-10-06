@@ -256,14 +256,10 @@
                                                         ->filter()
                                                         ->implode(', ') ?:
                                                     '-';
-                                                $date =
-                                                    $appointment['appointmentDate'] ?? ($appointment['date'] ?? null);
-                                                $time = trim(
-                                                    ($appointment['startTime'] ?? ($appointment['time'] ?? '')) .
-                                                        ($appointment['endTime'] ?? null
-                                                            ? ' - ' . $appointment['endTime']
-                                                            : ''),
-                                                );
+                                                // Shown in the doctor's timezone, labelled with it.
+                                                $when = appointment_when($appointment, $appointment['doctorTimezone'] ?? 'UTC');
+                                                $date = $appointment['appointmentDate'] ?? $when['date'];
+                                                $time = $when['label'];
                                             @endphp
                                             <tr>
                                                 <td>{{ $appointment['doctorName'] ?? 'Doctor' }}</td>

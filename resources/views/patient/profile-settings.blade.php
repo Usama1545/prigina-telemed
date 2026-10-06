@@ -123,6 +123,19 @@
                                         </div>
                                         <div class="col-lg-6 col-md-6">
                                             <div class="mb-3">
+                                                <label class="form-label">{{ __('app.country_of_residence.label') }} <span
+                                                        class="text-danger">*</span></label>
+                                                @include('partials.country-select', [
+                                                    'name' => 'countryOfResidence',
+                                                    'selected' => old('countryOfResidence', $patient['countryOfResidence'] ?? ''),
+                                                    'required' => true,
+                                                    'placeholder' => __('app.country_of_residence.select'),
+                                                ])
+                                                <small class="text-muted">{{ __('app.country_of_residence.hint') }}</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="mb-3">
                                                 <label class="form-label">{{ __('app.profile.timezone') }} <span
                                                         class="text-danger">*</span></label>
                                                 <select name="timezone" class="form-control" required>

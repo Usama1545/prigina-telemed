@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\CountriesOfPracticeService;
+use App\Support\CountriesOfPractice;
 use App\Mail\EmailVerification;
 use App\Mail\PasswordReset;
 use App\Services\FirebaseAuthService;
@@ -196,23 +198,25 @@ class AuthController extends Controller
         return view('doctor.register', compact('specializations'));
     }
 
-    public function registerDoctor(Request $request)
+    public function registerDoctor(Request $request, CountriesOfPracticeService $countriesOfPractice)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email',
             'phone' => 'required',
-            'licenseNumber' => 'required',
             'qualification' => 'required|array|min:1',
             'experience' => 'required|string',
             'specializations' => 'required|array|min:1',
             'password' => 'required|confirmed|min:6',
-            'medical_license' => 'required|file|mimes:jpg,jpeg,png,pdf',
             'degree_certificate' => 'required|file|mimes:jpg,jpeg,png,pdf',
             'id_proof' => 'required|file|mimes:jpg,jpeg,png,pdf',
             'clinic_registration' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-            'practiceCountry' => 'required',
-        ]);
+            // Countries of Practice: one entry per country, each with its licence.
+            ...$countriesOfPractice->rules(documentRequired: true),
+        ], $countriesOfPractice->messages());
+
+        // Before creating the account: a licence can't be registered twice in one country.
+        $countriesOfPractice->assertLicensesAvailable($request->input('practice', []), null);
 
         $firestore = app(FirestoreService::class);
 
@@ -241,30 +245,11 @@ class AuthController extends Controller
 
         try {
             $data = $request->except([
-                'medical_license',
                 'degree_certificate',
                 'id_proof',
                 'clinic_registration',
+                'practice',
             ]);
-
-            if ($request->hasFile('medical_license')) {
-                $medical_license = $request->file('medical_license');
-                $filePath = "doctor_documents/{$uid}/medical_license.{$medical_license->getClientOriginalExtension()}";
-
-                /** @var Storage $storage */
-                $storage = app('firebase.storage');
-                $bucket = $storage->getBucket();
-
-                $bucket->upload(
-                    fopen($medical_license->getRealPath(), 'r'),
-                    [
-                        'name' => $filePath,
-                        'predefinedAcl' => 'publicRead',
-                    ]
-                );
-
-                $data['documentUrls']['medical_license'] = 'https://storage.googleapis.com/'.$bucket->name().'/'.$filePath;
-            }
 
             if ($request->hasFile('degree_certificate')) {
                 $degree_certificate = $request->file('degree_certificate');
@@ -336,7 +321,6 @@ class AuthController extends Controller
             $data['isEmailVerified'] = false; // Default fee, can be updated by doctor later
             $data['isTopDoctor'] = false; // Default fee, can be updated by doctor later
             $data['isVerified'] = false; // Default fee, can be updated by doctor later
-            $data['practiceCountry'] = $request->practiceCountry; // Default fee, can be updated by doctor later
             $data['rating'] = 0; // Default fee, can be updated by doctor later
             $data['rejectionReason'] = ''; // Default fee, can be updated by doctor later
             $data['slotDuration'] = 30; // Default fee, can be updated by doctor later
@@ -349,7 +333,21 @@ class AuthController extends Controller
             $data['available'] = false; // Default fee, can be updated by doctor later
             $data['specializations'] = $request->specializations; // Default fee, can be updated by doctor later
 
+            // Countries of Practice, each pending admin review, with its licence document.
+            $entries = $countriesOfPractice->entriesFromSignup(
+                $request->input('practice', []),
+                $request->file('practice', []),
+                $uid,
+            );
+            $practice = CountriesOfPractice::fields($entries);
+            if (isset($practice['documentUrls']['medical_license'])) {
+                $data['documentUrls']['medical_license'] = $practice['documentUrls']['medical_license'];
+            }
+            unset($practice['documentUrls']);
+            $data = [...$data, ...$practice];
+
             $firestore->createWithId('doctors', $uid, $data);
+            $countriesOfPractice->reserveLicenses($entries, $uid);
         } catch (\Throwable $e) {
             report($e);
 
@@ -380,6 +378,7 @@ class AuthController extends Controller
             'dob' => 'required|date',
             'gender' => 'required|string',
             'password' => 'required|confirmed|min:6',
+            'countryOfResidence' => ['required', 'string', 'size:2', fn ($attr, $value, $fail) => \Symfony\Component\Intl\Countries::exists(strtoupper((string) $value)) || $fail(__('app.country_of_residence.invalid'))],
         ]);
 
         $firestore = app(FirestoreService::class);
@@ -416,6 +415,8 @@ class AuthController extends Controller
         $data['phone'] = $request->phone;
         $data['dob'] = $request->dob;
         $data['gender'] = $request->gender;
+        // Doctors are listed for patients by this country (their Countries of Practice).
+        $data['countryOfResidence'] = strtoupper($request->countryOfResidence);
         $data['createdAt'] = now();
         $data['isActive'] = true; // Default fee, can be updated by doctor later
         $data['isEmailVerified'] = false; // Default fee, can be updated by doctor later

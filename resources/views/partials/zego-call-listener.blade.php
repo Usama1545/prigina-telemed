@@ -57,6 +57,27 @@
         let zimPlugin = null;
         let callAcceptedObserver = null;
         let preCallUrl = window.location.href;
+        // The call we're receiving, so its server record can be stamped when it
+        // connects and ends (the caller's page created the record).
+        let incomingCall = null;
+
+        function postCallState(path, body) {
+            return fetch(path, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': @json(csrf_token()),
+                },
+                body: JSON.stringify(body),
+                keepalive: true,
+            }).catch(err => console.warn('[CALL] record update failed', err));
+        }
+
+        function incomingCallEnded() {
+            if (!incomingCall || incomingCall.ended) return;
+            incomingCall.ended = true;
+            postCallState('/calls/ended', incomingCall);
+        }
 
         // ── UI helpers ────────────────────────────────────────────────────────────
 
@@ -259,6 +280,7 @@
                     onIncomingCallReceived(callID, caller, callType) {
                         console.log('[ZEGO] Incoming call from', caller.userName, 'callID:', callID);
                         currentCallID = callID;
+                        incomingCall = { zegoCallId: callID, callerId: caller.userID };
                         startRingtone();
                         // hideCallBars();
                         // startCallAcceptWatcher();
@@ -332,9 +354,17 @@
                                 }
                             } : {}),
 
+                            onUserJoin() {
+                                if (incomingCall && !incomingCall.connected) {
+                                    incomingCall.connected = true;
+                                    postCallState('/calls/connected', incomingCall);
+                                }
+                            },
+
                             onLeaveRoom() {
 
                                 console.log('LOCAL LEFT ROOM');
+                                incomingCallEnded();
 
                                 if (pageReloaded) return;
                                 pageReloaded = true;
@@ -347,6 +377,7 @@
                             onUserLeave(user) {
 
                                 console.log('REMOTE LEFT ROOM', user);
+                                incomingCallEnded();
 
                                 if (pageReloaded) return;
                                 pageReloaded = true;
@@ -369,6 +400,7 @@
         })();
 
         window.addEventListener('beforeunload', () => {
+            if (incomingCall && incomingCall.connected) incomingCallEnded();
             if (currentCallID && zimPlugin) rejectCall(currentCallID);
             stopRingtone();
         });

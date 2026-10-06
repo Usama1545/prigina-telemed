@@ -94,8 +94,11 @@
         const conversationId = @json($id);
         const callerId = @json($user['uid']);
         const csrfToken = @json(csrf_token());
+        // Our call record (created by the server inside the appointment's call
+        // window). Connection and end are stamped server-side; this page only
+        // reports when they happen.
+        const callId = @json($callId);
 
-        let callStartTime = null;
         let callStatus = 'missed';
         let callSaved = false;
         let zp = null;
@@ -103,35 +106,26 @@
         let callAccepted = false;
         let forceRedirect = false;
 
-        function saveCallRecord(status, endTime) {
-            console.log('SAVE CALL', status, endTime, callStartTime);
-            if (callSaved) return;
-            callSaved = true;
-
-            const duration = (callStartTime && endTime) ?
-                Math.round((endTime - callStartTime) / 1000) : 0;
-
-            fetch(`/conversation/${conversationId}/save-call`, {
+        function postCall(url, body) {
+            return fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': csrfToken
                 },
-                body: JSON.stringify({
-                    callerId: callerId,
-                    receiverId: receiverID,
-                    callType: 'audio',
-                    status: status,
-                    duration: duration,
-                    startTime: callStartTime ? new Date(callStartTime).toISOString() : null,
-                    endTime: endTime ? new Date(endTime).toISOString() : null,
-                }),
+                body: JSON.stringify(body),
                 keepalive: true,
-            }).then(() => {
-                console.log('Call record saved successfully');
-            }).catch(err => {
-                console.error('Failed to save call record:', err);
-            });
+            }).catch(err => console.error('Call record update failed:', err));
+        }
+
+        function markConnected() {
+            postCall('/calls/connected', { callId });
+        }
+
+        function saveCallRecord(status) {
+            if (callSaved) return;
+            callSaved = true;
+            postCall('/calls/ended', { callId, reason: status });
         }
 
         function handleCallEnd(status) {
@@ -141,7 +135,7 @@
             callEndHandled = true;
 
             console.log('Call ended with status:', status);
-            saveCallRecord(status, Date.now());
+            saveCallRecord(status);
 
             // Force redirect without showing Zego's UI
             forceRedirect = true;
@@ -241,6 +235,9 @@
                     });
 
                     console.log('Invitation sent successfully', invitationResult);
+                    if (invitationResult && invitationResult.callID) {
+                        postCall(`/calls/${callId}/zego`, { zegoCallId: invitationResult.callID });
+                    }
 
                     // After invitation is sent, join the room to show the call UI
 
@@ -294,8 +291,10 @@
                     console.log('Outgoing call accepted', data);
 
                     callAccepted = true;
-                    callStartTime = Date.now();
+
                     callStatus = 'completed';
+
+                    markConnected();
                 },
 
                 onOutgoingCallRejected(data) {
@@ -344,8 +343,8 @@
 
                             if (!callAccepted) {
                                 callAccepted = true;
-                                callStartTime = Date.now();
                                 callStatus = 'completed';
+                                markConnected();
                             }
                         },
 
@@ -354,8 +353,8 @@
 
                             if (!callAccepted) {
                                 callAccepted = true;
-                                callStartTime = Date.now();
                                 callStatus = 'completed';
+                                markConnected();
                             }
                         },
 
@@ -380,8 +379,8 @@
         }
         // Safety net: if page closes unexpectedly
         window.addEventListener('beforeunload', () => {
-            if (callStartTime && !callSaved) {
-                saveCallRecord(callStatus, Date.now());
+            if (!callSaved) {
+                saveCallRecord(callStatus);
             }
         });
     </script>

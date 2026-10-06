@@ -309,3 +309,41 @@ if (! function_exists('can_chat')) {
             ->contains(fn ($a) => in_array($a['status'] ?? null, chat_eligible_statuses(), true));
     }
 }
+
+if (! function_exists('appointment_when')) {
+    /**
+     * An appointment's date and time for display in $timezone (default: the
+     * signed-in user's timezone). Appointments not yet on the UTC time model
+     * fall back to their stored strings, shown in the doctor's timezone.
+     *
+     * @return array{date: string, longDate: string, time: string, timezone: string, offset: string, label: string}
+     */
+    function appointment_when(array $appointment, ?string $timezone = null): array
+    {
+        $timezone ??= current_user()['timezone'] ?? null;
+
+        if (\App\Support\AppointmentTime::isCanonical($appointment)
+            && ($when = \App\Support\AppointmentTime::forViewer($appointment, $timezone))) {
+            return $when + [
+                'longDate' => $when['start']->translatedFormat('l, F j, Y'),
+                'label' => $when['time'].' ('.$when['timezone'].', '.$when['offset'].')',
+            ];
+        }
+
+        $parsed = \App\Support\AppointmentTime::toUtc($appointment['date'] ?? null);
+        $date = $parsed ? $parsed->translatedFormat('d M Y') : '';
+        $longDate = $parsed ? $parsed->translatedFormat('l, F j, Y') : '';
+
+        $time = trim(($appointment['startTime'] ?? '').' - '.($appointment['endTime'] ?? ''), ' -');
+        $doctorTimezone = \App\Support\AppointmentTime::timezone($appointment['doctorTimezone'] ?? null);
+
+        return [
+            'date' => $date,
+            'longDate' => $longDate,
+            'time' => $time,
+            'timezone' => $doctorTimezone,
+            'offset' => '',
+            'label' => $time.($time ? ' ('.$doctorTimezone.')' : ''),
+        ];
+    }
+}

@@ -125,6 +125,17 @@
                 </div>
                 <div class="col-xl-9">
 
+                    {{-- Patient location: doctors approved to practise in this country --}}
+                    @include('partials.doctor-country-filter', compact('country', 'countryOptions'))
+
+                    @if ($doctors->isEmpty())
+                        <div class="text-center text-muted py-5">
+                            {{ $country
+                                ? str_replace(':country', \App\Services\DoctorDirectory::countryName($country), __('app.doctor_country_filter.none_in'))
+                                : __('app.doctor_country_filter.none') }}
+                        </div>
+                    @endif
+
                     <div class="row" id="doctor-list">
                         @foreach ($doctors as $doctor)
                             <div class="col-xxl-4 col-md-6">
@@ -166,20 +177,7 @@
                                                                 {{ $doctor['experience'] }}</span>
                                                         </p>
                                                     </div>
-                                                    @if(isset($doctor['practiceCountry']))
-                                                            <div class="d-flex align-items-center gap-2">
-                                                                <img
-                                                                    src="https://flagcdn.com/24x18/{{ strtolower($doctor['practiceCountry']) }}.png"
-                                                                    alt="{{ $doctor['practiceCountry'] }}"
-                                                                    width="24"
-                                                                    class="rounded-sm"
-                                                                />
-
-                                                                <span class="fw-medium">
-                                                                    {{ Symfony\Component\Intl\Countries::getName($doctor['practiceCountry'], app()->getLocale()) }}
-                                                                </span>
-                                                            </div>
-                                                        @endif
+                                                    @include('partials.doctor-practice-countries', ['doctor' => $doctor, 'country' => $country])
                                                     
                                                 </div>
                                             </div>

@@ -161,22 +161,6 @@
 
                             <div class="row">
 
-                                <!-- License -->
-                                <div class="col-lg-6 col-md-6">
-                                    <div class="form-wrap">
-
-                                        <label class="form-label">
-                                            {{ __('app.profile.license_number') }}
-                                            <span class="text-danger">*</span>
-                                        </label>
-
-                                        <input type="text" name="licenseNumber" class="form-control"
-                                            value="{{ old('licenseNumber', current_user()['licenseNumber'] ?? '') }}"
-                                            required>
-
-                                    </div>
-                                </div>
-
                                 <!-- Qualification -->
                                 <div class="col-lg-6 col-md-6">
                                     <div class="form-wrap">
@@ -275,34 +259,12 @@
 
                                 </div>
 
-                                <!-- Practice Country -->
-                                <div class="col-lg-6">
-
-                                    <div class="form-wrap">
-
-                                        <label class="form-label">
-                                            {{ __('app.profile.practice_country') }}
-                                            <span class="text-danger">*</span>
-                                        </label>
-
-                                        <select name="practiceCountry" class="form-control" required>
-
-                                            <option value="">
-                                                {{ __('app.profile.select_practice_country') }}
-                                            </option>
-
-                                            @foreach ($countries as $code => $countryName)
-                                                <option value="{{ $code }}"
-                                                    {{ old('practiceCountry', current_user()['practiceCountry'] ?? '') == $code ? 'selected' : '' }}>
-                                                    {{ $countryName }}
-                                                </option>
-                                            @endforeach
-
-                                        </select>
-
-                                    </div>
-
-                                </div>
+                                {{-- Countries of Practice: changed or new licences go back for admin review --}}
+                                @include('partials.countries-of-practice-fields', [
+                                    'entries' => \App\Support\CountriesOfPractice::of(current_user())
+                                        ?: array_filter([\App\Support\CountriesOfPractice::fromLegacy(current_user())]),
+                                    'documentRequired' => false,
+                                ])
                             </div>
                         </div>
                         <div class="setting-title">
@@ -312,7 +274,7 @@
                         <div class="setting-card bg-white">
                             <small class="text-muted d-block mb-3">
                                 <i class="isax isax-info-circle"></i>
-                                {{ __('app.appointments.utc_notice') }}
+                                {{ __('app.appointments.working_hours_timezone_notice') }}
                             </small>
                             <div class="row">
                                 <div class="row mb-4">

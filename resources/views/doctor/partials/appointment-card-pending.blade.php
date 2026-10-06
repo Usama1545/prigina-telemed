@@ -1,15 +1,11 @@
 @php
-    $datePending = '';
-    if (!empty($appointment['date'])) {
-        if (is_numeric($appointment['date'])) {
-            $datePending = \Carbon\Carbon::createFromTimestamp($appointment['date'])->format('d M Y');
-        } else {
-            $datePending = \Carbon\Carbon::parse($appointment['date'])->format('d M Y');
-        }
-    }
+    // Shown in the doctor's own timezone, from the appointment's UTC start.
+    $when = appointment_when($appointment);
+    $datePending = $when['date'];
 @endphp
 
-<div class="col-xl-4 col-lg-6 col-md-12 d-flex appointment-card" id="appointment-{{ $appointment['id'] }}">
+<div class="col-xl-4 col-lg-6 col-md-12 d-flex appointment-card" id="appointment-{{ $appointment['id'] }}"
+    data-call-gate="appointment={{ urlencode($appointment['id']) }}">
 
     <div class="appointment-wrap appointment-grid-wrap w-100">
 
@@ -70,14 +66,14 @@
 
                                 </a>
 
-                                <a href="{{ route('doctor.appointment-video-call', $appointment['id']) }}"
+                                <a href="{{ route('doctor.appointment-video-call', $appointment['id']) }}" data-call-button
                                     class="btn btn-xs btn-outline-success rounded-pill px-2 py-1" title="{{ __('app.appointments.video_call') }}">
 
                                     <i class="fa-solid fa-video"></i>
 
                                 </a>
 
-                                <a href="{{ route('doctor.appointment-audio-call', $appointment['id']) }}"
+                                <a href="{{ route('doctor.appointment-audio-call', $appointment['id']) }}" data-call-button
                                     class="btn btn-xs btn-outline-primary rounded-pill px-2 py-1" title="{{ __('app.appointments.audio_call') }}">
 
                                     <i class="fa-solid fa-phone"></i>
@@ -85,6 +81,8 @@
                                 </a>
 
                             </div>
+                            {{-- Why calling is disabled, and the no-show report (see partials/call-gate) --}}
+                            <div class="mt-1"><small class="call-gate-hint" data-call-hint></small> <span class="call-gate-report" data-call-report></span></div>
 
                             <span
                                 class="badge mt-2
@@ -117,8 +115,8 @@
                             data-patient-image="{{ $appointment['patientImage'] ?? '' }}"
                             data-appointment-number="{{ $appointment['appointmentNumber'] ?? $appointment['id'] }}"
                             data-status="{{ $appointment['status'] ?? '' }}" data-date="{{ $datePending ?? '' }}"
-                            data-start="{{ $appointment['startTime'] ?? '--' }}"
-                            data-end="{{ $appointment['endTime'] ?? '--' }}"
+                            data-start="{{ $when['label'] ?: '--' }}"
+                            data-end=""
                             data-amount="{{ number_format($appointment['amount'] ?? 0, 2) }}"
                             data-symptoms="{{ $appointment['symptoms'] ?? '' }}"
                             data-notes="{{ $appointment['notes'] ?? '' }}"
@@ -152,9 +150,7 @@
 
                     <span>
 
-                        {{ $appointment['startTime'] ?? '--' }}
-                        -
-                        {{ $appointment['endTime'] ?? '--' }}
+                        {{ $when['time'] ?: '--' }}
 
                     </span>
 

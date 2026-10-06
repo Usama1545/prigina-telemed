@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\AppointmentTime;
+use App\Services\DoctorDirectory;
 use App\Models\Firestore\Category;
 use App\Models\Firestore\Doctor;
 use App\Services\FirestoreService;
@@ -20,61 +22,32 @@ class DoctorController extends Controller
         $this->categories = $categories;
     }
 
-    public function index(Request $request)
+    public function index(Request $request, DoctorDirectory $directory)
     {
-        $categoryIds = $request->query('category', []);
-        $availability = $request->query('availability', []);
-        $cursor = $request->query('cursor');
+        $categoryIds = array_filter((array) $request->query('category', []));
+        $availability = array_filter((array) $request->query('availability', []));
+        $search = mb_strtolower(trim((string) $request->query('search', '')));
+        $offset = max(0, (int) json_decode((string) $request->query('cursor', '0'), true));
+        $pageSize = 12;
 
-        if ($cursor) {
-            $cursor = json_decode($cursor, true);
-        }
+        // Only doctors approved to practise in the patient's chosen country.
+        $country = $directory->selectedCountry($request);
 
-        if (! is_array($categoryIds)) {
-            $categoryIds = [$categoryIds];
-        }
-        if (! is_array($availability)) {
-            $availability = [$availability];
-        }
+        $doctors = $directory->inCountry($country)
+            ->when($categoryIds, fn ($c) => $c->filter(
+                fn ($doc) => ! empty(array_intersect($doc['specializations'] ?? [], $categoryIds))
+            ))
+            ->when($availability, fn ($c) => $c->filter(
+                fn ($doc) => ! empty(array_intersect($doc['workingDays'] ?? [], $availability))
+            ))
+            ->when($search !== '', fn ($c) => $c->filter(
+                fn ($doc) => str_contains(mb_strtolower(($doc['name'] ?? '').' '.implode(' ', (array) ($doc['specializations'] ?? []))), $search)
+            ))
+            ->sortByDesc(fn ($doc) => AppointmentTime::toUtc($doc['createdAt'] ?? null)?->getTimestamp() ?? 0)
+            ->values();
 
-        $filters = [
-            [
-                'field' => 'isActive',
-                'op' => '=',
-                'value' => true,
-            ],
-            [
-                'field' => 'isVerified',
-                'op' => '=',
-                'value' => true,
-            ],
-
-        ];
-
-        if (! empty($categoryIds)) {
-            $filters[] = [
-                'field' => 'specializations',
-                'op' => 'array-contains-any',
-                'value' => $categoryIds,
-            ];
-        } elseif (! empty($availability)) {
-            $filters[] = [
-                'field' => 'workingDays',
-                'op' => 'array-contains-any',
-                'value' => $availability,
-            ];
-        }
-
-        $result = app(FirestoreService::class)
-            ->query('doctors', $filters, 12, $cursor);
-
-        $doctors = collect($result['documents']);
-
-        if (! empty($categoryIds) && ! empty($availability)) {
-            $doctors = $doctors->filter(function ($doc) use ($availability) {
-                return ! empty(array_intersect($doc['workingDays'] ?? [], $availability));
-            })->values();
-        }
+        $page = $doctors->slice($offset, $pageSize)->values();
+        $hasMore = $offset + $pageSize < $doctors->count();
 
         $categories = Cache::remember('home.doctors.categories', 6000, function () {
             return $this->categories->all()
@@ -83,10 +56,12 @@ class DoctorController extends Controller
         });
 
         return view('doctor.doctor-grid', [
-            'doctors' => $doctors,
-            'nextCursor' => $result['nextCursor'], // 👈 send to frontend
-            'hasMore' => $result['hasMore'] ?? false, // 👈 send to frontend
+            'doctors' => $page,
+            'nextCursor' => $hasMore ? $offset + $pageSize : null,
+            'hasMore' => $hasMore,
             'categories' => $categories,
+            'country' => $country,
+            'countryOptions' => $directory->countryOptions(),
         ]);
     }
 

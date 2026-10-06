@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers\Doctor;
 
+use App\Services\DoctorDirectory;
+use App\Services\CountriesOfPracticeService;
+use App\Support\CountriesOfPractice;
+use App\Http\Controllers\Concerns\OpensAppointmentCalls;
 use App\Http\Controllers\Controller;
 use App\Mail\AppointmentCompleted;
 use App\Mail\AppointmentConfirmed;
 use App\Mail\AppointmentRejected;
+use App\Exceptions\SlotUnavailableException;
 use App\Services\DoctorAvailabilityService;
 use App\Services\FirebaseAuthService;
 use App\Services\FirestoreService;
+use App\Support\AppointmentTime;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -25,6 +31,8 @@ use Symfony\Component\Intl\Countries;
 
 class DoctorProfileController extends Controller
 {
+    use OpensAppointmentCalls;
+
     protected $firestore;
 
     protected $availabilityService;
@@ -44,18 +52,11 @@ class DoctorProfileController extends Controller
                 ['field' => 'doctorId', 'op' => '=', 'value' => $uid],
             ])['documents'] ?? [];
 
-        $appointments = collect($appointments)->map(function ($appointment) {
+        $doctorTimezone = AppointmentTime::timezone(current_user()['timezone'] ?? null);
 
-            try {
-
-                $date = preg_replace('/\s+/', ' ', $appointment['date']);
-
-                $appointment['parsed_date'] = Carbon::parse($date);
-
-            } catch (\Exception $e) {
-
-                $appointment['parsed_date'] = null;
-            }
+        // parsed_date is the appointment's start in the doctor's own timezone.
+        $appointments = collect($appointments)->map(function ($appointment) use ($doctorTimezone) {
+            $appointment['parsed_date'] = AppointmentTime::startUtc($appointment)?->setTimezone($doctorTimezone);
 
             return $appointment;
         });
@@ -76,10 +77,10 @@ class DoctorProfileController extends Controller
             );
         });
 
-        $todayAppointments = $futureAppointments->filter(function ($appointment) {
+        $todayAppointments = $futureAppointments->filter(function ($appointment) use ($doctorTimezone) {
 
             return $appointment['parsed_date']
-                ? $appointment['parsed_date']->isToday()
+                ? $appointment['parsed_date']->isSameDay(Carbon::now($doctorTimezone))
                 : false;
         });
 
@@ -109,19 +110,19 @@ class DoctorProfileController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, CountriesOfPracticeService $countriesOfPractice)
     {
 
         // ✅ Validation
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
-            'licenseNumber' => 'required',
             'qualification' => 'required|array|min:1',
             'experience' => 'required|string',
             'specializations' => 'required|array|min:1',
             'languages' => 'required|array|min:1',
-            'practiceCountry' => 'required|string',
+            // Countries of Practice; documents only needed for new or replaced licences.
+            ...$countriesOfPractice->rules(documentRequired: false),
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'consultationFee' => 'required|numeric',
             'workingDays' => 'required|array',
@@ -134,9 +135,10 @@ class DoctorProfileController extends Controller
             'bio.es' => 'nullable|string',
             'bio.fr' => 'nullable|string',
             'bio.ar' => 'nullable|string',
-        ]);
+        ], $countriesOfPractice->messages());
 
         $uid = current_user()['uid'];
+        $countriesOfPractice->assertLicensesAvailable($request->input('practice', []), $uid);
 
         $data = collect($validated)->only([
             'name',
@@ -144,11 +146,9 @@ class DoctorProfileController extends Controller
             'email',
             'gender',
             'dob',
-            'licenseNumber',
             'qualification',
             'experience',
             'specializations',
-            'practiceCountry',
             'consultationFee',
             'workingDays',
             'workingHours',
@@ -195,6 +195,17 @@ class DoctorProfileController extends Controller
             $breaks = explode(',', $validated['breaks']);
         }
 
+        // Countries of Practice: new or changed licences go back for admin
+        // review (hidden from patients in that country until approved);
+        // existing appointments are not affected.
+        $entries = $countriesOfPractice->saveFromProfile(
+            $this->firestore->find('doctors', $uid) ?? [],
+            $request->input('practice', []),
+            $request->file('practice', []),
+            $uid,
+        );
+        $data = [...$data, ...CountriesOfPractice::fields($entries)];
+
         $this->firestore->update('doctors', $uid, [
             ...$data,
             'languages' => $validated['languages'],
@@ -202,6 +213,9 @@ class DoctorProfileController extends Controller
             'consultationFee' => intval($validated['consultationFee']),
             'timezone' => $validated['timezone'],
         ]);
+
+        // Countries of Practice may have changed which countries list this doctor.
+        DoctorDirectory::forget();
 
         return redirect()->back()->with('success', __('app.flash.profile_updated'));
     }
@@ -463,11 +477,9 @@ class DoctorProfileController extends Controller
 
         // Block cancellation within 24 hours of the appointment (only applies once
         // the booking is confirmed — a still-pending request can be declined anytime)
-        if (($appointment['status'] ?? '') === 'confirmed' && ! empty($appointment['date'])) {
-            $apptDate = Carbon::parse($appointment['date']);
-            if ($apptDate->lte(now()->addHours(24))) {
-                return redirect()->back()->with('error', __('app.flash.cannot_cancel_24h'));
-            }
+        $apptStart = $appointment ? AppointmentTime::startUtc($appointment) : null;
+        if (($appointment['status'] ?? '') === 'confirmed' && $apptStart && $apptStart->lte(now()->addHours(24))) {
+            return redirect()->back()->with('error', __('app.flash.cannot_cancel_24h'));
         }
 
         $this->firestore->update('appointments', $id, [
@@ -512,6 +524,17 @@ class DoctorProfileController extends Controller
     {
         $appointment = $this->firestore->find('appointments', $id);
 
+        // Doctors may only see their own appointments.
+        if (! $appointment || ($appointment['doctorId'] ?? null) !== (current_user()['uid'] ?? null)) {
+            return response()->json(['success' => false, 'message' => __('app.flash.appointment_not_found')], 404);
+        }
+
+        if ($appointment) {
+            $when = appointment_when($appointment);
+            $appointment['displayDate'] = $when['date'];
+            $appointment['displayTime'] = $when['label'];
+        }
+
         return response()->json($appointment);
     }
 
@@ -533,118 +556,22 @@ class DoctorProfileController extends Controller
 
     public function audioCall($id)
     {
-        $conversation = $this->firestore->find('conversations', $id);
-        if (! $conversation) {
-            abort(404);
-        }
-
-        $user = current_user();
-        if (! $user) {
-            abort(403);
-        }
-
-        // Remote party for the doctor is the patient
-        $patient = $this->firestore->find('patients', $conversation['patientId'] ?? '') ?? [];
-
-        $token = generateZegoToken($user['uid']);
-        Log::info('data', [
-            'token' => $token,
-            'patient' => $patient,   // shown as the remote party on the call screen
-        ]);
-
-        return view('patient.voice-call', [
-            'id' => $id,
-            'doctor' => $patient,   // shown as the remote party on the call screen
-            'user' => $user,
-            'token' => $token,
-            'backUrl' => route('doctor.conversations'),
-        ]);
+        return $this->openCallPage($id, null, 'audio', route('doctor.conversations.show', $id));
     }
 
     public function videoCall($id)
     {
-        $conversation = $this->firestore->find('conversations', $id);
-
-        if (! $conversation) {
-            abort(404);
-        }
-
-        $user = current_user();
-
-        if (! $user) {
-            abort(403);
-        }
-
-        // Remote party for the doctor is the patient
-        $patient = $this->firestore->find('patients', $conversation['patientId'] ?? '') ?? [];
-
-        $token = generateZegoToken($user['uid']);
-
-        return view('patient.video-call', [
-            'id' => $id,
-            'doctor' => $patient,   // shown as the remote party on the call screen
-            'user' => $user,
-            'token' => $token,
-            'backUrl' => route('doctor.conversations'),
-        ]);
+        return $this->openCallPage($id, null, 'video', route('doctor.conversations.show', $id));
     }
 
     public function appointmentVideoCall($appointmentId)
     {
-        $appointment = $this->firestore->find('appointments', $appointmentId);
-        if (! $appointment) {
-            abort(404);
-        }
-
-        $user = current_user();
-        if (! $user) {
-            abort(403);
-        }
-
-        $patientId = $appointment['patientId'] ?? null;
-        if (! $patientId) {
-            abort(404);
-        }
-
-        $patient = $this->firestore->find('patients', $patientId) ?? [];
-        $token = generateZegoToken($user['uid']);
-
-        return view('patient.video-call', [
-            'id' => $appointmentId,
-            'doctor' => $patient,
-            'user' => $user,
-            'token' => $token,
-            'backUrl' => route('doctor.appointments'),
-        ]);
+        return $this->openCallPage(null, $appointmentId, 'video', route('doctor.appointments'));
     }
 
     public function appointmentAudioCall($appointmentId)
     {
-        $appointment = $this->firestore->find('appointments', $appointmentId);
-        if (! $appointment) {
-            abort(404);
-        }
-
-        $user = current_user();
-        if (! $user) {
-            abort(403);
-        }
-
-        $patientId = $appointment['patientId'] ?? null;
-        if (! $patientId) {
-            abort(404);
-        }
-
-        $patient = $this->firestore->find('patients', $patientId) ?? [];
-        $token = generateZegoToken($user['uid']);
-
-        return view('patient.voice-call', [
-            'id' => $appointmentId,
-            'doctor' => $patient,
-            'user' => $user,
-            'token' => $token,
-            'backUrl' => route('doctor.appointments'),
-        ]);
+        return $this->openCallPage(null, $appointmentId, 'audio', route('doctor.appointments'));
     }
 
     public function createConversation($id)
@@ -994,7 +921,7 @@ class DoctorProfileController extends Controller
             'available' => $validated['isAvailable'] ? true : false,
         ]);
 
-        Cache::forget('home.doctors');
+        DoctorDirectory::forget();
 
         return response()->json(['success' => true, 'isAvailable' => $validated['isAvailable']]);
     }
@@ -1002,75 +929,45 @@ class DoctorProfileController extends Controller
     public function rescheduleAppointment(Request $request, $id)
     {
         $validated = $request->validate([
-            'date' => 'required|date|after_or_equal:today',
-            'startTime' => 'required|string', // 24h "H:i", must match one of the doctor's open slots
+            // The new slot's UTC start instant, as returned by the available-slots endpoint.
+            'slot' => 'required|string',
         ]);
-
-        $doctorUid = current_user()['uid'];
 
         $appointment = $this->firestore->find('appointments', $id);
 
-        if (! $appointment || ($appointment['doctorId'] ?? '') !== $doctorUid) {
+        if (! $appointment || ($appointment['doctorId'] ?? '') !== current_user()['uid']) {
             return response()->json(['success' => false, 'message' => __('app.flash.appointment_not_found')], 404);
         }
 
         // Block rescheduling within 24 hours of the appointment
-        if (! empty($appointment['date'])) {
-            $apptDate = Carbon::parse($appointment['date']);
-            if ($apptDate->lte(now()->addHours(24))) {
-                return response()->json(['success' => false, 'message' => __('app.flash.cannot_reschedule_24h')], 422);
+        $apptStart = AppointmentTime::startUtc($appointment);
+        if ($apptStart && $apptStart->lte(now()->addHours(24))) {
+            return response()->json(['success' => false, 'message' => __('app.flash.cannot_reschedule_24h')], 422);
+        }
+
+        $newStart = AppointmentTime::toUtc($validated['slot']);
+
+        // The service recomputes the doctor's real availability (ignoring this
+        // appointment's own slot) and reserves the new slot in a transaction.
+        // Reschedule emails (patient + doctor) are sent by the Firestore
+        // onAppointmentStatusChanged Cloud Function when startTimeUTC changes.
+        try {
+            if (! $newStart) {
+                throw new SlotUnavailableException;
             }
-        }
-
-        // Recompute real availability server-side rather than trusting whatever
-        // time the client posts — the current appointment's own slot is excluded
-        // so it doesn't block itself.
-        $availability = $this->availabilityService->getAvailability($doctorUid, $id);
-
-        if (! $availability) {
-            return response()->json(['success' => false, 'message' => __('app.flash.availability_not_set')], 422);
-        }
-
-        $daySlots = collect($availability['availability'])->firstWhere('date', $validated['date'])['slots'] ?? [];
-
-        if (! in_array($validated['startTime'], $daySlots, true)) {
+            $fields = $this->availabilityService->reschedule($id, $appointment, $newStart);
+        } catch (SlotUnavailableException) {
             return response()->json(['success' => false, 'message' => __('app.flash.slot_unavailable_choose_another')], 422);
         }
 
-        $slotDuration = $availability['slotDuration'];
-        $startTimestamp = strtotime($validated['startTime']);
-        $endTimestamp = $startTimestamp + $slotDuration * 60;
-
-        $formattedDate = Carbon::parse($validated['date'])->format('d M Y');
-        $startTimeFormatted = date('h:i A', $startTimestamp);
-        $endTimeFormatted = date('h:i A', $endTimestamp);
-
-        // Slot times are the doctor's own working-hours values, stored and shown
-        // as-is with no timezone conversion — times are UTC throughout so both
-        // sides need to convert to their own local time.
-        $startDateTime = Carbon::parse($validated['date'].' '.date('H:i:s', $startTimestamp), 'UTC');
-        $endDateTime = Carbon::parse($validated['date'].' '.date('H:i:s', $endTimestamp), 'UTC');
-
-        $startTimeUTC = $startDateTime->copy()->setTimezone('UTC');
-        $endTimeUTC = $endDateTime->copy()->setTimezone('UTC');
-
-        // Reschedule emails (patient + doctor) are sent by the Firestore
-        // onAppointmentStatusChanged Cloud Function, which detects the date/time
-        // change on this write and calls AppointmentEmailController::notifyStatus
-        // with ?reschedule=true — no need to send them from here too.
-        $this->firestore->update('appointments', $id, [
-            'date' => $startDateTime,
-            'startTime' => $startTimeFormatted,
-            'endTime' => $endTimeFormatted,
-            'startTimeUTC' => $startTimeUTC,
-            'endTimeUTC' => $endTimeUTC,
-        ]);
+        $local = AppointmentTime::forViewer($fields, current_user()['timezone'] ?? null);
 
         return response()->json([
             'success' => true,
-            'formattedDate' => $formattedDate,
-            'startTime' => $startTimeFormatted,
-            'endTime' => $endTimeFormatted,
+            'formattedDate' => $local['date'],
+            'startTime' => AppointmentTime::clock($local['start']),
+            'endTime' => AppointmentTime::clock($local['end']),
         ]);
     }
+
 }
