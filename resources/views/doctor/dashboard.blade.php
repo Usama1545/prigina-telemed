@@ -9,7 +9,11 @@
         $specialty = $doctor['specializations'][0] ?? ($doctor['qualification'] ?? 'Specialist');
         $license = $doctor['licenseNumber'] ?? 'Not Set';
         $todayCount = $todayAppointments->count();
-        $nextAppointment = $futureAppointments->first();
+        // The soonest appointment that hasn't started yet, by its UTC start.
+        $nextAppointment = $futureAppointments
+            ->filter(fn ($a) => \App\Support\AppointmentTime::startUtc($a)?->isFuture())
+            ->sortBy(fn ($a) => \App\Support\AppointmentTime::startUtc($a)->getTimestamp())
+            ->first();
         $activityCount = count($notifications ?? []);
     @endphp
 
@@ -57,7 +61,7 @@
                             <img src="{{ asset('build/img/doc-home/doc-logo-2.jpeg') }}" alt="">
                             <h2>{{ __('app.doctor_dashboard.average_rating') }}</h2>
                             <strong>{{ number_format($rating, 1) }}</strong>
-                            <div class="doctor-home-stars" aria-label="Rating {{ number_format($rating, 1) }} out of 5">
+                            <div class="doctor-home-stars" aria-label="{{ __('app.doctor_dashboard.rating_aria', ['rating' => number_format($rating, 1)]) }}">
                                 @for ($i = 1; $i <= 5; $i++)
                                     <i class="fa-solid fa-star {{ $rating >= $i ? 'active' : '' }}"></i>
                                 @endfor
@@ -88,7 +92,7 @@
                                         <a href="{{ route('doctor.appointments') }}" class="doctor-home-list-item">
                                             <span>
                                                 <strong>{{ $appointment['patientName'] ?? 'Patient' }}</strong>
-                                                {{ $appointment['patientLocalTime'] ?? ($appointment['startTime'] ?? '') . ' - ' . ($appointment['endTime'] ?? '') }}
+                                                {{ appointment_when($appointment)['label'] }}
                                             </span>
                                             <i class="isax isax-arrow-right-3"></i>
                                         </a>
@@ -103,7 +107,7 @@
                         <article class="doctor-home-panel next-panel">
                             <div class="doctor-home-panel-head">
                                 <h2>{{ __('app.doctor_dashboard.next_up') }}</h2>
-                                <a href="{{ route('doctor.appointments') }}" aria-label="View appointments">
+                                <a href="{{ route('doctor.appointments') }}" aria-label="{{ __('app.doctor_dashboard.view_appointments') }}">
                                     <i class="isax isax-arrow-right-3"></i>
                                 </a>
                             </div>
@@ -114,7 +118,7 @@
                                         <i class="isax isax-calendar-tick"></i>
                                     </div>
                                     <h3>{{ $nextAppointment['patientName'] ?? 'Upcoming patient' }}</h3>
-                                    <p>{{ $nextAppointment['patientLocalTime'] ?? ($nextAppointment['startTime'] ?? '') . ' - ' . ($nextAppointment['endTime'] ?? '') }}
+                                    <p>{{ appointment_when($nextAppointment)['label'] }}
                                     </p>
                                 </div>
                             @else

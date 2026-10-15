@@ -132,7 +132,7 @@ class AdminDashboardController extends Controller
             $filters[] = ['field' => 'paymentStatus', 'op' => '=', 'value' => $payment];
         }
 
-        return $this->firestore->paginatedQuery(
+        $page = $this->firestore->paginatedQuery(
             collection: 'appointments',
             filters: $filters,
             limit: 10,
@@ -140,6 +140,17 @@ class AdminDashboardController extends Controller
             orderByField: 'date',
             orderByDirection: 'DESC'
         );
+
+        // Admins see each appointment in the doctor's timezone, labelled with it.
+        $page['documents'] = array_map(function ($appointment) {
+            $when = appointment_when($appointment, $appointment['doctorTimezone'] ?? 'UTC');
+            $appointment['displayDate'] = $when['date'];
+            $appointment['displayTime'] = $when['label'];
+
+            return $appointment;
+        }, $page['documents'] ?? []);
+
+        return $page;
     }
 
     protected function appointmentStats(): array

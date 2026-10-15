@@ -516,7 +516,7 @@
                                                                                         min-width: 280px;
                                                                                     ">
                                                                                         <strong>
-                                                                                            ${data.senderName ?? 'New Message'}
+                                                                                            ${data.senderName ?? @json(__('app.chat.new_message'))}
                                                                                         </strong>
                                                                                         <br>
 
@@ -558,7 +558,7 @@
                                                                                         </strong>
                                                                                         <br>
 
-                                                                                        ${data.patientName ?? 'Patient'}
+                                                                                        ${data.patientName ?? @json(__('app.appointments.patient'))}
                                                                                         booked an appointment
                                                                                     </div>
                                                                                 `;
@@ -607,6 +607,9 @@
     }
 </script>
 @include('partials.zego-call-listener')
+@if (in_array(session('auth_role'), ['patient', 'doctor']))
+    @include('partials.call-gate')
+@endif
 @stack('scripts')
 </body>
 

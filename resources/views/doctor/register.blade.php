@@ -71,35 +71,6 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">{{ __('app.doctor_register.practice_country') }}</label>
-
-                                    <select name="practiceCountry" id="practiceCountry"
-                                        class="form-control @error('practiceCountry') is-invalid @enderror" required>
-                                        <option value="">{{ __('app.doctor_register.select_country') }}</option>
-                                    </select>
-
-                                    @error('practiceCountry')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label">{{ __('app.doctor_register.license_number') }}</label>
-
-                                    <input type="text" name="licenseNumber"
-                                        class="form-control @error('licenseNumber') is-invalid @enderror"
-                                        value="{{ old('licenseNumber') }}" required>
-
-                                    @error('licenseNumber')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-
-                                <div class="mb-3 col-md-6">
                                     <label class="form-label">{{ __('app.doctor_register.qualification') }}</label>
 
                                     <select name="qualification[]" multiple
@@ -194,22 +165,13 @@
 
                                 <hr>
 
+                                @include('partials.countries-of-practice-fields', [
+                                    'entries' => [],
+                                    'documentRequired' => true,
+                                ])
+
                                 <h5 class="text-primary fw-bold mb-3">{{ __('app.doctor_register.required_documents') }}
                                 </h5>
-
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label">{{ __('app.doctor_register.medical_license') }}</label>
-
-                                    <input type="file" name="medical_license"
-                                        class="form-control @error('medical_license') is-invalid @enderror"
-                                        accept=".jpg,.jpeg,.png,.pdf" required>
-
-                                    @error('medical_license')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">{{ __('app.doctor_register.degree_certificate') }}</label>
@@ -333,20 +295,6 @@
             document.getElementById('timezone').value =
                 Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-            // Populate practice country dropdown using intlTelInput data
-            const practiceCountrySelect = document.getElementById('practiceCountry');
-            const allCountries = window.intlTelInputGlobals.getCountryData();
-            const oldPracticeCountry = "{{ old('practiceCountry') }}";
-
-            allCountries.forEach(country => {
-                const option = document.createElement('option');
-                option.value = country.iso2.toUpperCase();
-                option.text = country.name;
-                if (oldPracticeCountry && oldPracticeCountry === country.iso2.toUpperCase()) {
-                    option.selected = true;
-                }
-                practiceCountrySelect.appendChild(option);
-            });
         });
     </script>
     <script>

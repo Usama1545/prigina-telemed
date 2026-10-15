@@ -24,10 +24,20 @@
                             {{-- Toolbar --}}
                             <div class="d-flex align-items-end justify-content-between mb-3 flex-wrap gap-2">
 
-                                <div>
-                                    <label class="form-label fw-semibold mb-1">Search by Name</label>
-                                    <input type="search" id="doctorSearchInput" class="form-control"
-                                        placeholder="Doctor name…" style="min-width:220px">
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <div>
+                                        <label class="form-label fw-semibold mb-1">Search by Name</label>
+                                        <input type="search" id="doctorSearchInput" class="form-control"
+                                            placeholder="Doctor name…" style="min-width:220px">
+                                    </div>
+                                    <div>
+                                        <label class="form-label fw-semibold mb-1">Show</label>
+                                        <select id="doctorFilterSelect" class="form-select">
+                                            <option value="">All doctors</option>
+                                            <option value="review">Countries to review</option>
+                                            <option value="expired">Licence expired</option>
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <div class="d-flex align-items-center gap-2">
@@ -73,6 +83,8 @@
                                                 $dActive = (bool) ($doctor['isActive'] ?? false);
                                                 $dTop = (bool) ($doctor['isTopDoctor'] ?? false);
                                                 $dDocs = $doctor['documentUrls'] ?? [];
+                                                $dToReview = (int) ($doctor['countriesToReview'] ?? 0);
+                                                $dExpired = (bool) ($doctor['licenceExpired'] ?? false);
                                             @endphp
                                             <tr>
                                                 <td>
@@ -94,6 +106,12 @@
                                                         <span class="badge bg-success">Verified</span>
                                                     @else
                                                         <span class="badge bg-warning text-dark">Pending</span>
+                                                    @endif
+                                                    @if ($dToReview)
+                                                        <span class="badge bg-info text-dark d-block mt-1">{{ $dToReview }} {{ $dToReview === 1 ? 'country' : 'countries' }} to review</span>
+                                                    @endif
+                                                    @if ($dExpired)
+                                                        <span class="badge bg-danger d-block mt-1">Licence expired</span>
                                                     @endif
                                                 </td>
                                                 <td>
@@ -211,6 +229,7 @@
         const nextBtn = document.getElementById('doctorNextBtn');
         const prevBtn = document.getElementById('doctorPrevBtn');
         const searchInput = document.getElementById('doctorSearchInput');
+        const filterSelect = document.getElementById('doctorFilterSelect');
 
         const SPINNER_SM = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
         const LOADING_ROW =
@@ -301,6 +320,7 @@
             const isVerified = Boolean(doc.isVerified);
             const isActive = Boolean(doc.isActive);
             const isTop = Boolean(doc.isTopDoctor);
+            const toReview = Number(doc.countriesToReview || 0);
             const hasDocs = doc.documentUrls && Object.keys(doc.documentUrls).length > 0;
             const docsJson = esc(JSON.stringify(doc.documentUrls || {}));
 
@@ -319,6 +339,12 @@
             <td>${isVerified
                 ? '<span class="badge bg-success">Verified</span>'
                 : '<span class="badge bg-warning text-dark">Pending</span>'
+            }${toReview
+                ? `<span class="badge bg-info text-dark d-block mt-1">${toReview} ${toReview === 1 ? 'country' : 'countries'} to review</span>`
+                : ''
+            }${doc.licenceExpired
+                ? '<span class="badge bg-danger d-block mt-1">Licence expired</span>'
+                : ''
             }</td>
             <td>
                 <div class="form-check form-switch mb-0">
@@ -357,6 +383,7 @@
 
             const url = new URL(doctorsConfig.dataUrl, window.location.origin);
             if (activeSearch) url.searchParams.set('search', activeSearch);
+            if (filterSelect.value) url.searchParams.set('filter', filterSelect.value);
             if (cursor !== null && cursor !== undefined) url.searchParams.set('cursor', cursor);
 
             try {
@@ -411,6 +438,14 @@
                 pageIndex = 0;
                 fetchDoctors(null);
             }, 350);
+        });
+
+        filterSelect.addEventListener('change', function() {
+            cursorStack = [];
+            currentCursor = null;
+            nextCursor = null;
+            pageIndex = 0;
+            fetchDoctors(null);
         });
 
         // ── Toggle: Active ────────────────────────────────────────────────────────

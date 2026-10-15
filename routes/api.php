@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Api\AppointmentEmailController;
 use App\Http\Controllers\Api\AuthEmailController;
+use App\Http\Controllers\Api\CallWebhookController;
 use App\Http\Controllers\ChatWebhookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,9 @@ Route::post('/auth/send-password-reset', [AuthEmailController::class, 'sendPassw
 // Appointment email actions
 Route::post('/appointments/{id}/send-reminder', [AppointmentEmailController::class, 'sendReminder']);
 Route::post('/appointments/{id}/notify-status', [AppointmentEmailController::class, 'notifyStatus']);
+
+// Firestore `calls` trigger: a call connected or ended (needs X-Webhook-Secret).
+Route::post('/calls/{callId}/changed', [CallWebhookController::class, 'changed']);
 
 // Public admin routes (no auth required)
 Route::post('/admin/authenticate', [AdminAuthController::class, 'authenticateToken'])->name('api.admin.authenticate-token');

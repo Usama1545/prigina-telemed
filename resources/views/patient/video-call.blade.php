@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Video Call — Prigina</title>
+    <title>{{ __('app.calls.video_title') }} — Prigina</title>
 
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('build/img/prigina-gav.png') }}">
 
@@ -71,7 +71,7 @@
 
     <div id="errBanner">
         <span id="errText"></span>
-        <a onclick="window.location.href=backUrl">Go back</a>
+        <a onclick="window.location.href=backUrl">{{ __('app.calls.go_back') }}</a>
     </div>
 
     <div id="zego-container"></div>
@@ -86,16 +86,19 @@
         const appID = {{ (int) config('services.zego.app_id') }};
         const serverToken = @json($token);
         const userID = @json($user['uid']);
-        const userName = @json($user['name'] ?: 'User');
+        const userName = @json($user['name'] ?: __('app.calls.user'));
         const roomID = "call_{{ substr(md5($id), 0, 12) }}";
         const receiverID = @json($doctor['uid'] ?? '');
-        const receiverName = @json($doctor['name'] ?: 'User');
+        const receiverName = @json($doctor['name'] ?: __('app.calls.user'));
         const backUrl = @json($backUrl ?? url('/dashboard'));
         const conversationId = @json($id);
         const callerId = @json($user['uid']);
         const csrfToken = @json(csrf_token());
+        // Our call record (created by the server inside the appointment's call
+        // window). Connection and end are stamped server-side; this page only
+        // reports when they happen.
+        const callId = @json($callId);
 
-        let callStartTime = null;
         let callStatus = 'missed';
         let callSaved = false;
         let zp = null;
@@ -103,35 +106,26 @@
         let callAccepted = false;
         let forceRedirect = false;
 
-        function saveCallRecord(status, endTime) {
-            console.log('SAVE CALL', status, endTime, callStartTime);
-            if (callSaved) return;
-            callSaved = true;
-
-            const duration = (callStartTime && endTime) ?
-                Math.round((endTime - callStartTime) / 1000) : 0;
-
-            fetch(`/conversation/${conversationId}/save-call`, {
+        function postCall(url, body) {
+            return fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': csrfToken
                 },
-                body: JSON.stringify({
-                    callerId: callerId,
-                    receiverId: receiverID,
-                    callType: 'video',
-                    status: status,
-                    duration: duration,
-                    startTime: callStartTime ? new Date(callStartTime).toISOString() : null,
-                    endTime: endTime ? new Date(endTime).toISOString() : null,
-                }),
+                body: JSON.stringify(body),
                 keepalive: true,
-            }).then(() => {
-                console.log('Call record saved successfully');
-            }).catch(err => {
-                console.error('Failed to save call record:', err);
-            });
+            }).catch(err => console.error('Call record update failed:', err));
+        }
+
+        function markConnected() {
+            postCall('/calls/connected', { callId });
+        }
+
+        function saveCallRecord(status) {
+            if (callSaved) return;
+            callSaved = true;
+            postCall('/calls/ended', { callId, reason: status });
         }
 
         function handleCallEnd(status) {
@@ -141,7 +135,7 @@
             callEndHandled = true;
 
             console.log('Call ended with status:', status);
-            saveCallRecord(status, Date.now());
+            saveCallRecord(status);
 
             // Force redirect without showing Zego's UI
             forceRedirect = true;
@@ -227,7 +221,7 @@
 
             } catch (err) {
                 console.error('Initialization error:', err);
-                showErr('Failed to initialise call: ' + (err.message || err));
+                showErr(@json(__('app.calls.init_failed')) + ' ' + (err.message || err));
             }
         })();
 
@@ -251,6 +245,9 @@
                     });
 
                     console.log('Invitation sent successfully', invitationResult);
+                    if (invitationResult && invitationResult.callID) {
+                        postCall(`/calls/${callId}/zego`, { zegoCallId: invitationResult.callID });
+                    }
 
                     // After invitation is sent, join the room to show the call UI
 
@@ -259,7 +256,7 @@
                     console.error(`Attempt ${attempt} failed:`, err);
 
                     if (attempt === maxAttempts) {
-                        showErr('Failed to send invitation: ' + (err.message || JSON.stringify(err)));
+                        showErr(@json(__('app.calls.invite_failed')) + ' ' + (err.message || JSON.stringify(err)));
                     } else {
                         await new Promise(r => setTimeout(r, retryDelay));
                     }
@@ -304,8 +301,10 @@
                     console.log('Outgoing call accepted', data);
 
                     callAccepted = true;
-                    callStartTime = Date.now();
+
                     callStatus = 'completed';
+
+                    markConnected();
                 },
 
                 onOutgoingCallRejected(data) {
@@ -359,8 +358,8 @@
 
                             if (!callAccepted) {
                                 callAccepted = true;
-                                callStartTime = Date.now();
                                 callStatus = 'completed';
+                                markConnected();
                             }
                         },
 
@@ -369,8 +368,8 @@
 
                             if (!callAccepted) {
                                 callAccepted = true;
-                                callStartTime = Date.now();
                                 callStatus = 'completed';
+                                markConnected();
                             }
                         },
 
@@ -395,8 +394,8 @@
         }
         // Safety net: if page closes unexpectedly
         window.addEventListener('beforeunload', () => {
-            if (callStartTime && !callSaved) {
-                saveCallRecord(callStatus, Date.now());
+            if (!callSaved) {
+                saveCallRecord(callStatus);
             }
         });
     </script>

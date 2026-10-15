@@ -323,7 +323,7 @@
                                                         class="rounded-sm" />
 
                                                     <span class="fw-medium">
-                                                        {{ Symfony\Component\Intl\Countries::getName($doctor['practiceCountry']) }}
+                                                        {{ Symfony\Component\Intl\Countries::getName($doctor['practiceCountry'], app()->getLocale()) }}
                                                     </span>
                                                 </div>
                                             @endif
@@ -799,8 +799,8 @@
                         </ul>
 
                         <div class="google-imgs-v2 mt-4 reveal-on-scroll" data-reveal="fade-up" data-reveal-delay="400">
-                            <a href="#"><img src="{{ URL::asset('build/img/icons/app-store.svg') }}"
-                                    alt="App Store"></a>
+                            <a href="https://apps.apple.com/us/app/prigina-global-telemed/id6792837255"><img
+                                    src="{{ URL::asset('build/img/icons/app-store.svg') }}" alt="App Store"></a>
                             <a href="https://play.google.com/store/apps/details?id=com.prigina_global.app"
                                 target="_blank"><img src="{{ URL::asset('build/img/icons/google-play.svg') }}"
                                     alt="Google Play"></a>

@@ -4,7 +4,7 @@
     <div class="d-flex align-items-center gap-2">
         <i class="fa-solid fa-mobile-screen-button text-primary"></i>
         <span class="small fw-semibold text-dark">
-            Stay connected — install the app so you never miss a call or notification.
+            {{ __('app.app_banner.message') }}
         </span>
     </div>
     <div class="d-flex align-items-center gap-2 flex-shrink-0">
@@ -13,11 +13,12 @@
             <i class="fa-brands fa-google-play"></i>
             <span class="small">Google Play</span>
         </a>
-        <a href="#" class="btn btn-sm btn-dark d-flex align-items-center gap-1 px-3" id="appStoreBtn">
+        <a href="https://apps.apple.com/us/app/prigina-global-telemed/id6792837255"
+            class="btn btn-sm btn-dark d-flex align-items-center gap-1 px-3" id="appStoreBtn">
             <i class="fa-brands fa-apple"></i>
             <span class="small">App Store</span>
         </a>
-        <button class="btn btn-sm btn-link text-muted p-0 ms-1" id="dismissAppBanner" title="Dismiss">
+        <button class="btn btn-sm btn-link text-muted p-0 ms-1" id="dismissAppBanner" title="{{ __('app.app_banner.dismiss') }}">
             <i class="fa-solid fa-xmark"></i>
         </button>
     </div>

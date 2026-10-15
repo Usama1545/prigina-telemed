@@ -19,7 +19,7 @@
                         <div class="doc-info-left">
                             <div class="doctor-img">
                                 <img src="{{ isset($doctor['profilePicture']) && $doctor['profilePicture'] ? $doctor['profilePicture'] : asset('build/img/doctors/doc-profile-02.jpg') }}"
-                                    class="img-fluid" alt="User Image">
+                                    class="img-fluid" alt="{{ __('app.stories.user_image') }}">
                             </div>
                             <div class="doc-info-cont">
                                 @if (($doctor['available'] ?? false) === true)
@@ -241,7 +241,9 @@
                     @php
                         use Carbon\Carbon;
 
-                        $today = Carbon::now();
+                        // Working days/hours are in the doctor's own timezone.
+                        $doctorTimezone = \App\Support\AppointmentTime::timezone($doctor['timezone'] ?? null);
+                        $today = Carbon::now($doctorTimezone);
                         $workingDays = $doctor['workingDays'] ?? [];
                         $workingHours = $doctor['workingHours'] ?? [];
 
@@ -265,7 +267,7 @@
                             try {
                                 $start = \Carbon\Carbon::createFromFormat('H:i', $workingHours[0])->format('h:i A');
                                 $end = \Carbon\Carbon::createFromFormat('H:i', $workingHours[1])->format('h:i A');
-                                $formattedHours = "$start - $end";
+                                $formattedHours = "$start - $end ($doctorTimezone)";
                             } catch (\Exception $e) {
                                 $formattedHours = '-';
                             }

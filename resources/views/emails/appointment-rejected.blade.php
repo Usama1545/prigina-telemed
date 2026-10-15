@@ -63,14 +63,15 @@
                 <span class="label">Date</span>
                 <span class="value">
                     @php
-                        $d = $appointment['date'] ?? null;
-                        echo $d ? \Carbon\Carbon::parse($d)->format('l, F j, Y') : 'N/A';
+                        // In the recipient's own timezone, from the appointment's UTC start.
+                        $when = appointment_when($appointment, $appointment['patientTimezone'] ?? 'UTC');
+                        echo e($when['longDate'] ?: 'N/A');
                     @endphp
                 </span>
             </div>
             <div class="row">
                 <span class="label">Time</span>
-                <span class="value">{{ $appointment['patientLocalTime'] ?? (($appointment['startTime'] ?? '') . ' – ' . ($appointment['endTime'] ?? '')) }}</span>
+                <span class="value">{{ $when['label'] }}</span>
             </div>
         </div>
 

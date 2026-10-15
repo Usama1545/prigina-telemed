@@ -33,16 +33,16 @@
                             <!-- Header -->
                             <div class="card-header">
                                 <div class="d-flex align-items-center filter-head justify-content-between">
-                                    <h4>Filter</h4>
+                                    <h4>{{ __('app.doctors.filter') }}</h4>
                                     <a href="{{ url()->current() }}" class="text-secondary text-decoration-underline">
-                                        Clear All
+                                        {{ __('app.doctors.clear_all') }}
                                     </a>
                                 </div>
 
                                 <div class="filter-input">
                                     <div class="position-relative input-icon">
                                         <input type="text" name="search" value="{{ request('search') }}"
-                                            class="form-control" placeholder="Search">
+                                            class="form-control" placeholder="{{ __('app.common.search') }}">
                                         <span><i class="isax isax-search-normal-1"></i></span>
                                     </div>
                                 </div>
@@ -55,7 +55,7 @@
                                     <div class="accordion-header">
                                         <div class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapse1">
                                             <div class="d-flex align-items-center w-100">
-                                                <h5>Specialities</h5>
+                                                <h5>{{ __('app.doctors.specialities') }}</h5>
                                                 <div class="ms-auto">
                                                     <i class="fas fa-chevron-down"></i>
                                                 </div>
@@ -92,7 +92,7 @@
                                     <div class="accordion-header">
                                         <div class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapse3">
                                             <div class="d-flex align-items-center w-100">
-                                                <h5>Availability</h5>
+                                                <h5>{{ __('app.doctors.availability') }}</h5>
                                                 <div class="ms-auto">
                                                     <i class="fas fa-chevron-down"></i>
                                                 </div>
@@ -110,7 +110,7 @@
                                                         {{ in_array($day, $selectedDays) ? 'checked' : '' }}>
 
                                                     <label class="form-check-label">
-                                                        {{ ucfirst($day) }}
+                                                        {{ \Carbon\Carbon::parse($day)->translatedFormat('l') }}
                                                     </label>
                                                 </div>
                                             @endforeach
@@ -124,6 +124,17 @@
                     </form>
                 </div>
                 <div class="col-xl-9">
+
+                    {{-- Patient location: doctors approved to practise in this country --}}
+                    @include('partials.doctor-country-filter', compact('country', 'countryOptions'))
+
+                    @if ($doctors->isEmpty())
+                        <div class="text-center text-muted py-5">
+                            {{ $country
+                                ? str_replace(':country', \App\Services\DoctorDirectory::countryName($country), __('app.doctor_country_filter.none_in'))
+                                : __('app.doctor_country_filter.none') }}
+                        </div>
+                    @endif
 
                     <div class="row" id="doctor-list">
                         @foreach ($doctors as $doctor)
@@ -146,12 +157,12 @@
                                             @if(($doctor['available'] ?? false) === true)
                                                 <span class="badge bg-success-light d-inline-flex align-items-center">
                                                     <i class="fa-solid fa-circle fs-5 me-1"></i>
-                                                    Available
+                                                    {{ __('app.doctors.available') }}
                                                 </span>
                                             @else
                                                 <span class="badge bg-danger-light d-inline-flex align-items-center">
                                                     <i class="fa-solid fa-circle fs-5 me-1"></i>
-                                                    Not Available
+                                                    {{ __('app.doctors.unavailable') }}
                                                 </span>
                                             @endif
                                         </div>
@@ -162,38 +173,25 @@
                                                             href="{{ route('doctor-details', $doctor['id']) }}">{{ $doctor['name'] }}</a>
                                                     </h3>
                                                     <div class="doctor-location">
-                                                        <p class="location-title"></i><span class="fw-medium">Experience:
+                                                        <p class="location-title"></i><span class="fw-medium">{{ __('app.doctors.experience') }}:
                                                                 {{ $doctor['experience'] }}</span>
                                                         </p>
                                                     </div>
-                                                    @if(isset($doctor['practiceCountry']))
-                                                            <div class="d-flex align-items-center gap-2">
-                                                                <img
-                                                                    src="https://flagcdn.com/24x18/{{ strtolower($doctor['practiceCountry']) }}.png"
-                                                                    alt="{{ $doctor['practiceCountry'] }}"
-                                                                    width="24"
-                                                                    class="rounded-sm"
-                                                                />
-
-                                                                <span class="fw-medium">
-                                                                    {{ Symfony\Component\Intl\Countries::getName($doctor['practiceCountry']) }}
-                                                                </span>
-                                                            </div>
-                                                        @endif
+                                                    @include('partials.doctor-practice-countries', ['doctor' => $doctor, 'country' => $country])
                                                     
                                                 </div>
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between">
                                                 @if(session('firebase_token'))
                                                 <div>
-                                                    <p class="mb-1">Consultation Fees</p>
+                                                    <p class="mb-1">{{ __('app.doctors.fee') }}</p>
                                                     <div class="price">{{ $doctor['consultationFee'] }}</div>
                                                 </div>
                                                 @endif
                                                 <a href="{{ url('doctor-details', $doctor['uid']) }}"
                                                     class="btn btn-md btn-dark d-inline-flex align-items-center rounded-pill">
                                                     <i class="isax isax-calendar-1 me-2"></i>
-                                                    Book
+                                                    {{ __('app.doctors.book') }}
                                                 </a>
                                             </div>
                                         </div>
@@ -207,7 +205,7 @@
                             <a id="load-more-btn" class="btn d-flex align-items-center gap-2"
                                 data-cursor='@json($nextCursor)'>
 
-                                <span class="btn-text">Load More</span>
+                                <span class="btn-text">{{ __('app.doctors.load_more') }}</span>
 
                                 <span class="spinner-border spinner-border-sm d-none" id="btn-loader"
                                     role="status"></span>
@@ -245,7 +243,7 @@
             // 🔒 disable button + show loader
             button.disabled = true;
             loader.classList.remove('d-none');
-            text.innerText = 'Loading...';
+            text.innerText = @json(__('app.common.loading'));
 
             let cursor = JSON.parse(button.getAttribute('data-cursor'));
 
@@ -271,7 +269,7 @@
                         // ✅ reset button
                         button.disabled = false;
                         loader.classList.add('d-none');
-                        text.innerText = 'Load More';
+                        text.innerText = @json(__('app.doctors.load_more'));
 
                     } else {
                         // ❌ no more data
@@ -284,7 +282,7 @@
                     // ❗ reset on error
                     button.disabled = false;
                     loader.classList.add('d-none');
-                    text.innerText = 'Load More';
+                    text.innerText = @json(__('app.doctors.load_more'));
                 });
         });
     </script>

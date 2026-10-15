@@ -30,6 +30,16 @@
         $docUrls = $doctor['documentUrls'] ?? [];
         $rejection = $doctor['rejectionReason'] ?? null;
 
+        // Countries of Practice, each reviewed on its own.
+        $practice = \App\Support\CountriesOfPractice::of($doctor)
+            ?: array_filter([\App\Support\CountriesOfPractice::fromLegacy($doctor)]);
+        $today = now('UTC');
+        $statusBadge = [
+            'pending' => ['bg-warning text-dark', 'Under review'],
+            'approved' => ['bg-success', 'Approved'],
+            'rejected' => ['bg-danger', 'Rejected'],
+        ];
+
         $docLabels = [
             'clinic_registration' => 'Clinic Registration',
             'degree_certificate' => 'Degree Certificate',
@@ -179,6 +189,95 @@
                         </div>
                     </div>
 
+                    {{-- Countries of Practice --}}
+                    <div class="card" id="countriesOfPractice">
+                        <div class="card-body">
+                            <h6 class="fw-bold mb-1">Countries of Practice</h6>
+                            <p class="text-muted small mb-3">
+                                Patients in a country only see this doctor once that country is approved.
+                                Rejecting a country doesn't affect existing appointments.
+                            </p>
+
+                            @forelse ($practice as $entry)
+                                @php
+                                    $countryName = \Symfony\Component\Intl\Countries::exists($entry['country'])
+                                        ? \Symfony\Component\Intl\Countries::getName($entry['country'])
+                                        : ($entry['country'] ?: 'Unknown country');
+                                    $expired = \App\Support\CountriesOfPractice::isExpired($entry, $today);
+                                    $incomplete = \App\Support\CountriesOfPractice::isIncomplete($entry);
+                                    $submitted = \App\Support\AppointmentTime::toUtc($entry['submittedAt']);
+                                    [$badgeClass, $badgeText] = $statusBadge[$entry['status']] ?? ['bg-secondary', $entry['status']];
+                                @endphp
+                                <div class="border rounded p-3 mb-2">
+                                    <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+                                        <div>
+                                            <strong>{{ $countryName }}</strong>
+                                            <span class="text-muted small">({{ $entry['country'] }})</span>
+                                            <span class="badge {{ $badgeClass }} ms-1">{{ $badgeText }}</span>
+                                            @if ($expired)
+                                                <span class="badge bg-danger ms-1">Licence expired</span>
+                                            @endif
+                                            @if ($incomplete)
+                                                <span class="badge bg-secondary ms-1">Details incomplete</span>
+                                            @endif
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            @if ($entry['status'] !== 'approved')
+                                                <button type="button" class="btn btn-sm btn-success cop-review-btn"
+                                                    data-entry="{{ $entry['id'] }}" data-decision="approved">
+                                                    <i class="fe fe-check me-1"></i>Approve
+                                                </button>
+                                            @endif
+                                            @if ($entry['status'] !== 'rejected')
+                                                <button type="button" class="btn btn-sm btn-outline-danger cop-review-btn"
+                                                    data-entry="{{ $entry['id'] }}" data-decision="rejected"
+                                                    data-country="{{ $countryName }}">
+                                                    <i class="fe fe-x me-1"></i>Reject
+                                                </button>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="row g-2 mt-1 small">
+                                        <div class="col-sm-6">
+                                            <span class="text-muted">Licensing authority:</span>
+                                            {{ $entry['licensingAuthority'] ?: '-' }}
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <span class="text-muted">Licence number:</span>
+                                            {{ $entry['licenseNumber'] ?: '-' }}
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <span class="text-muted">Expiry:</span>
+                                            <span class="{{ $expired ? 'text-danger fw-bold' : '' }}">
+                                                {{ $entry['licenseExpiry'] ? \Carbon\Carbon::parse($entry['licenseExpiry'])->format('d M Y') : 'None given' }}
+                                            </span>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <span class="text-muted">Submitted:</span>
+                                            {{ $submitted ? $submitted->format('d M Y') : '-' }}
+                                        </div>
+                                        <div class="col-12">
+                                            @if ($entry['documentUrl'])
+                                                <a href="{{ $entry['documentUrl'] }}" target="_blank" rel="noopener">
+                                                    <i class="fe fe-file-text me-1"></i>View licence document
+                                                </a>
+                                            @else
+                                                <span class="text-danger">No licence document uploaded</span>
+                                            @endif
+                                        </div>
+                                        @if ($entry['status'] === 'rejected' && $entry['rejectionReason'])
+                                            <div class="col-12 text-danger">
+                                                <strong>Rejection reason:</strong> {{ $entry['rejectionReason'] }}
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            @empty
+                                <p class="text-muted mb-0">No countries of practice added.</p>
+                            @endforelse
+                        </div>
+                    </div>
+
                     {{-- Status toggles --}}
                     <div class="card">
                         <div class="card-body">
@@ -259,11 +358,10 @@
                                 <tbody id="profileApptBody">
                                     @forelse($appointments as $appt)
                                         @php
-                                            $aDate = $appt['appointmentDate'] ?? ($appt['date'] ?? null);
-                                            $aTime = trim(
-                                                ($appt['startTime'] ?? ($appt['time'] ?? '')) .
-                                                    ($appt['endTime'] ?? null ? ' - ' . $appt['endTime'] : ''),
-                                            );
+                                            // Shown in the doctor's timezone, labelled with it.
+                                            $aWhen = appointment_when($appt, $appt['doctorTimezone'] ?? 'UTC');
+                                            $aDate = $appt['appointmentDate'] ?? $aWhen['date'];
+                                            $aTime = $aWhen['label'];
                                             $aStatus = $appt['status'] ?? 'pending';
                                             $aPay = $appt['paymentStatus'] ?? 'pending';
                                             $aPayout = $appt['payoutStatus'] ?? 'held';
@@ -480,6 +578,41 @@
                 this.disabled = false;
                 showToast('Failed to approve.', 'danger');
             }
+        });
+
+        // Countries of Practice: approve / reject one country
+        document.querySelectorAll('.cop-review-btn').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const decision = this.dataset.decision;
+                let reason = '';
+                if (decision === 'rejected') {
+                    reason = (prompt(`Reason for rejecting ${this.dataset.country} (shown to the doctor):`) || '').trim();
+                    if (!reason) return;
+                }
+
+                const original = this.innerHTML;
+                this.innerHTML = SPINNER_SM;
+                this.disabled = true;
+                try {
+                    const res = await fetch(
+                        `${profileConfig.baseUrl}/{{ $id }}/countries/${encodeURIComponent(this.dataset.entry)}/review`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': profileConfig.csrf,
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({ decision, reason }),
+                        });
+                    if (!res.ok) throw new Error();
+                    showToast(decision === 'approved' ? 'Country approved.' : 'Country rejected.');
+                    setTimeout(() => window.location.reload(), 900);
+                } catch {
+                    this.innerHTML = original;
+                    this.disabled = false;
+                    showToast('Failed to update the country.', 'danger');
+                }
+            });
         });
 
         // Decline (open modal)

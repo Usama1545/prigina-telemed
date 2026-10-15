@@ -12,10 +12,15 @@
     <div class="d-flex flex-wrap align-items-center gap-1 my-1">
         @foreach ($codes as $code)
             @php
-                $label = str_replace(':country', \App\Services\DoctorDirectory::countryName($code), __('app.doctor_country_filter.practices_in'));
+                $label = str_replace(
+                    ':country',
+                    \App\Services\DoctorDirectory::countryName($code),
+                    __('app.doctor_country_filter.practices_in'),
+                );
             @endphp
             <span class="practice-flag" tabindex="0" aria-label="{{ $label }}" data-label="{{ $label }}">
-                <img src="https://flagcdn.com/24x18/{{ strtolower($code) }}.png" alt="" width="24" height="18">
+                <img src="https://flagcdn.com/24x18/{{ strtolower($code) }}.png" alt="" width="24"
+                    height="18">
             </span>
         @endforeach
     </div>

@@ -8,7 +8,9 @@ use App\Models\Firestore\Appointment;
 use App\Models\Firestore\AppSetting;
 use App\Models\Firestore\Doctor;
 use App\Services\DoctorAvailabilityService;
+use App\Exceptions\SlotUnavailableException;
 use App\Services\FirestoreService;
+use App\Support\AppointmentTime;
 use Carbon\Carbon;
 use Flutterwave\Flutterwave;
 use Illuminate\Http\Request;
@@ -40,39 +42,42 @@ class BookingController extends Controller
 
     public function BookingSlots($id)
     {
-        $result = $this->availabilityService->getAvailability($id);
+        $result = $this->availabilityService->getAvailability($id, null, current_user()['timezone'] ?? null);
 
         if (! $result) {
             return redirect()
                 ->back()
-                ->with('error', 'This doctor has not set their availability yet. Please check back later.');
+                ->with('error', __('app.flash.doctor_no_availability_later'));
         }
 
         $doctor = $result['doctor'];
         $availability = $result['availability'];
+        $timezone = $result['timezone'];
         $title = 'Select Available Slots';
 
-        return view('booking', compact('doctor', 'title', 'availability'));
+        return view('booking', compact('doctor', 'title', 'availability', 'timezone'));
     }
 
     /**
-     * JSON list of a doctor's open slots for the next 7 days, optionally
-     * excluding one appointment's own slot (used when rescheduling it).
+     * JSON list of a doctor's open slots for the next 7 days in the signed-in
+     * user's timezone, optionally excluding one appointment's own slot (used
+     * when rescheduling it).
      */
     public function availableSlots(Request $request, $id)
     {
-        $result = $this->availabilityService->getAvailability($id, $request->query('exclude'));
+        $result = $this->availabilityService->getAvailability($id, $request->query('exclude'), current_user()['timezone'] ?? null);
 
         if (! $result) {
             return response()->json([
                 'success' => false,
-                'message' => 'This doctor has not set their availability yet.',
+                'message' => __('app.flash.doctor_no_availability_yet'),
             ], 422);
         }
 
         return response()->json([
             'success' => true,
             'availability' => $result['availability'],
+            'timezone' => $result['timezone'],
         ]);
     }
 
@@ -96,41 +101,23 @@ class BookingController extends Controller
         $firestore = app(FirestoreService::class);
 
         $user = current_user();
-        $setting = $this->appSetting->first();
 
-        // Get doctor details for timezone
-        $doctor = $this->doctors->find($validated['doctor_id']);
-        $slotDuration = $setting['slotDuration'] ?? 30;
+        // selected_slot is the slot's UTC start instant (e.g. "2026-10-05T13:00:00Z").
+        $requestedStart = AppointmentTime::toUtc($validated['selected_slot']);
+        $slot = $requestedStart
+            ? $this->availabilityService->findOpenSlot($validated['doctor_id'], $requestedStart)
+            : null;
 
-        $startTime = strtotime($validated['selected_slot']);
-        $endTime = $startTime + $slotDuration * 60;
-
-        // Format times for display
-        $startTimeFormatted = date('h:i A', $startTime); // 3:30 PM format
-        $endTimeFormatted = date('h:i A', $endTime);
-
-        // Get current UTC time
-        $now = Carbon::now('UTC');
-
-        // Slot times are the doctor's own working-hours values, stored and shown
-        // as-is with no timezone conversion — the doctor's timezone is displayed
-        // alongside the time so patients can convert it themselves if needed.
-        $startDateTime = Carbon::parse($validated['selected_date'].' '.date('H:i:s', $startTime), 'UTC');
-        $endDateTime = Carbon::parse($validated['selected_date'].' '.date('H:i:s', $endTime), 'UTC');
-        $documentId = uniqid();
-
-        // Convert to UTC for storage
-        $startTimeUTC = $startDateTime->copy()->setTimezone('UTC');
-        $endTimeUTC = $endDateTime->copy()->setTimezone('UTC');
-
-        // Reject stale/tampered submissions for a slot that has already passed
-        // (e.g. the booking page was left open across midnight before submitting).
-        if ($startTimeUTC->lte($now)) {
+        // Rejects stale/tampered submissions, slots that have passed and slots booked meanwhile.
+        if (! $slot) {
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('error', 'The selected time slot is no longer available. Please choose a different date or time.');
+                ->with('error', __('app.flash.slot_unavailable_choose_different'));
         }
+
+        $doctor = $slot['doctor'];
+        $documentId = uniqid();
 
         $documentUrls = [];
 
@@ -165,25 +152,22 @@ class BookingController extends Controller
             'id' => $documentId,
             'doctorId' => $validated['doctor_id'],
             'doctorName' => $validated['doctor_name'],
-            'doctorTimezone' => $doctor['timezone'] ?? 'UTC',
             'patientId' => $user['uid'],
             'patientName' => $validated['name'],
-            'patientTimezone' => $user['timezone'] ?? 'UTC', // Assuming user has timezone field
             'phone' => $validated['phone'],
             'email' => $validated['email'],
-            'date' => $startDateTime,
-            'startTime' => $startTimeFormatted,
-            'endTime' => $endTimeFormatted,
-            'startTimeUTC' => $startTimeUTC,
-            'endTimeUTC' => $endTimeUTC,
+            ...AppointmentTime::buildFields(
+                $slot['start'],
+                $slot['end'],
+                $doctor['timezone'] ?? 'UTC',
+                $user['timezone'] ?? 'UTC',
+            ),
             'amount' => (float) $validated['amount'] ?? $doctor['consultationFee'],
             'paymentMethod' => $validated['payment_gateway'] === 'stripe' ? 'Debit Card' : 'Flutterwave',
             'symptoms' => $validated['symptoms'],
             'notes' => $validated['problem'],
             'documentUrls' => $documentUrls,
             'status' => 'pending',
-            'patientLocalTime' => $startTimeFormatted.' - '.$endTimeFormatted,
-            'doctorLocalTime' => $startDateTime->format('h:i A').' - '.$endDateTime->format('h:i A'),
             'createdAt' => now(),
             'updatedAt' => now(),
             'totalAmount' => $consultationFee + $stripeFee,
@@ -193,7 +177,18 @@ class BookingController extends Controller
             'platformCommission' => $platformFee ?? 0,
         ];
 
-        $appointment = $firestore->createWithId('appointments', $documentId, $appointmentData);
+        try {
+            // Unpaid until Stripe/Flutterwave confirms, so the slot is only held for 30 minutes.
+            $this->availabilityService->reserve($documentId, $validated['doctor_id'], $slot['start'], $slot['end'], $appointmentData, isNew: true,
+                holdExpiresAt: now('UTC')->addMinutes(AppointmentTime::UNPAID_HOLD_MINUTES));
+        } catch (SlotUnavailableException) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', __('app.flash.slot_unavailable_choose_different'));
+        }
+
+        $appointment = $firestore->find('appointments', $documentId);
 
         // Redirect based on selected gateway
         if ($validated['payment_gateway'] === 'stripe') {
@@ -242,6 +237,9 @@ class BookingController extends Controller
             'payment_method_types' => ['card'],
             'line_items' => $lineItems,
             'mode' => 'payment',
+            // The slot is only held for 30 minutes; Stripe's minimum session length is 30
+            // minutes, plus a minute so server clock skew can't make Stripe reject it.
+            'expires_at' => time() + 31 * 60,
             'success_url' => route('booking.success').'?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => route('booking.cancel'),
             'metadata' => [
@@ -354,10 +352,10 @@ class BookingController extends Controller
         if ($doctorId) {
             return redirect()
                 ->route('booking', ['id' => $doctorId])
-                ->with('error', 'Payment was cancelled. Please review your details and try again.');
+                ->with('error', __('app.flash.payment_cancelled_retry'));
         }
 
-        return redirect()->route('doctors')->with('error', 'Payment was cancelled.');
+        return redirect()->route('doctors')->with('error', __('app.flash.payment_cancelled'));
     }
 
     public function flutterwaveCallback(Request $request)

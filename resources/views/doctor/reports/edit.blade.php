@@ -258,7 +258,7 @@
                                                 <div class="finding-row d-flex gap-2 mb-2">
                                                     <input type="text" class="form-control" name="key_findings[]"
                                                         value="{{ $finding }}"
-                                                        placeholder="Finding {{ $i + 1 }}"
+                                                        placeholder="{{ __('app.reports.finding_n', ['n' => $i + 1]) }}"
                                                         {{ $editable ? '' : 'readonly' }}>
                                                     @if ($editable)
                                                         <button type="button"
@@ -271,7 +271,7 @@
                                             @if (empty($findings))
                                                 <div class="finding-row d-flex gap-2 mb-2">
                                                     <input type="text" class="form-control" name="key_findings[]"
-                                                        placeholder="Finding 1" {{ $editable ? '' : 'readonly' }}>
+                                                        placeholder="{{ __('app.reports.finding_n', ['n' => 1]) }}" {{ $editable ? '' : 'readonly' }}>
                                                     @if ($editable)
                                                         <button type="button"
                                                             class="btn btn-outline-danger btn-sm remove-finding flex-shrink-0">
@@ -371,7 +371,7 @@
                                                         style="width:20px;">{{ $i + 1 }}.</span>
                                                     <input type="text" class="form-control"
                                                         name="questions_for_physician[]" value="{{ $question }}"
-                                                        placeholder="Question {{ $i + 1 }}"
+                                                        placeholder="{{ __('app.reports.question_n', ['n' => $i + 1]) }}"
                                                         {{ $editable ? '' : 'readonly' }}>
                                                     @if ($editable)
                                                         <button type="button"
@@ -386,7 +386,7 @@
                                                     <span class="text-muted small fw-semibold flex-shrink-0"
                                                         style="width:20px;">1.</span>
                                                     <input type="text" class="form-control"
-                                                        name="questions_for_physician[]" placeholder="Question 1"
+                                                        name="questions_for_physician[]" placeholder="{{ __('app.reports.question_n', ['n' => 1]) }}"
                                                         {{ $editable ? '' : 'readonly' }}>
                                                     @if ($editable)
                                                         <button type="button"
@@ -532,7 +532,7 @@
         <div class="d-flex align-items-center gap-2 px-3 py-2 rounded-3 shadow"
             style="background:#fff;border:1px solid #e5e7eb;">
             <span id="saveIcon" class="spinner-border spinner-border-sm text-primary" role="status"></span>
-            <span id="saveText" class="small fw-medium" style="color:#374151;">Saving…</span>
+            <span id="saveText" class="small fw-medium" style="color:#374151;">{{ __('app.reports.saving') }}</span>
         </div>
     </div>
 
@@ -664,7 +664,7 @@
                     const row = document.createElement('div');
                     row.className = 'finding-row d-flex gap-2 mb-2';
                     row.innerHTML =
-                        `<input type="text" class="form-control" name="key_findings[]" placeholder="Finding ${count}">
+                        `<input type="text" class="form-control" name="key_findings[]" placeholder="${@js(__('app.reports.finding_n', ['n' => '__N__'])).replace('__N__', count)}">
             <button type="button" class="btn btn-outline-danger btn-sm remove-finding flex-shrink-0"><i class="isax isax-minus-cirlce"></i></button>`;
                     list.appendChild(row);
                     row.querySelector('.remove-finding').addEventListener('click', () => row.remove());
@@ -682,7 +682,7 @@
                     row.className = 'question-row d-flex gap-2 mb-2 align-items-center';
                     row.innerHTML =
                         `<span class="text-muted small fw-semibold flex-shrink-0" style="width:20px;">${count}.</span>
-            <input type="text" class="form-control" name="questions_for_physician[]" placeholder="Question ${count}">
+            <input type="text" class="form-control" name="questions_for_physician[]" placeholder="${@js(__('app.reports.question_n', ['n' => '__N__'])).replace('__N__', count)}">
             <button type="button" class="btn btn-outline-danger btn-sm remove-question flex-shrink-0"><i class="isax isax-minus-cirlce"></i></button>`;
                     list.appendChild(row);
                     row.querySelector('.remove-question').addEventListener('click', () => row.remove());

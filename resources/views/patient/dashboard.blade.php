@@ -7,7 +7,11 @@
         $categories = collect($categories ?? [])->take(8);
         $doctors = collect($doctors ?? [])->take(8);
         $tips = collect($tips ?? [])->take(3);
-        $nextAppointment = $futureAppointments->first();
+        // The soonest appointment that hasn't started yet, by its UTC start.
+        $nextAppointment = $futureAppointments
+            ->filter(fn ($a) => \App\Support\AppointmentTime::startUtc($a)?->isFuture())
+            ->sortBy(fn ($a) => \App\Support\AppointmentTime::startUtc($a)->getTimestamp())
+            ->first();
         $defaultCategoryImages = [
             'build/img/icons/cardiology.png',
             'build/img/category/category-02.svg',
@@ -31,10 +35,13 @@
                     <form class="patient-search-card" action="{{ route('doctors') }}" method="GET">
                         <i class="isax isax-search-normal-1"></i>
                         <input type="search" name="search" placeholder="{{ __('app.patient_dashboard.search_placeholder') }}">
-                        <button type="submit" aria-label="Search filters">
+                        <button type="submit" aria-label="{{ __('app.common.search') }}">
                             <i class="isax isax-setting-4"></i>
                         </button>
                     </form>
+
+                    {{-- Patient location: doctors approved to practise in this country --}}
+                    @include('partials.doctor-country-filter', compact('country', 'countryOptions'))
 
                     <section class="patient-section">
                         <div class="patient-section-head">
@@ -87,8 +94,8 @@
                             </div>
                             @if ($nextAppointment)
                                 <div class="appointment-copy">
-                                    <h3>Dr. {{ $nextAppointment['doctorName'] ?? 'Doctor' }}</h3>
-                                    <p>{{ $nextAppointment['patientLocalTime'] ?? ($nextAppointment['startTime'] ?? '') . ' - ' . ($nextAppointment['endTime'] ?? '') }}
+                                    <h3>{{ __('app.review.dr_name', ['name' => $nextAppointment['doctorName'] ?? __('app.appointments.doctor')]) }}</h3>
+                                    <p>{{ appointment_when($nextAppointment)['label'] }}
                                     </p>
                                     <a href="{{ route('patient.appointments') }}">{{ __('app.patient_dashboard.view_appointment') }}</a>
                                 </div>
@@ -123,7 +130,7 @@
                                             alt="{{ $doctor['name'] ?? 'Doctor' }}">
                                         <div>
                                             <h3>
-                                                Dr. {{ $doctor['name'] ?? 'Doctor' }}
+                                                {{ __('app.review.dr_name', ['name' => $doctor['name'] ?? __('app.appointments.doctor')]) }}
                                                 <i class="fa-solid fa-circle-check"></i>
                                             </h3>
                                             <p>{{ $doctor['specializations'][0] ?? 'Specialist' }}</p>
@@ -133,6 +140,7 @@
                                                 {{ number_format((float) ($doctor['rating'] ?? 0), 1) }}
                                                 <span>({{ $doctor['totalReviews'] ?? 0 }})</span>
                                             </div>
+                                            @include('partials.doctor-practice-countries', ['doctor' => $doctor, 'country' => $country])
                                             <div
                                                 class="doctor-availability {{ $doctor['available'] ?? false ? 'text-success' : 'text-danger' }}">
                                                 <i class="fa-solid fa-circle-check"></i>
@@ -148,7 +156,7 @@
                             @empty
                                 <article class="patient-doctor-card">
                                     <div class="doctor-card-top">
-                                        <img src="{{ asset('build/img/doctor-grid/doctor-grid-01.jpg') }}" alt="Doctor">
+                                        <img src="{{ asset('build/img/doctor-grid/doctor-grid-01.jpg') }}" alt="{{ __('app.appointments.doctor') }}">
                                         <div>
                                             <h3>{{ __('app.patient_dashboard.find_specialist') }} <i class="fa-solid fa-circle-check"></i></h3>
                                             <p>{{ __('app.patient_dashboard.second_opinion_care') }}</p>

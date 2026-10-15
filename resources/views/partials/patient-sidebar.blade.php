@@ -13,7 +13,7 @@
             <div class="profile-info-widget">
 
                 <a href="{{ route('patient.settings') }}" class="booking-doc-img">
-                    <img src="{{ $profileImage }}" alt="User Image">
+                    <img src="{{ $profileImage }}" alt="{{ __('app.stories.user_image') }}">
                 </a>
 
                 <div class="profile-det-info">

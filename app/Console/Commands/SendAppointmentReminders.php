@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Mail\AppointmentReminder;
 use App\Services\FirestoreService;
+use App\Support\AppointmentTime;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -22,15 +23,18 @@ class SendAppointmentReminders extends Command
 
     public function handle(): int
     {
-        // Target window: appointments between 23 h and 25 h from now
-        $windowStart = Carbon::now()->addHours(23);
-        $windowEnd = Carbon::now()->addHours(25);
+        // Target window: appointments starting between 23 h and 25 h from now
+        $windowStart = Carbon::now('UTC')->addHours(23);
+        $windowEnd = Carbon::now('UTC')->addHours(25);
 
+        // The query uses the legacy `date` field (which has the Firestore index)
+        // over a wider range, since older appointments stored only their calendar
+        // date there; the exact UTC start decides who is actually due.
         $result = $this->firestore->paginatedQuery(
             collection: 'appointments',
             filters: [
-                ['field' => 'date', 'op' => '>=', 'value' => $windowStart],
-                ['field' => 'date', 'op' => '<=', 'value' => $windowEnd],
+                ['field' => 'date', 'op' => '>=', 'value' => $windowStart->copy()->subDay()],
+                ['field' => 'date', 'op' => '<=', 'value' => $windowEnd->copy()->addDay()],
                 ['field' => 'status', 'op' => 'in', 'value' => ['pending', 'confirmed']],
             ],
             limit: 500,
@@ -38,7 +42,13 @@ class SendAppointmentReminders extends Command
             orderByDirection: 'ASC'
         );
 
-        $appointments = $result['documents'] ?? [];
+        $appointments = array_filter($result['documents'] ?? [], function ($appt) use ($windowStart, $windowEnd) {
+            $start = AppointmentTime::startUtc($appt);
+
+            return AppointmentTime::isCanonical($appt)
+                && $start
+                && $start->between($windowStart, $windowEnd);
+        });
 
         if (empty($appointments)) {
             $this->info('No appointments in the 24-h window — nothing to send.');

@@ -43,6 +43,7 @@ Route::middleware(['admin.auth'])->group(function () {
     Route::patch('/doctors/{doctor}/top', [AdminDoctorController::class, 'toggleTopDoctor'])->name('doctors.top');
     Route::post('/doctors/{doctor}/approve', [AdminDoctorController::class, 'approve'])->name('doctors.approve');
     Route::post('/doctors/{doctor}/decline', [AdminDoctorController::class, 'decline'])->name('doctors.decline');
+    Route::post('/doctors/{doctor}/countries/{entry}/review', [AdminDoctorController::class, 'reviewCountry'])->name('doctors.countries.review');
     Route::patch('/doctors/{doctor}/status', [AdminDashboardController::class, 'toggleDoctorStatus'])->name('doctors.status');
     Route::get('/patient-list', [AdminPatientController::class, 'index'])->name('patient-list');
     Route::get('/patients/data', [AdminPatientController::class, 'data'])->name('patients.data');

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Second Opinion Report {{ $report['report_number'] ?? '' }} — PriGina Global Telemed</title>
+    <title>{{ __('app.reports.second_opinion_report') }} {{ $report['report_number'] ?? '' }} — PriGina Global Telemed</title>
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
@@ -422,13 +422,13 @@
             </div>
             <div class="report-id">
                 <div class="num">{{ $report['report_number'] ?? 'N/A' }}</div>
-                <div class="type">Second Opinion Report</div>
+                <div class="type">{{ __('app.reports.second_opinion_report') }}</div>
                 <div class="date-line">
                     @if (isset($report['report_information']['report_date']))
-                        Report Date:
-                        {{ \Carbon\Carbon::parse($report['report_information']['report_date'])->format('M d, Y') }}<br>
+                        {{ __('app.reports.report_date') }}:
+                        {{ \Carbon\Carbon::parse($report['report_information']['report_date'])->translatedFormat('M d, Y') }}<br>
                     @endif
-                    Case ID: {{ $report['report_information']['case_id'] ?? ($report['appointment_id'] ?? '—') }}
+                    {{ __('app.reports.case_id') }}: {{ $report['report_information']['case_id'] ?? ($report['appointment_id'] ?? '—') }}
                 </div>
             </div>
         </div>
@@ -436,41 +436,41 @@
         {{-- ── Row 1: Report Info | Physician Info ── --}}
         <div class="info-row">
             <div class="info-col">
-                <div class="section-title">1. Report Information</div>
+                <div class="section-title">1. {{ __('app.reports.section_report_info') }}</div>
                 <div class="grid-2">
                     <div class="field">
-                        <label>Report Number</label>
+                        <label>{{ __('app.reports.report_number') }}</label>
                         <span>{{ $report['report_number'] ?? '—' }}</span>
                     </div>
                     <div class="field">
-                        <label>Report Date</label>
-                        <span>{{ isset($report['report_information']['report_date']) ? \Carbon\Carbon::parse($report['report_information']['report_date'])->format('M d, Y') : '—' }}</span>
+                        <label>{{ __('app.reports.report_date') }}</label>
+                        <span>{{ isset($report['report_information']['report_date']) ? \Carbon\Carbon::parse($report['report_information']['report_date'])->translatedFormat('M d, Y') : '—' }}</span>
                     </div>
                     <div class="field">
-                        <label>Case ID</label>
+                        <label>{{ __('app.reports.case_id') }}</label>
                         <span>{{ $report['report_information']['case_id'] ?? ($report['appointment_id'] ?? '—') }}</span>
                     </div>
                     <div class="field">
-                        <label>Country of Practice</label>
+                        <label>{{ __('app.profile.practice_country') }}</label>
                         <span>{{ $report['report_information']['country_of_practice'] ?? '—' }}</span>
                     </div>
                 </div>
             </div>
             <div class="info-col">
-                <div class="section-title">2. Physician Information</div>
+                <div class="section-title">2. {{ __('app.reports.section_physician_info') }}</div>
                 <div class="field">
-                    <label>Physician</label>
-                    <span class="big">Dr. {{ $report['report_information']['physician_name'] ?? '—' }}</span>
+                    <label>{{ __('app.reports.physician') }}</label>
+                    <span class="big">{{ __('app.review.dr_name', ['name' => $report['report_information']['physician_name'] ?? '—']) }}</span>
                 </div>
                 <div class="grid-2" style="margin-top:10px;">
                     <div class="field">
-                        <label>Specialty</label>
+                        <label>{{ __('app.reports.specialty') }}</label>
                         <span>
                             {{ \Illuminate\Support\Str::headline($report['report_information']['specialty'] ?? '') ?: '—' }}
                         </span>
                     </div>
                     <div class="field">
-                        <label>Country</label>
+                        <label>{{ __('app.reports.country') }}</label>
                         <span>
                             {{ $report['report_information']['country'] ?: $report['report_information']['country_of_practice'] ?? '—' }}
                         </span>
@@ -482,38 +482,39 @@
         {{-- ── Row 2: Patient Info | Documents Reviewed ── --}}
         <div class="info-row">
             <div class="info-col">
-                <div class="section-title">3. Patient Information</div>
+                <div class="section-title">3. {{ __('app.reports.section_patient_info') }}</div>
                 <div class="grid-2">
                     <div class="field">
-                        <label>Patient Name</label>
+                        <label>{{ __('app.reports.patient_name') }}</label>
                         <span>{{ $report['patient_information']['patient_name'] ?? '—' }}</span>
                     </div>
                     <div class="field">
-                        <label>Age</label>
+                        <label>{{ __('app.reports.age') }}</label>
                         <span>{{ $report['patient_information']['age'] ?? '—' }}</span>
                     </div>
                     <div class="field">
-                        <label>Gender</label>
-                        <span>{{ $report['patient_information']['gender'] ?? '—' }}</span>
+                        <label>{{ __('app.reports.gender') }}</label>
+                        @php $genderKey = 'app.reports.gender_' . strtolower($report['patient_information']['gender'] ?? ''); @endphp
+                        <span>{{ empty($report['patient_information']['gender']) ? '—' : (Lang::has($genderKey) ? __($genderKey) : $report['patient_information']['gender']) }}</span>
                     </div>
                 </div>
                 @if (!empty($report['patient_information']['primary_concern']))
                     <div class="field" style="margin-top:10px;">
-                        <label>Primary Concern / Diagnosis Under Review</label>
+                        <label>{{ __('app.reports.primary_concern') }}</label>
                         <span>{{ $report['patient_information']['primary_concern'] }}</span>
                     </div>
                 @endif
             </div>
             <div class="info-col">
-                <div class="section-title">4. Documents Reviewed</div>
+                <div class="section-title">4. {{ __('app.reports.section_docs_reviewed') }}</div>
                 @php
                     $docLabels = [
-                        'medical_records' => 'Medical Records',
-                        'laboratory_results' => 'Lab Results',
-                        'imaging_studies' => 'Imaging Studies',
-                        'pathology_reports' => 'Pathology Reports',
-                        'operative_reports' => 'Operative Reports',
-                        'consultation_notes' => 'Consultation Notes',
+                        'medical_records' => __('app.reports.doc_medical_records'),
+                        'laboratory_results' => __('app.reports.doc_lab_results'),
+                        'imaging_studies' => __('app.reports.doc_imaging'),
+                        'pathology_reports' => __('app.reports.doc_pathology'),
+                        'operative_reports' => __('app.reports.doc_operative'),
+                        'consultation_notes' => __('app.reports.doc_consultation'),
                     ];
                     $reviewedDocs = collect($docLabels)->filter(
                         fn($_, $key) => !empty($report['documents_reviewed'][$key] ?? false),
@@ -529,7 +530,7 @@
                         @endif
                     </ul>
                 @else
-                    <span style="font-size:12px;color:#94a3b8;">No documents listed</span>
+                    <span style="font-size:12px;color:#94a3b8;">{{ __('app.reports.no_documents') }}</span>
                 @endif
             </div>
         </div>
@@ -537,7 +538,7 @@
         {{-- ── 5. Clinical Summary ── --}}
         @if (!empty($report['clinical_summary']))
             <div class="section">
-                <div class="section-title">5. Clinical Summary</div>
+                <div class="section-title">5. {{ __('app.reports.section_clinical') }}</div>
                 <div class="text-content">{!! $report['clinical_summary'] !!}</div>
             </div>
         @endif
@@ -545,7 +546,7 @@
         {{-- ── 6. Second Opinion Assessment ── --}}
         @if (!empty($report['second_opinion_assessment']))
             <div class="section">
-                <div class="section-title">6. Second Opinion Assessment</div>
+                <div class="section-title">6. {{ __('app.reports.section_assessment') }}</div>
                 <div class="text-content">{!! $report['second_opinion_assessment'] !!}</div>
             </div>
         @endif
@@ -553,7 +554,7 @@
         {{-- ── 7. Key Findings ── --}}
         @if (!empty($report['key_findings']))
             <div class="section">
-                <div class="section-title">7. Key Findings</div>
+                <div class="section-title">7. {{ __('app.reports.section_findings') }}</div>
                 <ul class="bullet-list">
                     @foreach ($report['key_findings'] as $finding)
                         @if (trim($finding))
@@ -567,7 +568,7 @@
         {{-- ── 8. Diagnostic Considerations ── --}}
         @if (!empty($report['diagnostic_considerations']))
             <div class="section">
-                <div class="section-title">8. Diagnostic Considerations</div>
+                <div class="section-title">8. {{ __('app.reports.section_diagnostic') }}</div>
                 <div class="text-content">{!! $report['diagnostic_considerations'] !!}</div>
             </div>
         @endif
@@ -575,14 +576,14 @@
         {{-- ── 9. Recommendations ── --}}
         @php
             $recLabels = [
-                'additional_testing' => 'Additional Testing',
-                'additional_imaging' => 'Additional Imaging',
-                'specialist_referral' => 'Specialist Referral',
-                'treatment_modification' => 'Treatment Modification',
-                'monitoring' => 'Monitoring / Observation',
-                'surgical_consultation' => 'Surgical Consultation',
-                'lifestyle_modifications' => 'Lifestyle Modifications',
-                'other' => 'Other',
+                'additional_testing' => __('app.reports.rec_additional_testing'),
+                'additional_imaging' => __('app.reports.rec_additional_imaging'),
+                'specialist_referral' => __('app.reports.rec_specialist_referral'),
+                'treatment_modification' => __('app.reports.rec_treatment_modification'),
+                'monitoring' => __('app.reports.rec_monitoring'),
+                'surgical_consultation' => __('app.reports.rec_surgical'),
+                'lifestyle_modifications' => __('app.reports.rec_lifestyle'),
+                'other' => __('app.reports.gender_other'),
             ];
             $selectedRecs = collect($recLabels)->filter(
                 fn($_, $key) => !empty($report['recommendations'][$key] ?? false),
@@ -590,7 +591,7 @@
         @endphp
         @if ($selectedRecs->isNotEmpty() || !empty($report['recommendations']['details']))
             <div class="section">
-                <div class="section-title">9. Recommendations</div>
+                <div class="section-title">9. {{ __('app.reports.section_recommendations') }}</div>
                 @if ($selectedRecs->isNotEmpty())
                     <div class="rec-tags">
                         @foreach ($selectedRecs as $key => $label)
@@ -607,7 +608,7 @@
         {{-- ── 10. Questions for Physician ── --}}
         @if (!empty($report['questions_for_physician']))
             <div class="section">
-                <div class="section-title">10. Questions to Discuss with Treating Physician</div>
+                <div class="section-title">10. {{ __('app.reports.questions_title') }}</div>
                 <ol class="numbered-list">
                     @foreach ($report['questions_for_physician'] as $question)
                         @if (trim($question))
@@ -621,7 +622,7 @@
         {{-- ── 11. Patient-Friendly Summary ── --}}
         @if (!empty($report['patient_friendly_summary']))
             <div class="section">
-                <div class="section-title">11. Patient-Friendly Summary</div>
+                <div class="section-title">11. {{ __('app.reports.section_patient_summary') }}</div>
                 <div class="text-content">{!! $report['patient_friendly_summary'] !!}</div>
             </div>
         @endif
@@ -629,25 +630,22 @@
         {{-- ── Bottom: Disclaimer | Physician Certification ── --}}
         <div class="bottom-row" style="border-top: 1px solid #e2e8f0;">
             <div class="bottom-col">
-                <div class="section-title">Disclaimer</div>
+                <div class="section-title">{{ __('app.reports.disclaimer') }}</div>
                 <div class="disclaimer-box">
-                    This second opinion report is prepared based on the medical documents provided. It does not replace
-                    the patient's treating physician's judgment and is intended to assist in informed medical
-                    decision-making. PriGina Global Telemed and the reviewing physician are not responsible for
-                    treatment decisions made based on this report.
+                    {{ __('app.reports.pdf_disclaimer') }}
                 </div>
             </div>
             <div class="bottom-col">
-                <div class="section-title">Physician Certification</div>
-                <div class="sig-name">Dr. {{ $report['certification']['physician_name'] ?? '—' }}</div>
+                <div class="section-title">{{ __('app.reports.physician_certification') }}</div>
+                <div class="sig-name">{{ __('app.review.dr_name', ['name' => $report['certification']['physician_name'] ?? '—']) }}</div>
                 <div class="sig-sub">
                     {{ \Illuminate\Support\Str::headline($report['certification']['specialty']) ?? '' }}<br>
                     PriGina Global Telemed
                 </div>
                 @if (!empty($report['certification']['certified_at']))
                     <div class="certified-badge">
-                        &#10003; Certified on
-                        {{ \Carbon\Carbon::parse($report['certification']['certified_at'])->format('M d, Y') }}
+                        &#10003; {{ __('app.reports.certified_on') }}
+                        {{ \Carbon\Carbon::parse($report['certification']['certified_at'])->translatedFormat('M d, Y') }}
                     </div>
                 @endif
             </div>
@@ -656,15 +654,15 @@
         {{-- ── Action Bar (hidden on print) ── --}}
         <div class="action-bar">
             <div>
-                <div class="action-bar-title">Patient Dashboard Actions</div>
+                <div class="action-bar-title">{{ __('app.reports.dashboard_actions') }}</div>
                 <div class="action-buttons" id="actionBar">
-                    <span onclick="downloadPdf()"><i class="fi fi-rr-file-download"></i>Download PDF</span>
-                    <span onclick="window.print()"><i class="fi fi-rr-print"></i>Print Report</span>
-                    <span onclick="history.back()"><i class="fi fi-rr-arrow-left"></i>Go Back</span>
+                    <span onclick="downloadPdf()"><i class="fi fi-rr-file-download"></i>{{ __('app.reports.download_pdf') }}</span>
+                    <span onclick="window.print()"><i class="fi fi-rr-print"></i>{{ __('app.reports.print_report') }}</span>
+                    <span onclick="history.back()"><i class="fi fi-rr-arrow-left"></i>{{ __('app.calls.go_back') }}</span>
                 </div>
             </div>
             <div>
-                <div class="action-bar-title">Need Help?</div>
+                <div class="action-bar-title">{{ __('app.reports.need_help') }}</div>
                 <ul class="contact-list">
                     <li><i class="fi fi-rr-globe"></i> www.priginaglobaltelemed.com</li>
                     <li><i class="fi fi-rr-envelope"></i> info@priginaglobaltelemed.com</li>
@@ -675,7 +673,7 @@
 
         {{-- ── Footer bar ── --}}
         <div class="pdf-footer">
-            <p>PriGina Global Telemed &mdash; Healthcare without borders.</p>
+            <p>PriGina Global Telemed &mdash; {{ __('app.our_mission.tagline') }}</p>
         </div>
     </div>
 

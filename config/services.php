@@ -61,4 +61,11 @@ return [
         'secretHash' => env('FLW_SECRET_HASH'),
     ],
 
+
+    // Shared with the Cloud Functions (CALLS_WEBHOOK_SECRET in functions/.env)
+    // so only they can call /api/calls/{id}/changed.
+    'calls_webhook' => [
+        'secret' => env('CALLS_WEBHOOK_SECRET'),
+    ],
+
 ];
