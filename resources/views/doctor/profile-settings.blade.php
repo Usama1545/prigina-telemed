@@ -261,8 +261,11 @@
 
                                 {{-- Countries of Practice: changed or new licences go back for admin review --}}
                                 @include('partials.countries-of-practice-fields', [
-                                    'entries' => \App\Support\CountriesOfPractice::of(current_user())
-                                        ?: array_filter([\App\Support\CountriesOfPractice::fromLegacy(current_user())]),
+                                    'entries' =>
+                                        \App\Support\CountriesOfPractice::of(current_user()) ?:
+                                        array_filter([
+                                            \App\Support\CountriesOfPractice::fromLegacy(current_user()),
+                                        ]),
                                     'documentRequired' => false,
                                 ])
                             </div>
@@ -308,16 +311,20 @@
                                             <optgroup label="Americas">
                                                 <option value="America/New_York"
                                                     {{ (current_user()['timezone'] ?? '') == 'America/New_York' ? 'selected' : '' }}>
-                                                    {{ tz_label('America/New_York', 'Eastern Time (US & Canada)') }}</option>
+                                                    {{ tz_label('America/New_York', 'Eastern Time (US & Canada)') }}
+                                                </option>
                                                 <option value="America/Chicago"
                                                     {{ (current_user()['timezone'] ?? '') == 'America/Chicago' ? 'selected' : '' }}>
-                                                    {{ tz_label('America/Chicago', 'Central Time (US & Canada)') }}</option>
+                                                    {{ tz_label('America/Chicago', 'Central Time (US & Canada)') }}
+                                                </option>
                                                 <option value="America/Denver"
                                                     {{ (current_user()['timezone'] ?? '') == 'America/Denver' ? 'selected' : '' }}>
-                                                    {{ tz_label('America/Denver', 'Mountain Time (US & Canada)') }}</option>
+                                                    {{ tz_label('America/Denver', 'Mountain Time (US & Canada)') }}
+                                                </option>
                                                 <option value="America/Los_Angeles"
                                                     {{ (current_user()['timezone'] ?? '') == 'America/Los_Angeles' ? 'selected' : '' }}>
-                                                    {{ tz_label('America/Los_Angeles', 'Pacific Time (US & Canada)') }}</option>
+                                                    {{ tz_label('America/Los_Angeles', 'Pacific Time (US & Canada)') }}
+                                                </option>
                                                 <option value="America/Anchorage"
                                                     {{ (current_user()['timezone'] ?? '') == 'America/Anchorage' ? 'selected' : '' }}>
                                                     {{ tz_label('America/Anchorage', 'Alaska') }}</option>
@@ -647,7 +654,8 @@
                                                 <div class="col-md-5">
                                                     <select class="form-control break-start" name="break_start[]"
                                                         required>
-                                                        <option value="">{{ __('app.profile.select_start_time') }}</option>
+                                                        <option value="">{{ __('app.profile.select_start_time') }}
+                                                        </option>
                                                         @php
                                                             $timeOptions = '';
                                                             for ($i = 0; $i < 24; $i++) {
@@ -665,7 +673,8 @@
 
                                                 <div class="col-md-5">
                                                     <select class="form-control break-end" name="break_end[]" required>
-                                                        <option value="">{{ __('app.profile.select_end_time') }}</option>
+                                                        <option value="">{{ __('app.profile.select_end_time') }}
+                                                        </option>
                                                         @php
                                                             $timeOptions = '';
                                                             for ($i = 0; $i < 24; $i++) {
@@ -724,24 +733,24 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="card border-danger">
-                            <div class="card-body">
-                                <div class="border-bottom pb-3 mb-3">
-                                    <h5 class="text-danger">{{ __('app.profile.delete_account') }}</h5>
-                                </div>
-                                <p class="text-muted">{{ __('app.profile.delete_account_notice') }}</p>
-                                <form id="deleteAccountForm" action="{{ route('doctor.settings.destroy') }}"
-                                    method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-outline-danger">
-                                        {{ __('app.profile.delete_account') }}
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
                     </form>
+                    <div class="card border-danger">
+                        <div class="card-body">
+                            <div class="border-bottom pb-3 mb-3">
+                                <h5 class="text-danger">{{ __('app.profile.delete_account') }}</h5>
+                            </div>
+                            <p class="text-muted">{{ __('app.profile.delete_account_notice') }}</p>
+                            <form id="deleteAccountForm" action="{{ route('doctor.settings.destroy') }}"
+                                method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-outline-danger">
+                                    {{ __('app.profile.delete_account') }}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
                     <!-- /Profile Settings -->
                 </div>
             </div>

@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers\Doctor;
 
-use App\Services\DoctorDirectory;
-use App\Services\CountriesOfPracticeService;
-use App\Support\CountriesOfPractice;
+use App\Exceptions\SlotUnavailableException;
 use App\Http\Controllers\Concerns\OpensAppointmentCalls;
 use App\Http\Controllers\Controller;
 use App\Mail\AppointmentCompleted;
 use App\Mail\AppointmentConfirmed;
 use App\Mail\AppointmentRejected;
-use App\Exceptions\SlotUnavailableException;
+use App\Services\CountriesOfPracticeService;
 use App\Services\DoctorAvailabilityService;
+use App\Services\DoctorDirectory;
 use App\Services\FirebaseAuthService;
 use App\Services\FirestoreService;
 use App\Support\AppointmentTime;
+use App\Support\CountriesOfPractice;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -969,5 +968,4 @@ class DoctorProfileController extends Controller
             'endTime' => AppointmentTime::clock($local['end']),
         ]);
     }
-
 }
