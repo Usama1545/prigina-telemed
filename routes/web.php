@@ -65,6 +65,7 @@ Route::middleware(['firebase.auth'])->group(function () {
         Route::get('/dashboard', 'dashboard')->name('patient.dashboard');
         Route::get('/profile', 'profile')->name('patient.settings');
         Route::put('/profile', 'update')->name('patient.settings.update');
+        Route::post('/profile/photo', 'updatePhoto')->name('patient.settings.photo');
         Route::put('/profile/change-password', 'changePassword')->name('patient.settings.changepassword');
         Route::delete('/profile', 'deleteAccount')->name('patient.settings.destroy');
         Route::get('/conversations', 'conversations')->name('patient.conversations');
@@ -112,6 +113,7 @@ Route::middleware(['firebase.auth'])->group(function () {
         Route::get('/', 'dashboard')->name('doctor.index');
         Route::get('/profile', 'profile')->name('doctor.settings');
         Route::post('/profile', 'update')->name('doctor.settings.update');
+        Route::post('/profile/photo', 'updatePhoto')->name('doctor.settings.photo');
         Route::put('/profile/change-password', 'changePassword')->name('doctor.settings.changepassword');
         Route::delete('/profile', 'deleteAccount')->name('doctor.settings.destroy');
         Route::get('/conversations', 'conversations')->name('doctor.conversations');

@@ -49,22 +49,29 @@
                         <input type="hidden" name="timezone" id="timezone">
                         <!-- Profile Image -->
                         <div class="setting-card bg-white">
-                            <label class="form-label mb-2">{{ __('app.profile.photo') }}</label>
-                            <div class="change-avatar img-upload">
-                                <div class="profile-img">
-                                    <i class="fa-solid fa-file-image"></i>
+                            <label for="profilePhotoInput" class="form-label mb-2" style="cursor: pointer">{{ __('app.profile.photo') }}</label>
+                            <label for="profilePhotoInput" class="change-avatar img-upload mb-0" style="cursor: pointer">
+                                <div class="profile-img" id="profilePhotoPreview">
+                                    @if (!empty(current_user()['profilePicture']))
+                                        <img src="{{ current_user()['profilePicture'] }}"
+                                            alt="{{ __('app.profile.photo') }}">
+                                    @else
+                                        <i class="fa-solid fa-file-image"></i>
+                                    @endif
                                 </div>
                                 <div class="upload-img">
                                     <div class="imgs-load d-flex align-items-center">
                                         <div class="change-photo">
                                             {{ __('app.profile.upload_new') }}
-                                            <input type="file" name="image" class="upload"
-                                                accept=".jpg,.jpeg,.png,.webp">
+                                            <input type="file" id="profilePhotoInput" class="upload"
+                                                accept=".jpg,.jpeg,.png,.webp"
+                                                data-url="{{ route('doctor.settings.photo') }}">
                                         </div>
                                     </div>
                                     <p>{{ __('app.profile.image_limit') }}</p>
+                                    <small id="profilePhotoStatus" class="d-block"></small>
                                 </div>
-                            </div>
+                            </label>
                         </div>
 
                         <!-- Personal Details -->
@@ -791,6 +798,51 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
+
+            // Upload the profile photo as soon as one is picked, no form submit needed.
+            $('#profilePhotoInput').on('change', function() {
+                const input = this;
+                const file = input.files[0];
+                if (!file) return;
+
+                const $status = $('#profilePhotoStatus');
+                const $preview = $('#profilePhotoPreview');
+                const previousHtml = $preview.html();
+
+                $preview.html($('<img>').attr('src', URL.createObjectURL(file)));
+                $status.removeClass('text-danger text-success').addClass('text-muted')
+                    .text(@json(__('app.profile.photo_uploading')));
+
+                const formData = new FormData();
+                formData.append('image', file);
+
+                $.ajax({
+                    url: $(input).data('url'),
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    success: function(res) {
+                        $preview.find('img').attr('src', res.url);
+                        $('.doctor-sidebar .booking-doc-img img').attr('src', res.url);
+                        $status.removeClass('text-muted').addClass('text-success').text(res
+                            .message);
+                    },
+                    error: function(xhr) {
+                        $preview.html(previousHtml);
+                        const errors = xhr.responseJSON?.errors?.image;
+                        $status.removeClass('text-muted').addClass('text-danger')
+                            .text(errors ? errors[0] : @json(__('app.profile.photo_upload_failed')));
+                    },
+                    complete: function() {
+                        input.value = '';
+                    }
+                });
+            });
 
             $('.select2').select2({
                 placeholder: @json(__('app.doctor_register.select_specializations')),

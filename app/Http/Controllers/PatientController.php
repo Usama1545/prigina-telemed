@@ -97,7 +97,6 @@ class PatientController extends Controller
             'gender' => 'nullable|in:male,female,other',
             'dob' => 'nullable|date',
             'age' => 'nullable|integer|min:0|max:150',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'bloodGroup' => 'nullable|string|max:10',
             'height' => 'nullable|string|max:20',
             'weight' => 'nullable|string|max:20',
@@ -139,29 +138,42 @@ class PatientController extends Controller
                 ->toISOString();
         }
 
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $fileName = time().'_'.$image->getClientOriginalName();
-            $filePath = "profile_pictures/patients/{$uid}/{$fileName}";
-
-            /** @var Storage $storage */
-            $storage = app('firebase.storage');
-            $bucket = $storage->getBucket();
-
-            $bucket->upload(
-                fopen($image->getRealPath(), 'r'),
-                [
-                    'name' => $filePath,
-                    'predefinedAcl' => 'publicRead',
-                ]
-            );
-
-            $data['photoUrl'] = 'https://storage.googleapis.com/'.$bucket->name().'/'.$filePath;
-        }
-
         $this->firestore->update('patients', $uid, $data);
 
         return redirect()->back()->with('success', __('app.flash.profile_updated'));
+    }
+
+    public function updatePhoto(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
+
+        $uid = current_user()['uid'];
+        $image = $request->file('image');
+        $fileName = time().'_'.$image->getClientOriginalName();
+        $filePath = "profile_pictures/patients/{$uid}/{$fileName}";
+
+        /** @var Storage $storage */
+        $storage = app('firebase.storage');
+        $bucket = $storage->getBucket();
+
+        $bucket->upload(
+            fopen($image->getRealPath(), 'r'),
+            [
+                'name' => $filePath,
+                'predefinedAcl' => 'publicRead',
+            ]
+        );
+
+        $imageUrl = 'https://storage.googleapis.com/'.$bucket->name().'/'.$filePath;
+
+        $this->firestore->update('patients', $uid, ['photoUrl' => $imageUrl]);
+
+        return response()->json([
+            'url' => $imageUrl,
+            'message' => __('app.flash.profile_photo_updated'),
+        ]);
     }
 
     public function appointments(Request $request)

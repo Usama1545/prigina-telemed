@@ -26,21 +26,28 @@
                                 </div>
 
                                 <div class="setting-card">
-                                    <label class="form-label mb-2">{{ __('app.profile.photo') }}</label>
-                                    <div class="change-avatar img-upload">
-                                        <div class="profile-img">
-                                            <i class="fa-solid fa-file-image"></i>
+                                    <label for="profilePhotoInput" class="form-label mb-2" style="cursor: pointer">{{ __('app.profile.photo') }}</label>
+                                    <label for="profilePhotoInput" class="change-avatar img-upload mb-0" style="cursor: pointer">
+                                        <div class="profile-img" id="profilePhotoPreview">
+                                            @if (!empty($patient['photoUrl']))
+                                                <img src="{{ $patient['photoUrl'] }}" alt="{{ __('app.profile.photo') }}">
+                                            @else
+                                                <i class="fa-solid fa-file-image"></i>
+                                            @endif
                                         </div>
                                         <div class="upload-img">
                                             <div class="imgs-load d-flex align-items-center">
                                                 <div class="change-photo">
                                                     {{ __('app.profile.upload_new') }}
-                                                    <input type="file" name="image" class="upload">
+                                                    <input type="file" id="profilePhotoInput" class="upload"
+                                                        accept=".jpg,.jpeg,.png,.webp"
+                                                        data-url="{{ route('patient.settings.photo') }}">
                                                 </div>
                                             </div>
                                             <p>{{ __('app.profile.image_limit') }}</p>
+                                            <small id="profilePhotoStatus" class="d-block"></small>
                                         </div>
-                                    </div>
+                                    </label>
                                 </div>
                                 <div class="setting-title">
                                     <h6>{{ __('app.profile.information') }}</h6>
@@ -127,7 +134,9 @@
                                                         class="text-danger">*</span></label>
                                                 @include('partials.country-select', [
                                                     'name' => 'countryOfResidence',
-                                                    'selected' => old('countryOfResidence', $patient['countryOfResidence'] ?? ''),
+                                                    'selected' => old(
+                                                        'countryOfResidence',
+                                                        $patient['countryOfResidence'] ?? ''),
                                                     'required' => true,
                                                     'placeholder' => __('app.country_of_residence.select'),
                                                 ])
@@ -139,21 +148,26 @@
                                                 <label class="form-label">{{ __('app.profile.timezone') }} <span
                                                         class="text-danger">*</span></label>
                                                 <select name="timezone" class="form-control" required>
-                                                    <option value="">{{ __('app.profile.select_timezone') }}</option>
+                                                    <option value="">{{ __('app.profile.select_timezone') }}
+                                                    </option>
                                                     <!-- Americas -->
                                                     <optgroup label="Americas">
                                                         <option value="America/New_York"
                                                             {{ ($patient['timezone'] ?? '') == 'America/New_York' ? 'selected' : '' }}>
-                                                            {{ tz_label('America/New_York', 'Eastern Time (US & Canada)') }}</option>
+                                                            {{ tz_label('America/New_York', 'Eastern Time (US & Canada)') }}
+                                                        </option>
                                                         <option value="America/Chicago"
                                                             {{ ($patient['timezone'] ?? '') == 'America/Chicago' ? 'selected' : '' }}>
-                                                            {{ tz_label('America/Chicago', 'Central Time (US & Canada)') }}</option>
+                                                            {{ tz_label('America/Chicago', 'Central Time (US & Canada)') }}
+                                                        </option>
                                                         <option value="America/Denver"
                                                             {{ ($patient['timezone'] ?? '') == 'America/Denver' ? 'selected' : '' }}>
-                                                            {{ tz_label('America/Denver', 'Mountain Time (US & Canada)') }}</option>
+                                                            {{ tz_label('America/Denver', 'Mountain Time (US & Canada)') }}
+                                                        </option>
                                                         <option value="America/Los_Angeles"
                                                             {{ ($patient['timezone'] ?? '') == 'America/Los_Angeles' ? 'selected' : '' }}>
-                                                            {{ tz_label('America/Los_Angeles', 'Pacific Time (US & Canada)') }}</option>
+                                                            {{ tz_label('America/Los_Angeles', 'Pacific Time (US & Canada)') }}
+                                                        </option>
                                                         <option value="America/Anchorage"
                                                             {{ ($patient['timezone'] ?? '') == 'America/Anchorage' ? 'selected' : '' }}>
                                                             {{ tz_label('America/Anchorage', 'Alaska') }}</option>
@@ -189,7 +203,8 @@
                                                             {{ tz_label('Europe/London', 'London (GMT/BST)') }}</option>
                                                         <option value="Europe/Paris"
                                                             {{ ($patient['timezone'] ?? '') == 'Europe/Paris' ? 'selected' : '' }}>
-                                                            {{ tz_label('Europe/Paris', 'Central European Time') }}</option>
+                                                            {{ tz_label('Europe/Paris', 'Central European Time') }}
+                                                        </option>
                                                         <option value="Europe/Berlin"
                                                             {{ ($patient['timezone'] ?? '') == 'Europe/Berlin' ? 'selected' : '' }}>
                                                             {{ tz_label('Europe/Berlin', 'Berlin') }}</option>
@@ -264,7 +279,8 @@
                                                     <optgroup label="Middle East">
                                                         <option value="Asia/Dubai"
                                                             {{ ($patient['timezone'] ?? '') == 'Asia/Dubai' ? 'selected' : '' }}>
-                                                            {{ tz_label('Asia/Dubai', 'Dubai (Gulf Standard Time)') }}</option>
+                                                            {{ tz_label('Asia/Dubai', 'Dubai (Gulf Standard Time)') }}
+                                                        </option>
                                                         <option value="Asia/Baghdad"
                                                             {{ ($patient['timezone'] ?? '') == 'Asia/Baghdad' ? 'selected' : '' }}>
                                                             {{ tz_label('Asia/Baghdad', 'Baghdad') }}</option>
@@ -285,7 +301,8 @@
                                                             {{ tz_label('Asia/Bangkok', 'Indochina Time') }}</option>
                                                         <option value="Asia/Ho_Chi_Minh"
                                                             {{ ($patient['timezone'] ?? '') == 'Asia/Ho_Chi_Minh' ? 'selected' : '' }}>
-                                                            {{ tz_label('Asia/Ho_Chi_Minh', 'Ho Chi Minh City') }}</option>
+                                                            {{ tz_label('Asia/Ho_Chi_Minh', 'Ho Chi Minh City') }}
+                                                        </option>
                                                         <option value="Asia/Hong_Kong"
                                                             {{ ($patient['timezone'] ?? '') == 'Asia/Hong_Kong' ? 'selected' : '' }}>
                                                             {{ tz_label('Asia/Hong_Kong', 'Hong Kong') }}</option>
@@ -477,7 +494,8 @@
                                 <h5>{{ __('app.help_support.title') }}</h5>
                             </div>
                             <div class="d-flex gap-2 flex-wrap">
-                                <a href="{{ route('patient.help-support') }}" class="btn btn-md btn-primary-gradient rounded-pill">
+                                <a href="{{ route('patient.help-support') }}"
+                                    class="btn btn-md btn-primary-gradient rounded-pill">
                                     <i class="isax isax-message-question me-1"></i> {{ __('app.help_support.title') }}
                                 </a>
                                 <a href="{{ route('patient.my-tickets') }}" class="btn btn-md btn-light rounded-pill">
@@ -553,6 +571,58 @@
                     }
 
                     ageInput.value = age >= 0 ? age : '';
+                });
+            }
+
+            // Upload the profile photo as soon as one is picked, no form submit needed.
+            const photoInput = document.getElementById('profilePhotoInput');
+            const photoPreview = document.getElementById('profilePhotoPreview');
+            const photoStatus = document.getElementById('profilePhotoStatus');
+
+            if (photoInput) {
+                photoInput.addEventListener('change', async function() {
+                    const file = this.files[0];
+                    if (!file) return;
+
+                    const previousHtml = photoPreview.innerHTML;
+                    const setStatus = (text, cls) => {
+                        photoStatus.className = 'd-block ' + cls;
+                        photoStatus.textContent = text;
+                    };
+
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(file);
+                    photoPreview.replaceChildren(img);
+                    setStatus(@json(__('app.profile.photo_uploading')), 'text-muted');
+
+                    const formData = new FormData();
+                    formData.append('image', file);
+
+                    try {
+                        const res = await fetch(this.dataset.url, {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Accept': 'application/json'
+                            }
+                        });
+                        const json = await res.json().catch(() => ({}));
+
+                        if (!res.ok) {
+                            throw new Error(json.errors?.image?.[0] || @json(__('app.profile.photo_upload_failed')));
+                        }
+
+                        img.src = json.url;
+                        document.querySelectorAll('.patient-profile-card .booking-doc-img img')
+                            .forEach(el => el.src = json.url);
+                        setStatus(json.message, 'text-success');
+                    } catch (err) {
+                        photoPreview.innerHTML = previousHtml;
+                        setStatus(err.message || @json(__('app.profile.photo_upload_failed')), 'text-danger');
+                    } finally {
+                        this.value = '';
+                    }
                 });
             }
 

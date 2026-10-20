@@ -24,7 +24,8 @@ $keep = collect(request()->except(['country', 'cursor']));
                 value="{{ $country ?? \App\Services\DoctorDirectory::ALL }}">
 
             <button type="button" id="countryToggle"
-                class="btn p-0 border-0 bg-transparent fw-bold fs-26 text-start text-primary w-100 d-flex align-items-center justify-content-between gap-2"
+                class="btn border rounded-3 bg-transparent fw-bold text-start text-primary w-100 d-flex align-items-center justify-content-between gap-2 px-3 py-2 my-1"
+                style="font-size:20px;"
                 aria-haspopup="listbox" aria-expanded="false">
                 <span class="text-truncate">{{ $country ? $selectedName : $t['all'] }}</span>
                 <svg class="flex-shrink-0" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"

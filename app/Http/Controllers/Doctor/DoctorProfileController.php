@@ -122,7 +122,6 @@ class DoctorProfileController extends Controller
             'languages' => 'required|array|min:1',
             // Countries of Practice; documents only needed for new or replaced licences.
             ...$countriesOfPractice->rules(documentRequired: false),
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'consultationFee' => 'required|numeric',
             'workingDays' => 'required|array',
             'workingHours' => 'required|array',
@@ -164,30 +163,6 @@ class DoctorProfileController extends Controller
             'ar' => $bioInput['ar'] ?? '',
         ];
 
-        // ✅ Handle Image Upload
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $fileName = time().'_'.$image->getClientOriginalName();
-
-            $filePath = "profile_pictures/doctor_profiles/{$uid}/{$fileName}";
-
-            /** @var Storage $storage */
-            $storage = app('firebase.storage');
-            $bucket = $storage->getBucket();
-
-            $bucket->upload(
-                fopen($image->getRealPath(), 'r'),
-                [
-                    'name' => $filePath,
-                    'predefinedAcl' => 'publicRead',
-                ]
-            );
-
-            $imageUrl = 'https://storage.googleapis.com/'.$bucket->name().'/'.$filePath;
-
-            $data['profilePicture'] = $imageUrl;
-        }
-
         $breaks = [];
 
         if (! empty($validated['breaks'])) {
@@ -217,6 +192,42 @@ class DoctorProfileController extends Controller
         DoctorDirectory::forget();
 
         return redirect()->back()->with('success', __('app.flash.profile_updated'));
+    }
+
+    public function updatePhoto(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
+
+        $uid = current_user()['uid'];
+        $image = $request->file('image');
+        $fileName = time().'_'.$image->getClientOriginalName();
+
+        $filePath = "profile_pictures/doctor_profiles/{$uid}/{$fileName}";
+
+        /** @var Storage $storage */
+        $storage = app('firebase.storage');
+        $bucket = $storage->getBucket();
+
+        $bucket->upload(
+            fopen($image->getRealPath(), 'r'),
+            [
+                'name' => $filePath,
+                'predefinedAcl' => 'publicRead',
+            ]
+        );
+
+        $imageUrl = 'https://storage.googleapis.com/'.$bucket->name().'/'.$filePath;
+
+        $this->firestore->update('doctors', $uid, ['profilePicture' => $imageUrl]);
+
+        DoctorDirectory::forget();
+
+        return response()->json([
+            'url' => $imageUrl,
+            'message' => __('app.flash.profile_photo_updated'),
+        ]);
     }
 
     public function appointments(Request $request)
