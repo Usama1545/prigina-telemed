@@ -185,6 +185,33 @@ final class CountriesOfPractice
     }
 
     /**
+     * Whether a profile edit ($before → $after, see merge()) added or changed
+     * any entry, i.e. sent something new to admin review. Removing entries
+     * doesn't count.
+     */
+    public static function hasNewSubmissions(array $before, array $after): bool
+    {
+        $old = [];
+        foreach ($before as $entry) {
+            $entry = self::normalize($entry);
+            $old[$entry['id']] = $entry;
+        }
+
+        foreach ($after as $entry) {
+            $entry = self::normalize($entry);
+            if ($entry['status'] !== self::PENDING) {
+                continue;
+            }
+            $prev = $old[$entry['id']] ?? null;
+            if (! $prev || $prev['status'] !== self::PENDING || $prev['submittedAt'] != $entry['submittedAt']) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * An admin's decision on one entry: approved, or rejected with a reason.
      *
      * @throws \InvalidArgumentException if the entry doesn't exist

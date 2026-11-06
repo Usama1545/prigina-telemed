@@ -801,6 +801,9 @@ return [
     ],
 
     'doctor_dashboard' => [
+        'under_review_title' => 'Votre compte est en cours de vérification',
+        'under_review_message' => 'Notre équipe vérifie vos informations. Tant que votre compte n\'est pas approuvé, votre profil ne sera pas visible par les patients dans la liste des médecins. Si l\'approbation prend plus de 3 jours ouvrables, veuillez contacter notre équipe d\'assistance.',
+        'under_review_contact' => 'Contacter l\'assistance',
         'todays_appointments' => "Rendez-vous d'aujourd'hui",
         'scheduled_today' => "Planifiés aujourd'hui",
         'no_appointments_today' => "Aucun rendez-vous aujourd'hui",
@@ -878,6 +881,7 @@ return [
         'status_pending' => 'En cours de vérification',
         'status_approved' => 'Approuvé',
         'status_rejected' => 'Refusé',
+        'review_notice' => 'L\'ajout d\'un nouveau pays ou la modification d\'un pays existant (pays, détails de la licence ou document) soumet votre compte à une nouvelle vérification par un administrateur. Tant qu\'il n\'est pas approuvé, vous n\'apparaîtrez pas dans la liste des médecins disponibles. Vous pouvez toujours vous connecter et vos rendez-vous existants ne sont pas affectés.',
         'rating_aria' => 'Note :rating sur 5',
         'view_appointments' => 'Voir les rendez-vous',
     ],
@@ -919,6 +923,7 @@ return [
         'status_pending' => 'En cours de vérification',
         'status_approved' => 'Approuvé',
         'status_rejected' => 'Refusé',
+        'review_notice' => 'L\'ajout d\'un nouveau pays ou la modification d\'un pays existant (pays, détails de la licence ou document) soumet votre compte à une nouvelle vérification par un administrateur. Tant qu\'il n\'est pas approuvé, vous n\'apparaîtrez pas dans la liste des médecins disponibles. Vous pouvez toujours vous connecter et vos rendez-vous existants ne sont pas affectés.',
     ],
 
     'doctor_register' => [

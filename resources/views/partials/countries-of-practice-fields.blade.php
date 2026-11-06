@@ -5,6 +5,7 @@
     @include('partials.countries-of-practice-fields', [
         'entries' => [],            // existing entries (profile), [] for sign-up
         'documentRequired' => true, // sign-up: every country needs a document
+        'reviewNotice' => false,    // profile: warn that changes need admin review
     ])
 --}}
 @php
@@ -32,6 +33,13 @@
 <div class="col-12 mb-3" id="countriesOfPractice">
     <h5 class="text-primary fw-bold mb-1">{{ $t['title'] }}</h5>
     <p class="text-muted small mb-3">{{ $t['subtitle'] }}</p>
+
+    @if ($reviewNotice ?? false)
+        <div class="alert alert-info d-flex align-items-start gap-2 py-2 small" role="alert">
+            <i class="fa-solid fa-circle-info mt-1"></i>
+            <div>{{ $t['review_notice'] }}</div>
+        </div>
+    @endif
 
     @if ($copErrors->isNotEmpty())
         <div class="alert alert-danger py-2">

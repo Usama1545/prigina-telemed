@@ -26,6 +26,18 @@
 
                 <div class="col-lg-8 col-xl-9">
 
+                    {{-- Unverified doctors (e.g. a Country of Practice change awaiting admin review) are hidden from patients --}}
+                    @if (($doctor['isVerified'] ?? false) !== true)
+                        <div class="alert alert-warning d-flex align-items-start gap-3 mb-4" role="alert">
+                            <i class="fa-solid fa-hourglass-half fs-4 mt-1"></i>
+                            <div>
+                                <h6 class="alert-heading fw-bold mb-1">{{ __('app.doctor_dashboard.under_review_title') }}</h6>
+                                <p class="mb-1">{{ __('app.doctor_dashboard.under_review_message') }}</p>
+                                <a href="{{ route('contact-us') }}" class="alert-link">{{ __('app.doctor_dashboard.under_review_contact') }}</a>
+                            </div>
+                        </div>
+                    @endif
+
                     @include('partials.app-install-banner')
 
                     <section class="doctor-home-stats">

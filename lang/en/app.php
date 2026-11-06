@@ -801,6 +801,9 @@ return [
     ],
 
     'doctor_dashboard' => [
+        'under_review_title' => 'Your account is under review',
+        'under_review_message' => 'Our team is verifying your details. Until your account is approved, your profile won\'t be shown to patients in the doctors list. If approval takes longer than 3 working days, please contact our support team.',
+        'under_review_contact' => 'Contact support',
         'todays_appointments' => "Today's Appointments",
         'scheduled_today' => 'Scheduled today',
         'no_appointments_today' => 'No appointments today',
@@ -878,6 +881,7 @@ return [
         'status_pending' => 'Under review',
         'status_approved' => 'Approved',
         'status_rejected' => 'Rejected',
+        'review_notice' => 'Adding a new country or changing an existing one (country, licence details or document) sends your account to an admin for re-verification. Until it is approved, you won\'t appear in the available doctors list. You can still log in and your existing appointments are not affected.',
         'rating_aria' => 'Rating :rating out of 5',
         'view_appointments' => 'View appointments',
     ],
@@ -919,6 +923,7 @@ return [
         'status_pending' => 'Under review',
         'status_approved' => 'Approved',
         'status_rejected' => 'Rejected',
+        'review_notice' => 'Adding a new country or changing an existing one (country, licence details or document) sends your account to an admin for re-verification. Until it is approved, you won\'t appear in the available doctors list. You can still log in and your existing appointments are not affected.',
     ],
 
     'doctor_register' => [

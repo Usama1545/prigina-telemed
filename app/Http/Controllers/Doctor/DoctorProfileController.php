@@ -17,6 +17,7 @@ use App\Support\AppointmentTime;
 use App\Support\CountriesOfPractice;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -172,13 +173,25 @@ class DoctorProfileController extends Controller
         // Countries of Practice: new or changed licences go back for admin
         // review (hidden from patients in that country until approved);
         // existing appointments are not affected.
+        $doctor = $this->firestore->find('doctors', $uid) ?? [];
         $entries = $countriesOfPractice->saveFromProfile(
-            $this->firestore->find('doctors', $uid) ?? [],
+            $doctor,
             $request->input('practice', []),
             $request->file('practice', []),
             $uid,
         );
         $data = [...$data, ...CountriesOfPractice::fields($entries)];
+
+        // A new or changed country unverifies the account (hidden from every
+        // patient list) until an admin re-approves it. pendingReverification
+        // lets the doctor keep logging in meanwhile.
+        $previous = CountriesOfPractice::of($doctor) ?: array_filter([CountriesOfPractice::fromLegacy($doctor)]);
+        $needsReview = CountriesOfPractice::hasNewSubmissions($previous, $entries);
+        $wasVerified = ($doctor['isVerified'] ?? false) === true;
+        if ($needsReview && ($wasVerified || ($doctor['pendingReverification'] ?? false))) {
+            $data['isVerified'] = false;
+            $data['pendingReverification'] = true;
+        }
 
         $this->firestore->update('doctors', $uid, [
             ...$data,
@@ -191,7 +204,38 @@ class DoctorProfileController extends Controller
         // Countries of Practice may have changed which countries list this doctor.
         DoctorDirectory::forget();
 
+        if (($data['pendingReverification'] ?? false) === true) {
+            Cache::forget('admin:stats');
+            $this->notifyAdminsOfCountryChange($uid, $validated['name']);
+        }
+
         return redirect()->back()->with('success', __('app.flash.profile_updated'));
+    }
+
+    /** Tells every admin that a doctor's Countries of Practice need review. */
+    protected function notifyAdminsOfCountryChange(string $doctorId, string $doctorName): void
+    {
+        try {
+            $admins = $this->firestore->query('admins', [], 50)['documents'] ?? [];
+            foreach ($admins as $admin) {
+                $adminId = $admin['uid'] ?? $admin['id'] ?? $admin['documentId'] ?? null;
+                if (! $adminId) {
+                    continue;
+                }
+                $this->firestore->create('notifications', [
+                    'userId' => $adminId,
+                    'title' => 'Countries of Practice updated',
+                    'description' => 'Dr. '.$doctorName.' added or changed a Country of Practice. Their account needs re-verification.',
+                    'type' => 'doctor_reverification',
+                    'data' => ['action' => 'verify_doctor', 'doctorId' => $doctorId],
+                    'isRead' => false,
+                    'createdAt' => now(),
+                ]);
+            }
+        } catch (\Throwable $e) {
+            // The profile is saved either way; the admin review queue still lists the doctor.
+            Log::error('Admin notification for Countries of Practice change failed: '.$e->getMessage());
+        }
     }
 
     public function updatePhoto(Request $request)

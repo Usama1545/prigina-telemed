@@ -714,6 +714,7 @@ class AdminDashboardController extends Controller
 
             $updated = $this->firestore->update('doctors', $doctorId, [
                 'isVerified' => true,
+                'pendingReverification' => false,
                 'verifiedAt' => now()->toDateTimeString(),
                 'verifiedBy' => session('auth_uid'),
             ]);
@@ -748,6 +749,7 @@ class AdminDashboardController extends Controller
 
             $updated = $this->firestore->update('doctors', $doctorId, [
                 'isActive' => false,
+                'pendingReverification' => false,
                 'rejectionReason' => $reason,
                 'rejectedAt' => now()->toDateTimeString(),
                 'rejectedBy' => session('auth_uid'),

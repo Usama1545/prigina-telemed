@@ -801,6 +801,9 @@ return [
     ],
 
     'doctor_dashboard' => [
+        'under_review_title' => 'Su cuenta está en revisión',
+        'under_review_message' => 'Nuestro equipo está verificando sus datos. Hasta que se apruebe su cuenta, su perfil no se mostrará a los pacientes en la lista de médicos. Si la aprobación tarda más de 3 días hábiles, póngase en contacto con nuestro equipo de soporte.',
+        'under_review_contact' => 'Contactar con soporte',
         'todays_appointments' => 'Citas de hoy',
         'scheduled_today' => 'Programadas hoy',
         'no_appointments_today' => 'Sin citas hoy',
@@ -878,6 +881,7 @@ return [
         'status_pending' => 'En revisión',
         'status_approved' => 'Aprobado',
         'status_rejected' => 'Rechazado',
+        'review_notice' => 'Al añadir un país nuevo o modificar uno existente (país, datos de la licencia o documento), su cuenta se enviará a un administrador para una nueva verificación. Hasta que se apruebe, no aparecerá en la lista de médicos disponibles. Podrá seguir iniciando sesión y sus citas existentes no se verán afectadas.',
         'rating_aria' => 'Valoración :rating de 5',
         'view_appointments' => 'Ver citas',
     ],
@@ -919,6 +923,7 @@ return [
         'status_pending' => 'En revisión',
         'status_approved' => 'Aprobado',
         'status_rejected' => 'Rechazado',
+        'review_notice' => 'Al añadir un país nuevo o modificar uno existente (país, datos de la licencia o documento), su cuenta se enviará a un administrador para una nueva verificación. Hasta que se apruebe, no aparecerá en la lista de médicos disponibles. Podrá seguir iniciando sesión y sus citas existentes no se verán afectadas.',
     ],
 
     'doctor_register' => [

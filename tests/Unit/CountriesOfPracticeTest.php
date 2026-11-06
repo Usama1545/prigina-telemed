@@ -142,4 +142,24 @@ class CountriesOfPracticeTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         COP::review($entries, 'missing', 'approved', '', 'now', 'admin1');
     }
+
+    public function test_has_new_submissions(): void
+    {
+        $existing = [
+            ['id' => 'a', 'country' => 'GH', 'licensingAuthority' => 'MDC', 'licenseNumber' => 'G1', 'status' => 'approved', 'documentUrl' => 'https://x/g.pdf'],
+            ['id' => 'b', 'country' => 'NG', 'licensingAuthority' => 'MDCN', 'licenseNumber' => 'N1', 'status' => 'pending', 'submittedAt' => 'earlier', 'documentUrl' => 'https://x/n.pdf'],
+        ];
+        $a = ['id' => 'a', 'country' => 'GH', 'licensingAuthority' => 'MDC', 'licenseNumber' => 'G1'];
+        $b = ['id' => 'b', 'country' => 'NG', 'licensingAuthority' => 'MDCN', 'licenseNumber' => 'N1'];
+
+        // Nothing changed (b stays pending from before), or an entry removed.
+        $this->assertFalse(COP::hasNewSubmissions($existing, COP::merge($existing, [$a, $b], 'now')));
+        $this->assertFalse(COP::hasNewSubmissions($existing, COP::merge($existing, [$a], 'now')));
+
+        // An approved country changed, a pending one changed again, or a new country.
+        $this->assertTrue(COP::hasNewSubmissions($existing, COP::merge($existing, [[...$a, 'licenseNumber' => 'G2'], $b], 'now')));
+        $this->assertTrue(COP::hasNewSubmissions($existing, COP::merge($existing, [$a, [...$b, 'licenseNumber' => 'N2']], 'now')));
+        $this->assertTrue(COP::hasNewSubmissions($existing, COP::merge($existing, [$a, $b,
+            ['country' => 'US', 'licensingAuthority' => 'FSMB', 'licenseNumber' => 'U1', 'documentUrl' => 'https://x/u.pdf']], 'now')));
+    }
 }

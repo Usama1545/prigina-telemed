@@ -274,6 +274,7 @@
                                             \App\Support\CountriesOfPractice::fromLegacy(current_user()),
                                         ]),
                                     'documentRequired' => false,
+                                    'reviewNotice' => true,
                                 ])
                             </div>
                         </div>

@@ -58,7 +58,9 @@ class AuthController extends Controller
                 ], 403);
             }
 
-            if (($doctor['isVerified'] ?? false) === false) {
+            // pendingReverification: a verified doctor whose new or changed
+            // Country of Practice awaits admin review can still log in.
+            if (($doctor['isVerified'] ?? false) === false && ($doctor['pendingReverification'] ?? false) !== true) {
                 return response()->json([
                     'error' => ! empty($doctor['rejectionReason']) ? $doctor['rejectionReason']
                         : 'Your account is currently pending verification by our team.',

@@ -127,6 +127,7 @@ class AdminDoctorController extends Controller
             ...$countries,
             'isVerified' => true,
             'isActive' => true,
+            'pendingReverification' => false,
             'verifiedAt' => now()->toDateTimeString(),
             'verifiedBy' => session('auth_uid'),
         ]);
@@ -146,6 +147,7 @@ class AdminDoctorController extends Controller
         $this->firestore->update('doctors', $doctorId, [
             'isVerified' => false,
             'isActive' => false,
+            'pendingReverification' => false,
             'rejectionReason' => $request->input('reason', 'Not specified'),
             'rejectedAt' => now()->toDateTimeString(),
             'rejectedBy' => session('auth_uid'),
@@ -185,10 +187,23 @@ class AdminDoctorController extends Controller
             abort(404);
         }
 
-        $this->firestore->update('doctors', $doctorId, [
-            ...CountriesOfPractice::fields($entries),
-            'updatedAt' => now()->toDateTimeString(),
-        ]);
+        $fields = CountriesOfPractice::fields($entries);
+        $update = [...$fields, 'updatedAt' => now()->toDateTimeString()];
+
+        // A doctor unverified only because of a Country of Practice change is
+        // verified again once none of their countries is waiting for review.
+        if (($doctor['pendingReverification'] ?? false) === true && ! $fields['hasPendingPracticeCountries']) {
+            $update = [
+                ...$update,
+                'isVerified' => true,
+                'pendingReverification' => false,
+                'verifiedAt' => now()->toDateTimeString(),
+                'verifiedBy' => session('auth_uid'),
+            ];
+            Cache::forget('admin:stats');
+        }
+
+        $this->firestore->update('doctors', $doctorId, $update);
         DoctorDirectory::forget();
 
         return response()->json(['success' => true]);
