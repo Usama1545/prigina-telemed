@@ -47,7 +47,7 @@
                                     <label class="mb-2">Platform Commission (%)</label>
                                     <input type="number" name="platformCommission" class="form-control" min="0"
                                         max="100" step="0.01"
-                                        value="{{ old('platformCommission', $settings['defaultPlatformFeePercent'] ?? 0) }}">
+                                        value="{{ old('platformCommission', $settings['defaultPlatformFeePercent'] ?? 40) }}">
                                 </div>
                                 <div class="mb-0">
                                     <button type="submit" class="btn btn-primary">Save Settings</button>

@@ -1363,4 +1363,13 @@ return [
         'review_already_submitted' => 'Vous avez déjà donné votre avis sur ce rendez-vous.',
         'review_submitted' => 'Merci ! Votre avis a été envoyé.',
     ],
+    'missed' => [
+        'tab' => 'Manqués',
+        'badge' => 'Manqué',
+        'none' => 'Aucun rendez-vous manqué',
+        'awaiting_review' => 'L\'appel de ce rendez-vous n\'a pas eu lieu à temps. Notre équipe va l\'examiner et vous informera de la suite. Si l\'autre partie ne s\'est pas présentée, signalez une absence ci-dessous.',
+        'reviewed_no_change' => 'Notre équipe a examiné ce rendez-vous manqué. Aucune modification n\'a été apportée.',
+        'reschedule_allowed' => 'Notre équipe a autorisé la reprogrammation de ce rendez-vous manqué. Choisissez un nouvel horaire ci-dessous.',
+        'admin_note' => 'Note de notre équipe : :note',
+    ],
 ];

@@ -80,4 +80,31 @@ class CallWindowTest extends TestCase
         $this->assertNull(CallWindow::roleIn($a, 'x'));
         $this->assertSame('d', CallWindow::counterpartOf($a, 'p'));
     }
+
+    public function test_missed_when_call_window_closed_without_consultation(): void
+    {
+        $a = $this->appt('a', '2026-10-05 13:00', '2026-10-05 13:30');
+        $later = $this->at('2026-10-06 00:00');
+
+        $this->assertFalse(CallWindow::isMissed($a, $this->at('2026-10-05 13:40'))); // window still open
+        $this->assertTrue(CallWindow::isMissed($a, $this->at('2026-10-05 13:40:01')));
+        $this->assertTrue(CallWindow::isMissed([...$a, 'status' => 'rescheduled'], $later));
+        $this->assertFalse(CallWindow::isMissed([...$a, 'consultationCallId' => 'c1'], $later));
+        foreach (['completed', 'cancelled', 'pending', 'pending_payment'] as $status) {
+            $this->assertFalse(CallWindow::isMissed([...$a, 'status' => $status], $later));
+        }
+        $this->assertFalse(CallWindow::isMissed(['status' => 'confirmed', 'startTimeUTC' => 1, 'endTimeUTC' => 2], $later));
+    }
+
+    public function test_missed_review_only_counts_for_its_start_time(): void
+    {
+        $a = $this->appt('a', '2026-10-05 13:00', '2026-10-05 13:30');
+        $review = ['decision' => 'dismissed', 'appointmentStartUTC' => $this->at('2026-10-05 13:00')];
+
+        $this->assertSame($review, CallWindow::missedReview([...$a, 'missedReview' => $review]));
+        // Rescheduled since: the old decision no longer applies.
+        $this->assertNull(CallWindow::missedReview([...$a, 'startTimeUTC' => $this->at('2026-10-07 09:00'), 'missedReview' => $review]));
+        $this->assertNull(CallWindow::missedReview([...$a, 'missedReview' => [...$review, 'decision' => 'other']]));
+        $this->assertNull(CallWindow::missedReview($a));
+    }
 }

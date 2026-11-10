@@ -1363,4 +1363,13 @@ return [
         'review_already_submitted' => 'Ya ha enviado una valoración para esta cita.',
         'review_submitted' => '¡Gracias! Su valoración ha sido enviada.',
     ],
+    'missed' => [
+        'tab' => 'Perdidas',
+        'badge' => 'Perdida',
+        'none' => 'No hay citas perdidas',
+        'awaiting_review' => 'La llamada de esta cita no se realizó a tiempo. Nuestro equipo la revisará y le informará de los siguientes pasos. Si la otra parte no se unió, informe una ausencia a continuación.',
+        'reviewed_no_change' => 'Nuestro equipo revisó esta cita perdida. No se realizaron cambios.',
+        'reschedule_allowed' => 'Nuestro equipo ha permitido reprogramar esta cita perdida. Elija una nueva hora a continuación.',
+        'admin_note' => 'Nota de nuestro equipo: :note',
+    ],
 ];

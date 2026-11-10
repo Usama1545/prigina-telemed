@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminDoctorController;
+use App\Http\Controllers\Admin\AdminMissedAppointmentController;
 use App\Http\Controllers\Admin\AdminNotificationController;
 use App\Http\Controllers\Admin\AdminPatientController;
 use App\Http\Controllers\Admin\AdminPaymentController;
@@ -36,6 +37,8 @@ Route::middleware(['admin.auth'])->group(function () {
     Route::patch('/appointments/{appointment}/status', [AdminDashboardController::class, 'updateAppointmentStatus'])->name('appointments.status');
     Route::post('/appointments/{appointment}/payment/release', [AdminPaymentController::class, 'releasePayment'])->name('appointments.payment.release');
     Route::post('/appointments/{appointment}/payment/refund', [AdminPaymentController::class, 'refundPayment'])->name('appointments.payment.refund');
+    Route::get('/missed-appointments', [AdminMissedAppointmentController::class, 'index'])->name('missed-appointments');
+    Route::post('/missed-appointments/{appointment}/resolve', [AdminMissedAppointmentController::class, 'resolve'])->name('missed-appointments.resolve');
     Route::get('/doctor-list', [AdminDoctorController::class, 'index'])->name('doctor-list');
     Route::get('/doctors/data', [AdminDoctorController::class, 'data'])->name('doctors.data');
     Route::get('/doctors/{doctor}', [AdminDoctorController::class, 'show'])->name('doctors.show');

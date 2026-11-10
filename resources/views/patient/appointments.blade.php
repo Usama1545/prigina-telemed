@@ -49,6 +49,12 @@
                                         aria-controls="pills-complete"
                                         aria-selected="true">{{ __('app.common.completed') }}<span>{{ count($appointments['completed']) }}</span></button>
                                 </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="pills-missed-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-missed" type="button" role="tab"
+                                        aria-controls="pills-missed"
+                                        aria-selected="false">{{ __('app.missed.tab') }}<span>{{ count($appointments['missed']) }}</span></button>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -183,6 +189,19 @@
                                                 class="page-link next">{{ __('app.appointments.next') }}</a></li>
                                     @endif
                                 </ul>
+                            </div>
+                        </div>
+
+                        {{-- ── MISSED (confirmed, no consultation call in time; an admin reviews it) ── --}}
+                        <div class="tab-pane fade" id="pills-missed" role="tabpanel" aria-labelledby="pills-missed-tab">
+                            <div class="row g-3 mt-1">
+                                @forelse($appointments['missed'] as $appointment)
+                                    @include('partials.missed-appointment-card', ['appointment' => $appointment, 'role' => 'patient'])
+                                @empty
+                                    <div class="col-12">
+                                        <p class="text-muted text-center py-4">{{ __('app.missed.none') }}</p>
+                                    </div>
+                                @endforelse
                             </div>
                         </div>
 

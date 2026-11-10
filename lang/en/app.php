@@ -1363,4 +1363,13 @@ return [
         'review_already_submitted' => 'You have already submitted a review for this appointment.',
         'review_submitted' => 'Thank you! Your review has been submitted.',
     ],
+    'missed' => [
+        'tab' => 'Missed',
+        'badge' => 'Missed',
+        'none' => 'No missed appointments',
+        'awaiting_review' => 'This appointment\'s call didn\'t happen in time. Our team will review it and let you know what happens next. If the other side didn\'t join, report a no-show below.',
+        'reviewed_no_change' => 'Our team reviewed this missed appointment. No changes were made.',
+        'reschedule_allowed' => 'Our team has allowed this missed appointment to be rescheduled. Pick a new time below.',
+        'admin_note' => 'Note from our team: :note',
+    ],
 ];

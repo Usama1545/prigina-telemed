@@ -63,6 +63,41 @@ final class CallWindow
         return in_array($appointment['status'] ?? '', self::CALLABLE_STATUSES, true);
     }
 
+    /** An admin's decision on a missed appointment (appointment.missedReview.decision). */
+    public const MISSED_DECISIONS = ['refund_patient', 'pay_doctor', 'dismissed', 'reschedule_allowed'];
+
+    /**
+     * Missed: still confirmed (or rescheduled), its call window has closed, and
+     * no consultation call was held. The status is never changed automatically;
+     * an admin decides (see MISSED_DECISIONS).
+     */
+    public static function isMissed(array $appointment, Carbon $now): bool
+    {
+        if (! self::isCallable($appointment) || ! empty($appointment['consultationCallId'])) {
+            return false;
+        }
+        $window = self::for($appointment);
+
+        return $window !== null && $now->gt($window['closesAt']);
+    }
+
+    /**
+     * The admin's decision on this missed appointment, or null. A decision made
+     * for an earlier start time (the appointment was rescheduled since) no
+     * longer counts. Compared to the second.
+     */
+    public static function missedReview(array $appointment): ?array
+    {
+        $review = $appointment['missedReview'] ?? null;
+        if (! is_array($review) || ! in_array($review['decision'] ?? null, self::MISSED_DECISIONS, true)) {
+            return null;
+        }
+        $reviewed = AppointmentTime::toUtc($review['appointmentStartUTC'] ?? null);
+        $start = AppointmentTime::toUtc($appointment['startTimeUTC'] ?? null);
+
+        return $reviewed && $start && $reviewed->getTimestamp() === $start->getTimestamp() ? $review : null;
+    }
+
     public static function isOpen(array $appointment, Carbon $now): bool
     {
         $window = self::for($appointment);

@@ -14,6 +14,7 @@ use App\Services\DoctorDirectory;
 use App\Services\FirebaseAuthService;
 use App\Services\FirestoreService;
 use App\Support\AppointmentTime;
+use App\Support\CallWindow;
 use App\Support\CountriesOfPractice;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -306,13 +307,19 @@ class DoctorProfileController extends Controller
             'pending' => [],
             'cancelled' => [],
             'completed' => [],
+            'missed' => [],
         ];
+        $now = Carbon::now('UTC');
 
         foreach ($appointments as $appointment) {
 
             $status = $appointment['status'] ?? null;
 
-            if ($status === 'confirmed') {
+            // Confirmed but no consultation call before the call window closed;
+            // an admin reviews it (CallWindow::isMissed).
+            if (CallWindow::isMissed($appointment, $now)) {
+                $grouped['missed'][] = $appointment;
+            } elseif ($status === 'confirmed') {
                 $grouped['upcoming'][] = $appointment;
             } elseif ($status === 'pending') {
                 $grouped['pending'][] = $appointment;
@@ -993,9 +1000,11 @@ class DoctorProfileController extends Controller
             return response()->json(['success' => false, 'message' => __('app.flash.appointment_not_found')], 404);
         }
 
-        // Block rescheduling within 24 hours of the appointment
+        // Block rescheduling within 24 hours of the appointment, except a missed
+        // one an admin allowed to be rescheduled (its time has passed).
+        $missedReschedule = (CallWindow::missedReview($appointment)['decision'] ?? null) === 'reschedule_allowed';
         $apptStart = AppointmentTime::startUtc($appointment);
-        if ($apptStart && $apptStart->lte(now()->addHours(24))) {
+        if (! $missedReschedule && $apptStart && $apptStart->lte(now()->addHours(24))) {
             return response()->json(['success' => false, 'message' => __('app.flash.cannot_reschedule_24h')], 422);
         }
 
