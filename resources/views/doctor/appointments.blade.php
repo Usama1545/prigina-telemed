@@ -83,6 +83,18 @@
 
                                 </li>
 
+                                <li class="nav-item">
+
+                                    <button class="nav-link" id="pills-missed-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-missed" type="button">
+                                        {{ __('app.missed.tab') }}
+                                        <span id="missed-count">
+                                            {{ count($appointments['missed']) }}
+                                        </span>
+                                    </button>
+
+                                </li>
+
                             </ul>
 
                         </div>
@@ -131,6 +143,23 @@
                                         'appointment' => $appointment,
                                     ])
                                 @endforeach
+
+                            </div>
+
+                        </div>
+
+                        {{-- MISSED (confirmed, no consultation call in time; an admin reviews it) --}}
+                        <div class="tab-pane fade" id="pills-missed">
+
+                            <div class="row" id="missed-appointments">
+
+                                @forelse ($appointments['missed'] as $appointment)
+                                    @include('partials.missed-appointment-card', ['appointment' => $appointment, 'role' => 'doctor'])
+                                @empty
+                                    <div class="col-12">
+                                        <p class="text-muted text-center py-4">{{ __('app.missed.none') }}</p>
+                                    </div>
+                                @endforelse
 
                             </div>
 

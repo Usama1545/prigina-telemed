@@ -13,6 +13,10 @@
                     <a href="{{ route('admin.appointment-list') }}"><i class="fe fe-layout"></i>
                         <span>Appointments</span></a>
                 </li>
+                <li class="{{ Request::is('admin/missed-appointments') ? 'active' : '' }}">
+                    <a href="{{ route('admin.missed-appointments') }}"><i class="fe fe-warning"></i>
+                        <span>Missed Appointments</span></a>
+                </li>
                 <li class="{{ Request::is('admin/specialities') ? 'active' : '' }}">
                     <a href="{{ route('admin.specialities') }}"><i class="fe fe-users"></i>
                         <span>Specialities</span></a>

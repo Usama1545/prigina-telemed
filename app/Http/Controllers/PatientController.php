@@ -10,6 +10,7 @@ use App\Services\DoctorAvailabilityService;
 use App\Services\FirebaseAuthService;
 use App\Services\FirestoreService;
 use App\Support\AppointmentTime;
+use App\Support\CallWindow;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -233,12 +234,18 @@ class PatientController extends Controller
             'pending' => [],
             'cancelled' => [],
             'completed' => [],
+            'missed' => [],
         ];
+        $now = Carbon::now('UTC');
 
         foreach ($appointments as $appointment) {
             $status = $appointment['status'] ?? null;
 
-            if ($status === 'confirmed') {
+            // Confirmed but no consultation call before the call window closed;
+            // an admin reviews it (CallWindow::isMissed).
+            if (CallWindow::isMissed($appointment, $now)) {
+                $grouped['missed'][] = $appointment;
+            } elseif ($status === 'confirmed') {
                 $grouped['upcoming'][] = $appointment;
             } elseif ($status === 'pending') {
                 $grouped['pending'][] = $appointment;
@@ -653,13 +660,17 @@ class PatientController extends Controller
             return response()->json(['success' => false, 'message' => __('app.flash.appointment_not_found')], 404);
         }
 
-        if (($appointment['status'] ?? '') !== 'confirmed') {
+        // A missed appointment an admin allowed to be rescheduled (its time has
+        // passed, so the 24-hour rule can't apply).
+        $missedReschedule = (CallWindow::missedReview($appointment)['decision'] ?? null) === 'reschedule_allowed';
+
+        if (! in_array($appointment['status'] ?? '', $missedReschedule ? CallWindow::CALLABLE_STATUSES : ['confirmed'], true)) {
             return response()->json(['success' => false, 'message' => __('app.flash.only_confirmed_reschedule')], 422);
         }
 
         // Block rescheduling within 24 hours of the appointment
         $apptStart = AppointmentTime::startUtc($appointment);
-        if ($apptStart && $apptStart->lte(now()->addHours(24))) {
+        if (! $missedReschedule && $apptStart && $apptStart->lte(now()->addHours(24))) {
             return response()->json(['success' => false, 'message' => __('app.flash.cannot_reschedule_24h')], 422);
         }
 

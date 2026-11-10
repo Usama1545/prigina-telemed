@@ -144,7 +144,7 @@ class BookingController extends Controller
         $consultationFee = (float) $validated['amount'];
         $stripeFee = round($consultationFee * (self::STRIPE_FEE_PERCENT / 100), 2);
         $settings = $firestore->find('app_settings', 'payment') ?? [];
-        $commission = (float) ($settings['defaultPlatformFeePercent'] ?? 30);
+        $commission = (float) ($settings['defaultPlatformFeePercent'] ?? 40);
         $transferAmount = (int) round($consultationFee * (1 - $commission / 100) * 100); // cents
         $netAmount = round($transferAmount / 100, 2);
         $platformFee = round($consultationFee - $netAmount, 2);
@@ -172,7 +172,7 @@ class BookingController extends Controller
             'updatedAt' => now(),
             'totalAmount' => $consultationFee + $stripeFee,
             'transactionFee' => $stripeFee ?? 0,
-            'platformFeePercent' => $commission ?? 30,
+            'platformFeePercent' => $commission ?? 40,
             'doctorAmount' => $netAmount ?? 0,
             'platformCommission' => $platformFee ?? 0,
         ];
